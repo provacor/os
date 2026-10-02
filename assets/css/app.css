@@ -763,3 +763,42 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
 .day-chip.today:not(.on) { border-color: var(--brand); }
 .day-chip.today:not(.on) .dc-name { color: var(--brand); }
 .today-tag { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 8px; border-radius: 99px; font-size: .72rem; font-weight: 600; color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
+
+/* ---------- study alarms ---------- */
+.alarms-card { margin-top: 18px; }
+.alarms-card .block-head { margin-bottom: 8px; }
+.alarm-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.alarm {
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: 10px; padding: 10px 8px 12px 10px;
+  border-radius: 14px; background: var(--surface-2); border: 1px solid var(--border);
+}
+.al-no { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: .85rem; color: var(--brand); background: color-mix(in srgb, var(--brand) 14%, transparent); }
+.al-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.al-note { font-size: .9rem; font-weight: 550; overflow-wrap: anywhere; }
+.al-meta { font-size: .72rem; color: var(--muted); }
+.al-left { flex: none; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.02rem; color: var(--text); }
+.al-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: var(--p, 0%); background: var(--brand); transition: width 1s linear; }
+.alarm.fired { border-color: color-mix(in srgb, var(--red) 45%, var(--border)); background: color-mix(in srgb, var(--red) 9%, var(--surface-2)); }
+.alarm.fired .al-left { color: var(--red); font-size: .88rem; }
+.alarm.fired .al-bar { background: var(--red); }
+.alarm-form { display: grid; gap: 10px; }
+.alarm-form input, .al-pick select {
+  min-width: 0; font: inherit; font-size: 16px; color: var(--text); background: var(--surface-2);
+  border: 1px solid var(--border-2); border-radius: 12px; padding: 11px 12px;
+}
+.alarm-form input:focus, .al-pick select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent); }
+.al-pick { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+.al-pick .btn { margin: 0; }
+.al-awake { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: .84rem; color: var(--text-2); }
+.al-awake input { width: 18px; height: 18px; accent-color: var(--brand); }
+.al-hint { display: flex; gap: 6px; align-items: flex-start; margin-top: 8px; }
+.al-hint .ic { flex: none; width: 15px; height: 15px; margin-top: 2px; }
+.al-full { margin: 4px 0; }
+.alarm-ring { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(0, 0, 0, .55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.ar-card { width: min(100%, 380px); background: var(--surface); border: 1px solid var(--border-2); border-radius: 22px; padding: 22px 18px; text-align: center; box-shadow: var(--shadow-2); }
+.ar-bell { font-size: 2.6rem; animation: ar-shake .5s ease-in-out infinite; }
+.ar-card h2 { margin: 6px 0 14px; font-size: 1.4rem; color: var(--red); }
+.ar-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); text-align: left; }
+.ar-row span { font-weight: 600; overflow-wrap: anywhere; }
+.ar-row .btn { flex: none; margin: 0; }
+@keyframes ar-shake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(14deg); } }
