@@ -1,11 +1,18 @@
-// AI tutor on Google Gemini, called straight from the browser with the person's own
-// API key (free from Google AI Studio). The key and the chat stay in this browser;
-// nothing goes through a Provacor server, so no shared key can leak from the site.
+// AI tutor: Google Gemini (free key from AI Studio) or Anthropic Claude (paid key from
+// the Claude Console), called straight from the browser with the person's own key.
+// Keys and the chat stay in this browser; nothing goes through a Provacor server, so
+// no shared key can leak from the site.
 
 const SETTINGS = 'hscos:ai:v1';
 const CHAT = 'hscos:ai-chat:v1';
 const API = 'https://generativelanguage.googleapis.com/v1beta/models';
 export const DEFAULT_MODEL = 'gemini-2.5-flash';
+export const CLAUDE_MODELS = [
+  ['claude-opus-5-5', 'Claude Opus 5.5 — সবচেয়ে ভালো'],
+  ['claude-sonnet-5-5', 'Claude Sonnet 5.5 — দ্রুত, কম খরচ'],
+  ['claude-haiku-4-5', 'Claude Haiku 4.5 — সবচেয়ে কম খরচ'],
+];
+const CLAUDE_DEFAULT = CLAUDE_MODELS[0][0];
 const KEEP = 40; // messages kept on the device
 const CONTEXT = 12; // recent messages sent with each question
 
@@ -32,16 +39,23 @@ export function cleanModel(m) {
   return /^gemini-[a-z0-9][a-z0-9.-]*$/.test(id) ? id : DEFAULT_MODEL;
 }
 
-let settings = { key: '', model: DEFAULT_MODEL, ...read(SETTINGS, {}) };
+const cleanClaude = (m) => (CLAUDE_MODELS.some(([id]) => id === m) ? m : CLAUDE_DEFAULT);
+
+// key/model are Gemini's (kept under their original names); claudeKey/claudeModel are Claude's.
+let settings = { provider: 'gemini', key: '', model: DEFAULT_MODEL, claudeKey: '', claudeModel: CLAUDE_DEFAULT, ...read(SETTINGS, {}) };
 settings.model = cleanModel(settings.model);
+settings.claudeModel = cleanClaude(settings.claudeModel);
 let chat = read(CHAT, []);
 
 export const aiSettings = () => settings;
-export const hasKey = () => !!settings.key;
+export const hasKey = () => !!(settings.provider === 'claude' ? settings.claudeKey : settings.key);
 export function saveSettings(patch) {
   settings = { ...settings, ...patch };
+  settings.provider = settings.provider === 'claude' ? 'claude' : 'gemini';
   settings.key = String(settings.key ?? '').trim();
+  settings.claudeKey = String(settings.claudeKey ?? '').trim();
   settings.model = cleanModel(settings.model);
+  settings.claudeModel = cleanClaude(settings.claudeModel);
   write(SETTINGS, settings);
 }
 
@@ -114,20 +128,31 @@ export class AiError extends Error {
 
 // Ask a question (text and/or photos). Calls onText(fullTextSoFar) while the answer streams.
 export async function ask({ text, images = [], context = '' }, onText) {
-  if (!settings.key) throw new AiError('no-key');
+  if (!hasKey()) throw new AiError('no-key');
+  if (!text && !images.length) throw new AiError('empty');
+  const system = SYSTEM + (context ? `\n\nশিক্ষার্থী এখন পড়ছে: ${context}` : '');
+  const prior = chat.slice(-CONTEXT).map((m) => ({
+    role: m.role === 'ai' ? 'ai' : 'user',
+    text: m.text || (m.thumbs?.length ? '[ছবি পাঠানো হয়েছিল]' : '…'),
+  }));
+  const thumbs = await Promise.all(images.map(thumbOf));
+  const out = settings.provider === 'claude'
+    ? await askClaude({ text, images, system, prior }, onText)
+    : await askGemini({ text, images, system, prior }, onText);
+  // keep the question only together with its answer, so failed tries don't pile up
+  remember({ role: 'user', text, thumbs, at: Date.now() });
+  remember({ role: 'ai', text: out, at: Date.now() });
+  return out;
+}
+
+async function askGemini({ text, images, system, prior: history }, onText) {
   const parts = [];
   if (text) parts.push({ text });
   for (const d of images) parts.push({ inline_data: { mime_type: 'image/jpeg', data: d.split(',')[1] } });
-  if (!parts.length) throw new AiError('empty');
-
-  const prior = chat.slice(-CONTEXT).map((m) => ({
-    role: m.role === 'ai' ? 'model' : 'user',
-    parts: [{ text: m.text || (m.thumbs?.length ? '[ছবি পাঠানো হয়েছিল]' : '…') }],
-  }));
-  const thumbs = await Promise.all(images.map(thumbOf));
+  const prior = history.map((m) => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.text }] }));
 
   const body = {
-    systemInstruction: { parts: [{ text: SYSTEM + (context ? `\n\nশিক্ষার্থী এখন পড়ছে: ${context}` : '') }] },
+    systemInstruction: { parts: [{ text: system }] },
     contents: [...prior, { role: 'user', parts }],
     generationConfig: { temperature: 0.4 },
   };
@@ -210,15 +235,64 @@ export async function ask({ text, images = [], context = '' }, onText) {
     }
   }
   if (!out) throw new AiError(blocked || 'empty-answer');
-  // keep the question only together with its answer, so failed tries don't pile up
-  remember({ role: 'user', text, thumbs, at: Date.now() });
-  remember({ role: 'ai', text: out, at: Date.now() });
   return out;
 }
 
+// Claude through the official Anthropic SDK (bundled in assets/vendor, loaded on first use).
+// Claude Opus 5.5 / Sonnet 5.5 take server-side refusal fallbacks and an explicit effort level.
+const CLAUDE_FALLBACKS = new Set(['claude-opus-5-5', 'claude-sonnet-5-5']);
+let sdk = null;
+async function askClaude({ text, images, system, prior }, onText) {
+  sdk ??= import('../vendor/anthropic-sdk.js').catch((e) => { sdk = null; throw e; });
+  let Anthropic;
+  try {
+    Anthropic = (await sdk).default;
+  } catch {
+    throw new AiError('network');
+  }
+  const client = new Anthropic({ apiKey: settings.claudeKey, dangerouslyAllowBrowser: true, maxRetries: 1 });
+  const model = settings.claudeModel;
+  const content = [
+    ...images.map((d) => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } })),
+    ...(text ? [{ type: 'text', text }] : [{ type: 'text', text: 'ছবির প্রশ্নটার উত্তর দাও।' }]),
+  ];
+  const params = {
+    model,
+    max_tokens: 16000,
+    system,
+    messages: [...prior.map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })), { role: 'user', content }],
+  };
+  if (model !== 'claude-haiku-4-5') params.output_config = { effort: 'medium' };
+  if (CLAUDE_FALLBACKS.has(model)) {
+    params.betas = ['server-side-fallback-2026-07-01'];
+    params.fallbacks = 'default';
+  }
+
+  try {
+    const stream = client.beta.messages.stream(params);
+    stream.on('text', (_delta, snapshot) => onText?.(snapshot));
+    const msg = await stream.finalMessage();
+    if (msg.stop_reason === 'refusal') throw new AiError('safety');
+    const out = msg.content.filter((b) => b.type === 'text').map((b) => b.text).join('');
+    if (!out) throw new AiError('empty-answer');
+    if (msg.stop_reason === 'max_tokens') return `${out}\n\n…(উত্তর অনেক বড়, এখানে কেটে গেছে)`;
+    return out;
+  } catch (e) {
+    if (e instanceof AiError) throw e;
+    if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) throw new AiError('bad-key', e.message);
+    if (e instanceof Anthropic.NotFoundError) throw new AiError('bad-model', e.message);
+    if (e instanceof Anthropic.RateLimitError) throw new AiError('quota', e.message);
+    if (e instanceof Anthropic.BadRequestError && /credit balance/i.test(e.message)) throw new AiError('credit', e.message);
+    if (e instanceof Anthropic.APIConnectionError) throw new AiError('network');
+    if (e instanceof Anthropic.APIError) throw new AiError('api', e.message);
+    throw new AiError('api', e?.message);
+  }
+}
+
 export const ERRORS = {
-  'no-key': 'আগে নিচের সেটিংসে তোমার Gemini API key বসাও।',
-  'bad-key': 'API key ঠিক নেই। Google AI Studio থেকে নতুন key কপি করে আবার বসাও।',
+  'no-key': 'আগে উপরের AI সেটিংসে তোমার API key বসাও।',
+  'bad-key': 'API key ঠিক নেই। নতুন key কপি করে আবার বসাও।',
+  credit: 'Claude অ্যাকাউন্টে টাকা (credit) নেই। Claude Console-এ Billing থেকে credit যোগ করো।',
   'bad-model': 'এই মডেলের নাম পাওয়া যায়নি। সেটিংসে মডেলের নাম ঠিক করো।',
   quota: 'আজকের ফ্রি লিমিট শেষ বা খুব দ্রুত প্রশ্ন করা হচ্ছে। একটু পরে আবার চেষ্টা করো।',
   network: 'ইন্টারনেট সংযোগ নেই।',

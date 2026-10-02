@@ -929,3 +929,6 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
 .ai-pend button { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; border: 0; background: var(--text); color: var(--bg); cursor: pointer; }
 .ai-pend button .ic { width: 13px; height: 13px; }
 .ai-foot { font-size: .68rem; text-align: center; margin-top: 4px; }
+.ai-prov { margin-top: 12px; }
+.ai-prov small { font-size: .7rem; color: var(--muted); margin-left: 2px; }
+.ai-key-form select { min-width: 0; font: inherit; font-size: 16px; color: var(--text); background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 12px; padding: 10px 12px; }
