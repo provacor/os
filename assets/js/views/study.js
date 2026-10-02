@@ -1,11 +1,12 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021333';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021333';
-import { progressOf } from '../progress.js?v=202610021333';
-import { contentCount, chapterCount } from '../model.js?v=202610021333';
-import { lastVisit } from './shared.js?v=202610021333';
-import { alarmsBlock } from './alarms.js?v=202610021333';
+import { icon } from '../icons.js?v=202610021341';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021341';
+import { progressOf } from '../progress.js?v=202610021341';
+import { contentCount, chapterCount } from '../model.js?v=202610021341';
+import { lastVisit } from './shared.js?v=202610021341';
+import { videosBlock } from './videos.js?v=202610021341';
+import { alarmsBlock } from './alarms.js?v=202610021341';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -125,7 +126,7 @@ export function chapterView(model, ch) {
     crumbs: [subjectCrumb(ch.subject), [ch.paper.name, `#/p/${ch.paper.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`]],
     accent: ch.subject.accent,
     visit: { chapterId: ch.id },
-    html: hero + readyHtml + restHtml + progressHtml + pager,
+    html: hero + readyHtml + videosBlock(ch) + restHtml + progressHtml + pager,
   };
 }
 
