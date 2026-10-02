@@ -834,3 +834,10 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
 .pf-stats div { display: flex; flex-direction: column; gap: 3px; padding: 10px 8px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); text-align: center; }
 .pf-stats b { font-size: .9rem; }
 .pf-stats span { font-size: .72rem; color: var(--muted); }
+.lb-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.lb-list .lb-preview { margin: 0; }
+.lb-list .lb-preview.me { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--surface-2)); }
+.lb-name small { font-weight: 500; color: var(--muted); }
+.lb-list li:nth-child(1) .lb-rank { color: #e0a800; }
+.lb-list li:nth-child(2) .lb-rank { color: #9aa4b2; }
+.lb-list li:nth-child(3) .lb-rank { color: #c07a3a; }

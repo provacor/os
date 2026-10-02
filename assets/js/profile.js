@@ -22,7 +22,7 @@ function write(key, value) {
 }
 
 // anonymous defaults to true: nobody shows by name unless they choose to.
-let profile = { name: '', photo: '', anonymous: true, ...read(PROFILE, {}) };
+let profile = { name: '', photo: '', anonymous: true, leaderboard: true, ...read(PROFILE, {}) };
 let usage = read(USAGE, {});
 
 export const getProfile = () => profile;
@@ -57,6 +57,18 @@ export function imageToAvatar(file) {
 // ---------- usage time ----------
 
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+// The leaderboard week runs Saturday to Friday; its key is that Saturday's date.
+export function weekKey(d = new Date()) {
+  const s = new Date(d);
+  s.setDate(d.getDate() - ((d.getDay() + 1) % 7));
+  return dayKey(s);
+}
+
+export function weekSeconds() {
+  const start = weekKey();
+  return Object.entries(usage).reduce((n, [k, s]) => (k >= start ? n + s : n), 0);
+}
 
 export function usageStats() {
   const today = dayKey();
