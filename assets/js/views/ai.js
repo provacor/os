@@ -1,16 +1,19 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610021409';
-import { esc } from '../components.js?v=202610021409';
-import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610021409';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021409';
+import { icon } from '../icons.js?v=202610021453';
+import { esc } from '../components.js?v=202610021453';
+import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610021453';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021453';
+import { canSpeak, canListen } from '../a11y.js?v=202610021453';
+
+export const speakBtn = () => (canSpeak() ? `<button class="ai-speak" data-ai-speak aria-label="উত্তর পড়ে শোনাও">${icon('speaker')}</button>` : '');
 
 export const aiState = { images: [], busy: false, context: '' };
 
 export function messageHtml(m) {
   const thumbs = m.thumbs?.length ? `<div class="ai-thumbs">${m.thumbs.filter(Boolean).map((t) => `<img src="${esc(t)}" alt="">`).join('')}</div>` : '';
   return m.role === 'ai'
-    ? `<div class="ai-msg ai-bot"><span class="ai-av">${icon('sparkle')}</span><div class="ai-bubble md">${renderMarkdown(m.text)}</div></div>`
+    ? `<div class="ai-msg ai-bot"><span class="ai-av">${icon('sparkle')}</span><div class="ai-bubble md">${renderMarkdown(m.text)}</div>${speakBtn()}</div>`
     : `<div class="ai-msg ai-me"><div class="ai-bubble">${thumbs}${m.text ? `<p>${esc(m.text)}</p>` : ''}</div></div>`;
 }
 
@@ -67,6 +70,7 @@ export function aiView(model, chapterId) {
         <div class="ai-row">
           <label class="icon-btn" aria-label="ছবি তোলো">${icon('camera')}<input type="file" accept="image/*" capture="environment" data-ai-pick hidden></label>
           <label class="icon-btn" aria-label="গ্যালারি থেকে ছবি">${icon('image')}<input type="file" accept="image/*" multiple data-ai-pick hidden></label>
+          ${canListen() ? `<button type="button" class="icon-btn" data-ai-mic aria-label="মুখে প্রশ্ন বলো">${icon('mic')}</button>` : ''}
           <textarea id="aiInput" rows="1" maxlength="4000" placeholder="প্রশ্ন লেখো…" aria-label="প্রশ্ন"></textarea>
           <button class="icon-btn ai-send" type="submit" aria-label="পাঠাও" ${aiState.busy ? 'disabled' : ''}>${icon('send')}</button>
         </div>

@@ -1,41 +1,45 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021409';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021409';
-import { buildIndex } from './search.js?v=202610021409';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021409';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021409';
-import { icon } from './icons.js?v=202610021409';
-import { crumbs, emptyState } from './components.js?v=202610021409';
-import { homeView } from './views/home.js?v=202610021409';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021409';
-import { sectionView } from './views/section.js?v=202610021409';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021409';
-import { progressView } from './views/progress.js?v=202610021409';
-import { moreView } from './views/more.js?v=202610021409';
-import { missionView, missionState } from './views/mission.js?v=202610021409';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021409';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021409';
-import { profileView } from './views/profile.js?v=202610021409';
-import { startLeaderboard } from './leaderboard.js?v=202610021409';
-import { addVideo, deleteVideo } from './videos.js?v=202610021409';
-import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021409';
-import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021409';
-import { renderMarkdown, typesetMath } from './markdown.js?v=202610021409';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021409';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021453';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021453';
+import { buildIndex } from './search.js?v=202610021453';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021453';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021453';
+import { icon } from './icons.js?v=202610021453';
+import { crumbs, emptyState } from './components.js?v=202610021453';
+import { homeView } from './views/home.js?v=202610021453';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021453';
+import { sectionView } from './views/section.js?v=202610021453';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021453';
+import { progressView } from './views/progress.js?v=202610021453';
+import { moreView } from './views/more.js?v=202610021453';
+import { missionView, missionState } from './views/mission.js?v=202610021453';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021453';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021453';
+import { profileView } from './views/profile.js?v=202610021453';
+import { startLeaderboard } from './leaderboard.js?v=202610021453';
+import { addVideo, deleteVideo } from './videos.js?v=202610021453';
+import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021453';
+import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021453';
+import { renderMarkdown, typesetMath } from './markdown.js?v=202610021453';
+import { a11yView } from './views/a11y.js?v=202610021453';
+import { a11y, setA11y, applyA11y, motionReduced, speak, stopSpeaking, isSpeaking, canListen, listen, voiceCommand } from './a11y.js?v=202610021453';
+import { speakBtn } from './views/ai.js?v=202610021453';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021453';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
 const NAV = ['home', 'search', 'study', 'mission', 'progress', 'more'];
-const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let model;
 let index;
 let lastRoute = null;
+let first = true;
 
 // ---------- boot ----------
 
 async function boot() {
   applyTheme();
+  applyA11y();
   const started = performance.now();
   try {
     const entries = await Promise.all(
@@ -69,8 +73,15 @@ async function boot() {
   document.addEventListener('keydown', onKey);
   document.addEventListener('submit', onSubmit);
   document.getElementById('themeBtn').addEventListener('click', () => toggleTheme());
+  const vb = document.getElementById('voiceBtn');
+  vb.hidden = !canListen();
+  vb.addEventListener('click', runVoice);
   document.addEventListener('change', (e) => {
     if (e.target.matches('[data-alarm-awake]')) setKeepAwake(e.target.checked);
+    if (e.target.matches('[data-a11y-toggle]')) {
+      setA11y({ [e.target.dataset.a11yToggle]: e.target.checked });
+      toast(`${icon('check')}<span>সেভ হয়েছে</span>`);
+    }
     if (e.target.matches('[data-ai-pick]')) {
       const files = [...(e.target.files ?? [])].slice(0, Math.max(0, 4 - aiState.images.length));
       e.target.value = '';
@@ -138,6 +149,7 @@ function resolve(r) {
     case 'progress': return progressView(model);
     case 'more': return moreView(model);
     case 'profile': return profileView();
+    case 'a11y': return a11yView();
     case 'ai': return aiView(model, r.a);
     case 'mission': return missionView();
     case '': return homeView(model);
@@ -167,7 +179,7 @@ function render({ keepScroll = false } = {}) {
   $crumbs.hidden = !out.crumbs?.length;
 
   $view.innerHTML = out.html;
-  if (newRoute && !reduced.matches) {
+  if (newRoute && !motionReduced()) {
     $view.classList.remove('page-enter');
     void $view.offsetWidth; // restart the enter animation
     $view.classList.add('page-enter');
@@ -188,6 +200,14 @@ function render({ keepScroll = false } = {}) {
     fab.hidden = route().kind === 'ai';
     fab.href = out.visit?.chapterId ? `#/ai/${encodeURIComponent(out.visit.chapterId)}` : '#/ai';
   }
+
+  if (newRoute) {
+    // screen readers: say which page opened, and move focus to it after a tap-navigation
+    document.getElementById('srAnnounce').textContent = out.title || 'Provacor';
+    if (!first && !keepScroll && !out.isSearch) $view.focus({ preventScroll: true });
+    stopSpeaking();
+  }
+  first = false;
 
   if (newRoute && !keepScroll) window.scrollTo(0, 0);
   if (out.isSearch) mountSearch();
@@ -312,7 +332,7 @@ function onVideoClick(t) {
   const play = t.closest('[data-video-play]');
   if (play) {
     const start = Number(play.dataset.start) || 0;
-    const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(play.dataset.videoPlay)}?autoplay=1&rel=0&playsinline=1${start ? `&start=${start}` : ''}`;
+    const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(play.dataset.videoPlay)}?autoplay=1&rel=0&playsinline=1${start ? `&start=${start}` : ''}${a11y().captions ? '&cc_load_policy=1&cc_lang_pref=bn&hl=bn' : ''}`;
     play.outerHTML = `<div class="vd-frame"><iframe src="${src}" title="YouTube video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;
     return true;
   }
@@ -365,6 +385,7 @@ async function sendAi() {
     cancelAnimationFrame(frame);
     bubble.classList.remove('ai-typing');
     bubble.innerHTML = renderMarkdown(answer);
+    bubble.insertAdjacentHTML('afterend', speakBtn());
     typesetMath(bubble);
   } catch (err) {
     cancelAnimationFrame(frame);
@@ -379,7 +400,70 @@ async function sendAi() {
   }
 }
 
+function onA11yClick(t) {
+  const el = t.closest('[data-a11y-font],[data-a11y-motion],[data-a11y-rate],[data-a11y-speak]');
+  if (!el) return false;
+  const d = el.dataset;
+  if (d.a11ySpeak) { speak(d.a11ySpeak, el); return true; }
+  if (d.a11yFont) setA11y({ font: Number(d.a11yFont) });
+  else if (d.a11yMotion) setA11y({ motion: d.a11yMotion });
+  else if (d.a11yRate) setA11y({ rate: Number(d.a11yRate) });
+  rerender();
+  return true;
+}
+
+let listening = false;
+async function runVoice() {
+  if (listening) return;
+  listening = true;
+  const vb = document.getElementById('voiceBtn');
+  vb.classList.add('listening');
+  toast(`${icon('mic')}<span>বলো… যেমন "মিশন" বা "লেন্স খোঁজো"</span>`);
+  try {
+    const heard = await listen();
+    const cmd = voiceCommand(heard);
+    toast(`<span>শুনেছি: “${heard[0].replace(/[<>&]/g, '')}”</span>`);
+    if (!cmd) return;
+    if (cmd.back) history.back();
+    else if (cmd.theme) setTheme(cmd.theme);
+    else if (cmd.hash) location.hash = cmd.hash;
+    else if (cmd.search != null) {
+      searchState.q = cmd.search;
+      searchState.filter = 'all';
+      addSearch(cmd.search);
+      if (location.hash === '#/search') render({ keepScroll: true });
+      else location.hash = '#/search';
+    }
+  } catch (e) {
+    const msg = { 'not-allowed': 'মাইক্রোফোনের অনুমতি দাও', 'no-speech': 'কিছু শোনা যায়নি, আবার চেষ্টা করো', unsupported: 'এই ব্রাউজারে ভয়েস সাপোর্ট নেই' }[e.message] ?? 'ভয়েস বোঝা যায়নি';
+    toast(`<span>${msg}</span>`);
+  } finally {
+    listening = false;
+    vb.classList.remove('listening');
+  }
+}
+
 function onAiClick(t) {
+  const sp = t.closest('[data-ai-speak]');
+  if (sp) {
+    if (isSpeaking(sp)) stopSpeaking();
+    else speak(sp.closest('.ai-msg').querySelector('.ai-bubble').textContent, sp);
+    return true;
+  }
+  const mic = t.closest('[data-ai-mic]');
+  if (mic) {
+    mic.classList.add('listening');
+    listen()
+      .then((heard) => {
+        const input = document.getElementById('aiInput');
+        input.value = [input.value.trim(), heard[0]].filter(Boolean).join(' ');
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+      })
+      .catch(() => toast('<span>শোনা যায়নি, আবার চেষ্টা করো</span>'))
+      .finally(() => mic.classList.remove('listening'));
+    return true;
+  }
   const un = t.closest('[data-ai-unpick]');
   if (un) {
     aiState.images.splice(Number(un.dataset.aiUnpick), 1);
@@ -469,7 +553,7 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
-  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t)) return;
+  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t) || onA11yClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {
