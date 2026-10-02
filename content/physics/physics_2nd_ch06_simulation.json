@@ -9,6 +9,14 @@
       "format": "html",
       "file": "content/files/physics_2nd_ch06_simulation/geometrical-optics-lab.html",
       "source": "User-provided interactive simulation (HTML)"
+    },
+    {
+      "id": "physics_2nd_ch06_simulation_0002",
+      "kind": null,
+      "title": "আলোকবিজ্ঞান ল্যাব — ৬ষ্ঠ অধ্যায়ের ১৬টি সিমুলেশন (প্রতিফলন-প্রতিসরণ · প্রিজম-বিচ্ছুরণ · লেন্স · বীক্ষণ যন্ত্র)",
+      "format": "html",
+      "file": "content/files/physics_2nd_ch06_simulation/geometrical-optics-16-sims.html",
+      "source": "User-provided interactive simulations (HTML)"
     }
   ]
 }
