@@ -1,8 +1,8 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610021035';
-import { esc } from '../components.js?v=202610021035';
-import { themePref } from '../theme.js?v=202610021035';
+import { icon } from '../icons.js?v=202610021057';
+import { esc } from '../components.js?v=202610021057';
+import { themePref } from '../theme.js?v=202610021057';
 
 export function moreView(model) {
   const pref = themePref();
@@ -31,7 +31,7 @@ export function moreView(model) {
       <section class="card rise" style="--i:3"><h2 class="card-title">${icon('trash')} Data on this device</h2>
         <p class="muted small">Progress, study history and recent searches are stored only in this browser.</p>
         <button class="btn btn-danger tap" data-action="reset">Reset progress & history</button></section>
-      <section class="card about rise" style="--i:4"><div class="brand-mark">${icon('study')}</div>
+      <section class="card about rise" style="--i:4"><img class="avatar lg" src="assets/img/avatar.jpg" alt="" width="56" height="56">
         <div><h2>Provacor</h2><p class="muted small">HSC Science study OS · ${model.subjects.length} subjects · ${model.chapters.length} chapters & topics · ${content} content items</p></div></section>`,
   };
 }
