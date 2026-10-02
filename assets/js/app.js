@@ -306,16 +306,28 @@ function sectionView(sec) {
   };
 }
 
+const FORMAT = {
+  pdf: { icon: '📄 ', open: 'Open PDF' },
+  html: { icon: '🔬 ', open: 'Full screen' },
+};
+
 function itemCard(it, sec) {
   const kind = sec.contentKinds.find((k) => k.id === it.kind)?.label;
   const doneNow = isItemDone(it.id);
+  const fmt = FORMAT[it.format] ?? { icon: '', open: 'Open file' };
   const meta = [kind, it.format?.toUpperCase(), it.pages ? `${it.pages} pages` : null].filter(Boolean).join(' · ');
+  const src = it.file ? esc(encodeURI(it.file)) : '';
+  // Interactive HTML (simulations) runs inline; other files open in a new tab.
+  const embed = it.format === 'html' && it.file
+    ? `<iframe class="item-embed" src="${src}" title="${esc(it.title ?? it.id)}" loading="lazy"></iframe>`
+    : '';
   return `<article class="card item-card">
-      <h3>${it.format === 'pdf' ? '📄 ' : ''}${esc(it.title ?? it.id)}</h3>
+      <h3>${fmt.icon}${esc(it.title ?? it.id)}</h3>
       <p class="muted small">${esc(meta)}</p>
       ${it.source ? `<p class="muted small">${esc(it.source)}</p>` : ''}
+      ${embed}
       <div class="item-actions">
-        ${it.file ? `<a class="btn" href="${esc(encodeURI(it.file))}" target="_blank" rel="noopener">Open ${it.format === 'pdf' ? 'PDF' : 'file'}</a>` : ''}
+        ${it.file ? `<a class="btn" href="${src}" target="_blank" rel="noopener">${fmt.open}</a>` : ''}
         <button class="btn ghost" data-action="toggle-done" data-item="${esc(it.id)}" aria-pressed="${doneNow}">${doneNow ? '✓ Done' : 'Mark as done'}</button>
       </div>
     </article>`;
