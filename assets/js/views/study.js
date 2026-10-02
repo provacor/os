@@ -1,10 +1,11 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021219';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021219';
-import { progressOf } from '../progress.js?v=202610021219';
-import { contentCount, chapterCount } from '../model.js?v=202610021219';
-import { lastVisit } from './shared.js?v=202610021219';
+import { icon } from '../icons.js?v=202610021225';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021225';
+import { progressOf } from '../progress.js?v=202610021225';
+import { contentCount, chapterCount } from '../model.js?v=202610021225';
+import { lastVisit } from './shared.js?v=202610021225';
+import { alarmsBlock } from './alarms.js?v=202610021225';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -169,6 +170,7 @@ export function studyMap(model) {
     title: 'Curriculum',
     html: `<header class="page-title rise"><p class="eyebrow">Study</p><h1>Curriculum map</h1>
         <p class="muted">${model.subjects.length} subjects · ${model.papers.length} papers · ${model.chapters.length} chapters & topics</p></header>
-      ${legend}<div class="map">${subjects}</div>`,
+      ${legend}<div class="map">${subjects}</div>
+      ${alarmsBlock()}`,
   };
 }
