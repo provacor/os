@@ -1,0 +1,87 @@
+// Mission tab: plan today and the next six days. Each day has its own task list and note.
+
+import { icon } from '../icons.js?v=202610021217';
+import { esc } from '../components.js?v=202610021217';
+import { week, tasksOf, noteOf, leftovers } from '../mission.js?v=202610021217';
+
+export const missionState = { day: null }; // selected day key; null = today
+
+const WEEKDAY = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+const SHORT = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র', 'শনি'];
+const MONTH = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+const RELATIVE = ['আজ', 'আগামীকাল', 'পরশু'];
+
+const bn = (n) => String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
+const dayName = (d) => RELATIVE[d.offset] ?? WEEKDAY[d.date.getDay()];
+const fullDate = (date) => `${bn(date.getDate())} ${MONTH[date.getMonth()]}, ${WEEKDAY[date.getDay()]}`;
+
+export function missionView() {
+  const days = week();
+  const sel = days.find((d) => d.key === missionState.day) ?? days[0];
+  missionState.day = sel.key;
+  const tasks = tasksOf(sel.key);
+  const done = tasks.filter((t) => t.done).length;
+  const weekTasks = days.flatMap((d) => tasksOf(d.key));
+  const weekDone = weekTasks.filter((t) => t.done).length;
+
+  const strip = days
+    .map((d) => {
+      const list = tasksOf(d.key);
+      const n = list.length;
+      const all = n && list.every((t) => t.done);
+      return `<button class="day-chip ${d.key === sel.key ? 'on' : ''} ${all ? 'all-done' : ''}" data-mission-day="${d.key}" aria-pressed="${d.key === sel.key}">
+          <span class="dc-name">${d.offset < 3 ? RELATIVE[d.offset] : SHORT[d.date.getDay()]}</span>
+          <span class="dc-date">${bn(d.date.getDate())}</span>
+          <span class="dc-count">${n ? `${bn(list.filter((t) => t.done).length)}/${bn(n)}` : '·'}</span>
+        </button>`;
+    })
+    .join('');
+
+  const rows = tasks.length
+    ? tasks
+        .map((t) => `<li class="task ${t.done ? 'done' : ''}">
+            <button class="task-check" data-action="task-toggle" data-task="${esc(t.id)}" aria-pressed="${t.done}" aria-label="${t.done ? 'Mark not done' : 'Mark done'}">${icon('check')}</button>
+            <span class="task-text">${esc(t.text)}</span>
+            <button class="task-del" data-action="task-del" data-task="${esc(t.id)}" aria-label="Delete task">${icon('x')}</button>
+          </li>`)
+        .join('')
+    : `<li class="task-empty">${icon('target')}<span>${esc(dayName(sel))}-এর জন্য এখনো কোনো মিশন নেই। নিচে লিখে যোগ করো।</span></li>`;
+
+  const old = sel.offset === 0 ? leftovers(sel.key) : [];
+  const oldHtml = old.length
+    ? `<section class="card mission-old rise" style="--i:3">
+        <h2 class="card-title">${icon('clock')} আগের বাকি কাজ <span class="muted small">${bn(old.length)}টি</span></h2>
+        <ul class="task-list">${old
+          .slice(0, 20)
+          .map((t) => `<li class="task">
+              <span class="task-text">${esc(t.text)}<small>${esc(fullDate(new Date(t.key + 'T12:00:00')))}</small></span>
+              <button class="btn tap task-move" data-action="task-move" data-from="${esc(t.key)}" data-task="${esc(t.id)}">আজকে আনো</button>
+              <button class="task-del" data-action="task-del" data-from="${esc(t.key)}" data-task="${esc(t.id)}" aria-label="Delete task">${icon('x')}</button>
+            </li>`)
+          .join('')}</ul>
+      </section>`
+    : '';
+
+  return {
+    nav: 'mission',
+    title: 'Mission',
+    html: `<header class="page-title rise"><p class="eyebrow">Personal Study Mission</p><h1>পার্সোনাল স্টাডি মিশন</h1>
+        <p class="muted">এই সপ্তাহে ${bn(weekDone)}/${bn(weekTasks.length)} মিশন শেষ · শুধু তোমার ফোনেই সেভ থাকে</p></header>
+      <div class="day-strip rise" style="--i:1" role="tablist" aria-label="Days">${strip}</div>
+      <section class="card mission-day rise" style="--i:2">
+        <div class="md-head">
+          <div><h2>${esc(dayName(sel))}</h2><p class="muted small">${esc(fullDate(sel.date))}</p></div>
+          ${tasks.length ? `<span class="md-count">${bn(done)}/${bn(tasks.length)}</span>` : ''}
+        </div>
+        ${tasks.length ? `<div class="bar bar-thin" role="progressbar" aria-valuenow="${Math.round((done / tasks.length) * 100)}" aria-valuemin="0" aria-valuemax="100"><span style="--p:${Math.round((done / tasks.length) * 100)}%"></span></div>` : ''}
+        <ul class="task-list">${rows}</ul>
+        <form class="task-add" data-task-form>
+          <input id="taskInput" type="text" maxlength="300" autocomplete="off" placeholder="নতুন মিশন লেখো… যেমন: পদার্থ ২য় পত্র অধ্যায় ৬ MCQ" aria-label="New task">
+          <button class="btn btn-primary tap" type="submit" aria-label="Add">${icon('check')}<span>যোগ</span></button>
+        </form>
+        <label class="note-label" for="dayNote">${icon('notes')} নোট</label>
+        <textarea id="dayNote" class="day-note" data-mission-note="${sel.key}" rows="4" maxlength="5000" placeholder="এই দিনের জন্য প্ল্যান বা নোট লিখে রাখো…">${esc(noteOf(sel.key))}</textarea>
+      </section>
+      ${oldHtml}`,
+  };
+}

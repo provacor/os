@@ -1,9 +1,9 @@
 // Search: filters, recent searches, suggestions and grouped, highlighted results.
 
-import { icon } from '../icons.js?v=202610021123';
-import { esc, highlight, subjectGlyph, sectionHue } from '../components.js?v=202610021123';
-import { search } from '../search.js?v=202610021123';
-import { recentSearches } from '../activity.js?v=202610021123';
+import { icon } from '../icons.js?v=202610021217';
+import { esc, highlight, subjectGlyph, sectionHue } from '../components.js?v=202610021217';
+import { search } from '../search.js?v=202610021217';
+import { recentSearches } from '../activity.js?v=202610021217';
 
 const GROUPS = [
   ['subject', 'Subjects'],

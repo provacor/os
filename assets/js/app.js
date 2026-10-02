@@ -1,22 +1,24 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021123';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021123';
-import { buildIndex } from './search.js?v=202610021123';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021123';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021123';
-import { icon } from './icons.js?v=202610021123';
-import { crumbs, emptyState } from './components.js?v=202610021123';
-import { homeView } from './views/home.js?v=202610021123';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021123';
-import { sectionView } from './views/section.js?v=202610021123';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021123';
-import { progressView } from './views/progress.js?v=202610021123';
-import { moreView } from './views/more.js?v=202610021123';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021217';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021217';
+import { buildIndex } from './search.js?v=202610021217';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021217';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021217';
+import { icon } from './icons.js?v=202610021217';
+import { crumbs, emptyState } from './components.js?v=202610021217';
+import { homeView } from './views/home.js?v=202610021217';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021217';
+import { sectionView } from './views/section.js?v=202610021217';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021217';
+import { progressView } from './views/progress.js?v=202610021217';
+import { moreView } from './views/more.js?v=202610021217';
+import { missionView, missionState } from './views/mission.js?v=202610021217';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021217';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
-const NAV = ['home', 'search', 'study', 'progress', 'more'];
+const NAV = ['home', 'search', 'study', 'mission', 'progress', 'more'];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let model;
 let index;
@@ -57,6 +59,7 @@ async function boot() {
   document.addEventListener('click', onClick);
   document.addEventListener('input', onInput);
   document.addEventListener('keydown', onKey);
+  document.addEventListener('submit', onSubmit);
   document.getElementById('themeBtn').addEventListener('click', () => toggleTheme());
   render();
   // Keep the entrance short: the splash leaves ~0.65s after start, or at once if loading took longer.
@@ -96,6 +99,7 @@ function resolve(r) {
     case 'syllabus': return studyMap(model);
     case 'progress': return progressView(model);
     case 'more': return moreView(model);
+    case 'mission': return missionView();
     case '': return homeView(model);
     default: return null;
   }
@@ -168,7 +172,15 @@ function setQuery(v, { save = false } = {}) {
   paintResults();
 }
 
+let noteTimer;
 function onInput(e) {
+  const note = e.target.dataset?.missionNote;
+  if (note) {
+    clearTimeout(noteTimer);
+    const v = e.target.value;
+    noteTimer = setTimeout(() => setNote(note, v), 300);
+    return;
+  }
   if (e.target.id !== 'q') return;
   clearTimeout(searchTimer);
   const v = e.target.value;
@@ -183,10 +195,50 @@ function onKey(e) {
   }
 }
 
+// ---------- mission planner ----------
+
+function onSubmit(e) {
+  if (!e.target.matches('[data-task-form]')) return;
+  e.preventDefault();
+  const input = document.getElementById('taskInput');
+  if (!addTask(missionState.day, input.value)) return input.focus();
+  rerender();
+  document.getElementById('taskInput')?.focus({ preventScroll: true });
+}
+
+function rerender() {
+  const y = window.scrollY;
+  render({ keepScroll: true });
+  window.scrollTo(0, y);
+}
+
+function onMissionClick(t) {
+  const dayBtn = t.closest('[data-mission-day]');
+  if (dayBtn) {
+    missionState.day = dayBtn.dataset.missionDay;
+    rerender();
+    return true;
+  }
+  const btn = t.closest('[data-action^="task-"]');
+  if (!btn) return false;
+  const id = btn.dataset.task;
+  const from = btn.dataset.from ?? missionState.day;
+  const act = btn.dataset.action;
+  if (act === 'task-toggle') toggleTask(from, id);
+  else if (act === 'task-del') deleteTask(from, id);
+  else if (act === 'task-move') {
+    moveTask(from, id, missionState.day);
+    toast(`${icon('check')}<span>আজকের মিশনে আনা হয়েছে</span>`);
+  }
+  rerender();
+  return true;
+}
+
 // ---------- interactions ----------
 
 function onClick(e) {
   const t = e.target;
+  if (onMissionClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {
