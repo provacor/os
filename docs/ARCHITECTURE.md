@@ -15,31 +15,31 @@ This covers the seven "first deliverable" items: subjects, papers, chapters, sec
 ## 2. Papers
 
 `english_2nd`, `higher_math_1st`, `higher_math_2nd`, `physics_1st`, `physics_2nd`, `chemistry_1st`, `chemistry_2nd`, `biology_1st`, `biology_2nd`.
-English 2nd Paper has one group, **Grammar**. Each grammar item is a unit.
+English 2nd Paper has one group, **Grammar Topics**. Each grammar topic works like a chapter.
 
 ## 3. Chapters
 
 No chapter lists exist yet. See [`SYLLABUS_STRUCTURE_AUDIT.md`](../SYLLABUS_STRUCTURE_AUDIT.md): no syllabus images were received, so nothing was invented.
-English has 7 provisional grammar units, taken from the brief and flagged `VERIFY FROM SOURCE`.
+English has 7 provisional grammar topics, taken from the brief and flagged `VERIFY FROM SOURCE`.
+
+All chapters of a paper sit together under that paper. **Exam groupings (অর্ধ-বার্ষিক / বার্ষিক / প্রাক-নির্বাচনী / নির্বাচনী) are ignored completely.** They are not stored and not shown. A chapter that the source repeats in several exam columns is recorded once.
 
 ## 4. Section structure (per chapter)
 
 Defined in `data/section-templates.json`. Each subject picks one template. Changing a template changes every chapter of that subject.
 
+Every science chapter gets the **core** sections: Notes · MCQ · Creative/CQ · Formula · Concepts · Simulation · Mistake Bank · Revision · Progress. The subject's extra sections go between Concepts and Simulation.
+
 | Template | Sections (in order) |
 |----------|---------------------|
-| `physics` | Notes · MCQ · Creative/CQ · Formula · Concepts · Derivation · Numerical · Graph · Diagram · Simulation · Mistake Bank · Revision · Progress |
-| `chemistry` | Notes · MCQ · Creative/CQ · Formula / Equation · Concepts · Reaction · Conversion · Mechanism · Identification Test · Simulation · Mistake Bank · Revision · Progress |
-| `higher_math` | Notes · MCQ · Creative/CQ · Formula · Concepts · Theorem · Problem Types · Graph · Solved Problems · Simulation · Mistake Bank · Revision · Progress |
-| `biology` | Notes · MCQ · Creative/CQ · Concepts · Definition · Diagram · Process · Comparison · Classification · Simulation / Interactive Diagram · Mistake Bank · Revision · Progress |
-| `english_grammar_unit` | Notes · Practice · MCQ · Board Questions · Mistakes · Revision · Progress |
-| `default` | Notes · MCQ · Creative/CQ · Formula · Concepts · Simulation · Mistake Bank · Revision · Progress |
+| `physics` | Notes · MCQ · Creative/CQ · Formula · Concepts · **Derivation · Numerical · Graph · Diagram** · Simulation · Mistake Bank · Revision · Progress |
+| `higher_math` | Notes · MCQ · Creative/CQ · Formula · Concepts · **Theorem · Problem Types · Solved Problems · Graph** · Simulation · Mistake Bank · Revision · Progress |
+| `chemistry` | Notes · MCQ · Creative/CQ · Formula · Concepts · **Reaction · Conversion · Mechanism · Identification Test** · Simulation · Mistake Bank · Revision · Progress |
+| `biology` | Notes · MCQ · Creative/CQ · Formula · Concepts · **Definition · Diagram · Process · Comparison · Classification** · Interactive Diagram / Simulation · Mistake Bank · Revision · Progress |
+| `english_grammar_topic` | Notes · Rules · Examples · Practice · MCQ · Board Questions · Mistake Bank · Revision · Progress |
+| `default` | the core list |
 
-Template decisions (each is one line to change in `data/section-templates.json`):
-
-- Every template has the core trio **Notes, MCQ, Creative/CQ**. English grammar units use the brief's own list (Notes, Practice, MCQ, Board Questions, Mistakes, Revision), which has no CQ.
-- The general list (brief §5–6) adds **Concepts** and **Progress** to every chapter. The subject-specific lists (§11–14) leave them out, so they are added to each subject list.
-- **Biology has no Formula section**, because the Biology list in brief §14 does not include one.
+`node tools/validate.mjs` fails if a science template is missing any core section.
 
 Each section type (`data/section-types.json`) also defines:
 
@@ -63,14 +63,13 @@ Subject ──< Paper ──< Chapter ──< Section ──< Content item
 | Subject | `<subject>` | `physics` |
 | Paper | `<subject>_<1st\|2nd>` | `physics_1st` |
 | Chapter | `<paper>_ch<NN>` | `physics_1st_ch01` |
-| English unit | `<paper>_<slug>` | `english_2nd_preposition` |
+| English topic | `<paper>_<slug>` | `english_2nd_preposition` |
 | Section | `<chapter>_<type>` | `physics_1st_ch01_notes`, `physics_1st_ch01_mcq`, `physics_1st_ch01_cq` |
 | Content item | `<section>_<NNNN>` | `physics_1st_ch01_mcq_0001` |
 
 Sections are **not stored one by one**. They are generated from the subject's template, so there is no `sections.json` with thousands of repeated rows, and adding a section type to a template adds it to every chapter. The IDs are still deterministic and stable.
 
-**Chapter record**: `id, paperId, groupId?, kind, number, order, name, topics[], exams{half_yearly,annual,pre_test,test: true|false|null}, source{image,wording,origin}, confidence, verification`.
-The exam grouping is **metadata only**. The navigation hierarchy is never split by exam.
+**Chapter record**: `id, paperId, groupId?, kind, number, order, name, topics[], source{wording,origin}, confidence, verification`. There is no exam field.
 
 **Progress**: each trackable section stores a 0–100 value on the device (`localStorage`, key `hscos:progress:v1`). Chapter = average of its trackable sections. Paper = average of its chapters. Subject = average of all its chapters. Everything shows 0% now.
 
@@ -92,8 +91,7 @@ The exam grouping is **metadata only**. The navigation hierarchy is never split 
 │   ├── papers.json
 │   ├── chapters.json
 │   ├── section-types.json
-│   ├── section-templates.json
-│   └── exams.json
+│   └── section-templates.json
 ├── content/                    ← CONTENT (empty in this phase)
 │   ├── index.json              sectionId → { file, count }
 │   └── README.md               content file format
@@ -119,14 +117,16 @@ Bottom nav:  🏠 Home   🔍 Search   📊 Progress   📋 Syllabus
 
 Home  #/
  └─ Subject card (papers · chapters · content · done %)
-     └─ Paper screen  #/p/<paperId>          ← paper tabs: [1st Paper | 2nd Paper]
-         └─ Chapter accordion  #/p/<paperId>/<chapterId>   (one open at a time)
-             ├─ progress bar, exam-coverage chips, topics
-             └─ Section tiles (Notes, MCQ, CQ, …)
-                 └─ Section screen  #/x/<sectionId>
-                     ├─ sibling-section chip row (switch with one tap)
-                     ├─ empty state: "Content not added yet" + [+ Add Content]
-                     └─ future categories (all 0) + planned item fields
+     └─ Subject screen  #/s/<subjectId>      ← paper cards: [1st Paper] [2nd Paper]
+         └─ Paper screen  #/p/<paperId>      ← ALL chapters of the paper, no exam grouping
+             │                                 (tabs switch to the other paper)
+             └─ Chapter accordion  #/p/<paperId>/<chapterId>   (one open at a time)
+                 ├─ progress bar, topics
+                 └─ Section tiles (Notes, MCQ, CQ, …)
+                     └─ Section screen  #/x/<sectionId>
+                         ├─ sibling-section chip row (switch with one tap)
+                         ├─ empty state: "Content not added yet" + [+ Add Content]
+                         └─ future categories (all 0) + planned item fields
 ```
 
 - A breadcrumb is shown on every screen below Home, for example `Home › Physics › 1st Paper › Ch 1 › Notes`.
@@ -153,3 +153,5 @@ Steps:
 3. Run `node tools/validate.mjs`.
 
 Structure files are never touched when content is added, so new content cannot break the hierarchy.
+
+**Search across content**: `assets/js/search.js` indexes subjects, papers, chapters, topics and sections today. When content files exist, their item text (question, title, body, formula, reaction, …) gets added to the same index. Each result already carries its full path, so a hit in an MCQ opens that chapter's MCQ section.

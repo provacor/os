@@ -8,7 +8,6 @@ export const DATA_FILES = {
   chapters: 'data/chapters.json',
   sectionTypes: 'data/section-types.json',
   templates: 'data/section-templates.json',
-  exams: 'data/exams.json',
   content: 'content/index.json',
 };
 
@@ -27,7 +26,6 @@ export function buildModel(raw) {
   const sectionTypes = raw.sectionTypes.sectionTypes;
   const templates = raw.templates.templates;
   const contentIndex = raw.content.sections ?? {};
-  const exams = [...raw.exams.exams].sort(byOrder);
   const byId = new Map();
 
   const subjects = [...raw.subjects.subjects].sort(byOrder).map((s) => ({ ...s, level: 'subject', papers: [] }));
@@ -82,7 +80,7 @@ export function buildModel(raw) {
     });
 
   const sections = chapters.flatMap((c) => c.sections);
-  return { subjects, papers, chapters, sections, exams, sectionTypes, templates, byId };
+  return { subjects, papers, chapters, sections, sectionTypes, templates, byId };
 }
 
 // ---- counting helpers (content, not progress) ----

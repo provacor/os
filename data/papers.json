@@ -6,9 +6,9 @@
       "subjectId": "english",
       "name": "2nd Paper",
       "paperNo": 2,
-      "unitLabel": "Unit",
+      "unitLabel": "Topic",
       "groups": [
-        { "id": "english_2nd_grammar", "name": "Grammar", "order": 1 }
+        { "id": "english_2nd_grammar", "name": "Grammar Topics", "order": 1 }
       ],
       "sourceStatus": "awaiting_source"
     },

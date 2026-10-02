@@ -1,17 +1,19 @@
 {
-  "$comment": "Chapters (or English grammar units). id = <paperId>_ch<NN> for numbered chapters, <paperId>_<slug> for English units. NEVER rename an id once content exists. name must be the exact source wording from the syllabus image; anything not read from the source stays verification = needs_verification. exams values: true | false | null (unknown). See SYLLABUS_STRUCTURE_AUDIT.md.",
+  "$comment": "Chapters (or English grammar topics). id = <paperId>_ch<NN> for numbered chapters, <paperId>_<slug> for English topics. Each chapter appears ONCE under its paper, even if the syllabus lists it in several exam columns; exam groupings are not stored. NEVER rename an id once content exists. name must be the exact source wording; anything not read from the source stays verification = needs_verification. See SYLLABUS_STRUCTURE_AUDIT.md.",
   "chapters": [
     {
       "id": "english_2nd_preposition",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 1,
       "name": "Preposition",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -19,13 +21,15 @@
       "id": "english_2nd_right_form_of_verbs",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 2,
       "name": "Right Form of Verbs",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -33,13 +37,15 @@
       "id": "english_2nd_completing_sentence",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 3,
       "name": "Completing Sentence",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -47,13 +53,15 @@
       "id": "english_2nd_narration",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 4,
       "name": "Narration / Speech",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -61,13 +69,15 @@
       "id": "english_2nd_sentence_connectors",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 5,
       "name": "Sentence Connectors",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -75,13 +85,15 @@
       "id": "english_2nd_antonym_synonym",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 6,
       "name": "Antonym / Synonym",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     },
@@ -89,13 +101,15 @@
       "id": "english_2nd_punctuation",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
-      "kind": "unit",
+      "kind": "topic",
       "number": null,
       "order": 7,
       "name": "Punctuation",
       "topics": [],
-      "exams": { "half_yearly": null, "annual": null, "pre_test": null, "test": null },
-      "source": { "image": null, "wording": null, "origin": "user_prompt_example" },
+      "source": {
+        "wording": null,
+        "origin": "user_prompt_example"
+      },
       "confidence": "low",
       "verification": "needs_verification"
     }

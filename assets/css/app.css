@@ -213,3 +213,9 @@ th { color: var(--muted); font-weight: 600; font-size: .78rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; }
 }
+
+/* subject page: paper cards */
+.paper-card { display: block; border-left: 4px solid var(--accent, var(--primary)); min-height: 76px; }
+.paper-card:active { transform: scale(.985); }
+.paper-head { display: flex; align-items: center; gap: 12px; }
+.paper-head > div { flex: 1; min-width: 0; }

@@ -67,12 +67,7 @@ function render() {
   const r = route();
   let out;
   switch (r.kind) {
-    case 's': {
-      const subj = model.byId.get(r.a);
-      if (subj?.papers[0]) { location.replace(`#/p/${subj.papers[0].id}`); return; }
-      out = notFound();
-      break;
-    }
+    case 's': out = subjectView(model.byId.get(r.a)); break;
     case 'p': out = paperView(model.byId.get(r.a), r.b); break;
     case 'x': out = sectionView(model.byId.get(r.a)); break;
     case 'search': out = searchView(); break;
@@ -131,7 +126,7 @@ function homeView() {
           ${ring(pct)}</div>
         <dl class="stats">
           <div><dt>Papers</dt><dd>${s.papers.length}</dd></div>
-          <div><dt>${s.id === 'english' ? 'Units' : 'Chapters'}</dt><dd>${chs || '—'}</dd></div>
+          <div><dt>${s.id === 'english' ? 'Topics' : 'Chapters'}</dt><dd>${chs || '—'}</dd></div>
           <div><dt>Content</dt><dd>${contentCount(s)}</dd></div>
           <div><dt>Done</dt><dd>${pct}%</dd></div>
         </dl>
@@ -149,6 +144,28 @@ function homeView() {
       </section>
       ${pending ? `<a class="banner" href="#/syllabus"><strong>${pending} of ${model.papers.length} papers</strong> are waiting for their chapter list to be verified from the syllabus images. Tap to see the audit.</a>` : ''}
       <div class="grid subjects">${cards}</div>`,
+  };
+}
+
+function subjectView(subj) {
+  if (!subj || subj.level !== 'subject') return notFound();
+  const cards = subj.papers
+    .map((p) => {
+      const pct = progressOf(p);
+      const n = chapterCount(p);
+      return `<a class="card paper-card accent-${esc(subj.accent)}" href="#/p/${esc(p.id)}">
+          <div class="paper-head"><div><h2>${esc(p.name)}</h2>
+            <p class="muted small">${n ? plural(n, esc(p.unitLabel)) : `${esc(p.unitLabel)} list pending syllabus source`} · ${contentCount(p)} content</p></div>
+            ${ring(pct)}</div>
+        </a>`;
+    })
+    .join('');
+  return {
+    nav: 'home',
+    crumbs: [[subj.name, `#/s/${subj.id}`]],
+    html: `<header class="page-head"><span class="subject-icon" aria-hidden="true">${subj.icon}</span>
+        <div><h1>${esc(subj.name)}</h1><p class="muted small">${plural(subj.papers.length, 'Paper')} · ${progressOf(subj)}% done</p></div></header>
+      <div class="stack">${cards}</div>`,
   };
 }
 
@@ -181,7 +198,7 @@ function paperView(paper, openChapterId) {
     nav: 'home',
     crumbs: [[subj.name, `#/s/${subj.id}`], [paper.name, `#/p/${paper.id}`]],
     html: `<header class="page-head"><span class="subject-icon" aria-hidden="true">${subj.icon}</span>
-        <div><h1>${esc(subj.name)}</h1><p class="muted small">${plural(chapterCount(paper), esc(paper.unitLabel))} · ${contentCount(paper)} content · ${progressOf(paper)}% done</p></div></header>
+        <div><h1>${esc(subj.name)} — ${esc(paper.name)}</h1><p class="muted small">${plural(chapterCount(paper), esc(paper.unitLabel))} · ${contentCount(paper)} content · ${progressOf(paper)}% done</p></div></header>
       <nav class="tabs" role="tablist">${tabs}</nav>
       ${body}`,
     after: () => {
@@ -192,15 +209,6 @@ function paperView(paper, openChapterId) {
 
 function chapterItem(ch, i, open) {
   const pct = progressOf(ch);
-  const examKnown = model.exams.filter((e) => ch.exams?.[e.id] != null);
-  const exams = examKnown.length
-    ? `<ul class="chips">${model.exams
-        .map((e) => {
-          const v = ch.exams?.[e.id];
-          return `<li class="chip ${v === true ? 'on' : v === false ? 'off' : ''}" title="${esc(e.name)}">${v === true ? '✓' : v === false ? '✗' : '?'} ${esc(e.nameBn)}</li>`;
-        })
-        .join('')}</ul>`
-    : `<p class="muted small">Exam coverage (অর্ধ-বার্ষিক / বার্ষিক / প্রাক-নির্বাচনী / নির্বাচনী): not yet recorded from source.</p>`;
   const topics = ch.topics?.length
     ? `<details class="topics"><summary>Topics (${ch.topics.length})</summary><ul>${ch.topics.map((t) => `<li>${esc(typeof t === 'string' ? t : t.name)}</li>`).join('')}</ul></details>`
     : '';
@@ -221,7 +229,6 @@ function chapterItem(ch, i, open) {
       </button>
       <div class="acc-body"><div class="acc-inner">
         ${bar(pct)}
-        ${exams}
         ${topics}
         <div class="section-grid">${sections}</div>
       </div></div>

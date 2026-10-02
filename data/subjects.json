@@ -7,7 +7,7 @@
       "icon": "📘",
       "accent": "blue",
       "order": 1,
-      "sectionTemplate": "english_grammar_unit",
+      "sectionTemplate": "english_grammar_topic",
       "note": "Only English 2nd Paper is kept. English 1st Paper is intentionally excluded."
     },
     {

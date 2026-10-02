@@ -21,14 +21,17 @@ const checkId = (id, what) => {
 
 const types = raw.sectionTypes.sectionTypes;
 const templates = raw.templates.templates;
-const examIds = new Set(raw.exams.exams.map((e) => e.id));
 
 for (const [name, list] of Object.entries(templates)) {
   const t = list.map((e) => (typeof e === 'string' ? e : e.type));
   t.forEach((x) => types[x] || err(`template "${name}" uses unknown section type "${x}"`));
   if (new Set(t).size !== t.length) err(`template "${name}" repeats a section type`);
   for (const core of ['notes', 'mcq']) if (!t.includes(core)) err(`template "${name}" is missing core section "${core}"`);
-  if (name !== 'english_grammar_unit' && !t.includes('cq')) err(`template "${name}" is missing core section "cq"`);
+  if (name !== 'english_grammar_topic') {
+    for (const core of ['cq', 'formula', 'concept', 'simulation', 'mistakes', 'revision', 'progress']) {
+      if (!t.includes(core)) err(`template "${name}" is missing core section "${core}"`);
+    }
+  }
 }
 
 const subjectIds = new Set();
@@ -48,6 +51,7 @@ for (const p of raw.papers.papers) {
 }
 if ([...paperIds.keys()].includes('english_1st')) err('English 1st Paper must not exist');
 
+const names = new Map();
 for (const c of raw.chapters.chapters) {
   checkId(c.id, 'chapter');
   const p = paperIds.get(c.paperId);
@@ -57,9 +61,12 @@ for (const c of raw.chapters.chapters) {
     err(`chapter ${c.id}: numbered chapter id should be ${c.paperId}_ch${String(c.number).padStart(2, '0')}`);
   }
   if (c.groupId && !p.groups?.some((g) => g.id === c.groupId)) err(`chapter ${c.id}: unknown group ${c.groupId}`);
-  for (const k of Object.keys(c.exams ?? {})) if (!examIds.has(k)) err(`chapter ${c.id}: unknown exam key ${k}`);
+  if ('exams' in c) err(`chapter ${c.id}: exam groupings are not part of the structure, remove "exams"`);
+  const key = `${c.paperId}|${String(c.name).trim().toLowerCase()}`;
+  if (names.has(key)) err(`chapter ${c.id}: duplicate of ${names.get(key)} (same name in the same paper)`);
+  names.set(key, c.id);
   if (!['verified', 'needs_verification'].includes(c.verification)) err(`chapter ${c.id}: verification must be verified|needs_verification`);
-  if (c.verification === 'verified' && !(c.source?.image && c.source?.wording)) err(`chapter ${c.id}: verified chapters need source.image and source.wording`);
+  if (c.verification === 'verified' && !c.source?.wording) err(`chapter ${c.id}: verified chapters need source.wording`);
   if (c.verification !== 'verified') warnings.push(`${c.id} needs verification`);
 }
 

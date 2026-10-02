@@ -1,9 +1,0 @@
-{
-  "$comment": "Examination / cycle groupings found in the syllabus images. Stored as chapter metadata only — the main hierarchy is never split by exam. On a chapter, exams.<id> is true (covered), false (not covered) or null (not stated in source / not yet extracted).",
-  "exams": [
-    { "id": "half_yearly", "name": "Half-Yearly", "nameBn": "অর্ধ-বার্ষিক", "order": 1 },
-    { "id": "annual", "name": "Annual", "nameBn": "বার্ষিক", "order": 2 },
-    { "id": "pre_test", "name": "Pre-Selection", "nameBn": "প্রাক-নির্বাচনী", "order": 3 },
-    { "id": "test", "name": "Selection", "nameBn": "নির্বাচনী", "order": 4 }
-  ]
-}
