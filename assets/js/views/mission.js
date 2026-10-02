@@ -1,23 +1,23 @@
 // Mission tab: plan today and the next six days. Each day has its own task list and note.
 
-import { icon } from '../icons.js?v=202610021217';
-import { esc } from '../components.js?v=202610021217';
-import { week, tasksOf, noteOf, leftovers } from '../mission.js?v=202610021217';
+import { icon } from '../icons.js?v=202610021219';
+import { esc } from '../components.js?v=202610021219';
+import { week, todayKey, tasksOf, noteOf, leftovers } from '../mission.js?v=202610021219';
 
-export const missionState = { day: null }; // selected day key; null = today
+export const missionState = { day: null, week: 0 }; // selected day key (null = today) and week offset
 
 const WEEKDAY = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
-const SHORT = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র', 'শনি'];
+const SHORT = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহস্পতি', 'শুক্র', 'শনি'];
 const MONTH = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
-const RELATIVE = ['আজ', 'আগামীকাল', 'পরশু'];
 
 const bn = (n) => String(n).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
-const dayName = (d) => RELATIVE[d.offset] ?? WEEKDAY[d.date.getDay()];
+const dayName = (d) => WEEKDAY[d.date.getDay()];
+const shortDate = (date) => `${bn(date.getDate())} ${MONTH[date.getMonth()]}`;
 const fullDate = (date) => `${bn(date.getDate())} ${MONTH[date.getMonth()]}, ${WEEKDAY[date.getDay()]}`;
 
 export function missionView() {
-  const days = week();
-  const sel = days.find((d) => d.key === missionState.day) ?? days[0];
+  const days = week(missionState.week);
+  const sel = days.find((d) => d.key === missionState.day) ?? days.find((d) => d.isToday) ?? days[0];
   missionState.day = sel.key;
   const tasks = tasksOf(sel.key);
   const done = tasks.filter((t) => t.done).length;
@@ -29,8 +29,8 @@ export function missionView() {
       const list = tasksOf(d.key);
       const n = list.length;
       const all = n && list.every((t) => t.done);
-      return `<button class="day-chip ${d.key === sel.key ? 'on' : ''} ${all ? 'all-done' : ''}" data-mission-day="${d.key}" aria-pressed="${d.key === sel.key}">
-          <span class="dc-name">${d.offset < 3 ? RELATIVE[d.offset] : SHORT[d.date.getDay()]}</span>
+      return `<button class="day-chip ${d.key === sel.key ? 'on' : ''} ${all ? 'all-done' : ''} ${d.isToday ? 'today' : ''}" data-mission-day="${d.key}" aria-pressed="${d.key === sel.key}">
+          <span class="dc-name">${SHORT[d.date.getDay()]}</span>
           <span class="dc-date">${bn(d.date.getDate())}</span>
           <span class="dc-count">${n ? `${bn(list.filter((t) => t.done).length)}/${bn(n)}` : '·'}</span>
         </button>`;
@@ -47,7 +47,8 @@ export function missionView() {
         .join('')
     : `<li class="task-empty">${icon('target')}<span>${esc(dayName(sel))}-এর জন্য এখনো কোনো মিশন নেই। নিচে লিখে যোগ করো।</span></li>`;
 
-  const old = sel.offset === 0 ? leftovers(sel.key) : [];
+  // Unfinished work from before this week; earlier days of this week are still in the strip.
+  const old = sel.isToday ? leftovers(days[0].key) : [];
   const oldHtml = old.length
     ? `<section class="card mission-old rise" style="--i:3">
         <h2 class="card-title">${icon('clock')} আগের বাকি কাজ <span class="muted small">${bn(old.length)}টি</span></h2>
@@ -66,11 +67,17 @@ export function missionView() {
     nav: 'mission',
     title: 'Mission',
     html: `<header class="page-title rise"><p class="eyebrow">Personal Study Mission</p><h1>পার্সোনাল স্টাডি মিশন</h1>
-        <p class="muted">এই সপ্তাহে ${bn(weekDone)}/${bn(weekTasks.length)} মিশন শেষ · শুধু তোমার ফোনেই সেভ থাকে</p></header>
+        <p class="muted">${missionState.week === 0 ? 'এই সপ্তাহে' : 'ওই সপ্তাহে'} ${bn(weekDone)}/${bn(weekTasks.length)} মিশন শেষ · শুধু তোমার ফোনেই সেভ থাকে</p></header>
+      <div class="week-nav rise" style="--i:1">
+        <button class="icon-btn" data-mission-week="-1" aria-label="Previous week">${icon('back')}</button>
+        <span><b>${missionState.week === 0 ? 'এই সপ্তাহ' : missionState.week === 1 ? 'পরের সপ্তাহ' : missionState.week === -1 ? 'গত সপ্তাহ' : 'সপ্তাহ'}</b>
+          <small>${esc(shortDate(days[0].date))} – ${esc(shortDate(days[6].date))}</small></span>
+        <button class="icon-btn" data-mission-week="1" aria-label="Next week">${icon('chevron')}</button>
+      </div>
       <div class="day-strip rise" style="--i:1" role="tablist" aria-label="Days">${strip}</div>
       <section class="card mission-day rise" style="--i:2">
         <div class="md-head">
-          <div><h2>${esc(dayName(sel))}</h2><p class="muted small">${esc(fullDate(sel.date))}</p></div>
+          <div><h2>${esc(dayName(sel))}${sel.isToday ? ' <span class="today-tag">আজ</span>' : ''}</h2><p class="muted small">${esc(fullDate(sel.date))}</p></div>
           ${tasks.length ? `<span class="md-count">${bn(done)}/${bn(tasks.length)}</span>` : ''}
         </div>
         ${tasks.length ? `<div class="bar bar-thin" role="progressbar" aria-valuenow="${Math.round((done / tasks.length) * 100)}" aria-valuemin="0" aria-valuemax="100"><span style="--p:${Math.round((done / tasks.length) * 100)}%"></span></div>` : ''}

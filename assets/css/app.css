@@ -756,3 +756,10 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
 .day-note { display: block; width: 100%; resize: vertical; line-height: 1.5; }
 .mission-old { margin-top: 12px; }
 :root[data-theme="dark"] .day-chip.on, :root[data-theme="dark"] .day-chip.on .dc-date, :root[data-theme="dark"] .day-chip.on .dc-count { color: #0a0c11; }
+.week-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.week-nav span { display: flex; flex-direction: column; align-items: center; font-size: .95rem; }
+.week-nav small { font-size: .74rem; color: var(--muted); }
+.week-nav .icon-btn .ic { width: 18px; height: 18px; }
+.day-chip.today:not(.on) { border-color: var(--brand); }
+.day-chip.today:not(.on) .dc-name { color: var(--brand); }
+.today-tag { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 8px; border-radius: 99px; font-size: .72rem; font-weight: 600; color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
