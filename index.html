@@ -11,8 +11,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="assets/css/app.css?v=202610021409">
+  <link rel="stylesheet" href="assets/css/app.css?v=202610021453">
   <script>
+    try {
+      var a = JSON.parse(localStorage.getItem('hscos:a11y:v1') || '{}'), h = document.documentElement;
+      h.style.setProperty('--fs', a.font || 1);
+      h.dataset.dyslexia = a.dyslexia ? 'on' : 'off';
+      h.dataset.contrast = a.contrast ? 'high' : 'normal';
+      h.dataset.motion = a.motion || 'system';
+    } catch (e) {}
     try {
       var p = localStorage.getItem('hscos:theme') || 'dark';
       if (p === 'system') p = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -21,6 +28,8 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#view">মূল কনটেন্টে যাও</a>
+  <div id="srAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
   <div id="splash" aria-hidden="true">
     <img class="splash-mark avatar" src="assets/img/avatar.jpg" alt="" width="72" height="72">
     <p class="splash-name">Provacor</p>
@@ -31,6 +40,7 @@
     <div class="tb-left" id="tbLeft"></div>
     <p class="tb-title" id="tbTitle"></p>
     <div class="tb-right">
+      <button class="icon-btn" id="voiceBtn" hidden aria-label="ভয়েস কমান্ড"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
       <a class="icon-btn" href="#/search" aria-label="Search"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
       <button class="icon-btn" id="themeBtn" aria-label="Toggle dark / light mode">
         <svg width="22" height="22" class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.2A8.5 8.5 0 1 1 10.8 3.5a6.6 6.6 0 0 0 9.7 9.7z"/></svg>
@@ -40,7 +50,7 @@
   </header>
   <nav id="crumbs" class="crumbs" aria-label="Breadcrumb"></nav>
 
-  <main id="view" class="container">
+  <main id="view" class="container" tabindex="-1">
     <div class="sk-wrap" aria-busy="true" aria-label="Loading">
       <div class="sk sk-hero"></div>
       <div class="sk sk-card"><span class="sk-b sk-dot"></span><span class="sk-b w50"></span><span class="sk-b w80"></span></div>
@@ -61,6 +71,6 @@
     <a href="#/progress" data-nav="progress"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 21h18"/><path d="M6 17v-5M11 17V7M16 17v-8"/></svg><span>Progress</span></a>
     <a href="#/more" data-nav="more"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>More</span></a>
   </nav>
-  <script type="module" src="assets/js/app.js?v=202610021409"></script>
+  <script type="module" src="assets/js/app.js?v=202610021453"></script>
 </body>
 </html>
