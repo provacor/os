@@ -15,12 +15,19 @@ This covers the seven "first deliverable" items: subjects, papers, chapters, sec
 ## 2. Papers
 
 `english_2nd`, `higher_math_1st`, `higher_math_2nd`, `physics_1st`, `physics_2nd`, `chemistry_1st`, `chemistry_2nd`, `biology_1st`, `biology_2nd`.
-English 2nd Paper has one group, **Grammar Topics**. Each grammar topic works like a chapter.
+English 2nd Paper has two groups, **Grammar Topics** and **Writing**. Each item works like a chapter.
 
 ## 3. Chapters
 
-No chapter lists exist yet. See [`SYLLABUS_STRUCTURE_AUDIT.md`](../SYLLABUS_STRUCTURE_AUDIT.md): no syllabus images were received, so nothing was invented.
-English has 7 provisional grammar topics, taken from the brief and flagged `VERIFY FROM SOURCE`.
+Extracted from the syllabus images in `docs/syllabus-source/`. The full list, with source wording and confidence for each, is in [`SYLLABUS_STRUCTURE_AUDIT.md`](../SYLLABUS_STRUCTURE_AUDIT.md).
+
+| Paper | Chapters |
+|-------|----------|
+| English 2nd Paper | 9 Grammar Topics + 4 Writing items |
+| Higher Math 1st / 2nd | 10 / 9 (2nd Paper chapter 5 is not in the source) |
+| Physics 1st / 2nd | 10 / 11 |
+| Chemistry 1st / 2nd | 5 / 5 |
+| Biology 1st (উদ্ভিদবিজ্ঞান) / 2nd (প্রাণিবিজ্ঞান) | 12 / 12 |
 
 All chapters of a paper sit together under that paper. **Exam groupings (অর্ধ-বার্ষিক / বার্ষিক / প্রাক-নির্বাচনী / নির্বাচনী) are ignored completely.** They are not stored and not shown. A chapter that the source repeats in several exam columns is recorded once.
 
@@ -69,7 +76,7 @@ Subject ──< Paper ──< Chapter ──< Section ──< Content item
 
 Sections are **not stored one by one**. They are generated from the subject's template, so there is no `sections.json` with thousands of repeated rows, and adding a section type to a template adds it to every chapter. The IDs are still deterministic and stable.
 
-**Chapter record**: `id, paperId, groupId?, kind, number, order, name, topics[], source{wording,origin}, confidence, verification`. There is no exam field.
+**Chapter record**: `id, paperId, groupId?, kind, number, order, name, topics[], source{image,wording,origin}, confidence, verification, note?`. There is no exam field. Chemistry has no printed chapter numbers, so `number` is `null` and `order` follows the source list. Its IDs still use `chNN` from that order.
 
 **Progress**: each trackable section stores a 0–100 value on the device (`localStorage`, key `hscos:progress:v1`). Chapter = average of its trackable sections. Paper = average of its chapters. Subject = average of all its chapters. Everything shows 0% now.
 

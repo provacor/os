@@ -11,11 +11,12 @@
       "name": "Preposition",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Preposition / Use of Preposition",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_right_form_of_verbs",
@@ -27,11 +28,12 @@
       "name": "Right Form of Verbs",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Right form of Verbs / Right form of verbs",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_completing_sentence",
@@ -43,11 +45,12 @@
       "name": "Completing Sentence",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Completing Sentence / Completing Sentences",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_narration",
@@ -59,11 +62,12 @@
       "name": "Narration / Speech",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Narration/speech",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_sentence_connectors",
@@ -75,11 +79,12 @@
       "name": "Sentence Connectors",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Sentence connectors / Sentence Connector",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_antonym_synonym",
@@ -91,11 +96,12 @@
       "name": "Antonym / Synonym",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Antonym/Synonym / Writing the antonym or synonym",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
     },
     {
       "id": "english_2nd_punctuation",
@@ -107,11 +113,1309 @@
       "name": "Punctuation",
       "topics": [],
       "source": {
-        "wording": null,
-        "origin": "user_prompt_example"
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Punctuation",
+        "origin": "syllabus_image"
       },
-      "confidence": "low",
-      "verification": "needs_verification"
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "english_2nd_changing_sentences",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_grammar",
+      "kind": "topic",
+      "number": null,
+      "order": 8,
+      "name": "Changing Sentences According to Direction",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Changing sentences acording to direction",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "english_2nd_correction_of_verbs",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_grammar",
+      "kind": "topic",
+      "number": null,
+      "order": 9,
+      "name": "Correction of Verbs",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Corrction of verbs",
+        "origin": "syllabus_image"
+      },
+      "confidence": "medium",
+      "verification": "needs_verification",
+      "note": "Listed separately in the source; may be the same item as Right Form of Verbs. Merge if so."
+    },
+    {
+      "id": "english_2nd_formal_letter",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_writing",
+      "kind": "topic",
+      "number": null,
+      "order": 10,
+      "name": "Formal Letter",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Formal Letter / Formal Letter-10",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "english_2nd_writing_paragraph",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_writing",
+      "kind": "topic",
+      "number": null,
+      "order": 11,
+      "name": "Writing Paragraph",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Writing Paragraph-15 / Writing paragraph-10",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "english_2nd_writing_essay",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_writing",
+      "kind": "topic",
+      "number": null,
+      "order": 12,
+      "name": "Writing Essay",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Writing Essay-10",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "english_2nd_report_writing",
+      "paperId": "english_2nd",
+      "groupId": "english_2nd_writing",
+      "kind": "topic",
+      "number": null,
+      "order": 13,
+      "name": "Report Writing",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
+        "wording": "Report Writing-10",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch01",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "ম্যাট্রিক্স ও নির্ণায়ক",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "১ম অধ্যায় : ম্যাট্রিক্স ও নির্ণায়ক",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch02",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "ভেক্টর",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "২য় অধ্যায় : ভেক্টর",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch03",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "সরল রেখা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৩য় অধ্যায় : সরল রেখা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch04",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "বৃত্ত",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৪র্থ অধ্যায় : বৃত্ত",
+        "origin": "syllabus_image"
+      },
+      "confidence": "medium",
+      "verification": "needs_verification",
+      "note": "Chapter number partly covered by ink; reads ৪র্থ."
+    },
+    {
+      "id": "higher_math_1st_ch05",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "বিন্যাস ও সমাবেশ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৫ম অধ্যায় : বিন্যাস ও সমাবেশ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch06",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "ত্রিকোণমিতিক অনুপাত",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৬ষ্ঠ অধ্যায় : ত্রিকোণমিতিক অনুপাত",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch07",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "সংযুক্ত ও যৌগিক কোণের ত্রিকোণমিতিক অনুপাত",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৭ম অধ্যায় : সংযুক্ত ও যৌগিক কোণের ত্রিকোণমিতিক অনুপাত",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch08",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "ফাংশন ও ফাংশনের লেখচিত্র",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৮ম অধ্যায় : ফাংশন ও ফাংশনের লেখচিত্র",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_1st_ch09",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "অন্তরীকরণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "[অস্পষ্ট] অধ্যায় : অন্তরীকরণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "medium",
+      "verification": "needs_verification",
+      "note": "Chapter number covered by ink; 9 is the only 1st Paper number not otherwise listed."
+    },
+    {
+      "id": "higher_math_1st_ch10",
+      "paperId": "higher_math_1st",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "যোগজীকরণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "১০ম অধ্যায় : যোগজীকরণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch01",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "বাস্তব সংখ্যা ও অসমতা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "১ম অধ্যায় : বাস্তব সংখ্যা ও অসমতা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch02",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "যোগাশ্রয়ী প্রোগ্রাম",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "২য় অধ্যায় : যোগাশ্রয়ী প্রোগ্রাম",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch03",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "জটিল সংখ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৩য় অধ্যায় : জটিল সংখ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch04",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "বহুপদী ও বহুপদী সমীকরণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৪র্থ অধ্যায় : বহুপদী ও বহুপদী সমীকরণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "medium",
+      "verification": "needs_verification",
+      "note": "Chapter number partly covered by ink; reads ৪র্থ."
+    },
+    {
+      "id": "higher_math_2nd_ch06",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "কণিক",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৬ষ্ঠ অধ্যায় : কণিক",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch07",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "[অস্পষ্ট] অধ্যায় : বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "medium",
+      "verification": "needs_verification",
+      "note": "Chapter number covered by ink; could be ৫ম or ৭ম. Confirm."
+    },
+    {
+      "id": "higher_math_2nd_ch08",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "স্থিতিবিদ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৮ম অধ্যায় : স্থিতিবিদ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch09",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "গতিবিদ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "৯ম অধ্যায় : গতিবিদ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "higher_math_2nd_ch10",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "বিস্তার পরিমাপ ও সম্ভাবনা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/04-higher-math.jpg",
+        "wording": "১০ম অধ্যায় : বিস্তার পরিমাপ ও সম্ভাবনা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch01",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "ভৌত জগৎ ও পরিমাপ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-১ : ভৌত জগৎ ও পরিমাপ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch02",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "ভেক্টর",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-২ : ভেক্টর",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch03",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "গতিবিদ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৩ : গতিবিদ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch04",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "নিউটনিয়ান বলবিদ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৪ : নিউটনিয়ান বলবিদ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch05",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "কাজ, শক্তি ও ক্ষমতা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৫ : কাজ, শক্তি ও ক্ষমতা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch06",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "মহাকর্ষ ও অভিকর্ষ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৬ : মহাকর্ষ ও অভিকর্ষ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch07",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "পদার্থের গাঠনিক ধর্ম",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৭ : পদার্থের গাঠনিক ধর্ম",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch08",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "পর্যায়বৃত্তিক গতি",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৮ : পর্যায়বৃত্তিক গতি",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch09",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "তরঙ্গ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৯ : তরঙ্গ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_1st_ch10",
+      "paperId": "physics_1st",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "আদর্শ গ্যাস ও গ্যাসের গতিতত্ত্ব",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-১০ : আদর্শ গ্যাস ও গ্যাসের গতিতত্ত্ব",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch01",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "তাপগতিবিদ্যা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-১ : তাপগতিবিদ্যা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch02",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "স্থির তড়িৎ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-২ : স্থির তড়িৎ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch03",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "চল তড়িৎ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৩ : চল তড়িৎ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch04",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "তড়িৎ প্রবাহের চৌম্বকীয় ক্রিয়া ও চুম্বকত্ব",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৪ : তড়িৎ প্রবাহের চৌম্বকীয় ক্রিয়া ও চুম্বকত্ব",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch05",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "তড়িৎচৌম্বকীয় আবেশ ও দিক পরিবর্তী প্রবাহ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৫ : তড়িৎচৌম্বকীয় আবেশ ও দিক পরিবর্তী প্রবাহ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch06",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "জ্যামিতিক আলোক বিজ্ঞান",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৬ : জ্যামিতিক আলোক বিজ্ঞান",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch07",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "ভৌত আলোকবিজ্ঞান",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৭ : ভৌত আলোকবিজ্ঞান",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch08",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "আধুনিক পদার্থবিজ্ঞানের সূচনা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৮ : আধুনিক পদার্থবিজ্ঞানের সূচনা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch09",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "পরমাণুর মডেল ও নিউক্লিয়ার পদার্থবিজ্ঞান",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-৯ : পরমাণুর মডেল ও নিউক্লিয়ার পদার্থবিজ্ঞান",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch10",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "সেমিকন্ডাক্টর ও ইলেকট্রনিক্স",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-১০ : সেমিকন্ডাক্টর ও ইলেকট্রনিক্স",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "physics_2nd_ch11",
+      "paperId": "physics_2nd",
+      "kind": "chapter",
+      "number": 11,
+      "order": 11,
+      "name": "জ্যোতির্বিজ্ঞান",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/05-physics.jpg",
+        "wording": "অধ্যায়-১১ : জ্যোতির্বিজ্ঞান",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_1st_ch01",
+      "paperId": "chemistry_1st",
+      "kind": "chapter",
+      "number": null,
+      "order": 1,
+      "name": "ল্যাবরেটরির নিরাপদ ব্যবহার",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "ল্যাবরেটরির নিরাপদ ব্যবহার",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_1st_ch02",
+      "paperId": "chemistry_1st",
+      "kind": "chapter",
+      "number": null,
+      "order": 2,
+      "name": "গুণগত রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "গুণগত রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_1st_ch03",
+      "paperId": "chemistry_1st",
+      "kind": "chapter",
+      "number": null,
+      "order": 3,
+      "name": "মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Source splits this chapter into ১ম অংশ and ২য় অংশ across exams; kept as one chapter."
+    },
+    {
+      "id": "chemistry_1st_ch04",
+      "paperId": "chemistry_1st",
+      "kind": "chapter",
+      "number": null,
+      "order": 4,
+      "name": "রাসায়নিক পরিবর্তন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "রাসায়নিক পরিবর্তন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_1st_ch05",
+      "paperId": "chemistry_1st",
+      "kind": "chapter",
+      "number": null,
+      "order": 5,
+      "name": "কর্মমুখী রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "কর্মমুখী রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_2nd_ch01",
+      "paperId": "chemistry_2nd",
+      "kind": "chapter",
+      "number": null,
+      "order": 1,
+      "name": "পরিবেশ রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "পরিবেশ রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_2nd_ch02",
+      "paperId": "chemistry_2nd",
+      "kind": "chapter",
+      "number": null,
+      "order": 2,
+      "name": "জৈব রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "জৈব রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_2nd_ch03",
+      "paperId": "chemistry_2nd",
+      "kind": "chapter",
+      "number": null,
+      "order": 3,
+      "name": "পরিমাণগত রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "পরিমাণগত রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified",
+      "note": "The বার্ষিক column prints \"পরিমাণগত পরিবর্তন\"; treated as the same chapter. Confirm."
+    },
+    {
+      "id": "chemistry_2nd_ch04",
+      "paperId": "chemistry_2nd",
+      "kind": "chapter",
+      "number": null,
+      "order": 4,
+      "name": "তড়িৎ রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "তড়িৎ রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "chemistry_2nd_ch05",
+      "paperId": "chemistry_2nd",
+      "kind": "chapter",
+      "number": null,
+      "order": 5,
+      "name": "অর্থনৈতিক রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/03-chemistry.jpg",
+        "wording": "অর্থনৈতিক রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch01",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "কোষ ও এর গঠন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "১ম অধ্যায় : কোষ ও এর গঠন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch02",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "কোষ বিভাজন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "২য় অধ্যায় : কোষ বিভাজন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch03",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "কোষ রসায়ন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৩য় অধ্যায় : কোষ রসায়ন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch04",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "অণুজীব",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৪র্থ অধ্যায় : অণুজীব",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch05",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "শৈবাল ও ছত্রাক",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৫ম অধ্যায় : শৈবাল ও ছত্রাক",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch06",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "ব্রায়োফাইটা ও টেরিডোফাইটা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৬ষ্ঠ অধ্যায় : ব্রায়োফাইটা ও টেরিডোফাইটা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch07",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "নগ্নবীজী ও আবৃতবীজী উদ্ভিদ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৭ম অধ্যায় : নগ্নবীজী ও আবৃতবীজী উদ্ভিদ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch08",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "টিস্যু ও টিস্যুতন্ত্র",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৮ম অধ্যায় : টিস্যু ও টিস্যুতন্ত্র",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch09",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "উদ্ভিদ শারীরতত্ত্ব",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "৯ম অধ্যায় : উদ্ভিদ শারীরতত্ত্ব",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch10",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "উদ্ভিদ প্রজনন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "১০ম অধ্যায় : উদ্ভিদ প্রজনন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch11",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 11,
+      "order": 11,
+      "name": "জীব প্রযুক্তি",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "১১শ অধ্যায় : জীব প্রযুক্তি",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_1st_ch12",
+      "paperId": "biology_1st",
+      "kind": "chapter",
+      "number": 12,
+      "order": 12,
+      "name": "জীবের পরিবেশ, বিস্তার ও সংরক্ষণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/06-biology-1st.jpg",
+        "wording": "১২শ অধ্যায় : জীবের পরিবেশ, বিস্তার ও সংরক্ষণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch01",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 1,
+      "order": 1,
+      "name": "প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "১ম অধ্যায় : প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch02",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 2,
+      "order": 2,
+      "name": "প্রাণীর পরিচিতি",
+      "topics": [
+        "হাইড্রা",
+        "ঘাসফড়িং",
+        "রুইমাছ"
+      ],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "২য় অধ্যায় : প্রাণীর পরিচিতি (হাইড্রা, ঘাসফড়িং ও রুইমাছ)",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch03",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 3,
+      "order": 3,
+      "name": "মানব শারীরতত্ত্ব: পরিপাক ও শোষণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৩য় অধ্যায় : মানব শারীরতত্ত্ব: পরিপাক ও শোষণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch04",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 4,
+      "order": 4,
+      "name": "মানব শারীরতত্ত্ব: রক্ত ও সংবহন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৪র্থ অধ্যায় : মানব শারীরতত্ত্ব: রক্ত ও সংবহন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch05",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "মানব শারীরতত্ত্ব: শ্বসন ও শ্বাসক্রিয়া",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৫ম অধ্যায় : মানব শারীরতত্ত্ব: শ্বসন ও শ্বাসক্রিয়া",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch06",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 6,
+      "order": 6,
+      "name": "মানব শারীরতত্ত্ব: বর্জ্য ও নিষ্কাশন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৬ষ্ঠ অধ্যায় : মানব শারীরতত্ত্ব: বর্জ্য ও নিষ্কাশন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch07",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 7,
+      "order": 7,
+      "name": "মানব শারীরতত্ত্ব: চলন ও অঙ্গ চালনা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৭ম অধ্যায় : মানব শারীরতত্ত্ব: চলন ও অঙ্গ চালনা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch08",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 8,
+      "order": 8,
+      "name": "মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৮ম অধ্যায় : মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch09",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 9,
+      "order": 9,
+      "name": "মানব জীবনের ধারাবাহিকতা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "৯ম অধ্যায় : মানব জীবনের ধারাবাহিকতা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch10",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 10,
+      "order": 10,
+      "name": "মানবদেহের প্রতিরক্ষা",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "১০ম অধ্যায় : মানবদেহের প্রতিরক্ষা",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch11",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 11,
+      "order": 11,
+      "name": "জিনতত্ত্ব ও বিবর্তন",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "১১শ অধ্যায় : জিনতত্ত্ব ও বিবর্তন",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
+    },
+    {
+      "id": "biology_2nd_ch12",
+      "paperId": "biology_2nd",
+      "kind": "chapter",
+      "number": 12,
+      "order": 12,
+      "name": "প্রাণীর আচরণ",
+      "topics": [],
+      "source": {
+        "image": "docs/syllabus-source/07-biology-2nd.jpg",
+        "wording": "১২শ অধ্যায় : প্রাণীর আচরণ",
+        "origin": "syllabus_image"
+      },
+      "confidence": "high",
+      "verification": "verified"
     }
   ]
 }

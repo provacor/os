@@ -8,17 +8,92 @@
       "paperNo": 2,
       "unitLabel": "Topic",
       "groups": [
-        { "id": "english_2nd_grammar", "name": "Grammar Topics", "order": 1 }
+        {
+          "id": "english_2nd_grammar",
+          "name": "Grammar Topics",
+          "order": 1
+        },
+        {
+          "id": "english_2nd_writing",
+          "name": "Writing",
+          "order": 2
+        }
       ],
-      "sourceStatus": "awaiting_source"
+      "sourceStatus": "verified"
     },
-    { "id": "higher_math_1st", "subjectId": "higher_math", "name": "1st Paper", "paperNo": 1, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "higher_math_2nd", "subjectId": "higher_math", "name": "2nd Paper", "paperNo": 2, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "physics_1st", "subjectId": "physics", "name": "1st Paper", "paperNo": 1, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "physics_2nd", "subjectId": "physics", "name": "2nd Paper", "paperNo": 2, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "chemistry_1st", "subjectId": "chemistry", "name": "1st Paper", "paperNo": 1, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "chemistry_2nd", "subjectId": "chemistry", "name": "2nd Paper", "paperNo": 2, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "biology_1st", "subjectId": "biology", "name": "1st Paper", "paperNo": 1, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" },
-    { "id": "biology_2nd", "subjectId": "biology", "name": "2nd Paper", "paperNo": 2, "unitLabel": "Chapter", "groups": [], "sourceStatus": "awaiting_source" }
+    {
+      "id": "higher_math_1st",
+      "subjectId": "higher_math",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "needs_verification"
+    },
+    {
+      "id": "higher_math_2nd",
+      "subjectId": "higher_math",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "incomplete"
+    },
+    {
+      "id": "physics_1st",
+      "subjectId": "physics",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "physics_2nd",
+      "subjectId": "physics",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "chemistry_1st",
+      "subjectId": "chemistry",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "chemistry_2nd",
+      "subjectId": "chemistry",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "biology_1st",
+      "subjectId": "biology",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified",
+      "subtitle": "উদ্ভিদবিজ্ঞান"
+    },
+    {
+      "id": "biology_2nd",
+      "subjectId": "biology",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified",
+      "subtitle": "প্রাণিবিজ্ঞান"
+    }
   ]
 }

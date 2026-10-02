@@ -142,7 +142,7 @@ function homeView() {
         <p class="muted">Subject → Paper → Chapter → Section</p>
         <a class="search-entry" href="#/search"><span aria-hidden="true">🔍</span> Search subject, chapter, section…</a>
       </section>
-      ${pending ? `<a class="banner" href="#/syllabus"><strong>${pending} of ${model.papers.length} papers</strong> are waiting for their chapter list to be verified from the syllabus images. Tap to see the audit.</a>` : ''}
+      ${pending ? `<a class="banner" href="#/syllabus"><strong>${pending} of ${model.papers.length} papers</strong> have chapters that need checking against the syllabus images. Tap to see which.</a>` : ''}
       <div class="grid subjects">${cards}</div>`,
   };
 }
@@ -154,7 +154,7 @@ function subjectView(subj) {
       const pct = progressOf(p);
       const n = chapterCount(p);
       return `<a class="card paper-card accent-${esc(subj.accent)}" href="#/p/${esc(p.id)}">
-          <div class="paper-head"><div><h2>${esc(p.name)}</h2>
+          <div class="paper-head"><div><h2>${esc(p.name)}${p.subtitle ? ` <span class="muted small">(${esc(p.subtitle)})</span>` : ''}</h2>
             <p class="muted small">${n ? plural(n, esc(p.unitLabel)) : `${esc(p.unitLabel)} list pending syllabus source`} · ${contentCount(p)} content</p></div>
             ${ring(pct)}</div>
         </a>`;
@@ -198,7 +198,7 @@ function paperView(paper, openChapterId) {
     nav: 'home',
     crumbs: [[subj.name, `#/s/${subj.id}`], [paper.name, `#/p/${paper.id}`]],
     html: `<header class="page-head"><span class="subject-icon" aria-hidden="true">${subj.icon}</span>
-        <div><h1>${esc(subj.name)} — ${esc(paper.name)}</h1><p class="muted small">${plural(chapterCount(paper), esc(paper.unitLabel))} · ${contentCount(paper)} content · ${progressOf(paper)}% done</p></div></header>
+        <div><h1>${esc(subj.name)} — ${esc(paper.name)}${paper.subtitle ? ` <span class="muted small">(${esc(paper.subtitle)})</span>` : ''}</h1><p class="muted small">${plural(chapterCount(paper), esc(paper.unitLabel))} · ${contentCount(paper)} content · ${progressOf(paper)}% done</p></div></header>
       <nav class="tabs" role="tablist">${tabs}</nav>
       ${body}`,
     after: () => {
@@ -209,6 +209,7 @@ function paperView(paper, openChapterId) {
 
 function chapterItem(ch, i, open) {
   const pct = progressOf(ch);
+  const note = ch.note ? `<p class="note small">⚠️ ${esc(ch.note)}</p>` : '';
   const topics = ch.topics?.length
     ? `<details class="topics"><summary>Topics (${ch.topics.length})</summary><ul>${ch.topics.map((t) => `<li>${esc(typeof t === 'string' ? t : t.name)}</li>`).join('')}</ul></details>`
     : '';
@@ -229,6 +230,7 @@ function chapterItem(ch, i, open) {
       </button>
       <div class="acc-body"><div class="acc-inner">
         ${bar(pct)}
+        ${note}
         ${topics}
         <div class="section-grid">${sections}</div>
       </div></div>
