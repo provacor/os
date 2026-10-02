@@ -183,6 +183,64 @@ async function askClaude({ text, images, system, prior }, onText) {
   }
 }
 
+// Classify one mistake into a kind with a short Bengali reason (structured JSON output).
+export async function classifyMistake(m, chapterName = '') {
+  if (!hasKey()) throw new AiError('no-key');
+  sdk ??= import('../vendor/anthropic-sdk.js').catch((e) => { sdk = null; throw e; });
+  let Anthropic;
+  try {
+    Anthropic = (await sdk).default;
+  } catch {
+    throw new AiError('network');
+  }
+  const client = new Anthropic({ apiKey: settings.claudeKey, dangerouslyAllowBrowser: true, maxRetries: 1 });
+  const lines = [
+    chapterName && `অধ্যায়: ${chapterName}`,
+    `প্রশ্ন: ${m.question}`,
+    m.options?.length && `অপশন: ${m.options.map((o, i) => `${'কখগঘ'[i] ?? i + 1}) ${o}`).join(' | ')}`,
+    m.source === 'mcq' ? `শিক্ষার্থীর উত্তর: ${m.options?.[m.chosen] ?? m.chosen}` : m.myAnswer && `শিক্ষার্থীর উত্তর: ${m.myAnswer}`,
+    m.source === 'mcq' ? `সঠিক উত্তর: ${m.correct}` : m.rightAnswer && `সঠিক উত্তর: ${m.rightAnswer}`,
+    m.explanation && `ব্যাখ্যা: ${m.explanation}`,
+  ].filter(Boolean).join('\n');
+  const params = {
+    model: settings.claudeModel,
+    max_tokens: 4000,
+    system: 'তুমি HSC বিজ্ঞানের শিক্ষক। শিক্ষার্থীর একটা ভুল দেখে ঠিক করো ভুলটা কোন ধরনের: concept (ধারণা বোঝেনি), formula (ভুল সূত্র বা সূত্র মনে নেই), calculation (সূত্র ঠিক কিন্তু হিসাবে ভুল), reading (প্রশ্ন ভুল পড়েছে বা বুঝেছে), careless (জানে কিন্তু অসাবধানতায় ভুল)। reason-এ বাংলায় এক-দুই বাক্যে কেন এই ধরন, আর tip-এ পরের বার এড়ানোর একটা ছোট পরামর্শ দাও।',
+    messages: [{ role: 'user', content: lines }],
+    output_config: {
+      format: {
+        type: 'json_schema',
+        schema: {
+          type: 'object',
+          properties: {
+            kind: { type: 'string', enum: ['concept', 'formula', 'calculation', 'reading', 'careless'] },
+            reason: { type: 'string' },
+            tip: { type: 'string' },
+          },
+          required: ['kind', 'reason', 'tip'],
+          additionalProperties: false,
+        },
+      },
+    },
+  };
+  if (settings.claudeModel !== 'claude-haiku-4-5') params.output_config.effort = 'low';
+  try {
+    const msg = await client.messages.create(params);
+    if (msg.stop_reason === 'refusal') throw new AiError('safety');
+    const text = msg.content.filter((b) => b.type === 'text').map((b) => b.text).join('');
+    const out = JSON.parse(text);
+    return { kind: out.kind, reason: `${out.reason}${out.tip ? ` — ${out.tip}` : ''}` };
+  } catch (e) {
+    if (e instanceof AiError) throw e;
+    if (e instanceof SyntaxError) throw new AiError('empty-answer');
+    if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) throw new AiError('bad-key', e.message);
+    if (e instanceof Anthropic.RateLimitError) throw new AiError('quota', e.message);
+    if (e instanceof Anthropic.BadRequestError && /credit balance/i.test(e.message)) throw new AiError('credit', e.message);
+    if (e instanceof Anthropic.APIConnectionError) throw new AiError('network');
+    throw new AiError('api', e?.message);
+  }
+}
+
 export const ERRORS = {
   'no-key': 'আগে উপরের AI সেটিংসে তোমার API key বসাও।',
   'bad-key': 'API key ঠিক নেই। নতুন key কপি করে আবার বসাও।',

@@ -1,0 +1,2516 @@
+{
+ "version": 1,
+ "note": "Concept map for universal search and the knowledge graph. prereqs = concepts to know first.",
+ "concepts": [
+  {
+   "id": "measurement",
+   "subject": "physics",
+   "bn": "একক ও মাত্রা",
+   "en": "Units & dimensions",
+   "chapters": [
+    "physics_1st_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "মাত্রা সমীকরণ",
+    "SI unit",
+    "ত্রুটি",
+    "error",
+    "significant figure"
+   ]
+  },
+  {
+   "id": "vector",
+   "subject": "physics",
+   "bn": "ভেক্টর",
+   "en": "Vector",
+   "chapters": [
+    "physics_1st_ch02"
+   ],
+   "prereqs": [
+    "measurement",
+    "m_vector"
+   ],
+   "aliases": [
+    "ডট গুণন",
+    "ক্রস গুণন",
+    "dot product",
+    "cross product",
+    "লব্ধি",
+    "resultant",
+    "নদী পারাপার"
+   ]
+  },
+  {
+   "id": "kinematics",
+   "subject": "physics",
+   "bn": "গতি, বেগ ও ত্বরণ",
+   "en": "Kinematics",
+   "chapters": [
+    "physics_1st_ch03"
+   ],
+   "prereqs": [
+    "vector",
+    "m_diff"
+   ],
+   "aliases": [
+    "বেগ",
+    "ত্বরণ",
+    "velocity",
+    "acceleration",
+    "মুক্তভাবে পড়ন্ত বস্তু",
+    "free fall",
+    "গতির সমীকরণ"
+   ]
+  },
+  {
+   "id": "projectile",
+   "subject": "physics",
+   "bn": "প্রক্ষেপক গতি",
+   "en": "Projectile motion",
+   "chapters": [
+    "physics_1st_ch03"
+   ],
+   "prereqs": [
+    "kinematics"
+   ],
+   "aliases": [
+    "প্রক্ষেপক",
+    "projectile",
+    "পাল্লা",
+    "range",
+    "সর্বোচ্চ উচ্চতা"
+   ]
+  },
+  {
+   "id": "newton_laws",
+   "subject": "physics",
+   "bn": "নিউটনের গতিসূত্র",
+   "en": "Newton's laws",
+   "chapters": [
+    "physics_1st_ch04"
+   ],
+   "prereqs": [
+    "kinematics"
+   ],
+   "aliases": [
+    "বল",
+    "force",
+    "জড়তা",
+    "inertia",
+    "ঘর্ষণ",
+    "friction",
+    "newton law"
+   ]
+  },
+  {
+   "id": "momentum",
+   "subject": "physics",
+   "bn": "ভরবেগ ও সংঘর্ষ",
+   "en": "Momentum & collision",
+   "chapters": [
+    "physics_1st_ch04"
+   ],
+   "prereqs": [
+    "newton_laws"
+   ],
+   "aliases": [
+    "ভরবেগের সংরক্ষণ",
+    "conservation of momentum",
+    "ঘাত",
+    "impulse",
+    "collision",
+    "সংঘর্ষ"
+   ]
+  },
+  {
+   "id": "circular",
+   "subject": "physics",
+   "bn": "বৃত্তাকার গতি",
+   "en": "Circular motion",
+   "chapters": [
+    "physics_1st_ch04"
+   ],
+   "prereqs": [
+    "newton_laws",
+    "kinematics"
+   ],
+   "aliases": [
+    "কেন্দ্রমুখী বল",
+    "centripetal force",
+    "কৌণিক বেগ",
+    "angular velocity",
+    "ব্যাংকিং"
+   ]
+  },
+  {
+   "id": "rotation",
+   "subject": "physics",
+   "bn": "টর্ক ও জড়তার ভ্রামক",
+   "en": "Torque & moment of inertia",
+   "chapters": [
+    "physics_1st_ch04"
+   ],
+   "prereqs": [
+    "newton_laws",
+    "vector",
+    "circular"
+   ],
+   "aliases": [
+    "টর্ক",
+    "torque",
+    "জড়তার ভ্রামক",
+    "moment of inertia",
+    "কৌণিক ভরবেগ",
+    "angular momentum",
+    "চক্রগতির ব্যাসার্ধ"
+   ]
+  },
+  {
+   "id": "work_energy",
+   "subject": "physics",
+   "bn": "কাজ ও শক্তি",
+   "en": "Work & energy",
+   "chapters": [
+    "physics_1st_ch05"
+   ],
+   "prereqs": [
+    "newton_laws",
+    "vector",
+    "m_int"
+   ],
+   "aliases": [
+    "কাজ",
+    "work",
+    "গতিশক্তি",
+    "kinetic energy",
+    "বিভব শক্তি",
+    "potential energy",
+    "শক্তির সংরক্ষণ",
+    "conservation of energy",
+    "কাজ-শক্তি উপপাদ্য"
+   ]
+  },
+  {
+   "id": "power",
+   "subject": "physics",
+   "bn": "ক্ষমতা",
+   "en": "Power",
+   "chapters": [
+    "physics_1st_ch05"
+   ],
+   "prereqs": [
+    "work_energy"
+   ],
+   "aliases": [
+    "ক্ষমতা",
+    "power",
+    "কর্মদক্ষতা",
+    "efficiency",
+    "অশ্বক্ষমতা",
+    "horsepower"
+   ]
+  },
+  {
+   "id": "gravitation",
+   "subject": "physics",
+   "bn": "মহাকর্ষ সূত্র",
+   "en": "Law of gravitation",
+   "chapters": [
+    "physics_1st_ch06"
+   ],
+   "prereqs": [
+    "newton_laws",
+    "circular"
+   ],
+   "aliases": [
+    "মহাকর্ষ",
+    "gravitation",
+    "অভিকর্ষজ ত্বরণ",
+    "acceleration due to gravity",
+    "g এর মান",
+    "মহাকর্ষীয় বিভব"
+   ]
+  },
+  {
+   "id": "kepler",
+   "subject": "physics",
+   "bn": "কেপলারের সূত্র ও উপগ্রহ",
+   "en": "Kepler's laws & satellites",
+   "chapters": [
+    "physics_1st_ch06"
+   ],
+   "prereqs": [
+    "gravitation"
+   ],
+   "aliases": [
+    "কেপলার",
+    "kepler",
+    "উপগ্রহ",
+    "satellite",
+    "ভূস্থির উপগ্রহ",
+    "geostationary"
+   ]
+  },
+  {
+   "id": "escape",
+   "subject": "physics",
+   "bn": "মুক্তিবেগ",
+   "en": "Escape velocity",
+   "chapters": [
+    "physics_1st_ch06"
+   ],
+   "prereqs": [
+    "gravitation",
+    "work_energy"
+   ],
+   "aliases": [
+    "মুক্তিবেগ",
+    "escape velocity"
+   ]
+  },
+  {
+   "id": "elasticity",
+   "subject": "physics",
+   "bn": "স্থিতিস্থাপকতা",
+   "en": "Elasticity",
+   "chapters": [
+    "physics_1st_ch07"
+   ],
+   "prereqs": [
+    "newton_laws"
+   ],
+   "aliases": [
+    "হুকের সূত্র",
+    "hooke",
+    "ইয়ং গুণাঙ্ক",
+    "young modulus",
+    "পীড়ন",
+    "বিকৃতি",
+    "stress",
+    "strain",
+    "পয়সনের অনুপাত"
+   ]
+  },
+  {
+   "id": "surface_tension",
+   "subject": "physics",
+   "bn": "পৃষ্ঠটান",
+   "en": "Surface tension",
+   "chapters": [
+    "physics_1st_ch07"
+   ],
+   "prereqs": [
+    "newton_laws"
+   ],
+   "aliases": [
+    "পৃষ্ঠটান",
+    "surface tension",
+    "কৈশিকতা",
+    "capillarity",
+    "স্পর্শ কোণ"
+   ]
+  },
+  {
+   "id": "viscosity",
+   "subject": "physics",
+   "bn": "সান্দ্রতা",
+   "en": "Viscosity",
+   "chapters": [
+    "physics_1st_ch07"
+   ],
+   "prereqs": [
+    "newton_laws"
+   ],
+   "aliases": [
+    "সান্দ্রতা",
+    "viscosity",
+    "স্টোকসের সূত্র",
+    "stokes",
+    "প্রান্তিক বেগ",
+    "terminal velocity"
+   ]
+  },
+  {
+   "id": "shm",
+   "subject": "physics",
+   "bn": "সরল ছন্দিত স্পন্দন",
+   "en": "Simple harmonic motion",
+   "chapters": [
+    "physics_1st_ch08"
+   ],
+   "prereqs": [
+    "newton_laws",
+    "circular"
+   ],
+   "aliases": [
+    "সরল ছন্দিত",
+    "shm",
+    "পর্যায়কাল",
+    "time period",
+    "কম্পাঙ্ক",
+    "frequency",
+    "বিস্তার",
+    "amplitude",
+    "স্প্রিং"
+   ]
+  },
+  {
+   "id": "pendulum",
+   "subject": "physics",
+   "bn": "সরল দোলক",
+   "en": "Simple pendulum",
+   "chapters": [
+    "physics_1st_ch08"
+   ],
+   "prereqs": [
+    "shm",
+    "gravitation"
+   ],
+   "aliases": [
+    "দোলক",
+    "pendulum",
+    "সেকেন্ড দোলক"
+   ]
+  },
+  {
+   "id": "wave",
+   "subject": "physics",
+   "bn": "তরঙ্গ",
+   "en": "Wave",
+   "chapters": [
+    "physics_1st_ch09"
+   ],
+   "prereqs": [
+    "shm"
+   ],
+   "aliases": [
+    "তরঙ্গ",
+    "wave",
+    "তরঙ্গদৈর্ঘ্য",
+    "wavelength",
+    "অগ্রগামী তরঙ্গ",
+    "স্থির তরঙ্গ",
+    "stationary wave",
+    "লম্বিক",
+    "অনুপ্রস্থ"
+   ]
+  },
+  {
+   "id": "sound",
+   "subject": "physics",
+   "bn": "শব্দ",
+   "en": "Sound",
+   "chapters": [
+    "physics_1st_ch09"
+   ],
+   "prereqs": [
+    "wave"
+   ],
+   "aliases": [
+    "শব্দ",
+    "sound",
+    "বীট",
+    "beat",
+    "ডপলার",
+    "doppler",
+    "শব্দের তীব্রতা",
+    "ডেসিবেল",
+    "decibel",
+    "অনুনাদ",
+    "resonance"
+   ]
+  },
+  {
+   "id": "ideal_gas",
+   "subject": "physics",
+   "bn": "আদর্শ গ্যাস",
+   "en": "Ideal gas",
+   "chapters": [
+    "physics_1st_ch10"
+   ],
+   "prereqs": [
+    "measurement"
+   ],
+   "aliases": [
+    "আদর্শ গ্যাস",
+    "ideal gas",
+    "বয়েলের সূত্র",
+    "চার্লসের সূত্র",
+    "গ্যাস সমীকরণ",
+    "PV=nRT"
+   ]
+  },
+  {
+   "id": "kinetic_theory",
+   "subject": "physics",
+   "bn": "গ্যাসের গতিতত্ত্ব",
+   "en": "Kinetic theory of gases",
+   "chapters": [
+    "physics_1st_ch10"
+   ],
+   "prereqs": [
+    "ideal_gas",
+    "momentum"
+   ],
+   "aliases": [
+    "গতিতত্ত্ব",
+    "kinetic theory",
+    "গড় বর্গবেগের মূল",
+    "rms",
+    "মুক্ত পথ",
+    "স্বাধীনতার মাত্রা",
+    "degree of freedom",
+    "আর্দ্রতা",
+    "শিশিরাঙ্ক"
+   ]
+  },
+  {
+   "id": "thermo_laws",
+   "subject": "physics",
+   "bn": "তাপগতিবিদ্যার সূত্র",
+   "en": "Laws of thermodynamics",
+   "chapters": [
+    "physics_2nd_ch01"
+   ],
+   "prereqs": [
+    "ideal_gas",
+    "work_energy"
+   ],
+   "aliases": [
+    "তাপগতিবিদ্যা",
+    "thermodynamics",
+    "প্রথম সূত্র",
+    "first law",
+    "সমোষ্ণ",
+    "রুদ্ধতাপীয়",
+    "isothermal",
+    "adiabatic",
+    "অভ্যন্তরীণ শক্তি"
+   ]
+  },
+  {
+   "id": "entropy",
+   "subject": "physics",
+   "bn": "কার্নো ইঞ্জিন ও এনট্রপি",
+   "en": "Carnot engine & entropy",
+   "chapters": [
+    "physics_2nd_ch01"
+   ],
+   "prereqs": [
+    "thermo_laws"
+   ],
+   "aliases": [
+    "এনট্রপি",
+    "entropy",
+    "কার্নো",
+    "carnot",
+    "তাপ ইঞ্জিন",
+    "heat engine",
+    "রেফ্রিজারেটর",
+    "দ্বিতীয় সূত্র"
+   ]
+  },
+  {
+   "id": "coulomb",
+   "subject": "physics",
+   "bn": "কুলম্বের সূত্র",
+   "en": "Coulomb's law",
+   "chapters": [
+    "physics_2nd_ch02"
+   ],
+   "prereqs": [
+    "vector",
+    "newton_laws"
+   ],
+   "aliases": [
+    "কুলম্ব",
+    "coulomb",
+    "আধান",
+    "charge",
+    "স্থির তড়িৎ"
+   ]
+  },
+  {
+   "id": "field_potential",
+   "subject": "physics",
+   "bn": "তড়িৎক্ষেত্র ও বিভব",
+   "en": "Electric field & potential",
+   "chapters": [
+    "physics_2nd_ch02"
+   ],
+   "prereqs": [
+    "coulomb",
+    "work_energy"
+   ],
+   "aliases": [
+    "তড়িৎক্ষেত্র",
+    "electric field",
+    "তড়িৎ বিভব",
+    "potential",
+    "গাউসের সূত্র",
+    "gauss",
+    "তড়িৎ ফ্লাক্স",
+    "দ্বিমেরু"
+   ]
+  },
+  {
+   "id": "capacitor",
+   "subject": "physics",
+   "bn": "ধারক",
+   "en": "Capacitor",
+   "chapters": [
+    "physics_2nd_ch02"
+   ],
+   "prereqs": [
+    "field_potential"
+   ],
+   "aliases": [
+    "ধারক",
+    "capacitor",
+    "ধারকত্ব",
+    "capacitance",
+    "সমান্তরাল পাত"
+   ]
+  },
+  {
+   "id": "ohm",
+   "subject": "physics",
+   "bn": "তড়িৎ প্রবাহ ও ওহমের সূত্র",
+   "en": "Current & Ohm's law",
+   "chapters": [
+    "physics_2nd_ch03"
+   ],
+   "prereqs": [
+    "field_potential"
+   ],
+   "aliases": [
+    "ওহম",
+    "ohm",
+    "রোধ",
+    "resistance",
+    "রোধকত্ব",
+    "resistivity",
+    "তড়িৎ প্রবাহ",
+    "current",
+    "জুলের সূত্র",
+    "তড়িৎ ক্ষমতা"
+   ]
+  },
+  {
+   "id": "kirchhoff",
+   "subject": "physics",
+   "bn": "কির্শফের সূত্র ও বর্তনী",
+   "en": "Kirchhoff's laws & circuits",
+   "chapters": [
+    "physics_2nd_ch03"
+   ],
+   "prereqs": [
+    "ohm"
+   ],
+   "aliases": [
+    "কির্শফ",
+    "kirchhoff",
+    "হুইটস্টোন",
+    "wheatstone",
+    "পোটেনশিওমিটার",
+    "potentiometer",
+    "মিটার ব্রিজ",
+    "তড়িৎচালক বল",
+    "emf"
+   ]
+  },
+  {
+   "id": "magnetism",
+   "subject": "physics",
+   "bn": "তড়িৎ প্রবাহের চৌম্বক ক্রিয়া",
+   "en": "Magnetic effect of current",
+   "chapters": [
+    "physics_2nd_ch04"
+   ],
+   "prereqs": [
+    "ohm",
+    "vector"
+   ],
+   "aliases": [
+    "চৌম্বক ক্ষেত্র",
+    "magnetic field",
+    "বায়োট-স্যাভার্ট",
+    "biot savart",
+    "অ্যাম্পিয়ার",
+    "ampere",
+    "লরেঞ্জ বল",
+    "lorentz",
+    "গ্যালভানোমিটার",
+    "সলিনয়েড"
+   ]
+  },
+  {
+   "id": "induction",
+   "subject": "physics",
+   "bn": "তড়িৎচৌম্বক আবেশ",
+   "en": "Electromagnetic induction",
+   "chapters": [
+    "physics_2nd_ch05"
+   ],
+   "prereqs": [
+    "magnetism"
+   ],
+   "aliases": [
+    "আবেশ",
+    "induction",
+    "ফ্যারাডে",
+    "faraday",
+    "লেঞ্জ",
+    "lenz",
+    "স্বকীয় আবেশ",
+    "পারস্পরিক আবেশ",
+    "ট্রান্সফর্মার",
+    "transformer"
+   ]
+  },
+  {
+   "id": "ac",
+   "subject": "physics",
+   "bn": "পরবর্তী প্রবাহ",
+   "en": "Alternating current",
+   "chapters": [
+    "physics_2nd_ch05"
+   ],
+   "prereqs": [
+    "induction",
+    "shm"
+   ],
+   "aliases": [
+    "পরবর্তী প্রবাহ",
+    "dynamo",
+    "ac",
+    "গড় মান",
+    "rms মান",
+    "জেনারেটর"
+   ]
+  },
+  {
+   "id": "light_nature",
+   "subject": "physics",
+   "bn": "আলোর প্রকৃতি",
+   "en": "Nature of light",
+   "chapters": [
+    "physics_2nd_ch06",
+    "physics_2nd_ch07"
+   ],
+   "prereqs": [
+    "wave"
+   ],
+   "aliases": [
+    "আলো",
+    "light",
+    "আলোর বেগ",
+    "তড়িৎচৌম্বক তরঙ্গ",
+    "electromagnetic wave"
+   ]
+  },
+  {
+   "id": "reflection",
+   "subject": "physics",
+   "bn": "আলোর প্রতিফলন",
+   "en": "Reflection of light",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "light_nature"
+   ],
+   "aliases": [
+    "প্রতিফলন",
+    "reflection",
+    "দর্পণ",
+    "mirror",
+    "গোলীয় দর্পণ"
+   ]
+  },
+  {
+   "id": "refraction",
+   "subject": "physics",
+   "bn": "আলোর প্রতিসরণ ও স্নেলের সূত্র",
+   "en": "Refraction & Snell's law",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "reflection"
+   ],
+   "aliases": [
+    "স্নেল",
+    "snell",
+    "snells law",
+    "স্নেলের সূত্র",
+    "প্রতিসরণ",
+    "refraction",
+    "প্রতিসরণাঙ্ক",
+    "refractive index",
+    "আপাত গভীরতা",
+    "apparent depth",
+    "ফার্মাটের নীতি",
+    "fermat"
+   ]
+  },
+  {
+   "id": "tir",
+   "subject": "physics",
+   "bn": "পূর্ণ অভ্যন্তরীণ প্রতিফলন",
+   "en": "Total internal reflection",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "refraction"
+   ],
+   "aliases": [
+    "পূর্ণ অভ্যন্তরীণ প্রতিফলন",
+    "total internal reflection",
+    "সংকট কোণ",
+    "critical angle",
+    "অপটিক্যাল ফাইবার",
+    "optical fibre",
+    "মরীচিকা"
+   ]
+  },
+  {
+   "id": "prism",
+   "subject": "physics",
+   "bn": "প্রিজম ও বিচ্ছুরণ",
+   "en": "Prism & dispersion",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "refraction"
+   ],
+   "aliases": [
+    "প্রিজম",
+    "prism",
+    "বিচ্ছুরণ",
+    "dispersion",
+    "ন্যূনতম বিচ্যুতি",
+    "minimum deviation",
+    "বর্ণালী",
+    "বিচ্ছুরণ ক্ষমতা"
+   ]
+  },
+  {
+   "id": "lens",
+   "subject": "physics",
+   "bn": "লেন্স",
+   "en": "Lens",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "refraction"
+   ],
+   "aliases": [
+    "লেন্স",
+    "lens",
+    "ফোকাস দূরত্ব",
+    "focal length",
+    "লেন্সের ক্ষমতা",
+    "power of lens",
+    "ডায়প্টার",
+    "lens maker",
+    "লেন্স প্রস্তুতকারকের সূত্র",
+    "গোলীয় তলে প্রতিসরণ"
+   ]
+  },
+  {
+   "id": "instruments",
+   "subject": "physics",
+   "bn": "আলোকযন্ত্র",
+   "en": "Optical instruments",
+   "chapters": [
+    "physics_2nd_ch06"
+   ],
+   "prereqs": [
+    "lens"
+   ],
+   "aliases": [
+    "অণুবীক্ষণ",
+    "microscope",
+    "দূরবীক্ষণ",
+    "telescope",
+    "বিবর্ধন",
+    "magnification",
+    "ক্যামেরা"
+   ]
+  },
+  {
+   "id": "interference",
+   "subject": "physics",
+   "bn": "হাইগেনস নীতি ও ব্যতিচার",
+   "en": "Huygens' principle & interference",
+   "chapters": [
+    "physics_2nd_ch07"
+   ],
+   "prereqs": [
+    "light_nature",
+    "wave"
+   ],
+   "aliases": [
+    "ব্যতিচার",
+    "interference",
+    "ইয়ংয়ের দ্বি-চিড়",
+    "young double slit",
+    "হাইগেনস",
+    "huygens",
+    "তরঙ্গমুখ",
+    "wavefront",
+    "ডোরা",
+    "fringe"
+   ]
+  },
+  {
+   "id": "diffraction",
+   "subject": "physics",
+   "bn": "অপবর্তন",
+   "en": "Diffraction",
+   "chapters": [
+    "physics_2nd_ch07"
+   ],
+   "prereqs": [
+    "interference"
+   ],
+   "aliases": [
+    "অপবর্তন",
+    "diffraction",
+    "গ্রেটিং",
+    "grating",
+    "একক চিড়"
+   ]
+  },
+  {
+   "id": "polarization",
+   "subject": "physics",
+   "bn": "সমবর্তন",
+   "en": "Polarization",
+   "chapters": [
+    "physics_2nd_ch07"
+   ],
+   "prereqs": [
+    "light_nature"
+   ],
+   "aliases": [
+    "সমবর্তন",
+    "polarization",
+    "পোলারয়েড",
+    "ব্রুস্টার"
+   ]
+  },
+  {
+   "id": "relativity",
+   "subject": "physics",
+   "bn": "আপেক্ষিকতা",
+   "en": "Special relativity",
+   "chapters": [
+    "physics_2nd_ch08"
+   ],
+   "prereqs": [
+    "kinematics",
+    "light_nature"
+   ],
+   "aliases": [
+    "আপেক্ষিকতা",
+    "relativity",
+    "কাল দীর্ঘায়ন",
+    "time dilation",
+    "দৈর্ঘ্য সংকোচন",
+    "ভর-শক্তি",
+    "E=mc2",
+    "লরেঞ্জ রূপান্তর"
+   ]
+  },
+  {
+   "id": "photoelectric",
+   "subject": "physics",
+   "bn": "আলোক তড়িৎ ক্রিয়া",
+   "en": "Photoelectric effect",
+   "chapters": [
+    "physics_2nd_ch08"
+   ],
+   "prereqs": [
+    "light_nature",
+    "work_energy"
+   ],
+   "aliases": [
+    "আলোক তড়িৎ",
+    "photoelectric",
+    "ফোটন",
+    "photon",
+    "কার্যাপেক্ষক",
+    "work function",
+    "প্ল্যাঙ্ক",
+    "planck",
+    "কম্পটন"
+   ]
+  },
+  {
+   "id": "de_broglie",
+   "subject": "physics",
+   "bn": "দ্য ব্রগলি তরঙ্গ",
+   "en": "de Broglie wave",
+   "chapters": [
+    "physics_2nd_ch08"
+   ],
+   "prereqs": [
+    "photoelectric",
+    "momentum"
+   ],
+   "aliases": [
+    "দ্য ব্রগলি",
+    "de broglie",
+    "বস্তু তরঙ্গ",
+    "matter wave",
+    "অনিশ্চয়তা",
+    "heisenberg"
+   ]
+  },
+  {
+   "id": "atom_model",
+   "subject": "physics",
+   "bn": "পরমাণু মডেল",
+   "en": "Atomic models",
+   "chapters": [
+    "physics_2nd_ch09"
+   ],
+   "prereqs": [
+    "coulomb",
+    "photoelectric"
+   ],
+   "aliases": [
+    "বোর",
+    "bohr",
+    "রাদারফোর্ড",
+    "rutherford",
+    "শক্তিস্তর",
+    "energy level",
+    "হাইড্রোজেন বর্ণালী"
+   ]
+  },
+  {
+   "id": "radioactivity",
+   "subject": "physics",
+   "bn": "তেজস্ক্রিয়তা",
+   "en": "Radioactivity",
+   "chapters": [
+    "physics_2nd_ch09"
+   ],
+   "prereqs": [
+    "atom_model"
+   ],
+   "aliases": [
+    "তেজস্ক্রিয়",
+    "radioactive",
+    "অর্ধায়ু",
+    "half life",
+    "গড় আয়ু",
+    "আলফা",
+    "বিটা",
+    "গামা",
+    "ক্ষয় ধ্রুবক"
+   ]
+  },
+  {
+   "id": "nuclear",
+   "subject": "physics",
+   "bn": "নিউক্লিয়ার শক্তি",
+   "en": "Nuclear energy",
+   "chapters": [
+    "physics_2nd_ch09"
+   ],
+   "prereqs": [
+    "radioactivity",
+    "relativity"
+   ],
+   "aliases": [
+    "ফিশন",
+    "fission",
+    "ফিউশন",
+    "fusion",
+    "ভর ত্রুটি",
+    "mass defect",
+    "বন্ধন শক্তি",
+    "binding energy",
+    "নিউক্লিয়ার চুল্লি"
+   ]
+  },
+  {
+   "id": "semiconductor",
+   "subject": "physics",
+   "bn": "অর্ধপরিবাহী ও ডায়োড",
+   "en": "Semiconductor & diode",
+   "chapters": [
+    "physics_2nd_ch10"
+   ],
+   "prereqs": [
+    "ohm"
+   ],
+   "aliases": [
+    "অর্ধপরিবাহী",
+    "semiconductor",
+    "ডায়োড",
+    "diode",
+    "p-n জংশন",
+    "pn junction",
+    "রেক্টিফায়ার",
+    "rectifier",
+    "ডোপিং"
+   ]
+  },
+  {
+   "id": "transistor",
+   "subject": "physics",
+   "bn": "ট্রানজিস্টর",
+   "en": "Transistor",
+   "chapters": [
+    "physics_2nd_ch10"
+   ],
+   "prereqs": [
+    "semiconductor"
+   ],
+   "aliases": [
+    "ট্রানজিস্টর",
+    "transistor",
+    "অ্যামপ্লিফায়ার",
+    "amplifier"
+   ]
+  },
+  {
+   "id": "logic_gate",
+   "subject": "physics",
+   "bn": "লজিক গেট ও সংখ্যা পদ্ধতি",
+   "en": "Logic gates & number systems",
+   "chapters": [
+    "physics_2nd_ch10"
+   ],
+   "prereqs": [
+    "semiconductor"
+   ],
+   "aliases": [
+    "লজিক গেট",
+    "logic gate",
+    "বাইনারি",
+    "binary",
+    "NAND",
+    "NOR",
+    "বুলিয়ান"
+   ]
+  },
+  {
+   "id": "astronomy",
+   "subject": "physics",
+   "bn": "জ্যোতির্বিজ্ঞান",
+   "en": "Astronomy",
+   "chapters": [
+    "physics_2nd_ch11"
+   ],
+   "prereqs": [
+    "gravitation",
+    "nuclear"
+   ],
+   "aliases": [
+    "নক্ষত্র",
+    "star",
+    "কৃষ্ণগহ্বর",
+    "black hole",
+    "মহাবিশ্ব",
+    "universe",
+    "বিগ ব্যাং",
+    "big bang",
+    "গ্যালাক্সি",
+    "galaxy"
+   ]
+  },
+  {
+   "id": "m_matrix",
+   "subject": "higher_math",
+   "bn": "ম্যাট্রিক্স ও নির্ণায়ক",
+   "en": "Matrix & determinant",
+   "chapters": [
+    "higher_math_1st_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "ম্যাট্রিক্স",
+    "matrix",
+    "নির্ণায়ক",
+    "determinant",
+    "বিপরীত ম্যাট্রিক্স",
+    "inverse matrix",
+    "ক্রেমারের নিয়ম"
+   ]
+  },
+  {
+   "id": "m_vector",
+   "subject": "higher_math",
+   "bn": "ভেক্টর (গণিত)",
+   "en": "Vectors (math)",
+   "chapters": [
+    "higher_math_1st_ch02"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "একক ভেক্টর",
+    "unit vector",
+    "স্কেলার গুণন",
+    "ভেক্টর গুণন"
+   ]
+  },
+  {
+   "id": "m_line",
+   "subject": "higher_math",
+   "bn": "সরলরেখা",
+   "en": "Straight line",
+   "chapters": [
+    "higher_math_1st_ch03"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "সরলরেখা",
+    "straight line",
+    "ঢাল",
+    "slope",
+    "দূরত্ব",
+    "স্থানাঙ্ক",
+    "coordinate"
+   ]
+  },
+  {
+   "id": "m_circle",
+   "subject": "higher_math",
+   "bn": "বৃত্ত",
+   "en": "Circle",
+   "chapters": [
+    "higher_math_1st_ch04"
+   ],
+   "prereqs": [
+    "m_line"
+   ],
+   "aliases": [
+    "বৃত্তের সমীকরণ",
+    "circle",
+    "স্পর্শক",
+    "tangent",
+    "জ্যা"
+   ]
+  },
+  {
+   "id": "m_permcomb",
+   "subject": "higher_math",
+   "bn": "বিন্যাস ও সমাবেশ",
+   "en": "Permutation & combination",
+   "chapters": [
+    "higher_math_1st_ch05"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "বিন্যাস",
+    "permutation",
+    "সমাবেশ",
+    "combination",
+    "nPr",
+    "nCr",
+    "ফ্যাক্টরিয়াল"
+   ]
+  },
+  {
+   "id": "m_trig",
+   "subject": "higher_math",
+   "bn": "ত্রিকোণমিতিক অনুপাত",
+   "en": "Trigonometric ratios",
+   "chapters": [
+    "higher_math_1st_ch06"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "ত্রিকোণমিতি",
+    "trigonometry",
+    "sin",
+    "cos",
+    "tan",
+    "রেডিয়ান",
+    "radian"
+   ]
+  },
+  {
+   "id": "m_compound",
+   "subject": "higher_math",
+   "bn": "সংযুক্ত ও যৌগিক কোণ",
+   "en": "Associated & compound angles",
+   "chapters": [
+    "higher_math_1st_ch07"
+   ],
+   "prereqs": [
+    "m_trig"
+   ],
+   "aliases": [
+    "যৌগিক কোণ",
+    "compound angle",
+    "গুণিতক কোণ",
+    "multiple angle",
+    "উপগুণিতক"
+   ]
+  },
+  {
+   "id": "m_function",
+   "subject": "higher_math",
+   "bn": "ফাংশন ও লেখচিত্র",
+   "en": "Function & graph",
+   "chapters": [
+    "higher_math_1st_ch08"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "ফাংশন",
+    "function",
+    "ডোমেন",
+    "domain",
+    "রেঞ্জ",
+    "range",
+    "লেখচিত্র",
+    "graph",
+    "বিপরীত ফাংশন"
+   ]
+  },
+  {
+   "id": "m_diff",
+   "subject": "higher_math",
+   "bn": "অন্তরীকরণ",
+   "en": "Differentiation",
+   "chapters": [
+    "higher_math_1st_ch09"
+   ],
+   "prereqs": [
+    "m_function",
+    "m_trig"
+   ],
+   "aliases": [
+    "অন্তরীকরণ",
+    "differentiation",
+    "অন্তরজ",
+    "derivative",
+    "লিমিট",
+    "limit",
+    "গুরুমান",
+    "লঘুমান",
+    "maxima",
+    "minima"
+   ]
+  },
+  {
+   "id": "m_int",
+   "subject": "higher_math",
+   "bn": "যোগজীকরণ",
+   "en": "Integration",
+   "chapters": [
+    "higher_math_1st_ch10"
+   ],
+   "prereqs": [
+    "m_diff"
+   ],
+   "aliases": [
+    "যোগজীকরণ",
+    "integration",
+    "যোগজ",
+    "integral",
+    "নির্দিষ্ট যোগজ",
+    "definite integral",
+    "ক্ষেত্রফল নির্ণয়"
+   ]
+  },
+  {
+   "id": "m_real",
+   "subject": "higher_math",
+   "bn": "বাস্তব সংখ্যা ও অসমতা",
+   "en": "Real numbers & inequality",
+   "chapters": [
+    "higher_math_2nd_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "অসমতা",
+    "inequality",
+    "পরমমান",
+    "absolute value",
+    "বাস্তব সংখ্যা"
+   ]
+  },
+  {
+   "id": "m_lp",
+   "subject": "higher_math",
+   "bn": "যোগাশ্রয়ী প্রোগ্রাম",
+   "en": "Linear programming",
+   "chapters": [
+    "higher_math_2nd_ch02"
+   ],
+   "prereqs": [
+    "m_line",
+    "m_real"
+   ],
+   "aliases": [
+    "যোগাশ্রয়ী প্রোগ্রাম",
+    "linear programming",
+    "লক্ষ্য ফাংশন",
+    "objective function",
+    "সম্ভাব্য অঞ্চল"
+   ]
+  },
+  {
+   "id": "m_complex",
+   "subject": "higher_math",
+   "bn": "জটিল সংখ্যা",
+   "en": "Complex numbers",
+   "chapters": [
+    "higher_math_2nd_ch03"
+   ],
+   "prereqs": [
+    "m_trig"
+   ],
+   "aliases": [
+    "জটিল সংখ্যা",
+    "complex number",
+    "আর্গুমেন্ট",
+    "মডুলাস",
+    "modulus",
+    "এককের ঘনমূল",
+    "দ্য ময়ভার"
+   ]
+  },
+  {
+   "id": "m_poly",
+   "subject": "higher_math",
+   "bn": "বহুপদী সমীকরণ",
+   "en": "Polynomial equations",
+   "chapters": [
+    "higher_math_2nd_ch04"
+   ],
+   "prereqs": [
+    "m_complex"
+   ],
+   "aliases": [
+    "বহুপদী",
+    "polynomial",
+    "দ্বিঘাত সমীকরণ",
+    "quadratic",
+    "মূল",
+    "root",
+    "নিশ্চায়ক",
+    "discriminant"
+   ]
+  },
+  {
+   "id": "m_binomial",
+   "subject": "higher_math",
+   "bn": "দ্বিপদী বিস্তৃতি",
+   "en": "Binomial expansion",
+   "chapters": [
+    "higher_math_2nd_ch05"
+   ],
+   "prereqs": [
+    "m_permcomb"
+   ],
+   "aliases": [
+    "দ্বিপদী",
+    "binomial",
+    "সাধারণ পদ",
+    "general term",
+    "মধ্যপদ",
+    "middle term"
+   ]
+  },
+  {
+   "id": "m_conic",
+   "subject": "higher_math",
+   "bn": "কণিক",
+   "en": "Conics",
+   "chapters": [
+    "higher_math_2nd_ch06"
+   ],
+   "prereqs": [
+    "m_circle"
+   ],
+   "aliases": [
+    "কণিক",
+    "conic",
+    "পরাবৃত্ত",
+    "parabola",
+    "উপবৃত্ত",
+    "ellipse",
+    "অধিবৃত্ত",
+    "hyperbola",
+    "উৎকেন্দ্রিকতা"
+   ]
+  },
+  {
+   "id": "m_invtrig",
+   "subject": "higher_math",
+   "bn": "বিপরীত ত্রিকোণমিতি ও সমীকরণ",
+   "en": "Inverse trig & trig equations",
+   "chapters": [
+    "higher_math_2nd_ch07"
+   ],
+   "prereqs": [
+    "m_compound",
+    "m_function"
+   ],
+   "aliases": [
+    "বিপরীত ত্রিকোণমিতিক",
+    "inverse trigonometric",
+    "ত্রিকোণমিতিক সমীকরণ",
+    "সাধারণ সমাধান"
+   ]
+  },
+  {
+   "id": "m_statics",
+   "subject": "higher_math",
+   "bn": "স্থিতিবিদ্যা",
+   "en": "Statics",
+   "chapters": [
+    "higher_math_2nd_ch08"
+   ],
+   "prereqs": [
+    "m_vector",
+    "m_trig"
+   ],
+   "aliases": [
+    "স্থিতিবিদ্যা",
+    "statics",
+    "বলের লব্ধি",
+    "লামির উপপাদ্য",
+    "lami",
+    "সমান্তরাল বল",
+    "ভারকেন্দ্র"
+   ]
+  },
+  {
+   "id": "m_dynamics",
+   "subject": "higher_math",
+   "bn": "গতিবিদ্যা (গণিত)",
+   "en": "Dynamics (math)",
+   "chapters": [
+    "higher_math_2nd_ch09"
+   ],
+   "prereqs": [
+    "m_diff",
+    "m_vector"
+   ],
+   "aliases": [
+    "সমত্বরণ",
+    "প্রক্ষিপ্ত বস্তু",
+    "আপেক্ষিক বেগ"
+   ]
+  },
+  {
+   "id": "m_prob",
+   "subject": "higher_math",
+   "bn": "বিস্তার পরিমাপ ও সম্ভাবনা",
+   "en": "Dispersion & probability",
+   "chapters": [
+    "higher_math_2nd_ch10"
+   ],
+   "prereqs": [
+    "m_permcomb"
+   ],
+   "aliases": [
+    "সম্ভাবনা",
+    "probability",
+    "বিস্তার",
+    "dispersion",
+    "পরিমিত ব্যবধান",
+    "standard deviation",
+    "ভেদাঙ্ক",
+    "variance"
+   ]
+  },
+  {
+   "id": "c_lab",
+   "subject": "chemistry",
+   "bn": "ল্যাবরেটরির নিরাপদ ব্যবহার",
+   "en": "Laboratory safety",
+   "chapters": [
+    "chemistry_1st_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "ল্যাবরেটরি",
+    "laboratory",
+    "নিরাপত্তা",
+    "hazard",
+    "গ্লাস সামগ্রী"
+   ]
+  },
+  {
+   "id": "c_atom",
+   "subject": "chemistry",
+   "bn": "পরমাণুর গঠন ও ইলেকট্রন বিন্যাস",
+   "en": "Atomic structure",
+   "chapters": [
+    "chemistry_1st_ch02"
+   ],
+   "prereqs": [
+    "atom_model"
+   ],
+   "aliases": [
+    "কোয়ান্টাম সংখ্যা",
+    "quantum number",
+    "অরবিটাল",
+    "orbital",
+    "ইলেকট্রন বিন্যাস",
+    "electron configuration",
+    "আউফবাউ",
+    "aufbau",
+    "হুন্ডের নীতি",
+    "পাউলির"
+   ]
+  },
+  {
+   "id": "c_spectra",
+   "subject": "chemistry",
+   "bn": "বর্ণালী",
+   "en": "Spectra",
+   "chapters": [
+    "chemistry_1st_ch02"
+   ],
+   "prereqs": [
+    "c_atom",
+    "light_nature"
+   ],
+   "aliases": [
+    "বর্ণালী",
+    "spectrum",
+    "spectra",
+    "শিখা পরীক্ষা",
+    "flame test"
+   ]
+  },
+  {
+   "id": "c_solubility",
+   "subject": "chemistry",
+   "bn": "দ্রাব্যতা ও দ্রাব্যতা গুণফল",
+   "en": "Solubility & Ksp",
+   "chapters": [
+    "chemistry_1st_ch02"
+   ],
+   "prereqs": [
+    "c_equilibrium"
+   ],
+   "aliases": [
+    "দ্রাব্যতা",
+    "solubility",
+    "দ্রাব্যতা গুণফল",
+    "ksp",
+    "সম আয়ন প্রভাব",
+    "common ion",
+    "আয়ন শনাক্তকরণ"
+   ]
+  },
+  {
+   "id": "c_periodic",
+   "subject": "chemistry",
+   "bn": "মৌলের পর্যায়বৃত্ত ধর্ম",
+   "en": "Periodic properties",
+   "chapters": [
+    "chemistry_1st_ch03"
+   ],
+   "prereqs": [
+    "c_atom"
+   ],
+   "aliases": [
+    "পর্যায় সারণি",
+    "periodic table",
+    "আয়নিকরণ শক্তি",
+    "ionization energy",
+    "তড়িৎ ঋণাত্মকতা",
+    "electronegativity",
+    "পারমাণবিক ব্যাসার্ধ",
+    "ইলেকট্রন আসক্তি"
+   ]
+  },
+  {
+   "id": "c_bond",
+   "subject": "chemistry",
+   "bn": "রাসায়নিক বন্ধন",
+   "en": "Chemical bonding",
+   "chapters": [
+    "chemistry_1st_ch03"
+   ],
+   "prereqs": [
+    "c_periodic"
+   ],
+   "aliases": [
+    "বন্ধন",
+    "bond",
+    "সংকরণ",
+    "hybridization",
+    "sp3",
+    "আয়নিক বন্ধন",
+    "সমযোজী",
+    "covalent",
+    "VSEPR",
+    "হাইড্রোজেন বন্ধন",
+    "আকৃতি"
+   ]
+  },
+  {
+   "id": "c_equilibrium",
+   "subject": "chemistry",
+   "bn": "রাসায়নিক সাম্যাবস্থা",
+   "en": "Chemical equilibrium",
+   "chapters": [
+    "chemistry_1st_ch04"
+   ],
+   "prereqs": [
+    "c_rate"
+   ],
+   "aliases": [
+    "সাম্যাবস্থা",
+    "equilibrium",
+    "লা শাতেলিয়ে",
+    "le chatelier",
+    "Kc",
+    "Kp",
+    "সাম্যধ্রুবক"
+   ]
+  },
+  {
+   "id": "c_rate",
+   "subject": "chemistry",
+   "bn": "বিক্রিয়ার হার",
+   "en": "Rate of reaction",
+   "chapters": [
+    "chemistry_1st_ch04"
+   ],
+   "prereqs": [
+    "c_mole"
+   ],
+   "aliases": [
+    "বিক্রিয়ার হার",
+    "rate of reaction",
+    "হার ধ্রুবক",
+    "rate constant",
+    "ক্রম",
+    "order",
+    "সক্রিয়ণ শক্তি",
+    "activation energy",
+    "প্রভাবক",
+    "catalyst"
+   ]
+  },
+  {
+   "id": "c_acidbase",
+   "subject": "chemistry",
+   "bn": "অম্ল, ক্ষার ও pH",
+   "en": "Acid, base & pH",
+   "chapters": [
+    "chemistry_1st_ch04"
+   ],
+   "prereqs": [
+    "c_equilibrium"
+   ],
+   "aliases": [
+    "pH",
+    "অম্ল",
+    "acid",
+    "ক্ষার",
+    "base",
+    "বাফার",
+    "buffer",
+    "pKa",
+    "নির্দেশক",
+    "indicator"
+   ]
+  },
+  {
+   "id": "c_thermochem",
+   "subject": "chemistry",
+   "bn": "তাপ রসায়ন",
+   "en": "Thermochemistry",
+   "chapters": [
+    "chemistry_1st_ch04"
+   ],
+   "prereqs": [
+    "thermo_laws"
+   ],
+   "aliases": [
+    "এনথালপি",
+    "enthalpy",
+    "হেসের সূত্র",
+    "hess",
+    "বিক্রিয়া তাপ",
+    "দহন তাপ"
+   ]
+  },
+  {
+   "id": "c_applied",
+   "subject": "chemistry",
+   "bn": "কর্মমুখী রসায়ন",
+   "en": "Applied chemistry",
+   "chapters": [
+    "chemistry_1st_ch05"
+   ],
+   "prereqs": [
+    "c_bond"
+   ],
+   "aliases": [
+    "খাদ্য সংরক্ষণ",
+    "preservative",
+    "সাবান",
+    "soap",
+    "ডিটারজেন্ট",
+    "টয়লেট্রিজ",
+    "ভিনেগার"
+   ]
+  },
+  {
+   "id": "c_gas",
+   "subject": "chemistry",
+   "bn": "গ্যাস ও পরিবেশ রসায়ন",
+   "en": "Gases & environmental chemistry",
+   "chapters": [
+    "chemistry_2nd_ch01"
+   ],
+   "prereqs": [
+    "ideal_gas"
+   ],
+   "aliases": [
+    "পরিবেশ",
+    "environment",
+    "গ্রিনহাউস",
+    "greenhouse",
+    "ওজোন",
+    "ozone",
+    "অম্ল বৃষ্টি",
+    "acid rain",
+    "ডাল্টনের আংশিক চাপ",
+    "গ্রাহামের ব্যাপন"
+   ]
+  },
+  {
+   "id": "c_organic",
+   "subject": "chemistry",
+   "bn": "জৈব যৌগের নামকরণ ও সমাণুতা",
+   "en": "Organic basics & isomerism",
+   "chapters": [
+    "chemistry_2nd_ch02"
+   ],
+   "prereqs": [
+    "c_bond"
+   ],
+   "aliases": [
+    "IUPAC",
+    "নামকরণ",
+    "সমাণুতা",
+    "isomerism",
+    "কার্যকরী মূলক",
+    "functional group",
+    "হাইড্রোকার্বন",
+    "hydrocarbon"
+   ]
+  },
+  {
+   "id": "c_orgreact",
+   "subject": "chemistry",
+   "bn": "জৈব বিক্রিয়া ও কৌশল",
+   "en": "Organic reactions & mechanisms",
+   "chapters": [
+    "chemistry_2nd_ch02"
+   ],
+   "prereqs": [
+    "c_organic"
+   ],
+   "aliases": [
+    "অ্যালকোহল",
+    "alcohol",
+    "অ্যালডিহাইড",
+    "aldehyde",
+    "কিটোন",
+    "ketone",
+    "কার্বক্সিলিক এসিড",
+    "অ্যারোমেটিক",
+    "benzene",
+    "বেনজিন",
+    "প্রতিস্থাপন",
+    "যুত বিক্রিয়া",
+    "SN1",
+    "SN2",
+    "কৌশল",
+    "mechanism"
+   ]
+  },
+  {
+   "id": "c_mole",
+   "subject": "chemistry",
+   "bn": "মোল ধারণা ও ঘনমাত্রা",
+   "en": "Mole concept & concentration",
+   "chapters": [
+    "chemistry_2nd_ch03"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "মোল",
+    "mole",
+    "মোলারিটি",
+    "molarity",
+    "ঘনমাত্রা",
+    "concentration",
+    "টাইট্রেশন",
+    "titration",
+    "স্টয়কিওমিতি",
+    "লিমিটিং বিক্রিয়ক"
+   ]
+  },
+  {
+   "id": "c_redox",
+   "subject": "chemistry",
+   "bn": "জারণ-বিজারণ",
+   "en": "Redox",
+   "chapters": [
+    "chemistry_2nd_ch03",
+    "chemistry_2nd_ch04"
+   ],
+   "prereqs": [
+    "c_mole"
+   ],
+   "aliases": [
+    "জারণ",
+    "বিজারণ",
+    "redox",
+    "oxidation",
+    "reduction",
+    "জারণ সংখ্যা",
+    "oxidation number"
+   ]
+  },
+  {
+   "id": "c_electro",
+   "subject": "chemistry",
+   "bn": "তড়িৎ রসায়ন",
+   "en": "Electrochemistry",
+   "chapters": [
+    "chemistry_2nd_ch04"
+   ],
+   "prereqs": [
+    "c_redox"
+   ],
+   "aliases": [
+    "তড়িৎ বিশ্লেষণ",
+    "electrolysis",
+    "ফ্যারাডের সূত্র",
+    "তড়িৎদ্বার বিভব",
+    "electrode potential",
+    "কোষ",
+    "cell",
+    "নার্নস্ট",
+    "nernst",
+    "ক্ষয়",
+    "corrosion"
+   ]
+  },
+  {
+   "id": "c_economic",
+   "subject": "chemistry",
+   "bn": "অর্থনৈতিক রসায়ন",
+   "en": "Economic chemistry",
+   "chapters": [
+    "chemistry_2nd_ch05"
+   ],
+   "prereqs": [
+    "c_orgreact"
+   ],
+   "aliases": [
+    "সার",
+    "fertilizer",
+    "ইউরিয়া",
+    "urea",
+    "সিমেন্ট",
+    "cement",
+    "কাগজ",
+    "চামড়া",
+    "পলিমার",
+    "polymer"
+   ]
+  },
+  {
+   "id": "b_cell",
+   "subject": "biology",
+   "bn": "কোষ ও কোষ অঙ্গাণু",
+   "en": "Cell & organelles",
+   "chapters": [
+    "biology_1st_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "কোষ",
+    "cell",
+    "মাইটোকন্ড্রিয়া",
+    "mitochondria",
+    "ক্লোরোপ্লাস্ট",
+    "রাইবোজোম",
+    "কোষঝিল্লি",
+    "DNA",
+    "নিউক্লিয়াস",
+    "ক্রোমোজোম",
+    "chromosome"
+   ]
+  },
+  {
+   "id": "b_division",
+   "subject": "biology",
+   "bn": "কোষ বিভাজন",
+   "en": "Cell division",
+   "chapters": [
+    "biology_1st_ch02"
+   ],
+   "prereqs": [
+    "b_cell"
+   ],
+   "aliases": [
+    "মাইটোসিস",
+    "mitosis",
+    "মিয়োসিস",
+    "meiosis",
+    "ক্রসিং ওভার",
+    "কোষচক্র",
+    "cell cycle"
+   ]
+  },
+  {
+   "id": "b_biomol",
+   "subject": "biology",
+   "bn": "কোষ রসায়ন ও এনজাইম",
+   "en": "Biomolecules & enzymes",
+   "chapters": [
+    "biology_1st_ch03"
+   ],
+   "prereqs": [
+    "b_cell",
+    "c_organic"
+   ],
+   "aliases": [
+    "কার্বোহাইড্রেট",
+    "carbohydrate",
+    "প্রোটিন",
+    "protein",
+    "লিপিড",
+    "lipid",
+    "এনজাইম",
+    "enzyme",
+    "অ্যামিনো এসিড",
+    "নিউক্লিক এসিড"
+   ]
+  },
+  {
+   "id": "b_microbe",
+   "subject": "biology",
+   "bn": "ভাইরাস ও ব্যাকটেরিয়া",
+   "en": "Virus & bacteria",
+   "chapters": [
+    "biology_1st_ch04"
+   ],
+   "prereqs": [
+    "b_cell"
+   ],
+   "aliases": [
+    "ভাইরাস",
+    "virus",
+    "ব্যাকটেরিয়া",
+    "bacteria",
+    "ব্যাকটেরিওফাজ",
+    "ম্যালেরিয়া",
+    "অণুজীব"
+   ]
+  },
+  {
+   "id": "b_algae",
+   "subject": "biology",
+   "bn": "শৈবাল ও ছত্রাক",
+   "en": "Algae & fungi",
+   "chapters": [
+    "biology_1st_ch05"
+   ],
+   "prereqs": [
+    "b_cell"
+   ],
+   "aliases": [
+    "শৈবাল",
+    "algae",
+    "ছত্রাক",
+    "fungi",
+    "লাইকেন",
+    "lichen",
+    "ইউলোথ্রিক্স",
+    "অ্যাগারিকাস"
+   ]
+  },
+  {
+   "id": "b_bryo",
+   "subject": "biology",
+   "bn": "ব্রায়োফাইটা ও টেরিডোফাইটা",
+   "en": "Bryophyta & Pteridophyta",
+   "chapters": [
+    "biology_1st_ch06"
+   ],
+   "prereqs": [
+    "b_algae"
+   ],
+   "aliases": [
+    "মস",
+    "রিকশিয়া",
+    "ফার্ন",
+    "টেরিস",
+    "জনুক্রম"
+   ]
+  },
+  {
+   "id": "b_seed",
+   "subject": "biology",
+   "bn": "নগ্নবীজী ও আবৃতবীজী",
+   "en": "Gymnosperms & angiosperms",
+   "chapters": [
+    "biology_1st_ch07"
+   ],
+   "prereqs": [
+    "b_bryo"
+   ],
+   "aliases": [
+    "নগ্নবীজী",
+    "gymnosperm",
+    "আবৃতবীজী",
+    "angiosperm",
+    "সাইকাস",
+    "পোয়েসি",
+    "ম্যালভেসি"
+   ]
+  },
+  {
+   "id": "b_tissue",
+   "subject": "biology",
+   "bn": "টিস্যু ও টিস্যুতন্ত্র",
+   "en": "Tissues",
+   "chapters": [
+    "biology_1st_ch08"
+   ],
+   "prereqs": [
+    "b_division"
+   ],
+   "aliases": [
+    "টিস্যু",
+    "tissue",
+    "ভাজক টিস্যু",
+    "জাইলেম",
+    "xylem",
+    "ফ্লোয়েম",
+    "phloem",
+    "ক্যাম্বিয়াম"
+   ]
+  },
+  {
+   "id": "b_photosyn",
+   "subject": "biology",
+   "bn": "সালোকসংশ্লেষণ",
+   "en": "Photosynthesis",
+   "chapters": [
+    "biology_1st_ch09"
+   ],
+   "prereqs": [
+    "b_biomol",
+    "b_cell"
+   ],
+   "aliases": [
+    "সালোকসংশ্লেষণ",
+    "photosynthesis",
+    "ক্যালভিন",
+    "calvin",
+    "C3",
+    "C4",
+    "আলোক বিক্রিয়া"
+   ]
+  },
+  {
+   "id": "b_plantresp",
+   "subject": "biology",
+   "bn": "উদ্ভিদের শ্বসন ও পানি শোষণ",
+   "en": "Plant respiration & transport",
+   "chapters": [
+    "biology_1st_ch09"
+   ],
+   "prereqs": [
+    "b_biomol"
+   ],
+   "aliases": [
+    "শ্বসন",
+    "respiration",
+    "গ্লাইকোলাইসিস",
+    "glycolysis",
+    "ক্রেবস",
+    "krebs",
+    "অভিস্রবণ",
+    "osmosis",
+    "প্রস্বেদন",
+    "transpiration"
+   ]
+  },
+  {
+   "id": "b_plantrep",
+   "subject": "biology",
+   "bn": "উদ্ভিদ প্রজনন",
+   "en": "Plant reproduction",
+   "chapters": [
+    "biology_1st_ch10"
+   ],
+   "prereqs": [
+    "b_division"
+   ],
+   "aliases": [
+    "পরাগায়ন",
+    "pollination",
+    "দ্বিনিষেক",
+    "double fertilization",
+    "ভ্রূণ",
+    "অযৌন জনন"
+   ]
+  },
+  {
+   "id": "b_biotech",
+   "subject": "biology",
+   "bn": "জীবপ্রযুক্তি",
+   "en": "Biotechnology",
+   "chapters": [
+    "biology_1st_ch11"
+   ],
+   "prereqs": [
+    "b_genetics",
+    "b_microbe"
+   ],
+   "aliases": [
+    "জিন প্রকৌশল",
+    "genetic engineering",
+    "রিকম্বিনেন্ট DNA",
+    "টিস্যু কালচার",
+    "tissue culture",
+    "GMO",
+    "PCR",
+    "বায়োটেকনোলজি"
+   ]
+  },
+  {
+   "id": "b_ecology",
+   "subject": "biology",
+   "bn": "পরিবেশ ও সংরক্ষণ",
+   "en": "Ecology & conservation",
+   "chapters": [
+    "biology_1st_ch12"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "বাস্তুতন্ত্র",
+    "ecosystem",
+    "জীববৈচিত্র্য",
+    "biodiversity",
+    "খাদ্যশৃঙ্খল",
+    "food chain",
+    "সংরক্ষণ",
+    "conservation",
+    "বায়োম"
+   ]
+  },
+  {
+   "id": "b_classify",
+   "subject": "biology",
+   "bn": "প্রাণীর শ্রেণিবিন্যাস",
+   "en": "Animal classification",
+   "chapters": [
+    "biology_2nd_ch01"
+   ],
+   "prereqs": [],
+   "aliases": [
+    "শ্রেণিবিন্যাস",
+    "classification",
+    "পর্ব",
+    "phylum",
+    "প্রতিসাম্য",
+    "সিলোম"
+   ]
+  },
+  {
+   "id": "b_animals",
+   "subject": "biology",
+   "bn": "হাইড্রা, ঘাসফড়িং ও রুই মাছ",
+   "en": "Hydra, grasshopper & rohu",
+   "chapters": [
+    "biology_2nd_ch02"
+   ],
+   "prereqs": [
+    "b_classify"
+   ],
+   "aliases": [
+    "হাইড্রা",
+    "hydra",
+    "ঘাসফড়িং",
+    "grasshopper",
+    "রুই মাছ",
+    "rohu",
+    "ফুলকা"
+   ]
+  },
+  {
+   "id": "b_digestion",
+   "subject": "biology",
+   "bn": "পরিপাক ও শোষণ",
+   "en": "Digestion & absorption",
+   "chapters": [
+    "biology_2nd_ch03"
+   ],
+   "prereqs": [
+    "b_biomol"
+   ],
+   "aliases": [
+    "পরিপাক",
+    "digestion",
+    "যকৃত",
+    "liver",
+    "অগ্ন্যাশয়",
+    "শোষণ",
+    "absorption",
+    "স্থূলতা"
+   ]
+  },
+  {
+   "id": "b_blood",
+   "subject": "biology",
+   "bn": "রক্ত ও সংবহন",
+   "en": "Blood & circulation",
+   "chapters": [
+    "biology_2nd_ch04"
+   ],
+   "prereqs": [
+    "b_tissue"
+   ],
+   "aliases": [
+    "রক্ত",
+    "blood",
+    "হৃৎপিণ্ড",
+    "heart",
+    "হৃদচক্র",
+    "cardiac cycle",
+    "রক্তচাপ",
+    "blood pressure",
+    "রক্ত জমাট",
+    "লসিকা"
+   ]
+  },
+  {
+   "id": "b_breathing",
+   "subject": "biology",
+   "bn": "শ্বসন ও শ্বাসক্রিয়া",
+   "en": "Breathing & respiration",
+   "chapters": [
+    "biology_2nd_ch05"
+   ],
+   "prereqs": [
+    "b_blood"
+   ],
+   "aliases": [
+    "ফুসফুস",
+    "lung",
+    "শ্বাসক্রিয়া",
+    "breathing",
+    "গ্যাসীয় বিনিময়",
+    "হাঁপানি"
+   ]
+  },
+  {
+   "id": "b_excretion",
+   "subject": "biology",
+   "bn": "বর্জ্য ও নিষ্কাশন",
+   "en": "Excretion",
+   "chapters": [
+    "biology_2nd_ch06"
+   ],
+   "prereqs": [
+    "b_blood"
+   ],
+   "aliases": [
+    "বৃক্ক",
+    "kidney",
+    "নেফ্রন",
+    "nephron",
+    "মূত্র",
+    "urine",
+    "ডায়ালাইসিস"
+   ]
+  },
+  {
+   "id": "b_locomotion",
+   "subject": "biology",
+   "bn": "চলন ও অঙ্গচালনা",
+   "en": "Locomotion & movement",
+   "chapters": [
+    "biology_2nd_ch07"
+   ],
+   "prereqs": [
+    "b_tissue"
+   ],
+   "aliases": [
+    "কঙ্কাল",
+    "skeleton",
+    "অস্থি",
+    "bone",
+    "পেশি",
+    "muscle",
+    "অস্থিসন্ধি",
+    "joint",
+    "লিভার"
+   ]
+  },
+  {
+   "id": "b_coordination",
+   "subject": "biology",
+   "bn": "সমন্বয় ও নিয়ন্ত্রণ",
+   "en": "Coordination & control",
+   "chapters": [
+    "biology_2nd_ch08"
+   ],
+   "prereqs": [
+    "b_tissue"
+   ],
+   "aliases": [
+    "স্নায়ু",
+    "nerve",
+    "নিউরন",
+    "neuron",
+    "মস্তিষ্ক",
+    "brain",
+    "হরমোন",
+    "hormone",
+    "চোখ",
+    "কান",
+    "প্রতিবর্ত ক্রিয়া"
+   ]
+  },
+  {
+   "id": "b_humanrep",
+   "subject": "biology",
+   "bn": "মানব প্রজনন",
+   "en": "Human reproduction",
+   "chapters": [
+    "biology_2nd_ch09"
+   ],
+   "prereqs": [
+    "b_division",
+    "b_coordination"
+   ],
+   "aliases": [
+    "প্রজনন",
+    "reproduction",
+    "শুক্রাণু",
+    "ডিম্বাণু",
+    "গ্যামেটোজেনেসিস",
+    "অমরা",
+    "placenta",
+    "ভ্রূণ বিকাশ"
+   ]
+  },
+  {
+   "id": "b_immunity",
+   "subject": "biology",
+   "bn": "মানবদেহের প্রতিরক্ষা",
+   "en": "Immunity",
+   "chapters": [
+    "biology_2nd_ch10"
+   ],
+   "prereqs": [
+    "b_blood"
+   ],
+   "aliases": [
+    "প্রতিরক্ষা",
+    "immunity",
+    "অ্যান্টিবডি",
+    "antibody",
+    "অ্যান্টিজেন",
+    "antigen",
+    "টিকা",
+    "vaccine",
+    "লিম্ফোসাইট"
+   ]
+  },
+  {
+   "id": "b_genetics",
+   "subject": "biology",
+   "bn": "জিনতত্ত্ব",
+   "en": "Genetics",
+   "chapters": [
+    "biology_2nd_ch11"
+   ],
+   "prereqs": [
+    "b_division"
+   ],
+   "aliases": [
+    "মেন্ডেল",
+    "mendel",
+    "জিন",
+    "gene",
+    "প্রকট",
+    "প্রচ্ছন্ন",
+    "dominant",
+    "recessive",
+    "লিঙ্গ নির্ধারণ",
+    "রক্তের গ্রুপ",
+    "blood group",
+    "বর্ণান্ধতা"
+   ]
+  },
+  {
+   "id": "b_evolution",
+   "subject": "biology",
+   "bn": "বিবর্তন",
+   "en": "Evolution",
+   "chapters": [
+    "biology_2nd_ch11"
+   ],
+   "prereqs": [
+    "b_genetics"
+   ],
+   "aliases": [
+    "বিবর্তন",
+    "evolution",
+    "ডারউইন",
+    "darwin",
+    "প্রাকৃতিক নির্বাচন",
+    "natural selection",
+    "ল্যামার্ক"
+   ]
+  },
+  {
+   "id": "b_behavior",
+   "subject": "biology",
+   "bn": "প্রাণীর আচরণ",
+   "en": "Animal behaviour",
+   "chapters": [
+    "biology_2nd_ch12"
+   ],
+   "prereqs": [
+    "b_coordination"
+   ],
+   "aliases": [
+    "আচরণ",
+    "behaviour",
+    "behavior",
+    "ট্যাক্সিস",
+    "প্রবৃত্তি",
+    "instinct",
+    "শিক্ষণ",
+    "learning",
+    "মৌমাছি"
+   ]
+  }
+ ]
+}

@@ -1,12 +1,12 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021453';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021453';
-import { progressOf } from '../progress.js?v=202610021453';
-import { contentCount, chapterCount } from '../model.js?v=202610021453';
-import { lastVisit } from './shared.js?v=202610021453';
-import { videosBlock } from './videos.js?v=202610021453';
-import { alarmsBlock } from './alarms.js?v=202610021453';
+import { icon } from '../icons.js?v=202610021514';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021514';
+import { progressOf } from '../progress.js?v=202610021514';
+import { contentCount, chapterCount } from '../model.js?v=202610021514';
+import { lastVisit } from './shared.js?v=202610021514';
+import { videosBlock } from './videos.js?v=202610021514';
+import { alarmsBlock } from './alarms.js?v=202610021514';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -169,7 +169,8 @@ export function studyMap(model) {
   return {
     nav: 'study',
     title: 'Curriculum',
-    html: `<header class="page-title rise"><p class="eyebrow">Study</p><h1>Curriculum map</h1>
+    html: `<div class="chip-row study-links rise"><a class="chip" href="#/graph">${icon('map')} ধারণার মানচিত্র</a><a class="chip" href="#/focus">${icon('play')} Focus mode</a><a class="chip" href="#/planner">${icon('target')} পরীক্ষার প্ল্যান</a></div>
+      <header class="page-title rise"><p class="eyebrow">Study</p><h1>Curriculum map</h1>
         <p class="muted">${model.subjects.length} subjects · ${model.papers.length} papers · ${model.chapters.length} chapters & topics</p></header>
       ${legend}<div class="map">${subjects}</div>
       ${alarmsBlock()}`,

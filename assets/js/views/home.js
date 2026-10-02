@@ -1,10 +1,10 @@
 // Home: personal dashboard + subject cards. Every number shown is real.
 
-import { icon } from '../icons.js?v=202610021453';
-import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610021453';
-import { todayStats, streak, recentVisits } from '../activity.js?v=202610021453';
-import { progressOf } from '../progress.js?v=202610021453';
-import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021453';
+import { icon } from '../icons.js?v=202610021514';
+import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610021514';
+import { todayStats, streak, recentVisits } from '../activity.js?v=202610021514';
+import { progressOf } from '../progress.js?v=202610021514';
+import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021514';
 
 export function homeView(model) {
   const t = totals(model);
@@ -68,5 +68,15 @@ export function homeView(model) {
           .join('')}</div></section>`
     : '';
 
-  return { nav: 'home', title: 'Provacor', html: hero + recentHtml + subjects + libHtml };
+  const tools = [
+    ['#/focus', 'play', 'Focus mode', 'মনোযোগ দিয়ে পড়া', 'teal'],
+    ['#/planner', 'target', 'পরীক্ষার প্ল্যান', 'দিন ধরে পড়া সাজাও', 'violet'],
+    ['#/mistakes', 'warn', 'ভুলের খাতা', 'Mistake Book', 'rose'],
+    ['#/graph', 'map', 'ধারণার মানচিত্র', 'Knowledge map', 'blue'],
+    ['#/ai', 'sparkle', 'AI শিক্ষক', 'ছবি তুলে প্রশ্ন', 'amber'],
+    ['#/backup', 'key', 'ব্যাকআপ', 'এনক্রিপ্টেড', 'green'],
+  ];
+  const toolsHtml = `<section class="block"><div class="block-head"><h2>Tools</h2></div>
+      <div class="tools">${tools.map(([href, ic, t, d, hue], i) => `<a class="tool hue-${hue} rise" style="--i:${i}" href="${href}"><span class="tool-ic">${icon(ic)}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div></section>`;
+  return { nav: 'home', title: 'Provacor', html: hero + toolsHtml + recentHtml + subjects + libHtml };
 }

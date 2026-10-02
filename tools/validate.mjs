@@ -87,6 +87,30 @@ for (const [id, reg] of Object.entries(raw.content.sections ?? {})) {
     if (it.file && !existsSync(join(root, it.file))) err(`${reg.file}: item ${it.id} file ${it.file} is missing`);
   }
 }
+// Concept map (universal search + knowledge graph): known chapters/subjects, known prereqs, no cycles.
+const conceptsPath = join(root, 'data/concepts.json');
+if (existsSync(conceptsPath)) {
+  const cs = JSON.parse(readFileSync(conceptsPath, 'utf8')).concepts ?? [];
+  const byId = new Map();
+  for (const c of cs) {
+    if (byId.has(c.id)) err(`concepts: duplicate id ${c.id}`);
+    byId.set(c.id, c);
+    if (!model.byId.get(c.subject)) err(`concepts: ${c.id} has unknown subject ${c.subject}`);
+    for (const ch of c.chapters ?? []) if (model.byId.get(ch)?.level !== 'chapter') err(`concepts: ${c.id} points to unknown chapter ${ch}`);
+  }
+  const state = {};
+  const visit = (id, trail) => {
+    if (state[id] === 1) { err(`concepts: prerequisite cycle ${[...trail, id].join(' > ')}`); return; }
+    if (state[id] === 2) return;
+    state[id] = 1;
+    for (const p of byId.get(id)?.prereqs ?? []) {
+      if (!byId.has(p)) err(`concepts: ${id} has unknown prereq ${p}`);
+      else visit(p, [...trail, id]);
+    }
+    state[id] = 2;
+  };
+  cs.forEach((c) => visit(c.id, []));
+}
 model.papers.filter((p) => !p.chapters.length).forEach((p) => warnings.push(`${p.id} has no chapters yet (awaiting syllabus source)`));
 
 console.log(`subjects ${model.subjects.length} · papers ${model.papers.length} · chapters ${model.chapters.length} · sections ${model.sections.length}`);
