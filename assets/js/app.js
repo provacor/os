@@ -1,25 +1,28 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021341';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021341';
-import { buildIndex } from './search.js?v=202610021341';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021341';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021341';
-import { icon } from './icons.js?v=202610021341';
-import { crumbs, emptyState } from './components.js?v=202610021341';
-import { homeView } from './views/home.js?v=202610021341';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021341';
-import { sectionView } from './views/section.js?v=202610021341';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021341';
-import { progressView } from './views/progress.js?v=202610021341';
-import { moreView } from './views/more.js?v=202610021341';
-import { missionView, missionState } from './views/mission.js?v=202610021341';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021341';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021341';
-import { profileView } from './views/profile.js?v=202610021341';
-import { startLeaderboard } from './leaderboard.js?v=202610021341';
-import { addVideo, deleteVideo } from './videos.js?v=202610021341';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021341';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021354';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021354';
+import { buildIndex } from './search.js?v=202610021354';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021354';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021354';
+import { icon } from './icons.js?v=202610021354';
+import { crumbs, emptyState } from './components.js?v=202610021354';
+import { homeView } from './views/home.js?v=202610021354';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021354';
+import { sectionView } from './views/section.js?v=202610021354';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021354';
+import { progressView } from './views/progress.js?v=202610021354';
+import { moreView } from './views/more.js?v=202610021354';
+import { missionView, missionState } from './views/mission.js?v=202610021354';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021354';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021354';
+import { profileView } from './views/profile.js?v=202610021354';
+import { startLeaderboard } from './leaderboard.js?v=202610021354';
+import { addVideo, deleteVideo } from './videos.js?v=202610021354';
+import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021354';
+import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021354';
+import { renderMarkdown, typesetMath } from './markdown.js?v=202610021354';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021354';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -68,6 +71,18 @@ async function boot() {
   document.getElementById('themeBtn').addEventListener('click', () => toggleTheme());
   document.addEventListener('change', (e) => {
     if (e.target.matches('[data-alarm-awake]')) setKeepAwake(e.target.checked);
+    if (e.target.matches('[data-ai-pick]')) {
+      const files = [...(e.target.files ?? [])].slice(0, Math.max(0, 4 - aiState.images.length));
+      e.target.value = '';
+      Promise.all(files.map((f) => shrinkImage(f)))
+        .then((imgs) => {
+          aiState.images.push(...imgs);
+          document.getElementById('aiPends').innerHTML = pendingHtml();
+          document.getElementById('aiInput')?.focus();
+        })
+        .catch(() => toast('<span>ছবিটা খোলা গেল না</span>'));
+      if (!files.length) toast('<span>একবারে সর্বোচ্চ ৪টা ছবি</span>');
+    }
     if (e.target.matches('[data-profile-photo]')) {
       imageToAvatar(e.target.files?.[0])
         .then((photo) => {
@@ -123,6 +138,7 @@ function resolve(r) {
     case 'progress': return progressView(model);
     case 'more': return moreView(model);
     case 'profile': return profileView();
+    case 'ai': return aiView(model, r.a);
     case 'mission': return missionView();
     case '': return homeView(model);
     default: return null;
@@ -167,6 +183,12 @@ function render({ keepScroll = false } = {}) {
     else a.removeAttribute('aria-current');
   });
 
+  const fab = document.getElementById('aiFab');
+  if (fab) {
+    fab.hidden = route().kind === 'ai';
+    fab.href = out.visit?.chapterId ? `#/ai/${encodeURIComponent(out.visit.chapterId)}` : '#/ai';
+  }
+
   if (newRoute && !keepScroll) window.scrollTo(0, 0);
   if (out.isSearch) mountSearch();
   out.after?.();
@@ -198,6 +220,11 @@ function setQuery(v, { save = false } = {}) {
 
 let noteTimer;
 function onInput(e) {
+  if (e.target.id === 'aiInput') {
+    e.target.style.height = 'auto';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 160)}px`;
+    return;
+  }
   const note = e.target.dataset?.missionNote;
   if (note) {
     clearTimeout(noteTimer);
@@ -222,6 +249,18 @@ function onKey(e) {
 // ---------- mission planner ----------
 
 function onSubmit(e) {
+  if (e.target.matches('[data-ai-settings]')) {
+    e.preventDefault();
+    saveSettings({ key: e.target.key.value, model: e.target.model.value });
+    toast(`${icon('check')}<span>AI সেটিংস সেভ হয়েছে</span>`);
+    rerender();
+    return;
+  }
+  if (e.target.matches('[data-ai-form]')) {
+    e.preventDefault();
+    sendAi();
+    return;
+  }
   if (e.target.matches('[data-video-form]')) {
     e.preventDefault();
     const f = e.target;
@@ -295,6 +334,73 @@ function onVideoClick(t) {
   return false;
 }
 
+async function sendAi() {
+  if (aiState.busy) return;
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  const images = aiState.images.slice();
+  if (!text && !images.length) return toast(`<span>${ERRORS.empty}</span>`);
+  const chat = document.getElementById('aiChat');
+  chat.querySelector('.ai-empty')?.remove();
+  chat.insertAdjacentHTML('beforeend', messageHtml({ role: 'user', text, thumbs: images }));
+  chat.insertAdjacentHTML('beforeend', `<div class="ai-msg ai-bot"><span class="ai-av">${icon('sparkle')}</span><div class="ai-bubble md ai-typing"><span></span><span></span><span></span></div></div>`);
+  const bubble = chat.lastElementChild.querySelector('.ai-bubble');
+  bubble.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  input.value = '';
+  input.style.height = '';
+  aiState.images = [];
+  document.getElementById('aiPends').innerHTML = '';
+  aiState.busy = true;
+  document.querySelector('.ai-send')?.setAttribute('disabled', '');
+  let frame = 0;
+  try {
+    const answer = await ask({ text, images, context: aiState.context }, (soFar) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        bubble.classList.remove('ai-typing');
+        bubble.innerHTML = renderMarkdown(soFar);
+      });
+    });
+    cancelAnimationFrame(frame);
+    bubble.classList.remove('ai-typing');
+    bubble.innerHTML = renderMarkdown(answer);
+    typesetMath(bubble);
+  } catch (err) {
+    cancelAnimationFrame(frame);
+    const kind = err instanceof AiError ? err.kind : 'api';
+    bubble.classList.remove('ai-typing');
+    bubble.classList.add('ai-error');
+    bubble.innerHTML = `<p>${ERRORS[kind] ?? ERRORS.api}</p>${kind === 'api' && err.message ? `<p class="small muted">${err.message.replace(/[<>&]/g, '')}</p>` : ''}`;
+    if (kind === 'no-key' || kind === 'bad-key' || kind === 'bad-model') document.querySelector('.ai-settings')?.setAttribute('open', '');
+  } finally {
+    aiState.busy = false;
+    document.querySelector('.ai-send')?.removeAttribute('disabled');
+  }
+}
+
+function onAiClick(t) {
+  const un = t.closest('[data-ai-unpick]');
+  if (un) {
+    aiState.images.splice(Number(un.dataset.aiUnpick), 1);
+    document.getElementById('aiPends').innerHTML = pendingHtml();
+    return true;
+  }
+  const sug = t.closest('[data-ai-suggest]');
+  if (sug) {
+    document.getElementById('aiInput').value = sug.dataset.aiSuggest;
+    sendAi();
+    return true;
+  }
+  if (t.closest('[data-ai-clear]')) {
+    if (confirm('আগের সব প্রশ্ন-উত্তর মুছে নতুন চ্যাট শুরু করবে?')) {
+      clearChat();
+      rerender();
+    }
+    return true;
+  }
+  return false;
+}
+
 function onProfileClick(t) {
   const mode = t.closest('[data-profile-mode]')?.dataset.profileMode;
   if (mode) {
@@ -362,7 +468,7 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
-  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t)) return;
+  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {

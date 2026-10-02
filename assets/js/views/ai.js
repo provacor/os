@@ -1,0 +1,78 @@
+// AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
+
+import { icon } from '../icons.js?v=202610021354';
+import { esc } from '../components.js?v=202610021354';
+import { aiSettings, hasKey, chatHistory, DEFAULT_MODEL } from '../ai.js?v=202610021354';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021354';
+
+export const aiState = { images: [], busy: false, context: '' };
+
+export function messageHtml(m) {
+  const thumbs = m.thumbs?.length ? `<div class="ai-thumbs">${m.thumbs.filter(Boolean).map((t) => `<img src="${esc(t)}" alt="">`).join('')}</div>` : '';
+  return m.role === 'ai'
+    ? `<div class="ai-msg ai-bot"><span class="ai-av">${icon('sparkle')}</span><div class="ai-bubble md">${renderMarkdown(m.text)}</div></div>`
+    : `<div class="ai-msg ai-me"><div class="ai-bubble">${thumbs}${m.text ? `<p>${esc(m.text)}</p>` : ''}</div></div>`;
+}
+
+export function pendingHtml() {
+  return aiState.images.map((d, i) => `<span class="ai-pend"><img src="${esc(d)}" alt=""><button type="button" data-ai-unpick="${i}" aria-label="ছবি সরাও">${icon('x')}</button></span>`).join('');
+}
+
+export function aiView(model, chapterId) {
+  const ch = chapterId ? model.byId.get(chapterId) : null;
+  aiState.context = ch?.level === 'chapter' ? `${ch.subject.name} · ${ch.paper.name} · ${ch.name}` : '';
+  const s = aiSettings();
+  const list = chatHistory();
+  const setup = !hasKey();
+
+  const settingsCard = `<details class="card ai-settings" ${setup ? 'open' : ''}>
+      <summary>${icon('key')} <span>AI সেটিংস</span>${setup ? '<span class="flag">দরকার</span>' : '<span class="ok-tag">চালু</span>'}</summary>
+      ${setup ? `<ol class="ai-steps">
+          <li><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> খুলে Google অ্যাকাউন্ট দিয়ে ঢোকো।</li>
+          <li><b>Create API key</b> চাপো, তারপর key-টা কপি করো।</li>
+          <li>নিচের ঘরে পেস্ট করে <b>সেভ</b> চাপো। এটা ফ্রি।</li>
+        </ol>` : ''}
+      <form class="ai-key-form" data-ai-settings>
+        <label class="pf-label" for="aiKey">Gemini API key</label>
+        <input id="aiKey" name="key" type="password" autocomplete="off" spellcheck="false" value="${esc(s.key)}" placeholder="AIza…">
+        <label class="pf-label" for="aiModel">মডেল</label>
+        <input id="aiModel" name="model" type="text" autocomplete="off" spellcheck="false" value="${esc(s.model)}" placeholder="${DEFAULT_MODEL}">
+        <button class="btn btn-primary tap" type="submit">${icon('check')}<span>সেভ</span></button>
+      </form>
+      <p class="muted small">key শুধু এই ফোনেই থাকে, সরাসরি Google-এর কাছে যায়। কাউকে key দেখাবে না।</p>
+    </details>`;
+
+  const empty = `<div class="ai-empty">
+      <span class="ai-logo">${icon('sparkle')}</span>
+      <h2>কী জানতে চাও?</h2>
+      <p class="muted small">প্রশ্ন লেখো, অথবা বই/খাতার প্রশ্নের ছবি তুলে পাঠাও। অঙ্ক ধাপে ধাপে বুঝিয়ে দেবে।</p>
+      <div class="chip-row ai-sugg">
+        ${['লেন্সের ক্ষমতা কী? একক কী?', 'জারণ-বিজারণ সহজ করে বোঝাও', 'Article a/an এর ব্যবহার উদাহরণসহ'].map((q) => `<button class="chip" type="button" data-ai-suggest="${esc(q)}">${esc(q)}</button>`).join('')}
+      </div>
+    </div>`;
+
+  return {
+    nav: 'home',
+    title: 'Provacor AI',
+    back: ch ? `#/c/${ch.id}` : '#/',
+    html: `<header class="page-title rise ai-head"><p class="eyebrow">AI শিক্ষক</p><h1>Provacor AI</h1>
+        ${aiState.context ? `<p class="muted small">${icon('notes')} ${esc(aiState.context)}</p>` : ''}
+        ${list.length ? '<button class="link ai-clear" data-ai-clear>নতুন চ্যাট</button>' : ''}</header>
+      ${settingsCard}
+      <div class="ai-chat" id="aiChat" aria-live="polite">${list.length ? list.map(messageHtml).join('') : empty}</div>
+      <form class="ai-compose" data-ai-form>
+        <div class="ai-pends" id="aiPends">${pendingHtml()}</div>
+        <div class="ai-row">
+          <label class="icon-btn" aria-label="ছবি তোলো">${icon('camera')}<input type="file" accept="image/*" capture="environment" data-ai-pick hidden></label>
+          <label class="icon-btn" aria-label="গ্যালারি থেকে ছবি">${icon('image')}<input type="file" accept="image/*" multiple data-ai-pick hidden></label>
+          <textarea id="aiInput" rows="1" maxlength="4000" placeholder="প্রশ্ন লেখো…" aria-label="প্রশ্ন"></textarea>
+          <button class="icon-btn ai-send" type="submit" aria-label="পাঠাও" ${aiState.busy ? 'disabled' : ''}>${icon('send')}</button>
+        </div>
+        <p class="ai-foot muted">AI ভুল করতে পারে, গুরুত্বপূর্ণ উত্তর বই দিয়ে মিলিয়ে নিও।</p>
+      </form>`,
+    after: () => {
+      document.querySelectorAll('#aiChat .md').forEach(typesetMath);
+      if (list.length) document.getElementById('aiChat')?.lastElementChild?.scrollIntoView({ block: 'end' });
+    },
+  };
+}
