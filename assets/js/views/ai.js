@@ -1,9 +1,9 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610021354';
-import { esc } from '../components.js?v=202610021354';
-import { aiSettings, hasKey, chatHistory, DEFAULT_MODEL } from '../ai.js?v=202610021354';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021354';
+import { icon } from '../icons.js?v=202610021400';
+import { esc } from '../components.js?v=202610021400';
+import { aiSettings, hasKey, chatHistory, DEFAULT_MODEL } from '../ai.js?v=202610021400';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021400';
 
 export const aiState = { images: [], busy: false, context: '' };
 
@@ -34,9 +34,9 @@ export function aiView(model, chapterId) {
         </ol>` : ''}
       <form class="ai-key-form" data-ai-settings>
         <label class="pf-label" for="aiKey">Gemini API key</label>
-        <input id="aiKey" name="key" type="password" autocomplete="off" spellcheck="false" value="${esc(s.key)}" placeholder="AIza…">
+        <input id="aiKey" name="key" type="password" autocomplete="new-password" spellcheck="false" value="${esc(s.key)}" placeholder="AIza…">
         <label class="pf-label" for="aiModel">মডেল</label>
-        <input id="aiModel" name="model" type="text" autocomplete="off" spellcheck="false" value="${esc(s.model)}" placeholder="${DEFAULT_MODEL}">
+        <input id="aiModel" name="model" type="text" autocomplete="off" autocapitalize="off" data-lpignore="true" spellcheck="false" value="${esc(s.model)}" placeholder="${DEFAULT_MODEL}">
         <button class="btn btn-primary tap" type="submit">${icon('check')}<span>সেভ</span></button>
       </form>
       <p class="muted small">key শুধু এই ফোনেই থাকে, সরাসরি Google-এর কাছে যায়। কাউকে key দেখাবে না।</p>

@@ -25,7 +25,15 @@ function write(key, value) {
   }
 }
 
+// A Gemini model id like "gemini-2.5-flash". Anything else (an autofilled email,
+// a pasted key, extra text) falls back to the default instead of breaking requests.
+export function cleanModel(m) {
+  const id = String(m ?? '').trim().replace(/^models\//, '').toLowerCase();
+  return /^gemini-[a-z0-9][a-z0-9.-]*$/.test(id) ? id : DEFAULT_MODEL;
+}
+
 let settings = { key: '', model: DEFAULT_MODEL, ...read(SETTINGS, {}) };
+settings.model = cleanModel(settings.model);
 let chat = read(CHAT, []);
 
 export const aiSettings = () => settings;
@@ -33,7 +41,7 @@ export const hasKey = () => !!settings.key;
 export function saveSettings(patch) {
   settings = { ...settings, ...patch };
   settings.key = String(settings.key ?? '').trim();
-  settings.model = String(settings.model ?? '').trim() || DEFAULT_MODEL;
+  settings.model = cleanModel(settings.model);
   write(SETTINGS, settings);
 }
 
@@ -124,24 +132,56 @@ export async function ask({ text, images = [], context = '' }, onText) {
     generationConfig: { temperature: 0.4 },
   };
 
-  let res;
-  try {
-    res = await fetch(`${API}/${encodeURIComponent(settings.model)}:streamGenerateContent?alt=sse`, {
+  const call = (model) =>
+    fetch(`${API}/${model}:streamGenerateContent?alt=sse`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': settings.key },
       body: JSON.stringify(body),
     });
-  } catch {
-    throw new AiError('network');
-  }
-  if (!res.ok) {
+  const failure = async (r) => {
     let msg = '';
-    try { msg = (await res.json()).error?.message ?? ''; } catch { /* ignore */ }
-    if (res.status === 400 && /api key/i.test(msg)) throw new AiError('bad-key', msg);
-    if (res.status === 403) throw new AiError('bad-key', msg);
-    if (res.status === 404) throw new AiError('bad-model', msg);
-    if (res.status === 429) throw new AiError('quota', msg);
-    throw new AiError('api', msg || `HTTP ${res.status}`);
+    try { msg = (await r.json()).error?.message ?? ''; } catch { /* ignore */ }
+    if (r.status === 400 && /api key/i.test(msg)) return new AiError('bad-key', msg);
+    if (r.status === 401 || r.status === 403) return new AiError('bad-key', msg);
+    if (r.status === 404 || (r.status === 400 && /model/i.test(msg))) return new AiError('bad-model', msg);
+    if (r.status === 429) return new AiError('quota', msg);
+    return new AiError('api', msg || `HTTP ${r.status}`);
+  };
+
+  // Ask Google which models this key can use and pick the newest "flash" one.
+  const discover = async () => {
+    try {
+      const r = await fetch(`${API}?pageSize=200`, { headers: { 'x-goog-api-key': settings.key } });
+      if (!r.ok) return null;
+      const ids = ((await r.json()).models ?? [])
+        .filter((m) => m.supportedGenerationMethods?.includes('generateContent'))
+        .map((m) => m.name.replace(/^models\//, ''))
+        .filter((id) => /^gemini-[\d.]+-flash$/.test(id));
+      ids.sort((a, b) => parseFloat(b.slice(7)) - parseFloat(a.slice(7)));
+      return ids[0] ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  let res;
+  try {
+    res = await call(settings.model);
+    if (!res.ok) {
+      let err = await failure(res);
+      // an unknown or retired model: retry once with the default and keep it if it works
+      for (const next of err.kind === 'bad-model' ? [DEFAULT_MODEL, 'discover'] : []) {
+        const model = next === 'discover' ? await discover() : next;
+        if (!model || model === settings.model) continue;
+        res = await call(model);
+        if (res.ok) { saveSettings({ model }); break; }
+        err = await failure(res);
+        if (err.kind !== 'bad-model') break;
+      }
+      if (!res.ok) throw err;
+    }
+  } catch (e) {
+    throw e instanceof AiError ? e : new AiError('network');
   }
 
   let out = '';
