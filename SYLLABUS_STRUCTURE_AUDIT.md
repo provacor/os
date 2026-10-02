@@ -20,36 +20,37 @@ The 7 images received on 2026-10-02 are stored in `docs/syllabus-source/`:
 
 **Excluded from the source:** English 1st Paper (all units), marks distributions, full-marks lines, the exam-cycle headings, "Revision of All Grammar", and phrases such as "এবং অর্ধ-বার্ষিক পরীক্ষার অধ্যায়সমূহ" (these refer to exams, not chapters).
 
-## ⚠️ Needs verification
+## Verification log
+
+All items were confirmed by the user on 2026-10-02. Nothing is left to verify.
 
 | # | Item | Problem |
 |---|------|---------|
 | 1 | Higher Math 2nd Paper, **Chapter 5** | ✅ Resolved. It is not printed in the image; the user gave the name **দ্বিপদী বিস্তৃতি** (2026-10-02). |
 | 2 | Higher Math 2nd Paper, বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | ✅ Resolved. The number is covered by ink, but with chapter 5 confirmed, 7 is the only number left. |
-| 3 | Higher Math 1st Paper, অন্তরীকরণ | The chapter number is covered by ink. Recorded as 9, the only 1st Paper number not otherwise listed. [NEEDS VERIFICATION] |
-| 4 | Higher Math 1st Paper, বৃত্ত · 2nd Paper, বহুপদী ও বহুপদী সমীকরণ | The number is partly covered by ink; it reads ৪র্থ. [NEEDS VERIFICATION] |
-| 5 | English: Correction of Verbs | Printed as "Corrction of verbs" in the প্রাক-নির্বাচনী column. It may be the same item as Right Form of Verbs. Kept separate until confirmed. [NEEDS VERIFICATION] |
+| 3 | Higher Math 1st Paper, অন্তরীকরণ | ✅ The chapter number is covered by ink. The user confirmed **৯ম অধ্যায়**. |
+| 4 | Higher Math 1st Paper, বৃত্ত · 2nd Paper, বহুপদী ও বহুপদী সমীকরণ | ✅ The number is partly covered by ink. The user confirmed **৪র্থ অধ্যায়** for both. |
+| 5 | English: Correction of Verbs | ✅ Printed as "Corrction of verbs" in the প্রাক-নির্বাচনী column. The user confirmed it is the same topic as **Right Form of Verbs**, so the two are merged. |
 | 6 | Chemistry: chapter numbers | No chapter numbers are printed. The order follows the নির্বাচনী column, which lists each paper in full. |
-| 7 | Chemistry 2nd Paper: পরিমাণগত রসায়ন | The বার্ষিক column prints "পরিমাণগত পরিবর্তন". Treated as the same chapter, not a new one. [NEEDS VERIFICATION] |
+| 7 | Chemistry 2nd Paper: পরিমাণগত রসায়ন | ✅ The বার্ষিক column prints "পরিমাণগত পরিবর্তন". The user confirmed it is the same chapter. |
 | 8 | Chemistry 1st Paper: মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন | The source splits it into "(১ম অংশ)" and "(২য় অংশ)" across exams. Kept as one chapter. |
 | 9 | English 2nd Paper: Writing items | ✅ Removed at the user's request. English keeps only Grammar. |
 | 10 | English: Article | Not in the syllabus images. Added at the user's request (2026-10-02) together with its notes PDF. |
 
-Confidence: **High** = read clearly · **Medium** = readable, some doubt (see table above).
+Confidence: **High** = read clearly or confirmed by the user.
 
 ## English 2nd Paper (Grammar Topics)
 
 | Subject | Paper | Chapter | Source wording | Confidence |
 |---------|-------|---------|----------------|------------|
 | English | 2nd Paper | Preposition | Preposition / Use of Preposition | High |
-| English | 2nd Paper | Right Form of Verbs | Right form of Verbs / Right form of verbs | High |
+| English | 2nd Paper | Right Form of Verbs | Right form of Verbs / Right form of verbs / Corrction of verbs | High |
 | English | 2nd Paper | Completing Sentence | Completing Sentence / Completing Sentences | High |
 | English | 2nd Paper | Narration / Speech | Narration/speech | High |
 | English | 2nd Paper | Sentence Connectors | Sentence connectors / Sentence Connector | High |
 | English | 2nd Paper | Antonym / Synonym | Antonym/Synonym / Writing the antonym or synonym | High |
 | English | 2nd Paper | Punctuation | Punctuation | High |
 | English | 2nd Paper | Changing Sentences According to Direction | Changing sentences acording to direction | High |
-| English | 2nd Paper | Correction of Verbs [NEEDS VERIFICATION] | Corrction of verbs | Medium |
 | English | 2nd Paper | Article | not in image; added by user | High (user) |
 
 ## Higher Mathematics
@@ -59,17 +60,17 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 | Higher Mathematics | 1st Paper | 1. ম্যাট্রিক্স ও নির্ণায়ক | ১ম অধ্যায় : ম্যাট্রিক্স ও নির্ণায়ক | High |
 | Higher Mathematics | 1st Paper | 2. ভেক্টর | ২য় অধ্যায় : ভেক্টর | High |
 | Higher Mathematics | 1st Paper | 3. সরল রেখা | ৩য় অধ্যায় : সরল রেখা | High |
-| Higher Mathematics | 1st Paper | 4. বৃত্ত [NEEDS VERIFICATION] | ৪র্থ অধ্যায় : বৃত্ত | Medium |
+| Higher Mathematics | 1st Paper | 4. বৃত্ত | ৪র্থ অধ্যায় : বৃত্ত | High (user-confirmed) |
 | Higher Mathematics | 1st Paper | 5. বিন্যাস ও সমাবেশ | ৫ম অধ্যায় : বিন্যাস ও সমাবেশ | High |
 | Higher Mathematics | 1st Paper | 6. ত্রিকোণমিতিক অনুপাত | ৬ষ্ঠ অধ্যায় : ত্রিকোণমিতিক অনুপাত | High |
 | Higher Mathematics | 1st Paper | 7. সংযুক্ত ও যৌগিক কোণের ত্রিকোণমিতিক অনুপাত | ৭ম অধ্যায় : সংযুক্ত ও যৌগিক কোণের ত্রিকোণমিতিক অনুপাত | High |
 | Higher Mathematics | 1st Paper | 8. ফাংশন ও ফাংশনের লেখচিত্র | ৮ম অধ্যায় : ফাংশন ও ফাংশনের লেখচিত্র | High |
-| Higher Mathematics | 1st Paper | 9. অন্তরীকরণ [NEEDS VERIFICATION] | [অস্পষ্ট] অধ্যায় : অন্তরীকরণ | Medium |
+| Higher Mathematics | 1st Paper | 9. অন্তরীকরণ | [অস্পষ্ট] অধ্যায় : অন্তরীকরণ | High (user-confirmed) |
 | Higher Mathematics | 1st Paper | 10. যোগজীকরণ | ১০ম অধ্যায় : যোগজীকরণ | High |
 | Higher Mathematics | 2nd Paper | 1. বাস্তব সংখ্যা ও অসমতা | ১ম অধ্যায় : বাস্তব সংখ্যা ও অসমতা | High |
 | Higher Mathematics | 2nd Paper | 2. যোগাশ্রয়ী প্রোগ্রাম | ২য় অধ্যায় : যোগাশ্রয়ী প্রোগ্রাম | High |
 | Higher Mathematics | 2nd Paper | 3. জটিল সংখ্যা | ৩য় অধ্যায় : জটিল সংখ্যা | High |
-| Higher Mathematics | 2nd Paper | 4. বহুপদী ও বহুপদী সমীকরণ [NEEDS VERIFICATION] | ৪র্থ অধ্যায় : বহুপদী ও বহুপদী সমীকরণ | Medium |
+| Higher Mathematics | 2nd Paper | 4. বহুপদী ও বহুপদী সমীকরণ | ৪র্থ অধ্যায় : বহুপদী ও বহুপদী সমীকরণ | High (user-confirmed) |
 | Higher Mathematics | 2nd Paper | 5. দ্বিপদী বিস্তৃতি | not in image; given by user: "দিপদী বিস্তৃতি" | High (user) |
 | Higher Mathematics | 2nd Paper | 6. কণিক | ৬ষ্ঠ অধ্যায় : কণিক | High |
 | Higher Mathematics | 2nd Paper | 7. বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | [অস্পষ্ট] অধ্যায় : বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | High (by elimination) |
@@ -151,9 +152,9 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 
 | Paper | Chapters | Status |
 |-------|----------|--------|
-| English 2nd Paper | 10 grammar topics | 1 to confirm |
-| Higher Math 1st Paper | 10 | 2 chapter numbers to confirm |
-| Higher Math 2nd Paper | 10 | 1 chapter number to confirm |
+| English 2nd Paper | 9 grammar topics | complete |
+| Higher Math 1st Paper | 10 | complete |
+| Higher Math 2nd Paper | 10 | complete |
 | Physics 1st Paper | 10 | complete |
 | Physics 2nd Paper | 11 | complete |
 | Chemistry 1st Paper | 5 | complete (no printed numbers) |

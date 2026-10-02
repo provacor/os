@@ -23,7 +23,7 @@
       "paperNo": 1,
       "unitLabel": "Chapter",
       "groups": [],
-      "sourceStatus": "needs_verification"
+      "sourceStatus": "verified"
     },
     {
       "id": "higher_math_2nd",
@@ -32,7 +32,7 @@
       "paperNo": 2,
       "unitLabel": "Chapter",
       "groups": [],
-      "sourceStatus": "needs_verification"
+      "sourceStatus": "verified"
     },
     {
       "id": "physics_1st",

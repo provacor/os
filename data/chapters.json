@@ -29,11 +29,12 @@
       "topics": [],
       "source": {
         "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Right form of Verbs / Right form of verbs",
+        "wording": "Right form of Verbs / Right form of verbs / Corrction of verbs",
         "origin": "syllabus_image"
       },
       "confidence": "high",
-      "verification": "verified"
+      "verification": "verified",
+      "note": "The pre-test column calls this topic \"Corrction of verbs\"; the user confirmed it is the same topic."
     },
     {
       "id": "english_2nd_completing_sentence",
@@ -138,30 +139,12 @@
       "verification": "verified"
     },
     {
-      "id": "english_2nd_correction_of_verbs",
-      "paperId": "english_2nd",
-      "groupId": "english_2nd_grammar",
-      "kind": "topic",
-      "number": null,
-      "order": 9,
-      "name": "Correction of Verbs",
-      "topics": [],
-      "source": {
-        "image": "docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Corrction of verbs",
-        "origin": "syllabus_image"
-      },
-      "confidence": "medium",
-      "verification": "needs_verification",
-      "note": "Listed separately in the source; may be the same item as Right Form of Verbs. Merge if so."
-    },
-    {
       "id": "english_2nd_article",
       "paperId": "english_2nd",
       "groupId": "english_2nd_grammar",
       "kind": "topic",
       "number": null,
-      "order": 10,
+      "order": 9,
       "name": "Article",
       "topics": [],
       "source": {
@@ -234,9 +217,9 @@
         "wording": "৪র্থ অধ্যায় : বৃত্ত",
         "origin": "syllabus_image"
       },
-      "confidence": "medium",
-      "verification": "needs_verification",
-      "note": "Chapter number partly covered by ink; reads ৪র্থ."
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Chapter number partly covered by ink in the image (৪র্থ); confirmed by the user."
     },
     {
       "id": "higher_math_1st_ch05",
@@ -315,9 +298,9 @@
         "wording": "[অস্পষ্ট] অধ্যায় : অন্তরীকরণ",
         "origin": "syllabus_image"
       },
-      "confidence": "medium",
-      "verification": "needs_verification",
-      "note": "Chapter number covered by ink; 9 is the only 1st Paper number not otherwise listed."
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Chapter number covered by ink in the image; confirmed by the user as ৯ম."
     },
     {
       "id": "higher_math_1st_ch10",
@@ -396,9 +379,9 @@
         "wording": "৪র্থ অধ্যায় : বহুপদী ও বহুপদী সমীকরণ",
         "origin": "syllabus_image"
       },
-      "confidence": "medium",
-      "verification": "needs_verification",
-      "note": "Chapter number partly covered by ink; reads ৪র্থ."
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Chapter number partly covered by ink in the image (৪র্থ); confirmed by the user."
     },
     {
       "id": "higher_math_2nd_ch05",
@@ -448,7 +431,7 @@
       },
       "confidence": "high",
       "verification": "verified",
-      "note": "Chapter number is covered by ink in the image. With chapter 5 confirmed as দ্বিপদী বিস্তৃতি, 7 is the only number left."
+      "note": "Chapter number covered by ink in the image; 7 confirmed by the user."
     },
     {
       "id": "higher_math_2nd_ch08",
@@ -987,7 +970,7 @@
       },
       "confidence": "high",
       "verification": "verified",
-      "note": "The বার্ষিক column prints \"পরিমাণগত পরিবর্তন\"; treated as the same chapter. Confirm."
+      "note": "The বার্ষিক column prints \"পরিমাণগত পরিবর্তন\"; the user confirmed it is this same chapter."
     },
     {
       "id": "chemistry_2nd_ch04",
