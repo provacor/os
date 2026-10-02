@@ -24,8 +24,8 @@ The 7 images received on 2026-10-02 are stored in `docs/syllabus-source/`:
 
 | # | Item | Problem |
 |---|------|---------|
-| 1 | Higher Math 2nd Paper, **Chapter 5** | **Missing from the source.** The image lists chapters 1, 2, 3, 4, 6, 7, 8, 9, 10; chapter 5 never appears, and the নির্বাচনী column only says "সম্পূর্ণ সিলেবাস". Nothing has been added for it. [NEEDS VERIFICATION] |
-| 2 | Higher Math 2nd Paper, বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | The chapter number is covered by ink. It must be ৫ম or ৭ম; recorded as 7. [NEEDS VERIFICATION] |
+| 1 | Higher Math 2nd Paper, **Chapter 5** | ✅ Resolved. It is not printed in the image; the user gave the name **দ্বিপদী বিস্তৃতি** (2026-10-02). |
+| 2 | Higher Math 2nd Paper, বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | ✅ Resolved. The number is covered by ink, but with chapter 5 confirmed, 7 is the only number left. |
 | 3 | Higher Math 1st Paper, অন্তরীকরণ | The chapter number is covered by ink. Recorded as 9, the only 1st Paper number not otherwise listed. [NEEDS VERIFICATION] |
 | 4 | Higher Math 1st Paper, বৃত্ত · 2nd Paper, বহুপদী ও বহুপদী সমীকরণ | The number is partly covered by ink; it reads ৪র্থ. [NEEDS VERIFICATION] |
 | 5 | English: Correction of Verbs | Printed as "Corrction of verbs" in the প্রাক-নির্বাচনী column. It may be the same item as Right Form of Verbs. Kept separate until confirmed. [NEEDS VERIFICATION] |
@@ -72,9 +72,9 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 | Higher Mathematics | 2nd Paper | 2. যোগাশ্রয়ী প্রোগ্রাম | ২য় অধ্যায় : যোগাশ্রয়ী প্রোগ্রাম | High |
 | Higher Mathematics | 2nd Paper | 3. জটিল সংখ্যা | ৩য় অধ্যায় : জটিল সংখ্যা | High |
 | Higher Mathematics | 2nd Paper | 4. বহুপদী ও বহুপদী সমীকরণ [NEEDS VERIFICATION] | ৪র্থ অধ্যায় : বহুপদী ও বহুপদী সমীকরণ | Medium |
-| Higher Mathematics | 2nd Paper | 5. [NEEDS VERIFICATION] | not present in source | None |
+| Higher Mathematics | 2nd Paper | 5. দ্বিপদী বিস্তৃতি | not in image; given by user: "দিপদী বিস্তৃতি" | High (user) |
 | Higher Mathematics | 2nd Paper | 6. কণিক | ৬ষ্ঠ অধ্যায় : কণিক | High |
-| Higher Mathematics | 2nd Paper | 7. বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ [NEEDS VERIFICATION] | [অস্পষ্ট] অধ্যায় : বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | Medium |
+| Higher Mathematics | 2nd Paper | 7. বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | [অস্পষ্ট] অধ্যায় : বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ | High (by elimination) |
 | Higher Mathematics | 2nd Paper | 8. স্থিতিবিদ্যা | ৮ম অধ্যায় : স্থিতিবিদ্যা | High |
 | Higher Mathematics | 2nd Paper | 9. গতিবিদ্যা | ৯ম অধ্যায় : গতিবিদ্যা | High |
 | Higher Mathematics | 2nd Paper | 10. বিস্তার পরিমাপ ও সম্ভাবনা | ১০ম অধ্যায় : বিস্তার পরিমাপ ও সম্ভাবনা | High |
@@ -155,7 +155,7 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 |-------|----------|--------|
 | English 2nd Paper | 9 grammar topics + 4 writing items | 1 to confirm |
 | Higher Math 1st Paper | 10 | 2 chapter numbers to confirm |
-| Higher Math 2nd Paper | 9 of 10 | chapter 5 missing; 2 numbers to confirm |
+| Higher Math 2nd Paper | 10 | 1 chapter number to confirm |
 | Physics 1st Paper | 10 | complete |
 | Physics 2nd Paper | 11 | complete |
 | Chemistry 1st Paper | 5 | complete (no printed numbers) |

@@ -451,6 +451,23 @@
       "note": "Chapter number partly covered by ink; reads ৪র্থ."
     },
     {
+      "id": "higher_math_2nd_ch05",
+      "paperId": "higher_math_2nd",
+      "kind": "chapter",
+      "number": 5,
+      "order": 5,
+      "name": "দ্বিপদী বিস্তৃতি",
+      "topics": [],
+      "source": {
+        "image": null,
+        "wording": "পাঁচ অধ্যায়ের নাম হচ্ছে দিপদী বিস্তৃতি",
+        "origin": "user_confirmed"
+      },
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Not printed in the syllabus image; name given by the user (written as \"দিপদী\"), stored as \"দ্বিপদী\"."
+    },
+    {
       "id": "higher_math_2nd_ch06",
       "paperId": "higher_math_2nd",
       "kind": "chapter",
@@ -479,9 +496,9 @@
         "wording": "[অস্পষ্ট] অধ্যায় : বিপরীত ত্রিকোণমিতি ফাংশন ও ত্রিকোণমিতিক সমীকরণ",
         "origin": "syllabus_image"
       },
-      "confidence": "medium",
-      "verification": "needs_verification",
-      "note": "Chapter number covered by ink; could be ৫ম or ৭ম. Confirm."
+      "confidence": "high",
+      "verification": "verified",
+      "note": "Chapter number is covered by ink in the image. With chapter 5 confirmed as দ্বিপদী বিস্তৃতি, 7 is the only number left."
     },
     {
       "id": "higher_math_2nd_ch08",

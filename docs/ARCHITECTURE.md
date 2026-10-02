@@ -24,7 +24,7 @@ Extracted from the syllabus images in `docs/syllabus-source/`. The full list, wi
 | Paper | Chapters |
 |-------|----------|
 | English 2nd Paper | 9 Grammar Topics + 4 Writing items |
-| Higher Math 1st / 2nd | 10 / 9 (2nd Paper chapter 5 is not in the source) |
+| Higher Math 1st / 2nd | 10 / 10 (2nd Paper chapter 5 was supplied by the user, not the image) |
 | Physics 1st / 2nd | 10 / 11 |
 | Chemistry 1st / 2nd | 5 / 5 |
 | Biology 1st (উদ্ভিদবিজ্ঞান) / 2nd (প্রাণিবিজ্ঞান) | 12 / 12 |
