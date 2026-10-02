@@ -1,10 +1,10 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021057';
-import { esc, plural, ring, bar, chapterCard, sectionCard, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021057';
-import { progressOf } from '../progress.js?v=202610021057';
-import { contentCount, chapterCount } from '../model.js?v=202610021057';
-import { lastVisit } from './shared.js?v=202610021057';
+import { icon } from '../icons.js?v=202610021123';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021123';
+import { progressOf } from '../progress.js?v=202610021123';
+import { contentCount, chapterCount } from '../model.js?v=202610021123';
+import { lastVisit } from './shared.js?v=202610021123';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -40,7 +40,7 @@ export function subjectView(model, subject, openPaperId = null) {
   const openId = openPaperId ?? recent?.chapter.paper.id ?? subject.papers[0]?.id;
 
   const hero = `<section class="page-hero acc-${esc(subject.accent)} pat-${esc(subject.id)} rise">
-      <span class="s-icon lg">${icon(subject.id)}</span>
+      <span class="s-icon lg">${subjectGlyph(subject)}</span>
       <div class="ph-text">
         <p class="eyebrow">HSC ${esc(subject.name)}</p>
         <h1>${esc(subject.name)}</h1>
@@ -156,7 +156,7 @@ export function studyMap(model) {
           return `<li class="tree-paper"><a class="tree-paper-head" href="#/p/${esc(p.id)}">${esc(p.name)}${p.subtitle ? ` <span class="muted">· ${esc(p.subtitle)}</span>` : ''}<span class="muted small">${p.chapters.length}</span></a><ul class="tree-leaves">${body}</ul></li>`;
         })
         .join('');
-      const head = `<span class="fold-title"><span class="s-icon sm">${icon(s.id)}</span><span><span class="ft-name">${esc(s.name)}</span>
+      const head = `<span class="fold-title"><span class="s-icon sm">${subjectGlyph(s)}</span><span><span class="ft-name">${esc(s.name)}</span>
           <span class="ft-meta">${plural(s.papers.length, 'paper')} · ${plural(chapterCount(s), s.id === 'english' ? 'topic' : 'chapter')} · ${progressOf(s)}%</span></span></span>`;
       return `<div class="acc-${esc(s.accent)} rise" style="--i:${si}">${fold(`map-${s.id}`, false, head, `<ul class="tree">${papers}</ul>`)}</div>`;
     })

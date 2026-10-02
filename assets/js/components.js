@@ -1,14 +1,22 @@
 // Reusable UI building blocks. Each returns an HTML string; views compose them.
 
-import { icon } from './icons.js?v=202610021057';
-import { progressOf } from './progress.js?v=202610021057';
-import { contentCount, chapterCount } from './model.js?v=202610021057';
+import { icon } from './icons.js?v=202610021123';
+import { progressOf } from './progress.js?v=202610021123';
+import { contentCount, chapterCount } from './model.js?v=202610021123';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 export const plural = (n, word) => `${n} ${word.toLowerCase()}${n === 1 ? '' : 's'}`;
 export const pad2 = (n) => String(n).padStart(2, '0');
+
+// A subject's glyph: a custom round image when the subject defines one in
+// data/subjects.json, otherwise the line icon. Drops into any .s-icon / .r-icon box.
+export function subjectGlyph(s) {
+  return s?.image
+    ? `<img class="s-img" src="${esc(s.image)}" alt="" loading="lazy" decoding="async" width="56" height="56">`
+    : icon(s?.id ?? 'layers');
+}
 
 // Each section type gets a hue so the chapter workspace reads at a glance.
 const SECTION_HUE = {
@@ -85,7 +93,7 @@ export function subjectCard(s, { cont, i = 0 }) {
   return `<article class="subject-card acc-${esc(s.accent)} pat-${esc(s.id)} rise" style="--i:${i}">
       <a class="cover-link" href="#/s/${esc(s.id)}" aria-label="Open ${esc(s.name)}"></a>
       <div class="sc-top">
-        <span class="s-icon">${icon(s.id)}</span>
+        <span class="s-icon">${subjectGlyph(s)}</span>
         <div class="sc-title"><h3>${esc(s.name)}</h3><p>${s.papers.map((p) => esc(p.name)).join(' · ')}</p></div>
         ${ring(pct, { size: 46 })}
       </div>

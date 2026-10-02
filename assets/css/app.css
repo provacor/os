@@ -700,3 +700,10 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
 .avatar.sm { width: 34px; height: 34px; }
 .avatar.lg { width: 56px; height: 56px; }
 .splash-mark.avatar { width: 72px; height: 72px; padding: 0; border-radius: 50%; }
+
+/* custom subject image icons (round, drop into any icon box) */
+.s-icon:has(.s-img), .r-icon:has(.s-img) { background: none; border: 0; padding: 0; overflow: hidden; }
+.s-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+.bottom-nav .nav-img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; display: block; transition: transform var(--t) var(--ease-out); box-shadow: 0 0 0 1.5px var(--border-2); }
+.bottom-nav a.active .nav-img { box-shadow: 0 0 0 2px var(--brand); transform: translateY(-1px) scale(1.06); }
+.bottom-nav a:active .nav-img { transform: scale(.88); }
