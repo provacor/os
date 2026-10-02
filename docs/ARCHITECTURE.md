@@ -88,58 +88,50 @@ Sections are **not stored one by one**. They are generated from the subject's te
 
 ```
 /
-├── index.html                  App shell (header, breadcrumb, view, bottom nav)
+├── index.html                  App shell: splash, top bar, breadcrumb, view, bottom nav
 ├── manifest.webmanifest        Installable on Android ("Add to Home screen")
 ├── sw.js                       Offline cache (network-first)
-├── icon.svg
 ├── SYLLABUS_STRUCTURE_AUDIT.md Chapter-by-chapter source audit
 ├── data/                       ← STRUCTURE (edit these, not the UI code)
-│   ├── subjects.json
-│   ├── papers.json
-│   ├── chapters.json
-│   ├── section-types.json
-│   └── section-templates.json
-├── content/                    ← CONTENT (empty in this phase)
-│   ├── index.json              sectionId → { file, count }
-│   └── README.md               content file format
+├── content/                    ← CONTENT (section JSON + attached PDFs / simulations)
 ├── assets/
-│   ├── css/app.css             Design tokens, light/dark, mobile-first
+│   ├── css/app.css             Design system: tokens (dark-first + light), subject identity, motion, components
 │   └── js/
-│       ├── model.js            JSON → Subject/Paper/Chapter/Section tree (pure)
-│       ├── progress.js         Progress framework
-│       ├── search.js           Global structure search
-│       └── app.js              Router + views + accordion
+│       ├── model.js            JSON → Subject/Paper/Chapter/Section tree (pure, shared with tools/)
+│       ├── progress.js         Completion state + progress math
+│       ├── activity.js         Real usage history: recent chapters, daily activity, streak, recent searches
+│       ├── search.js           Search index over structure + content
+│       ├── theme.js            Dark / light / system theme
+│       ├── icons.js            SVG icon set (subjects, section types, UI)
+│       ├── components.js       ProgressRing, ProgressBar, Breadcrumb, EmptyState, Skeleton, SubjectCard, ChapterCard, SectionCard
+│       ├── app.js              Boot, router, page transitions, interactions (AppShell)
+│       └── views/              home, study (subject / chapter / curriculum map), section, search, progress, more
 ├── docs/ARCHITECTURE.md        This file
-└── tools/
-    ├── validate.mjs            Structure integrity check
-    └── serve.mjs               Zero-dependency local server
+└── tools/                      validate.mjs, serve.mjs
 ```
 
-The app is plain HTML/CSS/ES modules with no build step and no dependencies, so it loads fast on a phone and can be hosted directly on GitHub Pages.
+No framework and no build step: views return HTML strings built from components, so the app loads fast on mid-range Android phones and can be hosted directly on GitHub Pages.
 
 ## 7. UI navigation
 
 ```
-Bottom nav:  🏠 Home   🔍 Search   📊 Progress   📋 Syllabus
+Bottom nav (floating, animated indicator):  Home · Search · Study · Progress · More
 
-Home  #/
- └─ Subject card (papers · chapters · content · done %)
-     └─ Subject screen  #/s/<subjectId>      ← paper cards: [1st Paper] [2nd Paper]
-         └─ Paper screen  #/p/<paperId>      ← ALL chapters of the paper, no exam grouping
-             │                                 (tabs switch to the other paper)
-             └─ Chapter accordion  #/p/<paperId>/<chapterId>   (one open at a time)
-                 ├─ progress bar, topics
-                 └─ Section tiles (Notes, MCQ, CQ, …)
-                     └─ Section screen  #/x/<sectionId>
-                         ├─ sibling-section chip row (switch with one tap)
-                         ├─ empty state: "Content not added yet" + [+ Add Content]
-                         └─ future categories (all 0) + planned item fields
+Home  #/                  dashboard: continue studying, real stats, recently opened, subject cards, library
+ └─ Subject  #/s/<id>      hero + progress ring, collapsible papers with chapter cards
+     (#/p/<paperId> opens the same page with that paper expanded)
+     └─ Chapter  #/c/<id>  workspace: hero, topics, "Study now" (sections with content),
+         │                 "Other sections" (empty ones, collapsed), progress, prev/next chapter
+         └─ Section  #/x/<id>  sticky section tabs; items (PDF / simulation / MCQ) or empty state
+Search    #/search         filters, recent searches, suggestions, grouped + highlighted results
+Study     #/study          curriculum map (subject → paper → group → chapter, with status)
+Progress  #/progress       overall ring, tiles, activity heatmap + streak, subject/paper/chapter progress
+More      #/more           theme, syllabus source status, reset data, about
 ```
 
-- A breadcrumb is shown on every screen below Home, for example `Home › Physics › 1st Paper › Ch 1 › Notes`.
-- Every screen has a deep link, so the Android back button works.
-- Dark/light mode follows the system setting, with a manual toggle that is remembered.
-- Touch targets are at least 44px, there is no horizontal page overflow at 360px width, and reduced-motion is respected.
+- Old links (`#/p/<paper>/<chapter>`, `#/syllabus`) still work.
+- Every number on screen comes from real data: completions marked by the user, content in `content/`, and visits recorded on this device. Nothing is estimated.
+- Motion: 150–250 ms for micro-interactions and 250–450 ms for page and fold transitions, all with ease-out curves. `prefers-reduced-motion` turns animations off.
 
 ## 8. Future content ingestion
 

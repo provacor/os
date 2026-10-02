@@ -61,6 +61,7 @@ export function buildModel(raw) {
           icon: def.icon ?? '•',
           screenTitle: entry.label ?? def.screenTitle ?? def.label,
           emptyText: def.emptyText ?? '',
+          blurb: def.blurb ?? '',
           trackable: !!def.trackable,
           computed: !!def.computed,
           contentKinds: def.contentKinds ?? [],
