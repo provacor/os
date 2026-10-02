@@ -1,9 +1,9 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610021453';
-import { esc } from '../components.js?v=202610021453';
-import { themePref } from '../theme.js?v=202610021453';
-import { getProfile } from '../profile.js?v=202610021453';
+import { icon } from '../icons.js?v=202610021514';
+import { esc } from '../components.js?v=202610021514';
+import { themePref } from '../theme.js?v=202610021514';
+import { getProfile } from '../profile.js?v=202610021514';
 
 export function moreView(model) {
   const pref = themePref();
@@ -38,6 +38,7 @@ export function moreView(model) {
     html: `<header class="page-title rise"><h1>More</h1></header>
       ${profileRow}
       ${a11yRow}
+      <a class="card pf-link rise" href="#/backup" style="--i:0"><span class="pf-mini pf-blank a11y-ico">${icon('key')}</span><span class="pf-link-text"><b>Backup · ব্যাকআপ ও রিস্টোর</b><small class="muted">পাসওয়ার্ড দিয়ে এনক্রিপ্ট করা ফাইল, ফোন হারালেও তথ্য থাকবে</small></span>${icon('chevron')}</a>
       <section class="card rise" style="--i:1"><h2 class="card-title">${icon('sun')} Appearance</h2><div class="seg">${seg}</div></section>
       <section class="card rise" style="--i:2"><h2 class="card-title">${icon('map')} Syllabus source</h2>
         <p class="muted small">Chapter names come from the syllabus photos. Items still marked <span class="flag">verify</span> need a check.</p>

@@ -1,31 +1,43 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021453';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021453';
-import { buildIndex } from './search.js?v=202610021453';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021453';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021453';
-import { icon } from './icons.js?v=202610021453';
-import { crumbs, emptyState } from './components.js?v=202610021453';
-import { homeView } from './views/home.js?v=202610021453';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021453';
-import { sectionView } from './views/section.js?v=202610021453';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021453';
-import { progressView } from './views/progress.js?v=202610021453';
-import { moreView } from './views/more.js?v=202610021453';
-import { missionView, missionState } from './views/mission.js?v=202610021453';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021453';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021453';
-import { profileView } from './views/profile.js?v=202610021453';
-import { startLeaderboard } from './leaderboard.js?v=202610021453';
-import { addVideo, deleteVideo } from './videos.js?v=202610021453';
-import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021453';
-import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021453';
-import { renderMarkdown, typesetMath } from './markdown.js?v=202610021453';
-import { a11yView } from './views/a11y.js?v=202610021453';
-import { a11y, setA11y, applyA11y, motionReduced, speak, stopSpeaking, isSpeaking, canListen, listen, voiceCommand } from './a11y.js?v=202610021453';
-import { speakBtn } from './views/ai.js?v=202610021453';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021453';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021514';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021514';
+import { buildIndex } from './search.js?v=202610021514';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021514';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021514';
+import { icon } from './icons.js?v=202610021514';
+import { crumbs, emptyState } from './components.js?v=202610021514';
+import { homeView } from './views/home.js?v=202610021514';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021514';
+import { sectionView } from './views/section.js?v=202610021514';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021514';
+import { progressView } from './views/progress.js?v=202610021514';
+import { moreView } from './views/more.js?v=202610021514';
+import { missionView, missionState } from './views/mission.js?v=202610021514';
+import { addTask, toggleTask, deleteTask, moveTask, setNote, todayKey, tasksOf } from './mission.js?v=202610021514';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021514';
+import { profileView } from './views/profile.js?v=202610021514';
+import { startLeaderboard } from './leaderboard.js?v=202610021514';
+import { addVideo, deleteVideo } from './videos.js?v=202610021514';
+import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021514';
+import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021514';
+import { renderMarkdown, typesetMath } from './markdown.js?v=202610021514';
+import { a11yView } from './views/a11y.js?v=202610021514';
+import { a11y, setA11y, applyA11y, motionReduced, speak, stopSpeaking, isSpeaking, canListen, listen, voiceCommand } from './a11y.js?v=202610021514';
+import { speakBtn } from './views/ai.js?v=202610021514';
+import { setConcepts } from './concepts.js?v=202610021514';
+import { setSearchModel } from './views/search.js?v=202610021514';
+import { mistakesView, mistakeState } from './views/mistakes.js?v=202610021514';
+import { recordMcqMistake, addManualMistake, updateMistake, deleteMistake, mistakeById } from './mistakes.js?v=202610021514';
+import { classifyMistake } from './ai.js?v=202610021514';
+import { graphView, graphState } from './views/graph.js?v=202610021514';
+import { plannerView, plannerState, planSummary } from './views/planner.js?v=202610021514';
+import { buildPlan, clearPlan, autoRebuild } from './planner.js?v=202610021514';
+import { focusView, focusState, clock } from './views/focus.js?v=202610021514';
+import { focusRun, startFocus, togglePause, endFocus, reviewFocus, noteLeave, rewake, elapsedMs, totalMs } from './focus.js?v=202610021514';
+import { backupView } from './views/backup.js?v=202610021514';
+import { makeBackup, readBackup, restore, saveOrShare } from './backup.js?v=202610021514';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021514';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -58,6 +70,13 @@ async function boot() {
       }),
     );
     files.forEach((f) => attachContent(model, f));
+    try {
+      const res = await fetch('data/concepts.json', { cache: 'no-cache' });
+      if (res.ok) setConcepts((await res.json()).concepts);
+    } catch {
+      /* the concept map is optional: search and the app still work without it */
+    }
+    setSearchModel(model);
     index = buildIndex(model);
   } catch (err) {
     hideSplash();
@@ -78,6 +97,10 @@ async function boot() {
   vb.addEventListener('click', runVoice);
   document.addEventListener('change', (e) => {
     if (e.target.matches('[data-alarm-awake]')) setKeepAwake(e.target.checked);
+    if (e.target.matches('[data-mk-kind]')) {
+      updateMistake(e.target.dataset.mkKind, { kind: e.target.value || null });
+      rerender();
+    }
     if (e.target.matches('[data-a11y-toggle]')) {
       setA11y({ [e.target.dataset.a11yToggle]: e.target.checked });
       toast(`${icon('check')}<span>সেভ হয়েছে</span>`);
@@ -107,6 +130,15 @@ async function boot() {
   render();
   // An alarm that just went off: refresh the Study tab unless the user is typing a new one.
   startUsage();
+  const rebuilt = autoRebuild(model);
+  if (rebuilt?.missed) setTimeout(() => toast(`${icon('target')}<span>আগের ${String(rebuilt.missed).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}টি কাজ বাকি ছিল — পরীক্ষার প্ল্যান নতুন করে সাজানো হয়েছে</span>`), 1200);
+  setInterval(tickFocus, 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (!focusRun()) return;
+    if (document.visibilityState === 'hidden') noteLeave();
+    else rewake();
+  });
+  window.addEventListener('beforeunload', (e) => { if (focusRun() && !focusRun().pausedAt) { e.preventDefault(); e.returnValue = ''; } });
   startLeaderboard();
   startAlarms(() => {
     if (route().kind === 'study' && !document.activeElement?.closest('[data-alarm-form]')) rerender();
@@ -150,6 +182,11 @@ function resolve(r) {
     case 'more': return moreView(model);
     case 'profile': return profileView();
     case 'a11y': return a11yView();
+    case 'mistakes': return mistakesView(model);
+    case 'graph': return graphView(model, r.a);
+    case 'planner': return plannerView(model);
+    case 'focus': return focusView();
+    case 'backup': return backupView();
     case 'ai': return aiView(model, r.a);
     case 'mission': return missionView();
     case '': return homeView(model);
@@ -195,9 +232,10 @@ function render({ keepScroll = false } = {}) {
     else a.removeAttribute('aria-current');
   });
 
+  document.body.classList.toggle('focus-on', !!out.focus);
   const fab = document.getElementById('aiFab');
   if (fab) {
-    fab.hidden = route().kind === 'ai';
+    fab.hidden = route().kind === 'ai' || !!out.focus;
     fab.href = out.visit?.chapterId ? `#/ai/${encodeURIComponent(out.visit.chapterId)}` : '#/ai';
   }
 
@@ -269,6 +307,68 @@ function onKey(e) {
 // ---------- mission planner ----------
 
 function onSubmit(e) {
+  const f = e.target;
+  if (f.matches('[data-mk-form]')) {
+    e.preventDefault();
+    addManualMistake({ chapterId: f.chapter.value, question: f.question.value, myAnswer: f.mine.value, rightAnswer: f.right.value, kind: f.kind.value });
+    toast(`${icon('check')}<span>ভুলের খাতায় যোগ হয়েছে</span>`);
+    mistakeState.filter = 'open';
+    rerender();
+    return;
+  }
+  if (f.matches('[data-plan-form]')) {
+    e.preventDefault();
+    const subjects = [...f.querySelectorAll('[name=subj]:checked')].map((x) => x.value);
+    if (!subjects.length) return toast('<span>কমপক্ষে একটা বিষয় বেছে নাও</span>');
+    const res = buildPlan(model, { examDate: f.date.value, hours: Number(f.hours.value), offDay: f.off.value, subjects });
+    if (res?.error) return toast('<span>পরীক্ষার তারিখ আজকের পরে দাও</span>');
+    plannerState.result = res;
+    toast(`${icon('check')}<span>${String(res.studyDays).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])} দিনের প্ল্যান Mission-এ বসানো হয়েছে</span>`);
+    rerender();
+    return;
+  }
+  if (f.matches('[data-fx-form]')) {
+    e.preventDefault();
+    startFocus({ target: f.goal.value, minutes: focusState.minutes, sound: focusState.sound, taskId: f.taskId.value || null, taskKey: f.taskId.value ? todayKey() : null });
+    render({ keepScroll: true });
+    return;
+  }
+  if (f.matches('[data-fx-review]')) {
+    e.preventDefault();
+    const s = focusState.review;
+    const done = f.done.value === '1';
+    reviewFocus(f.dataset.fxReview, { done, rating: Number(f.rating.value), note: f.note.value.trim() });
+    if (done && s?.taskId && s.taskKey && !tasksOf(s.taskKey).find((t) => t.id === s.taskId)?.done) toggleTask(s.taskKey, s.taskId);
+    focusState.review = null;
+    toast(`${icon('check')}<span>সেশন সেভ হয়েছে</span>`);
+    rerender();
+    return;
+  }
+  if (f.matches('[data-bk-make]')) {
+    e.preventDefault();
+    if (f.pw.value !== f.pw2.value) return toast('<span>দুটো পাসওয়ার্ড মেলেনি</span>');
+    toast('<span>এনক্রিপ্ট করা হচ্ছে…</span>');
+    makeBackup(f.pw.value, { includeAiKey: f.ai.checked })
+      .then(saveOrShare)
+      .then((how) => { if (how !== 'cancelled') toast(`${icon('check')}<span>ব্যাকআপ ফাইল তৈরি হয়েছে</span>`); rerender(); })
+      .catch(() => toast('<span>ব্যাকআপ বানানো গেল না</span>'));
+    return;
+  }
+  if (f.matches('[data-bk-restore]')) {
+    e.preventDefault();
+    const file = f.file.files?.[0];
+    if (!file) return;
+    readBackup(file, f.pw.value)
+      .then((payload) => {
+        const when = new Date(payload.at).toLocaleString('bn-BD');
+        if (!confirm(`${when}-এর ব্যাকআপ রিস্টোর করবে? এই ফোনের এখনকার তথ্যের জায়গায় ব্যাকআপের তথ্য বসবে।`)) return;
+        restore(payload);
+        toast(`${icon('check')}<span>রিস্টোর হয়েছে, অ্যাপ আবার খুলছে…</span>`);
+        setTimeout(() => location.reload(), 900);
+      })
+      .catch((err) => toast(`<span>${err.message === 'badpassword' ? 'পাসওয়ার্ড ভুল' : 'এটা Provacor-এর ব্যাকআপ ফাইল না'}</span>`));
+    return;
+  }
   if (e.target.matches('[data-ai-settings]')) {
     e.preventDefault();
     const f = e.target;
@@ -486,6 +586,76 @@ function onAiClick(t) {
   return false;
 }
 
+function onToolsClick(t) {
+  const el = t.closest('[data-mk-filter],[data-mk-filter-kind],[data-mk-ai],[data-mk-retry],[data-mk-answer],[data-mk-fix],[data-mk-del],[data-kg-subject],[data-kg-node],[data-plan-days],[data-plan-ai],[data-plan-clear],[data-fx-min],[data-fx-sound],[data-fx-task],[data-fx-pause],[data-fx-stop]');
+  if (!el) return false;
+  const d = el.dataset;
+  if (d.mkFilter) { mistakeState.filter = d.mkFilter; rerender(); return true; }
+  if (d.mkFilterKind) { mistakeState.kind = d.mkFilterKind; rerender(); return true; }
+  if (d.mkAi) {
+    const m = mistakeById(d.mkAi);
+    el.classList.add('busy');
+    el.textContent = 'ভাবছে…';
+    classifyMistake(m, m.chapterId ? model.byId.get(m.chapterId)?.name : '')
+      .then((r) => { updateMistake(m.id, r); toast(`${icon('sparkle')}<span>ধরন ঠিক হয়েছে</span>`); })
+      .catch((err) => toast(`<span>${ERRORS[err.kind] ?? ERRORS.api}</span>`))
+      .finally(() => rerender());
+    return true;
+  }
+  if (d.mkRetry) { mistakeState.retry = d.mkRetry; rerender(); return true; }
+  if (d.mkAnswer != null && d.mk) {
+    const m = mistakeById(d.mk);
+    const ok = m.options[Number(d.mkAnswer)] === m.correct;
+    mistakeState.retry = null;
+    if (ok) updateMistake(m.id, { resolved: true });
+    else updateMistake(m.id, { times: (m.times ?? 1) + 1, chosen: Number(d.mkAnswer) });
+    toast(ok ? `${icon('check')}<span>এবার ঠিক! ভুলটা "ঠিক হয়েছে" তে গেল</span>` : '<span>এবারও ভুল — ব্যাখ্যাটা আবার পড়ো</span>');
+    rerender();
+    return true;
+  }
+  if (d.mkFix) { const m = mistakeById(d.mkFix); updateMistake(m.id, { resolved: !m.resolved }); rerender(); return true; }
+  if (d.mkDel) { if (confirm('এই ভুলটা মুছে ফেলবে?')) { deleteMistake(d.mkDel); rerender(); } return true; }
+  if (d.kgSubject) { graphState.subject = d.kgSubject; graphState.sel = null; rerender(); return true; }
+  if (d.kgNode) {
+    graphState.sel = graphState.sel === d.kgNode ? null : d.kgNode;
+    if (location.hash.startsWith('#/graph/')) history.replaceState(null, '', '#/graph');
+    rerender();
+    return true;
+  }
+  if (d.planDays) { const x = new Date(); x.setDate(x.getDate() + Number(d.planDays)); document.getElementById('plDate').value = x.toISOString().slice(0, 10); return true; }
+  if (el.hasAttribute('data-plan-ai')) { sessionStorage.setItem('hscos:ai-prefill', planSummary(model)); location.hash = '#/ai'; return true; }
+  if (el.hasAttribute('data-plan-clear')) { if (confirm('পরীক্ষার প্ল্যান মুছে ফেলবে? আজ থেকে পরের প্ল্যানের কাজগুলো Mission থেকে সরে যাবে।')) { clearPlan(); plannerState.result = null; rerender(); } return true; }
+  if (d.fxMin) { focusState.minutes = Number(d.fxMin); document.querySelectorAll('[data-fx-min]').forEach((c) => c.classList.toggle('on', c === el)); return true; }
+  if (d.fxSound) { focusState.sound = d.fxSound; document.querySelectorAll('[data-fx-sound]').forEach((c) => c.classList.toggle('on', c === el)); return true; }
+  if (d.fxTask) { const f = el.closest('form'); f.goal.value = d.text; f.taskId.value = d.fxTask; document.querySelectorAll('[data-fx-task]').forEach((c) => c.classList.toggle('on', c === el)); return true; }
+  if (el.hasAttribute('data-fx-pause')) { togglePause(); render({ keepScroll: true }); return true; }
+  if (el.hasAttribute('data-fx-stop')) { finishFocus(false); return true; }
+  return false;
+}
+
+function finishFocus(timeUp) {
+  const s = endFocus();
+  if (!s) return;
+  focusState.review = s;
+  if (timeUp) {
+    try { navigator.vibrate?.([300, 150, 300]); } catch { /* ignore */ }
+    toast(`${icon('check')}<span>সময় শেষ! দারুণ পড়েছ</span>`);
+  }
+  if (location.hash !== '#/focus') location.hash = '#/focus';
+  else render();
+}
+
+function tickFocus() {
+  const run = focusRun();
+  if (!run) return;
+  const left = totalMs() - elapsedMs();
+  if (left <= 0) return finishFocus(true);
+  const c = document.getElementById('fxClock');
+  if (c) c.textContent = clock(left);
+  const b = document.getElementById('fxBar');
+  if (b) b.style.width = `${Math.min(100, (elapsedMs() / totalMs()) * 100)}%`;
+}
+
 function onProfileClick(t) {
   const mode = t.closest('[data-profile-mode]')?.dataset.profileMode;
   if (mode) {
@@ -553,7 +723,7 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
-  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t) || onA11yClick(t)) return;
+  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t) || onA11yClick(t) || onToolsClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {
@@ -590,6 +760,18 @@ function onClick(e) {
     opt.classList.add(correct ? 'right' : 'wrong');
     card.querySelectorAll('.opt').forEach((o, i) => isRight(o, i) && o.classList.add('right'));
     card.querySelector('.mcq-exp')?.removeAttribute('hidden');
+    if (!correct) {
+      const itemId = opt.dataset.item;
+      const sec = model.byId.get(itemId.replace(/_\d{4}$/, ''));
+      const options = [...card.querySelectorAll('.opt span:last-child')].map((x) => x.textContent.trim());
+      const right = [...card.querySelectorAll('.opt')].findIndex((o, i) => isRight(o, i));
+      recordMcqMistake({
+        itemId, sectionId: sec?.id, chapterId: sec?.chapter?.id,
+        question: card.querySelector('.mcq-q')?.textContent.replace(/^\s*\d+\.\s*/, '').trim() ?? '',
+        options, chosen: k, correct: options[right] ?? ans, explanation: card.querySelector('.mcq-exp')?.textContent ?? '',
+      });
+      toast(`${icon('warn')}<span>ভুলের খাতায় জমা হয়েছে</span>`);
+    }
     return;
   }
 

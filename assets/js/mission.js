@@ -105,3 +105,22 @@ export function moveTask(fromKey, id, toKey) {
   }
   if (changed) save();
 })();
+
+// ---------- study-plan tasks (written by the planner) ----------
+
+// Replace the planner's tasks on one day, keeping the person's own tasks.
+export function setPlanTasks(key, tasks) {
+  const d = day(key);
+  d.tasks = [...d.tasks.filter((t) => !t.plan), ...tasks.map((t) => ({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), done: false, plan: true, ...t }))];
+  if (!d.tasks.length && !d.note) delete plan[key];
+  save();
+}
+
+// Every planner task stored on the device, with its day.
+export const allPlanTasks = () => Object.entries(plan).flatMap(([key, d]) => (d.tasks ?? []).filter((t) => t.plan).map((t) => ({ key, ...t })));
+
+export const exportMission = () => plan;
+export function importMission(obj) {
+  plan = obj && typeof obj === 'object' ? obj : {};
+  save();
+}

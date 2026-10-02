@@ -1,8 +1,8 @@
 // Mission tab: plan today and the next six days. Each day has its own task list and note.
 
-import { icon } from '../icons.js?v=202610021453';
-import { esc } from '../components.js?v=202610021453';
-import { week, todayKey, tasksOf, noteOf, leftovers } from '../mission.js?v=202610021453';
+import { icon } from '../icons.js?v=202610021514';
+import { esc } from '../components.js?v=202610021514';
+import { week, todayKey, tasksOf, noteOf, leftovers } from '../mission.js?v=202610021514';
 
 export const missionState = { day: null, week: 0 }; // selected day key (null = today) and week offset
 
@@ -66,7 +66,8 @@ export function missionView() {
   return {
     nav: 'mission',
     title: 'Mission',
-    html: `<header class="page-title rise"><p class="eyebrow">Personal Study Mission</p><h1>পার্সোনাল স্টাডি মিশন</h1>
+    html: `<a class="card pf-link rise mi-plan" href="#/planner"><span class="pf-mini pf-blank a11y-ico">${icon('target')}</span><span class="pf-link-text"><b>পরীক্ষার প্ল্যান</b><small class="muted">পরীক্ষার তারিখ দিলে প্রতিদিনের পড়া নিজে থেকে বসিয়ে দেবে</small></span>${icon('chevron')}</a>
+      <header class="page-title rise"><p class="eyebrow">Personal Study Mission</p><h1>পার্সোনাল স্টাডি মিশন</h1>
         <p class="muted">${missionState.week === 0 ? 'এই সপ্তাহে' : 'ওই সপ্তাহে'} ${bn(weekDone)}/${bn(weekTasks.length)} মিশন শেষ · শুধু তোমার ফোনেই সেভ থাকে</p></header>
       <div class="week-nav rise" style="--i:1">
         <button class="icon-btn" data-mission-week="-1" aria-label="Previous week">${icon('back')}</button>

@@ -1,10 +1,10 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610021453';
-import { esc } from '../components.js?v=202610021453';
-import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610021453';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021453';
-import { canSpeak, canListen } from '../a11y.js?v=202610021453';
+import { icon } from '../icons.js?v=202610021514';
+import { esc } from '../components.js?v=202610021514';
+import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610021514';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021514';
+import { canSpeak, canListen } from '../a11y.js?v=202610021514';
 
 export const speakBtn = () => (canSpeak() ? `<button class="ai-speak" data-ai-speak aria-label="উত্তর পড়ে শোনাও">${icon('speaker')}</button>` : '');
 
@@ -77,6 +77,13 @@ export function aiView(model, chapterId) {
         <p class="ai-foot muted">AI ভুল করতে পারে, গুরুত্বপূর্ণ উত্তর বই দিয়ে মিলিয়ে নিও।</p>
       </form>`,
     after: () => {
+      const pre = sessionStorage.getItem('hscos:ai-prefill');
+      if (pre) {
+        sessionStorage.removeItem('hscos:ai-prefill');
+        const input = document.getElementById('aiInput');
+        input.value = pre;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
       document.querySelectorAll('#aiChat .md').forEach(typesetMath);
       if (list.length) document.getElementById('aiChat')?.lastElementChild?.scrollIntoView({ block: 'end' });
     },
