@@ -1,0 +1,599 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>আলোকবিজ্ঞান ল্যাব — ৬ষ্ঠ অধ্যায়ের ১৬টি সিমুলেশন</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--page:#e9eef4;--ink:#13263b;--muted:#5a7089;--rule:#c7d3e0;--chip:#ffffff;--chipOn:#13263b;--chipOnInk:#ffd23f;--readout:#ffffff;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--page:#0a1726;--ink:#e7eef6;--muted:#8ea6bf;--rule:#22384f;--chip:#12263b;--chipOn:#ffd23f;--chipOnInk:#0f2236;--readout:#102338}}
+:root[data-theme="dark"]{--page:#0a1726;--ink:#e7eef6;--muted:#8ea6bf;--rule:#22384f;--chip:#12263b;--chipOn:#ffd23f;--chipOnInk:#0f2236;--readout:#102338}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"Noto Serif Bengali","FreeSerif",serif;line-height:1.55}
+main{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:clamp(24px,5vw,38px);margin:6px 0 2px;line-height:1.2}
+.lede{color:var(--muted);margin:0 0 14px;font-size:15px}
+nav .grp{margin:0 0 8px}
+nav .gl{font-size:13px;color:var(--muted);margin:0 0 4px 2px}
+nav .row{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+nav button{flex:0 0 auto;border:1px solid var(--rule);background:var(--chip);color:var(--ink);font:inherit;font-size:14.5px;padding:6px 13px;border-radius:999px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--chipOn);color:var(--chipOnInk);border-color:var(--chipOn);font-weight:700}
+button:focus-visible,input:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
+h2{font-size:21px;margin:14px 0 8px}
+.stage{background:#0f2236;border-radius:14px;overflow:hidden;margin-bottom:10px}
+canvas{display:block;width:100%;height:auto;touch-action:pan-y}
+.ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 22px;margin:12px 2px}
+.ctrl label{display:flex;flex-direction:column;font-size:15px;gap:3px}
+.ctrl .v{font-weight:700}
+input[type=range]{width:100%;accent-color:#e0a800;height:28px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--rule);background:var(--chip);color:var(--ink);font:inherit;font-size:14px;padding:5px 11px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--chipOn);color:var(--chipOnInk);font-weight:700}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin:6px 0 4px}
+.out div{background:var(--readout);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.out small{display:block;color:var(--muted);font-size:13px}
+.out b{font-size:18px}
+.note{border-left:4px solid #e0a800;padding:6px 12px;margin:12px 0 0;font-size:15px;background:var(--readout);border-radius:0 10px 10px 0}
+footer{color:var(--muted);font-size:13px;margin-top:26px;border-top:1px solid var(--rule);padding-top:10px}
+</style></head><body><main>
+<h1>আলোকবিজ্ঞান ল্যাব</h1>
+<p class="lede">জ্যামিতিক আলোকবিজ্ঞান (৬ষ্ঠ অধ্যায়)-এর ১৬টি সিমুলেশন। স্লাইডার টেনে নিজে পরীক্ষা করো। চিহ্নের প্রথা: বাস্তব-ধনাত্মক — 1/u + 1/v = 1/f, m = −v/u।</p>
+<nav id="nav"></nav>
+<section id="sim"></section>
+<footer>সূত্র: তোমার জ্যামিতিক আলোকবিজ্ঞান নোট (লেকচার স্লাইড + রেটিনা + জয়কলি)। সব মান হিসাবকৃত ও গোলাকার করা; বিচ্ছুরণের কাচের μ আনুমানিক।</footer>
+</main>
+<script>
+// ===== Shared optics drawing library (video + interactive) =====
+const COL = {
+  bg: '#0f2236', board: '#132b44', panel: 'rgba(255,255,255,0.06)', line: '#c9d6e6', dim: '#6f88a3',
+  ray: '#ffd23f', ray2: '#ff8a5b', normal: '#8fb3d9', glass: 'rgba(120,200,235,0.22)', glassEdge: '#7cc6e6',
+  water: 'rgba(80,150,230,0.20)', obj: '#7aa7ff', img: '#5ee3a1', virt: '#5ee3a1', text: '#eef3f8',
+  accent: '#ffd23f', warn: '#ff6b6b', ok: '#5ee3a1', head: '#ffd23f', sub: '#a9c3df'
+};
+let FONT = '"Noto Serif Bengali","FreeSerif",serif';
+const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x, 0, 1); return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, s, d) => clamp((t - s) / d, 0, 1);       // 0..1 progress
+const fade = (t, s, d = 0.5) => ease(prog(t, s, d));
+
+function setFont(ctx, size, bold = false) { ctx.font = `${bold ? 'bold ' : ''}${size}px ${FONT}`; }
+
+function text(ctx, s, x, y, o = {}) {
+  const { size = 26, color = COL.text, align = 'left', bold = false, alpha = 1, base = 'alphabetic' } = o;
+  if (alpha <= 0) return 0;
+  ctx.save(); ctx.globalAlpha *= alpha; setFont(ctx, size, bold); ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = base;
+  ctx.fillText(s, x, y); const w = ctx.measureText(s).width; ctx.restore(); return w;
+}
+
+function line(ctx, x1, y1, x2, y2, o = {}) {
+  const { color = COL.line, w = 2, dash = null, alpha = 1 } = o;
+  if (alpha <= 0) return;
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+}
+
+function arrowHead(ctx, x, y, ang, color, size = 12, alpha = 1) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = color; ctx.translate(x, y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-size, -size * 0.45); ctx.lineTo(-size, size * 0.45); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+// draw polyline progressively, arrowheads at middle of each segment (glowing ray)
+function ray(ctx, pts, p = 1, o = {}) {
+  const { color = COL.ray, w = 3, dash = null, arrows = true, alpha = 1, glow = true } = o;
+  if (p <= 0 || alpha <= 0 || pts.length < 2) return;
+  let L = 0; const seg = [];
+  for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); L += d; }
+  let rem = L * clamp(p, 0, 1);
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round';
+  if (dash) ctx.setLineDash(dash);
+  if (glow) { ctx.shadowColor = color; ctx.shadowBlur = 10; }
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+  const heads = [];
+  for (let i = 1; i < pts.length && rem > 0; i++) {
+    const d = seg[i - 1], k = Math.min(1, rem / d);
+    const x = lerp(pts[i - 1][0], pts[i][0], k), y = lerp(pts[i - 1][1], pts[i][1], k);
+    ctx.lineTo(x, y);
+    if (arrows && !dash && k > 0.5 && d > 40) heads.push([lerp(pts[i - 1][0], pts[i][0], .5), lerp(pts[i - 1][1], pts[i][1], .5), Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0])]);
+    rem -= d;
+  }
+  ctx.stroke(); ctx.restore();
+  heads.forEach(h => arrowHead(ctx, h[0] + 6 * Math.cos(h[2]), h[1] + 6 * Math.sin(h[2]), h[2], color, 13, alpha));
+}
+
+function dot(ctx, x, y, r = 5, color = COL.text, alpha = 1) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.restore();
+}
+
+function rrect(ctx, x, y, w, h, r = 12, fill = COL.panel, stroke = null, alpha = 1, lw = 1.5) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } ctx.restore();
+}
+
+// angle arc between two directions (radians, canvas coords) from center
+function angArc(ctx, cx, cy, a1, a2, r, color, label, o = {}) {
+  const { alpha = 1, size = 22 } = o; if (alpha <= 0) return;
+  let d = a2 - a1; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath();
+  ctx.arc(cx, cy, r, a1, a1 + d, d < 0); ctx.stroke(); ctx.restore();
+  if (label) { const m = a1 + d / 2; text(ctx, label, cx + (r + 18) * Math.cos(m), cy + (r + 18) * Math.sin(m) + 7, { size, color, align: 'center', alpha, bold: true }); }
+}
+
+// ---------- mini formula renderer ----------
+// syntax:  \f{num}{den}   _{sub}   ^{sup}
+function parseF(s) {
+  let i = 0;
+  function group() { // expects '{'
+    i++; const out = seq('}'); i++; return out;
+  }
+  function seq(end) {
+    const nodes = []; let buf = '';
+    const flush = () => { if (buf) { nodes.push({ t: 'txt', s: buf }); buf = ''; } };
+    while (i < s.length && s[i] !== end) {
+      if (s.startsWith('\\f{', i)) { flush(); i += 2; const n = group(); const d = group(); nodes.push({ t: 'frac', n, d }); }
+      else if ((s[i] === '_' || s[i] === '^') && s[i + 1] === '{') { flush(); const k = s[i]; i++; const g = group(); nodes.push({ t: k === '_' ? 'sub' : 'sup', g }); }
+      else { buf += s[i]; i++; }
+    }
+    flush(); return nodes;
+  }
+  return seq(null);
+}
+function measureNodes(ctx, nodes, size) {
+  let w = 0, up = size * 0.8, dn = size * 0.25;
+  for (const n of nodes) {
+    if (n.t === 'txt') { setFont(ctx, size); w += ctx.measureText(n.s).width; }
+    else if (n.t === 'sub' || n.t === 'sup') { const m = measureNodes(ctx, n.g, size * 0.62); w += m.w + 1; if (n.t === 'sub') dn = Math.max(dn, size * 0.45); else up = Math.max(up, size * 1.0); }
+    else if (n.t === 'frac') { const a = measureNodes(ctx, n.n, size * 0.86), b = measureNodes(ctx, n.d, size * 0.86); w += Math.max(a.w, b.w) + size * 0.3; up = Math.max(up, a.up + a.dn + size * 0.35); dn = Math.max(dn, b.up + b.dn + size * 0.05); }
+  }
+  return { w, up, dn };
+}
+function drawNodes(ctx, nodes, x, y, size, color) {
+  for (const n of nodes) {
+    if (n.t === 'txt') { setFont(ctx, size); ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(n.s, x, y); x += ctx.measureText(n.s).width; }
+    else if (n.t === 'sub') { const s2 = size * 0.62; x = drawNodes(ctx, n.g, x, y + size * 0.28, s2, color) + 1; }
+    else if (n.t === 'sup') { const s2 = size * 0.62; x = drawNodes(ctx, n.g, x, y - size * 0.42, s2, color) + 1; }
+    else if (n.t === 'frac') {
+      const s2 = size * 0.86, a = measureNodes(ctx, n.n, s2), b = measureNodes(ctx, n.d, s2), W = Math.max(a.w, b.w) + size * 0.15;
+      const barY = y - size * 0.3;
+      drawNodes(ctx, n.n, x + (W - a.w) / 2 + size * 0.07, barY - a.dn - size * 0.12, s2, color);
+      drawNodes(ctx, n.d, x + (W - b.w) / 2 + size * 0.07, barY + b.up + size * 0.08, s2, color);
+      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = Math.max(1.5, size / 16); ctx.beginPath(); ctx.moveTo(x + size * 0.04, barY); ctx.lineTo(x + W + size * 0.1, barY); ctx.stroke(); ctx.restore();
+      x += W + size * 0.3;
+    }
+  }
+  return x;
+}
+function fx(ctx, s, x, y, o = {}) {
+  const { size = 34, color = COL.text, align = 'left', alpha = 1 } = o; if (alpha <= 0) return 0;
+  const nodes = parseF(s); const m = measureNodes(ctx, nodes, size);
+  let x0 = x; if (align === 'center') x0 = x - m.w / 2; else if (align === 'right') x0 = x - m.w;
+  ctx.save(); ctx.globalAlpha *= alpha; drawNodes(ctx, nodes, x0, y, size, color); ctx.restore(); return m.w;
+}
+
+// ---------- physics helpers ----------
+function refractDir(d, n, eta) { // d unit incident, n unit normal pointing toward incident side, eta=n1/n2
+  const cosi = -(d[0] * n[0] + d[1] * n[1]); const k = 1 - eta * eta * (1 - cosi * cosi);
+  if (k < 0) return null; const a = eta * cosi - Math.sqrt(k); return [eta * d[0] + a * n[0], eta * d[1] + a * n[1]];
+}
+function reflectDir(d, n) { const k = 2 * (d[0] * n[0] + d[1] * n[1]); return [d[0] - k * n[0], d[1] - k * n[1]]; }
+function segIntersect(p, d, a, b) { // ray p + t d with segment a-b, return [t,s]
+  const ex = b[0] - a[0], ey = b[1] - a[1]; const den = d[0] * ey - d[1] * ex; if (Math.abs(den) < 1e-9) return null;
+  const t = ((a[0] - p[0]) * ey - (a[1] - p[1]) * ex) / den; const s = ((a[0] - p[0]) * d[1] - (a[1] - p[1]) * d[0]) / den;
+  return [t, s];
+}
+// prism trace: apex, left base, right base; incidence angle i (deg) at point fraction q along left face from apex
+function prismTrace(P, iDeg, mu, q = 0.55, Lin = 260, Lout = 300) {
+  const [T, BL, BR] = P;
+  const hit = [lerp(T[0], BL[0], q), lerp(T[1], BL[1], q)];
+  const fx_ = BL[0] - T[0], fy_ = BL[1] - T[1], fl = Math.hypot(fx_, fy_);
+  let nOut = [fy_ / fl, -fx_ / fl]; // perpendicular; make it point outward (away from centroid)
+  const C = [(T[0] + BL[0] + BR[0]) / 3, (T[1] + BL[1] + BR[1]) / 3];
+  if ((hit[0] - C[0]) * nOut[0] + (hit[1] - C[1]) * nOut[1] < 0) nOut = [-nOut[0], -nOut[1]];
+  const nIn = [-nOut[0], -nOut[1]];
+  // incident direction: rotate nIn by +i towards apex side reversed (ray comes from below-left going up-right)
+  const i = iDeg * D2R; const rot = (v, a) => [v[0] * Math.cos(a) - v[1] * Math.sin(a), v[0] * Math.sin(a) + v[1] * Math.cos(a)];
+  let d = rot(nIn, -i); // tilt so the ray rises toward the base side -> classic picture
+  const start = [hit[0] - d[0] * Lin, hit[1] - d[1] * Lin];
+  const din = refractDir(d, nOut, 1 / mu);
+  const tt = segIntersect(hit, din, T, BR); if (!tt) return null;
+  const hit2 = [hit[0] + din[0] * tt[0], hit[1] + din[1] * tt[0]];
+  const gx = BR[0] - T[0], gy = BR[1] - T[1], gl = Math.hypot(gx, gy);
+  let n2 = [gy / gl, -gx / gl]; if ((hit2[0] - C[0]) * n2[0] + (hit2[1] - C[1]) * n2[1] < 0) n2 = [-n2[0], -n2[1]];
+  const dout = refractDir(din, [-n2[0], -n2[1]], mu);
+  const r1 = Math.asin(Math.sin(i) / mu) * R2D; const A = Math.acos((-(fx_ * gx + fy_ * gy)) / (fl * gl) * -1) * R2D;
+  if (!dout) return { start, hit, hit2, d, din, dout: null, nOut, n2, r1, tir: true };
+  const end = [hit2[0] + dout[0] * Lout, hit2[1] + dout[1] * Lout];
+  const dev = Math.acos(clamp(d[0] * dout[0] + d[1] * dout[1], -1, 1)) * R2D;
+  return { start, hit, hit2, end, d, din, dout, nOut, n2, r1, dev, tir: false };
+}
+function prismDev(iDeg, mu, A) { const r1 = Math.asin(Math.sin(iDeg * D2R) / mu) * R2D, r2 = A - r1; const s = mu * Math.sin(r2 * D2R); if (s > 1) return null; const i2 = Math.asin(s) * R2D; return { r1, r2, i2, dev: iDeg + i2 - A }; }
+
+// ---------- lens helpers (real-is-positive: 1/u + 1/v = 1/f, m = -v/u) ----------
+function lensImage(u, f) { if (Math.abs(u - f) < 1e-6) return { v: Infinity, m: Infinity }; const v = u * f / (u - f); return { v, m: -v / u }; }
+function drawLens(ctx, x, y, h, convex = true, o = {}) {
+  const { alpha = 1, bulge = 22 } = o; ctx.save(); ctx.globalAlpha *= alpha; ctx.beginPath();
+  if (convex) { ctx.moveTo(x, y - h); ctx.quadraticCurveTo(x + bulge * 2, y, x, y + h); ctx.quadraticCurveTo(x - bulge * 2, y, x, y - h); }
+  else { const e = 16; ctx.moveTo(x - e, y - h); ctx.lineTo(x + e, y - h); ctx.quadraticCurveTo(x + 2, y, x + e, y + h); ctx.lineTo(x - e, y + h); ctx.quadraticCurveTo(x - 2, y, x - e, y - h); }
+  ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+}
+function objArrow(ctx, x, y0, h, color, o = {}) {
+  const { alpha = 1, dash = null, w = 4 } = o; if (alpha <= 0 || !isFinite(x) || !isFinite(h)) return;
+  line(ctx, x, y0, x, y0 - h, { color, w, dash, alpha }); arrowHead(ctx, x, y0 - h, h > 0 ? -Math.PI / 2 : Math.PI / 2, color, 14, alpha);
+}
+// line through two points clipped to x-range
+function extend(p, q, x) { const k = (x - p[0]) / (q[0] - p[0]); return [x, p[1] + (q[1] - p[1]) * k]; }
+
+// wrap text into lines (Bangla-safe: breaks on spaces only)
+function wrap(ctx, s, maxW, size, bold = false) {
+  setFont(ctx, size, bold); const words = s.split(' '); const out = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (ctx.measureText(t).width > maxW && cur) { out.push(cur); cur = w; } else cur = t; }
+  if (cur) out.push(cur); return out;
+}
+function para(ctx, s, x, y, maxW, o = {}) {
+  const { size = 24, lh = 1.45, color = COL.text, bold = false, alpha = 1 } = o;
+  const ls = wrap(ctx, s, maxW, size, bold); ls.forEach((l, k) => text(ctx, l, x, y + k * size * lh, { size, color, bold, alpha })); return ls.length * size * lh;
+}
+
+// ===== 16 simulations — Chapter 6 only =====
+const fmt = (x, d = 2) => Number.isFinite(x) ? (+x.toFixed(d)).toString() : '∞';
+function clearC(ctx, w, h) {
+  ctx.fillStyle = COL.bg; ctx.fillRect(0, 0, w, h); ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+  for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); } ctx.restore();
+}
+const S = (k, label, min, max, step, val, unit = '') => ({ k, label, min, max, step, val, unit });
+const SEG = (k, label, opts, val) => ({ k, label, type: 'seg', opts, val });
+function lensMarks(ctx, X0, Y0, fpx, conv, sz = 15) {
+  const lab = conv ? ['2F₁', 'F₁', 'F₂', '2F₂'] : ['2F₂', 'F₂', 'F₁', '2F₁'];
+  [[-2, lab[0]], [-1, lab[1]], [1, lab[2]], [2, lab[3]]].forEach(([k, l]) => { const xx = X0 + k * fpx; if (xx > 8 && xx < 792) { dot(ctx, xx, Y0, 4); text(ctx, l, xx, Y0 + 24, { size: sz, align: 'center' }); } });
+  dot(ctx, X0, Y0, 4, COL.accent); text(ctx, 'O', X0 + 8, Y0 - 8, { size: 15, color: COL.accent });
+}
+function graphAxes(g, gx, gy, gw, gh, xl, yl, xr, yr, xt, yt) {
+  const X = v => gx + (v - xr[0]) / (xr[1] - xr[0]) * gw, Y = v => gy - (v - yr[0]) / (yr[1] - yr[0]) * gh;
+  line(g, gx, gy, gx + gw, gy, { color: COL.line }); line(g, gx, gy, gx, gy - gh, { color: COL.line });
+  text(g, xl, gx + gw, gy + 30, { size: 14, align: 'right', color: COL.sub }); text(g, yl, gx + 4, gy - gh - 8, { size: 14, color: COL.sub });
+  xt.forEach(v => text(g, String(v), X(v), gy + 16, { size: 12, align: 'center', color: COL.dim }));
+  yt.forEach(v => text(g, String(v), gx - 6, Y(v) + 4, { size: 12, align: 'right', color: COL.dim }));
+  return [X, Y];
+}
+
+const SIMS = [
+// ---------------- Group 1 ----------------
+{ id: 'reflect', g: 'প্রতিফলন ও প্রতিসরণ', name: 'প্রতিফলন', h: 400,
+  ctrls: [S('i', 'আপতন কোণ i', 0, 89, 0.5, 35, '°')],
+  note: 'প্রতিফলনের ২য় সূত্র: ∠i = ∠r সবসময়। আপতিত রশ্মি, প্রতিফলিত রশ্মি ও অভিলম্ব একই সমতলে থাকে।',
+  draw(ctx, V) {
+    const ox = 400, oy = 330, L = 250, ir = V.i * D2R;
+    ctx.fillStyle = 'rgba(160,190,220,0.25)'; ctx.fillRect(120, oy, 560, 16); line(ctx, 120, oy, 680, oy, { color: COL.glassEdge, w: 3 });
+    for (let x = 130; x < 680; x += 20) line(ctx, x, oy + 3, x - 10, oy + 16, { color: COL.dim, w: 1 });
+    line(ctx, ox, oy, ox, 30, { color: COL.normal, dash: [7, 6] }); text(ctx, 'অভিলম্ব', ox + 8, 44, { size: 15, color: COL.normal });
+    const A = [ox - L * Math.sin(ir), oy - L * Math.cos(ir)], B = [ox + L * Math.sin(ir), oy - L * Math.cos(ir)];
+    ray(ctx, [A, [ox, oy]]); ray(ctx, [[ox, oy], B], 1, { color: COL.ray2 });
+    angArc(ctx, ox, oy, -Math.PI / 2, -Math.PI / 2 - ir, 64, COL.accent, 'i'); angArc(ctx, ox, oy, -Math.PI / 2, -Math.PI / 2 + ir, 84, COL.ray2, 'r');
+    text(ctx, 'সমতল দর্পণ', 680, oy + 40, { size: 15, align: 'right', color: COL.sub });
+    return [['আপতন কোণ i', fmt(V.i, 1) + '°'], ['প্রতিফলন কোণ r', fmt(V.i, 1) + '°'], ['রশ্মির বিচ্যুতি (180° − 2i)', fmt(180 - 2 * V.i, 1) + '°']];
+  } },
+{ id: 'refr', g: 'প্রতিফলন ও প্রতিসরণ', name: 'প্রতিসরণ (স্নেলের সূত্র)', h: 440,
+  ctrls: [S('n1', 'উপরের মাধ্যম μ₁', 1, 2.42, 0.01, 1), S('n2', 'নিচের মাধ্যম μ₂', 1, 2.42, 0.01, 1.5), S('i', 'আপতন কোণ i', 0, 89, 0.5, 40, '°')],
+  note: 'হালকা → ঘন: অভিলম্বের দিকে বাঁকে। ঘন → হালকা: অভিলম্ব থেকে দূরে সরে। μ₁ > μ₂ করে i বাড়াও — TIR দেখবে।',
+  draw(ctx, V) {
+    const { n1, n2, i } = V, W = 800, H = 440, ox = 400, oy = 220;
+    ctx.fillStyle = `rgba(120,200,235,${0.05 + 0.2 * (n1 - 1) / 1.42})`; ctx.fillRect(0, 0, W, oy);
+    ctx.fillStyle = `rgba(120,200,235,${0.05 + 0.2 * (n2 - 1) / 1.42})`; ctx.fillRect(0, oy, W, H - oy);
+    line(ctx, 0, oy, W, oy, { color: COL.glassEdge, w: 2 }); line(ctx, ox, 10, ox, H - 10, { color: COL.normal, dash: [7, 6] });
+    text(ctx, 'μ₁ = ' + n1.toFixed(2), 16, 30, { size: 16, color: COL.sub }); text(ctx, 'μ₂ = ' + n2.toFixed(2), 16, H - 14, { size: 16, color: COL.sub });
+    const ir = i * D2R, L = 230; ray(ctx, [[ox - L * Math.sin(ir), oy - L * Math.cos(ir)], [ox, oy]]);
+    angArc(ctx, ox, oy, -Math.PI / 2, -Math.PI / 2 - ir, 60, COL.accent, 'i');
+    const s = n1 * Math.sin(ir) / n2;
+    if (s <= 1) { const r = Math.asin(s); ray(ctx, [[ox, oy], [ox + L * Math.sin(r), oy + L * Math.cos(r)]], 1, { color: COL.ray2 }); angArc(ctx, ox, oy, Math.PI / 2, Math.PI / 2 - r, 78, COL.ray2, 'r');
+      ray(ctx, [[ox, oy], [ox + L * .55 * Math.sin(ir), oy - L * .55 * Math.cos(ir)]], 1, { alpha: .3, w: 1.5, arrows: false });
+      const o = [['প্রতিসরণ কোণ r', fmt(r * R2D, 1) + '°'], ['sin i / sin r', i > 0 ? fmt(Math.sin(ir) / Math.sin(r), 3) : '—'], ['₁μ₂ = μ₂/μ₁', fmt(n2 / n1, 3)], ['রশ্মি', n2 > n1 ? 'অভিলম্বের দিকে বাঁকে' : (n2 < n1 ? 'অভিলম্ব থেকে দূরে সরে' : 'সোজা যায়')]];
+      if (n1 > n2) o.push(['সংকট কোণ θc', fmt(Math.asin(n2 / n1) * R2D, 1) + '°']); return o; }
+    ray(ctx, [[ox, oy], [ox + L * Math.sin(ir), oy - L * Math.cos(ir)]]); text(ctx, 'পূর্ণ অভ্যন্তরীণ প্রতিফলন!', ox + 20, oy + 50, { size: 22, bold: true, color: COL.warn });
+    return [['প্রতিসরণ', 'ঘটে না'], ['কারণ', 'i > θc = ' + fmt(Math.asin(n2 / n1) * R2D, 1) + '°']];
+  } },
+{ id: 'depth', g: 'প্রতিফলন ও প্রতিসরণ', name: 'প্রকৃত ও আপাত গভীরতা', h: 440,
+  ctrls: [S('h', 'প্রকৃত গভীরতা h', 0.5, 5, 0.1, 3, ' m'), S('mu', 'তরলের প্রতিসরাঙ্ক μ', 1.0, 2.0, 0.01, 1.33)],
+  note: 'প্রায় খাড়া উপর থেকে দেখলে: μ = প্রকৃত/আপাত গভীরতা। ⚡ Shortcut: উত্থান Δh = h(1 − 1/μ)। পানিতে মুদ্রা প্রায় ¼ অংশ উপরে দেখায়।',
+  draw(ctx, V) {
+    const { h, mu } = V, top = 90, sc = 300 / 5, bx = 300, yb = top + h * sc, ya = top + (h / mu) * sc;
+    rrect(ctx, 120, top, 460, h * sc + 8, 4, COL.water, COL.glassEdge);
+    text(ctx, 'বায়ু', 130, 60, { size: 16, color: COL.sub }); text(ctx, 'তরল μ = ' + mu.toFixed(2), 130, top + 26, { size: 16, color: COL.sub });
+    const i = 14 * D2R, P = [bx + (yb - top) * Math.tan(i), top], s = mu * Math.sin(i);
+    ray(ctx, [[bx, yb], P], 1, { w: 2.4 });
+    if (s < 1) { const r = Math.asin(s); ray(ctx, [P, [P[0] + 160 * Math.sin(r), top - 160 * Math.cos(r)]], 1, { color: COL.ray2, w: 2.4 });
+      const yext = top + (P[0] - bx) / Math.tan(r); line(ctx, P[0], P[1], bx, yext, { color: COL.ray2, dash: [6, 5] }); }
+    line(ctx, bx, top - 40, bx, yb, { color: COL.normal, dash: [5, 6], alpha: .5 });
+    objArrow(ctx, bx, yb, 28, COL.obj); objArrow(ctx, bx, ya, 28, COL.img, { dash: [6, 5] });
+    text(ctx, 'প্রকৃত অবস্থান', bx - 14, yb - 6, { size: 15, align: 'right', color: COL.obj }); text(ctx, 'আপাত অবস্থান', bx - 14, ya - 6, { size: 15, align: 'right', color: COL.img });
+    // eye
+    text(ctx, '👁', P[0] + 150 * Math.sin(Math.asin(Math.min(1, s))) + 6, top - 140, { size: 28 });
+    const ha = h / mu;
+    return [['আপাত গভীরতা h′ = h/μ', fmt(ha, 2) + ' m'], ['উত্থান Δh = h − h′', fmt(h - ha, 2) + ' m'], ['Δh/h', fmt((1 - 1 / mu) * 100, 1) + '%']];
+  } },
+{ id: 'tir', g: 'প্রতিফলন ও প্রতিসরণ', name: 'সংকট কোণ ও TIR', h: 440,
+  ctrls: [S('mu', 'ঘন মাধ্যমের μ (লঘু = বায়ু)', 1.1, 2.42, 0.01, 1.5), S('i', 'আপতন কোণ i', 0, 89, 0.5, 30, '°')],
+  note: 'sin θc = 1/μ। μ বাড়লে θc কমে। হীরার (μ ≈ 2.42) θc ≈ 24° — তাই হীরা ঝলমলে।',
+  draw(ctx, V) {
+    const { mu, i } = V, H = 440, ox = 250, oy = 200, ic = Math.asin(1 / mu) * R2D;
+    ctx.fillStyle = COL.glass; ctx.fillRect(0, oy, 500, H - oy); line(ctx, 0, oy, 500, oy, { color: COL.glassEdge, w: 2 }); line(ctx, ox, 10, ox, H - 10, { color: COL.normal, dash: [7, 6] });
+    text(ctx, 'বায়ু (লঘু)', 14, 28, { size: 15, color: COL.sub }); text(ctx, 'ঘন মাধ্যম μ = ' + mu.toFixed(2), 14, H - 14, { size: 15, color: COL.sub });
+    const ir = i * D2R, L = 200, s = mu * Math.sin(ir); ray(ctx, [[ox - L * Math.sin(ir), oy + L * Math.cos(ir)], [ox, oy]]);
+    angArc(ctx, ox, oy, Math.PI / 2, Math.PI / 2 + ir, 55, COL.accent, 'i'); let st;
+    if (s < 0.9995) { const r = Math.asin(s); ray(ctx, [[ox, oy], [ox + L * Math.sin(r), oy - L * Math.cos(r)]], 1, { color: COL.ray2 }); ray(ctx, [[ox, oy], [ox + L * .6 * Math.sin(ir), oy + L * .6 * Math.cos(ir)]], 1, { alpha: .3, w: 1.5, arrows: false }); st = 'i < θc → প্রতিসরণ'; }
+    else if (s <= 1.0005) { ray(ctx, [[ox, oy], [ox + L, oy - 1]], 1, { color: COL.ray2 }); st = 'i = θc → r = 90°'; }
+    else { ray(ctx, [[ox, oy], [ox + L * Math.sin(ir), oy + L * Math.cos(ir)]]); st = 'i > θc → পূর্ণ অভ্যন্তরীণ প্রতিফলন'; }
+    const [X, Y] = graphAxes(ctx, 560, 380, 210, 300, 'μ', 'θc (°)', [1.1, 2.42], [20, 70], [1.2, 1.6, 2.0, 2.4], [30, 45, 60]);
+    const pts = []; for (let v = 1.1; v <= 2.42; v += 0.02) pts.push([X(v), Y(Math.asin(1 / v) * R2D)]); ray(ctx, pts, 1, { arrows: false, color: COL.accent, w: 2.5 }); dot(ctx, X(mu), Y(ic), 6, COL.warn);
+    return [['সংকট কোণ θc = sin⁻¹(1/μ)', fmt(ic, 2) + '°'], ['অবস্থা', st]];
+  } },
+{ id: 'fibre', g: 'প্রতিফলন ও প্রতিসরণ', name: 'অপটিক্যাল ফাইবার', h: 380,
+  ctrls: [S('n1', 'কোরের μ₁', 1.40, 1.70, 0.01, 1.50), S('n2', 'ক্ল্যাডিংয়ের μ₂', 1.30, 1.65, 0.01, 1.45), S('th', 'প্রবেশ কোণ θ (বায়ু থেকে)', 0, 70, 0.5, 20, '°')],
+  note: 'শর্ত: কোরের μ > ক্ল্যাডিংয়ের μ, এবং দেয়ালে আপতন কোণ > সংকট কোণ। তখনই আলো বারবার TIR করে সামনে যায়। θ খুব বড় করলে আলো ক্ল্যাডিংয়ে বেরিয়ে যায়।',
+  draw(ctx, V) {
+    const { n1, n2, th } = V, x0 = 140, x1 = 780, yt = 160, yb = 260, yc = 210;
+    ctx.fillStyle = 'rgba(150,170,200,0.16)'; ctx.fillRect(x0, yt - 40, x1 - x0, yb - yt + 80); ctx.fillStyle = COL.glass; ctx.fillRect(x0, yt, x1 - x0, yb - yt);
+    line(ctx, x0, yt, x1, yt, { color: COL.glassEdge }); line(ctx, x0, yb, x1, yb, { color: COL.glassEdge }); line(ctx, x0, yt - 40, x0, yb + 40, { color: COL.glassEdge });
+    text(ctx, 'কোর μ₁ = ' + n1.toFixed(2), x1 - 10, yc + 6, { size: 15, align: 'right' }); text(ctx, 'ক্ল্যাডিং μ₂ = ' + n2.toFixed(2), x1 - 10, yt - 14, { size: 14, align: 'right', color: COL.sub });
+    const t = th * D2R, phi = Math.asin(Math.sin(t) / n1), wall = 90 - phi * R2D;
+    const guided = n1 > n2 && Math.sin(wall * D2R) * n1 / n2 >= 1; const thc = n1 > n2 ? Math.asin(n2 / n1) * R2D : NaN;
+    ray(ctx, [[x0 - 110 * Math.cos(t), yc + 110 * Math.sin(t)], [x0, yc]]);
+    let pts = [[x0, yc]], x = x0, y = yc, dir = -1, k = Math.tan(phi);
+    if (phi < 1e-4) pts.push([x1, yc]);
+    else { let hit = 0; while (x < x1 && hit < 60) { const ny = dir < 0 ? yt : yb; const dx = Math.abs(ny - y) / k; if (x + dx > x1) { pts.push([x1, y + dir * (x1 - x) * k]); break; } x += dx; y = ny; pts.push([x, y]); hit++;
+        if (!guided) { const out = Math.asin(Math.min(1, n1 * Math.sin(wall * D2R) / n2)); const ex = [x + 90 * Math.sin(out), y + dir * 90 * Math.cos(out)]; ray(ctx, pts, 1); ray(ctx, [[x, y], ex], 1, { color: COL.warn }); text(ctx, 'আলো বেরিয়ে যাচ্ছে!', x + 10, dir < 0 ? yt - 50 : yb + 60, { size: 18, bold: true, color: COL.warn }); pts = null; break; }
+        dir = -dir; } }
+    if (pts) ray(ctx, pts, 1);
+    const NA = n1 > n2 ? Math.sqrt(n1 * n1 - n2 * n2) : 0;
+    return [['কোরে প্রতিসরণ কোণ', fmt(phi * R2D, 1) + '°'], ['দেয়ালে আপতন কোণ', fmt(wall, 1) + '°'], ['কোর-ক্ল্যাডিং সংকট কোণ', n1 > n2 ? fmt(thc, 1) + '°' : '— (μ₁ > μ₂ হতে হবে)'], ['অবস্থা', guided ? 'TIR — আলো পরিবাহিত হয় ✓' : 'আলো হারিয়ে যায় ✗'], ['সর্বোচ্চ প্রবেশ কোণ (অতিরিক্ত)', NA >= 1 ? '90°' : (NA ? fmt(Math.asin(NA) * R2D, 1) + '°' : '—')]];
+  } },
+{ id: 'fermat', g: 'প্রতিফলন ও প্রতিসরণ', name: 'ফার্মাটের নীতি', h: 420,
+  ctrls: [SEG('mode', 'ঘটনা', [['refr', 'প্রতিসরণ'], ['refl', 'প্রতিফলন']], 'refr'), S('x', 'বিভেদতলে বিন্দু P-এর অবস্থান x', 0, 100, 0.5, 30, ''), S('mu', 'নিচের মাধ্যমের μ (প্রতিসরণে)', 1, 2.4, 0.01, 1.5)],
+  note: 'P সরিয়ে সময় t-এর লেখচিত্র দেখো। t যেখানে সর্বনিম্ন (dt/dx = 0), ঠিক সেখানেই প্রতিফলনে ∠i = ∠r আর প্রতিসরণে sin i / sin r = μ — অর্থাৎ ফার্মাটের নীতি থেকেই সূত্রগুলো আসে।',
+  draw(ctx, V) {
+    const refr = V.mode === 'refr', mu = refr ? V.mu : 1, by = 240, A = [70, 70], B = refr ? [450, 400] : [450, 70];
+    const Px = 40 + V.x / 100 * 440, P = [Px, by];
+    if (refr) { ctx.fillStyle = COL.glass; ctx.fillRect(20, by, 480, 180); } else { ctx.fillStyle = 'rgba(160,190,220,0.25)'; ctx.fillRect(20, by, 480, 14); }
+    line(ctx, 20, by, 500, by, { color: COL.glassEdge, w: 2 });
+    const tf = x => { const p = [40 + x / 100 * 440, by]; return Math.hypot(p[0] - A[0], p[1] - A[1]) + mu * Math.hypot(p[0] - B[0], p[1] - B[1]); };
+    let best = 0, bt = 1e9; for (let x = 0; x <= 100; x += 0.1) { const t = tf(x); if (t < bt) { bt = t; best = x; } }
+    const Pb = [40 + best / 100 * 440, by];
+    line(ctx, A[0], A[1], Pb[0], Pb[1], { color: COL.ok, dash: [5, 5], alpha: .6 }); line(ctx, Pb[0], Pb[1], B[0], B[1], { color: COL.ok, dash: [5, 5], alpha: .6 });
+    ray(ctx, [A, P, B]); dot(ctx, A[0], A[1], 6, COL.obj); dot(ctx, B[0], B[1], 6, COL.img); dot(ctx, P[0], P[1], 6, COL.accent);
+    text(ctx, 'A', A[0] - 18, A[1] + 5, { size: 18, bold: true }); text(ctx, 'B', B[0] + 10, B[1] + 5, { size: 18, bold: true }); text(ctx, 'P', P[0], P[1] - 12, { size: 16, bold: true, align: 'center', color: COL.accent });
+    line(ctx, P[0], by - 120, P[0], by + 120, { color: COL.normal, dash: [6, 6] });
+    const iA = Math.atan2(Math.abs(P[0] - A[0]), by - A[1]) * R2D, rB = Math.atan2(Math.abs(B[0] - P[0]), Math.abs(B[1] - by)) * R2D;
+    const [X, Y] = graphAxes(ctx, 550, 380, 220, 280, 'x', 'সময় t (আপেক্ষিক)', [0, 100], [bt * 0.98, bt * 1.6], [0, 50, 100], []);
+    const pts = []; for (let x = 0; x <= 100; x += 1) pts.push([X(x), Y(Math.min(tf(x), bt * 1.6))]); ray(ctx, pts, 1, { arrows: false, color: COL.accent, w: 2.4 });
+    dot(ctx, X(best), Y(bt), 6, COL.ok); dot(ctx, X(V.x), Y(Math.min(tf(V.x), bt * 1.6)), 6, COL.warn);
+    const o = [['P-তে ∠i', fmt(iA, 1) + '°'], [refr ? 'P-তে ∠r (প্রতিসরণ)' : 'P-তে ∠r (প্রতিফলন)', fmt(rB, 1) + '°']];
+    if (refr) o.push(['sin i / sin r', fmt(Math.sin(iA * D2R) / Math.sin(rB * D2R), 3)], ['μ', fmt(mu, 2)]);
+    o.push(['ন্যূনতম সময়ের অবস্থান', 'x = ' + fmt(best, 1) + (Math.abs(best - V.x) < 0.8 ? ' ✓ (এখানেই আছো!)' : '')]);
+    return o;
+  } },
+
+// ---------------- Group 2 : Prism ----------------
+{ id: 'prism', g: 'প্রিজম ও বিচ্ছুরণ', name: 'প্রিজম ও ন্যূনতম বিচ্যুতি', h: 440, graph: 330,
+  ctrls: [S('A', 'প্রিজম কোণ A', 30, 75, 1, 60, '°'), S('mu', 'প্রতিসরাঙ্ক μ', 1.3, 1.8, 0.01, 1.5), S('i', 'আপতন কোণ i₁', 20, 89, 0.5, 40, '°')],
+  note: 'লেখচিত্রের লাল বিন্দু = ন্যূনতম বিচ্যুতি। সেখানে i₁ = i₂ = (A+δm)/2 এবং r₁ = r₂ = A/2। A = 60°, δm = 30° হলে μ = √2।',
+  draw(ctx, V, g) {
+    const { A, mu, i } = V, Sd = 330, T0 = [400, 50], a = A / 2 * D2R, P = [T0, [T0[0] - Sd * Math.sin(a), T0[1] + Sd * Math.cos(a)], [T0[0] + Sd * Math.sin(a), T0[1] + Sd * Math.cos(a)]];
+    ctx.beginPath(); ctx.moveTo(...P[0]); ctx.lineTo(...P[1]); ctx.lineTo(...P[2]); ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2; ctx.stroke();
+    text(ctx, 'A', T0[0], T0[1] + 44, { size: 18, bold: true, align: 'center', color: COL.accent });
+    const r = prismTrace(P, i, mu, 0.5, 220, 260), d = prismDev(i, mu, A), nl = 70;
+    if (r) { line(ctx, r.hit[0] + r.nOut[0] * nl, r.hit[1] + r.nOut[1] * nl, r.hit[0] - r.nOut[0] * nl, r.hit[1] - r.nOut[1] * nl, { color: COL.normal, dash: [6, 6] }); ray(ctx, [r.start, r.hit, r.hit2]);
+      if (r.end) { line(ctx, r.hit2[0] + r.n2[0] * nl, r.hit2[1] + r.n2[1] * nl, r.hit2[0] - r.n2[0] * nl, r.hit2[1] - r.n2[1] * nl, { color: COL.normal, dash: [6, 6] }); ray(ctx, [r.hit2, r.end], 1, { color: COL.ray2 }); line(ctx, r.hit[0], r.hit[1], r.hit[0] + r.d[0] * 300, r.hit[1] + r.d[1] * 300, { color: COL.ray, dash: [5, 6], alpha: .7 }); }
+      else text(ctx, '২য় তলে পূর্ণ অভ্যন্তরীণ প্রতিফলন — রশ্মি বের হয় না', 400, 420, { size: 18, bold: true, align: 'center', color: COL.warn }); }
+    const ok = mu * Math.sin(A / 2 * D2R) < 1, imin = ok ? Math.asin(mu * Math.sin(A / 2 * D2R)) * R2D : NaN, dm = 2 * imin - A;
+    const o = d ? [['r₁', fmt(d.r1, 2) + '°'], ['r₂ = A − r₁', fmt(d.r2, 2) + '°'], ['নির্গমন কোণ i₂', fmt(d.i2, 2) + '°'], ['বিচ্যুতি δ = i₁+i₂−A', fmt(d.dev, 2) + '°']] : [['অবস্থা', '২য় তলে TIR — i বাড়াও']];
+    o.push(['ন্যূনতম বিচ্যুতি δm', ok ? fmt(dm, 2) + '° (i = ' + fmt(imin, 1) + '°)' : '—']);
+    const pts = []; for (let v = 1; v <= 89.5; v += 0.25) { const q = prismDev(v, mu, A); if (q) pts.push([v, q.dev]); }
+    if (!pts.length) { text(g, 'এই μ ও A-তে কোনো আপতন কোণেই রশ্মি বের হয় না', 400, 170, { size: 18, align: 'center', color: COL.warn }); return o; }
+    const ilo = Math.floor(pts[0][0] / 5) * 5, dmax = Math.max(...pts.map(p => p[1])), dmin = Math.min(...pts.map(p => p[1])), st = Math.max(2, Math.round((dmax - dmin) / 5));
+    const yt = []; for (let v = Math.ceil((dmin - 3) / st) * st; v <= dmax + 3; v += st) yt.push(v); const xt = []; for (let v = Math.ceil(ilo / 10) * 10; v <= 90; v += 10) xt.push(v);
+    const [X, Y] = graphAxes(g, 70, 290, 700, 240, 'আপতন কোণ i₁ (°)', 'বিচ্যুতি δ (°)', [ilo, 90], [dmin - 3, dmax + 3], xt, yt);
+    ray(g, pts.map(p => [X(p[0]), Y(p[1])]), 1, { arrows: false, color: COL.accent, w: 2.5 });
+    if (ok) { dot(g, X(imin), Y(dm), 7, COL.warn); text(g, 'δm = ' + fmt(dm, 2) + '°', X(imin) + 10, Y(dm) + 26, { size: 15, bold: true, color: COL.warn }); } if (d) dot(g, X(i), Y(d.dev), 6, COL.ray2);
+    return o;
+  } },
+{ id: 'thin', g: 'প্রিজম ও বিচ্ছুরণ', name: 'সরু প্রিজম: δ = (μ−1)A কতটা ঠিক?', h: 300, graph: 330,
+  ctrls: [S('A', 'প্রিজম কোণ A', 1, 40, 0.5, 8, '°'), S('mu', 'প্রতিসরাঙ্ক μ', 1.3, 1.8, 0.01, 1.5)],
+  note: 'প্রায় অভিলম্ব আপতনে (i₁ ≈ 0) সঠিক বিচ্যুতি: δ = sin⁻¹(μ sin A) − A। A ছোট হলে sin A ≈ A, তাই δ ≈ (μ−1)A — সরু প্রিজমের সূত্র। লেখচিত্রে দেখো A বাড়লে দুটি বক্ররেখা আলাদা হয়ে যায়।',
+  draw(ctx, V, g) {
+    const { A, mu } = V, a = A * D2R, ok = mu * Math.sin(a) < 1, ex = ok ? Math.asin(mu * Math.sin(a)) * R2D - A : NaN, ap = (mu - 1) * A;
+    const T0 = [360, 30], L = 250, P1 = [T0[0], T0[1] + L], P2 = [T0[0] + L * Math.sin(a), T0[1] + L * Math.cos(a)];
+    ctx.beginPath(); ctx.moveTo(...T0); ctx.lineTo(...P1); ctx.lineTo(...P2); ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2; ctx.stroke();
+    const y = T0[1] + L * 0.6, hit = [T0[0], y]; ray(ctx, [[60, y], hit], 1);
+    const h2x = T0[0] + (y - T0[1]) * Math.tan(a); const h2 = [h2x, y];
+    // second face exit: ray inside horizontal; exits deviated downward by ex
+    ray(ctx, [hit, h2], 1); if (ok) { const ang = ex * D2R; ray(ctx, [h2, [h2[0] + 300 * Math.cos(ang), y + 300 * Math.sin(ang)]], 1, { color: COL.ray2 }); line(ctx, h2[0], y, h2[0] + 300, y, { color: COL.ray, dash: [5, 6], alpha: .6 }); angArc(ctx, h2[0], y, 0, ang, 120, COL.warn, 'δ'); }
+    else text(ctx, 'TIR — রশ্মি বের হয় না', 560, 150, { size: 18, color: COL.warn, bold: true });
+    const xs = [0, 10, 20, 30, 40], pe = [], pa = []; let ymax = 0;
+    for (let v = 0.5; v <= 40; v += 0.5) { const q = mu * Math.sin(v * D2R); if (q < 1) { const e = Math.asin(q) * R2D - v; pe.push([v, e]); ymax = Math.max(ymax, e); } pa.push([v, (mu - 1) * v]); ymax = Math.max(ymax, (mu - 1) * v); }
+    const top = Math.min(60, Math.ceil(ymax / 5) * 5); const yt = []; for (let v = 0; v <= top; v += top > 30 ? 10 : 5) yt.push(v);
+    const [X, Y] = graphAxes(g, 70, 290, 700, 240, 'প্রিজম কোণ A (°)', 'δ (°)', [0, 40], [0, top], xs, yt);
+    ray(g, pe.filter(p => p[1] <= top).map(p => [X(p[0]), Y(p[1])]), 1, { arrows: false, color: COL.accent, w: 2.5 }); ray(g, pa.filter(p => p[1] <= top).map(p => [X(p[0]), Y(p[1])]), 1, { arrows: false, color: '#7cf0d0', w: 2, dash: [8, 6] });
+    text(g, '— সঠিক মান', 600, 40, { size: 14, color: COL.accent }); text(g, '- - (μ−1)A', 600, 60, { size: 14, color: '#7cf0d0' }); line(g, X(A), 290, X(A), 50, { color: COL.warn, dash: [4, 4] });
+    return [['সঠিক δ (i₁ = 0)', ok ? fmt(ex, 3) + '°' : 'TIR'], ['সরু প্রিজম সূত্র (μ−1)A', fmt(ap, 3) + '°'], ['পার্থক্য', ok ? fmt(Math.abs(ex - ap) / ex * 100, 1) + '%' : '—']];
+  } },
+{ id: 'disp', g: 'প্রিজম ও বিচ্ছুরণ', name: 'বিচ্ছুরণ ও বিচ্ছুরণ ক্ষমতা', h: 440,
+  ctrls: [SEG('glass', 'কাচের ধরন', [['crown', 'ক্রাউন'], ['flint', 'ফ্লিন্ট']], 'crown'), S('A', 'প্রিজম কোণ A', 4, 20, 0.5, 10, '°'), S('ex', 'রং ছড়ানো দেখার জন্য বাড়াও (শুধু ছবি)', 1, 40, 1, 25, '×')],
+  note: 'সরু প্রিজমে: δ = (μ−1)A, কৌণিক বিচ্ছুরণ = δv − δr = (μv − μr)A, বিচ্ছুরণ ক্ষমতা ω = (μv − μr)/(μ − 1)। ω বিচ্ছুরক মাধ্যমের ধর্ম — প্রিজম কোণের উপর নির্ভর করে না। (মান আনুমানিক)',
+  draw(ctx, V) {
+    const G = V.glass === 'crown' ? [1.513, 1.532] : [1.612, 1.660], [mr, mv] = G, mm = (mr + mv) / 2;
+    const cols = ['#ef4444', '#fb923c', '#facc15', '#22c55e', '#38bdf8', '#3b5bfd', '#8b5cf6'], names = ['লাল', 'কমলা', 'হলুদ', 'সবুজ', 'আসমানী', 'নীল', 'বেগুনি'];
+    const a = V.A / 2 * D2R, Sd = 360, T0 = [330, 40], P = [T0, [T0[0] - Sd * Math.sin(a), T0[1] + Sd * Math.cos(a)], [T0[0] + Sd * Math.sin(a), T0[1] + Sd * Math.cos(a)]];
+    ctx.beginPath(); ctx.moveTo(...P[0]); ctx.lineTo(...P[1]); ctx.lineTo(...P[2]); ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2; ctx.stroke();
+    const i0 = Math.asin(mm * Math.sin(a)) * R2D; const base = prismTrace(P, i0, mm, 0.6, 260, 0);
+    ray(ctx, [base.start, base.hit], 1, { color: '#fff', w: 3.5 });
+    cols.forEach((c, k) => { const mu = mr + (mv - mr) * k / 6, mvis = mm + (mu - mm) * V.ex; const r = prismTrace(P, i0, mvis, 0.6, 260, 420); if (r && r.end) { ray(ctx, [r.hit, r.hit2, r.end], 1, { color: c, w: 2.2, arrows: false });
+      if (k % 3 === 0) text(ctx, names[k], r.end[0] - 6, r.end[1] + (k ? 16 : -6), { size: 14, color: c, align: 'right', bold: true }); } });
+    text(ctx, 'সাদা আলো', base.start[0] + 4, base.start[1] - 10, { size: 15 });
+    const A = V.A, dr = (mr - 1) * A, dv = (mv - 1) * A;
+    return [['μ (লাল) / μ (বেগুনি)', mr + ' / ' + mv], ['δ লাল = (μr−1)A', fmt(dr, 2) + '°'], ['δ বেগুনি = (μv−1)A', fmt(dv, 2) + '°'], ['কৌণিক বিচ্ছুরণ', fmt(dv - dr, 3) + '°'], ['বিচ্ছুরণ ক্ষমতা ω', fmt((mv - mr) / (mm - 1), 4)]];
+  } },
+
+// ---------------- Group 3 : Lens ----------------
+{ id: 'sph', g: 'লেন্স', name: 'গোলীয় তলে প্রতিসরণ', h: 420,
+  ctrls: [SEG('sh', 'তলের ধরন (বস্তুর দিক থেকে)', [['1', 'উত্তল তল'], ['-1', 'অবতল তল']], '1'), S('R', 'বক্রতার ব্যাসার্ধ |r|', 5, 40, 0.5, 10, ' cm'), S('mu', 'দ্বিতীয় মাধ্যমের μ₂ (প্রথম = বায়ু)', 1.05, 2.0, 0.01, 1.5), S('u', 'বস্তুর দূরত্ব u', 2, 100, 0.5, 40, ' cm')],
+  note: 'বাস্তব-ধনাত্মক প্রথায়: μ₁/u + μ₂/v = (μ₂ − μ₁)/r (বায়ু থেকে হলে μ/v + 1/u = (μ−1)/r)। বক্রতার কেন্দ্র প্রতিসৃত দিকে থাকলে r ধনাত্মক।',
+  draw(ctx, V) {
+    const sg = +V.sh, R = V.R, r = sg * R, mu = V.mu, u = V.u, X0 = 420, Y0 = 220;
+    const den = (mu - 1) / r - 1 / u, v = Math.abs(den) < 1e-9 ? Infinity : mu / den;
+    const s = 300 / Math.max(u, 2 * R, Number.isFinite(v) ? Math.min(Math.abs(v), 150) : 0, 20), Rp = R * s;
+    const cx = X0 + sg * Rp, hmax = Math.min(150, Rp * 0.95);
+    ctx.save(); ctx.beginPath();
+    for (let y = -hmax; y <= hmax; y += 2) { const x = cx - sg * Math.sqrt(Rp * Rp - y * y); y === -hmax ? ctx.moveTo(x, Y0 + y) : ctx.lineTo(x, Y0 + y); }
+    ctx.lineTo(800, Y0 + hmax); ctx.lineTo(800, Y0 - hmax); ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.restore();
+    ctx.save(); ctx.beginPath(); for (let y = -hmax; y <= hmax; y += 2) { const x = cx - sg * Math.sqrt(Rp * Rp - y * y); y === -hmax ? ctx.moveTo(x, Y0 + y) : ctx.lineTo(x, Y0 + y); } ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2.5; ctx.stroke(); ctx.restore();
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 }); if (cx > 0 && cx < 800) { dot(ctx, cx, Y0, 4); text(ctx, 'C', cx, Y0 + 22, { size: 15, align: 'center' }); }
+    text(ctx, 'বায়ু μ₁ = 1', 20, 40, { size: 15, color: COL.sub }); text(ctx, 'μ₂ = ' + mu.toFixed(2), 780, 40, { size: 15, color: COL.sub, align: 'right' });
+    const ox = X0 - u * s; if (ox > 0) { dot(ctx, ox, Y0, 6, COL.obj); text(ctx, 'O (বস্তু)', ox, Y0 + 24, { size: 14, align: 'center', color: COL.obj }); }
+    const yh = Math.min(70, hmax * 0.6), sx = cx - sg * Math.sqrt(Rp * Rp - yh * yh), Pt = [sx, Y0 - yh];
+    ray(ctx, [[ox, Y0], Pt], 1, { w: 2.4 });
+    let o;
+    if (!Number.isFinite(v)) { ray(ctx, [Pt, [800, Y0 - yh]], 1, { color: COL.ray2, w: 2.4 }); o = [['v', '∞ — প্রতিসৃত রশ্মি সমান্তরাল']]; }
+    else { const ix = X0 + v * s;
+      if (v > 0) { ray(ctx, [Pt, extend(Pt, [ix, Y0], Math.min(790, ix + 120))], 1, { color: COL.ray2, w: 2.4 }); if (ix < 800) { dot(ctx, ix, Y0, 6, COL.img); text(ctx, 'I (বিম্ব)', ix, Y0 + 24, { size: 14, align: 'center', color: COL.img }); } }
+      else { const dir = [Pt[0] - ix, Pt[1] - Y0], n = Math.hypot(...dir); ray(ctx, [Pt, [Pt[0] + dir[0] / n * 300, Pt[1] + dir[1] / n * 300]], 1, { color: COL.ray2, w: 2.4 }); line(ctx, Pt[0], Pt[1], ix, Y0, { color: COL.ray2, dash: [6, 5] }); if (ix > 0) { dot(ctx, ix, Y0, 6, COL.img); text(ctx, 'I (অবাস্তব)', ix, Y0 + 24, { size: 14, align: 'center', color: COL.img }); } }
+      o = [['r (চিহ্নসহ)', fmt(r, 1) + ' cm'], ['বিম্বের দূরত্ব v', fmt(v, 2) + ' cm'], ['বিম্ব', v > 0 ? 'বাস্তব — দ্বিতীয় মাধ্যমে' : 'অবাস্তব — বস্তুর দিকে']]; }
+    return o;
+  } },
+{ id: 'lens', g: 'লেন্স', name: 'লেন্সে প্রতিবিম্ব (u, f, h)', h: 440,
+  ctrls: [SEG('t', 'লেন্সের ধরন', [['1', 'উত্তল'], ['-1', 'অবতল']], '1'), S('u', 'বস্তুর দূরত্ব u', 4, 90, 0.5, 45, ' cm'), S('f', 'ফোকাস দূরত্ব |f|', 5, 40, 0.5, 15, ' cm'), S('h', 'বস্তুর উচ্চতা h', 1, 8, 0.5, 4, ' cm')],
+  note: 'u = 2f রাখলে m = −1 (সমান, উল্টো); u < f হলে বিম্ব অবাস্তব ও সোজা। অবতল লেন্সে বিম্ব সর্বদা অবাস্তব, সোজা ও খর্বিত। ডটেড = অবাস্তব রশ্মির পেছনের দিক।',
+  draw(ctx, V) {
+    const u = V.u, fa = V.f, h = V.h, f = +V.t * fa, X0 = 400, Y0 = 230, s = 330 / Math.max(u, 2 * fa, 20), vs = 13, X = x => X0 + x * s, Y = y => Y0 - y * vs;
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 }); drawLens(ctx, X0, Y0, 150, f > 0); lensMarks(ctx, X0, Y0, fa * s, f > 0);
+    const ox = X(-u), oy = Y(h); objArrow(ctx, ox, Y0, h * vs, COL.obj); text(ctx, 'বস্তু', ox, Y0 + 42, { size: 15, align: 'center', color: COL.obj });
+    const im = lensImage(u, f), L = 1400, d1 = [fa, -h * Math.sign(f)], n1 = Math.hypot(...d1), p1 = [X(0), Y(h)];
+    ray(ctx, [[ox, oy], p1, [X(d1[0] / n1 * L), Y(h + d1[1] / n1 * L)]], 1, { w: 2.4 });
+    ray(ctx, [[ox, oy], [X0, Y0], [X(L), Y(-h / u * L)]], 1, { w: 2.4, color: '#7cf0d0' });
+    if (!Number.isFinite(im.v)) return [['v', '∞ (অসীমে)'], ['প্রকৃতি', 'নির্গত রশ্মি সমান্তরাল — বিম্ব অসীমে']];
+    const ix = X(im.v), ih = h * im.m;
+    if (im.v < 0) { line(ctx, p1[0], p1[1], ix, Y(ih), { color: COL.ray, dash: [6, 5] }); line(ctx, X0, Y0, ix, Y(ih), { color: '#7cf0d0', dash: [6, 5] }); }
+    if (ix > -50 && ix < 850) { objArrow(ctx, ix, Y0, Math.max(-200, Math.min(200, ih * vs)), COL.img, { dash: im.v < 0 ? [6, 5] : null }); text(ctx, 'বিম্ব', ix + 6, Y0 - 8, { size: 15, color: COL.img }); }
+    else text(ctx, 'বিম্ব ক্যানভাসের বাইরে →', 790, 40, { size: 16, align: 'right', color: COL.img });
+    const am = Math.abs(im.m);
+    return [['বিম্বের দূরত্ব v', fmt(im.v, 1) + ' cm'], ['বিবর্ধন m = −v/u', fmt(im.m, 2)], ['প্রকৃতি', im.v > 0 ? 'বাস্তব, উল্টো' : 'অবাস্তব, সোজা'], ['আকার', am > 1.005 ? 'বিবর্ধিত' : (am < 0.995 ? 'খর্বিত' : 'বস্তুর সমান')], ['বিম্বের উচ্চতা', fmt(Math.abs(ih), 2) + ' cm'], ['ক্ষমতা P', fmt(100 / f, 2) + ' D']];
+  } },
+{ id: 'maker', g: 'লেন্স', name: 'লেন্স প্রস্তুতকারকের সূত্র ও পানিতে লেন্স', h: 400,
+  ctrls: [SEG('sh', 'লেন্সের আকৃতি', [['bx', 'উভোত্তল'], ['px', 'সমতলোত্তল'], ['bv', 'উভাবতল'], ['pv', 'সমতলাবতল']], 'bx'), S('R', 'বক্রতার ব্যাসার্ধ |r|', 5, 60, 0.5, 20, ' cm'), S('ml', 'লেন্সের উপাদানের μ', 1.3, 1.9, 0.01, 1.5), S('mm', 'চারপাশের মাধ্যমের μ (বায়ু 1, পানি 1.33)', 1.0, 1.9, 0.01, 1.0)],
+  note: '1/f = (μ_লেন্স/μ_মাধ্যম − 1)(1/r₁ − 1/r₂)। উভোত্তল: r₁ (+), r₂ (−)। কাচের লেন্স পানিতে নিলে f প্রায় ৪ গুণ হয়। মাধ্যমের μ লেন্সের চেয়ে বেশি হলে উত্তল লেন্স অবতলের মতো আচরণ করে!',
+  draw(ctx, V) {
+    const R = V.R, map = { bx: [R, -R], px: [R, Infinity], bv: [-R, R], pv: [-R, Infinity] }, [r1, r2] = map[V.sh];
+    const k = V.ml / V.mm - 1, inv = k * (1 / r1 - (Number.isFinite(r2) ? 1 / r2 : 0)), f = Math.abs(inv) < 1e-9 ? Infinity : 1 / inv;
+    const X0 = 380, Y0 = 200, s = Number.isFinite(f) ? 280 / Math.min(Math.max(Math.abs(f), 20), 400) : 1;
+    ctx.fillStyle = `rgba(80,150,230,${0.05 + 0.25 * (V.mm - 1) / 0.9})`; ctx.fillRect(0, 0, 800, 400);
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 });
+    const convexShape = V.sh === 'bx' || V.sh === 'px'; drawLens(ctx, X0, Y0, 140, convexShape);
+    let o = [['r₁ , r₂', fmt(r1, 1) + ' , ' + (Number.isFinite(r2) ? fmt(r2, 1) : '∞') + ' cm'], ['(μ_লেন্স/μ_মাধ্যম − 1)', fmt(k, 4)]];
+    for (const yy of [-90, -45, 45, 90]) {
+      if (!Number.isFinite(f)) { ray(ctx, [[20, Y0 + yy], [780, Y0 + yy]], 1, { w: 2, arrows: false }); continue; }
+      const F = [X0 + f * s, Y0];
+      if (f > 0) ray(ctx, [[20, Y0 + yy], [X0, Y0 + yy], F, extend([X0, Y0 + yy], F, 790)], 1, { w: 2, arrows: false });
+      else { ray(ctx, [[20, Y0 + yy], [X0, Y0 + yy], extend(F, [X0, Y0 + yy], 790)], 1, { w: 2, arrows: false }); line(ctx, X0, Y0 + yy, F[0], F[1], { color: COL.ray, dash: [6, 5], alpha: .7 }); }
+    }
+    if (Number.isFinite(f)) { const Fx = X0 + f * s; if (Fx > 0 && Fx < 800) { dot(ctx, Fx, Y0, 6, COL.accent); text(ctx, 'F', Fx, Y0 + 26, { size: 16, align: 'center', bold: true }); } }
+    o.push(['ফোকাস দূরত্ব f', fmt(f, 2) + ' cm'], ['আচরণ', !Number.isFinite(f) ? 'কোনো বাঁকানো নেই (μ সমান)' : (f > 0 ? 'অভিসারী (উত্তলের মতো)' : 'অপসারী (অবতলের মতো)')]);
+    if (convexShape && f < 0) o.push(['লক্ষ্য করো', 'উত্তল আকৃতির লেন্স অবতলের মতো কাজ করছে!']);
+    return o;
+  } },
+{ id: 'combo', g: 'লেন্স', name: 'লেন্সের সমবায় (সংস্পর্শে)', h: 380,
+  ctrls: [S('p1', '১ম লেন্সের ক্ষমতা P₁', -10, 10, 0.5, 4, ' D'), S('p2', '২য় লেন্সের ক্ষমতা P₂', -10, 10, 0.5, 2, ' D')],
+  note: 'সংস্পর্শে থাকা লেন্সের জন্য: P = P₁ + P₂ এবং 1/F = 1/f₁ + 1/f₂। উত্তল (+) ও অবতল (−) মিলিয়ে P = 0 করলে সমবায় সমতল কাচের মতো আচরণ করে।',
+  draw(ctx, V) {
+    const P = V.p1 + V.p2, F = P ? 100 / P : Infinity, X0 = 400, Y0 = 190, s = Number.isFinite(F) ? 300 / Math.max(Math.abs(F), 10) : 1;
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 });
+    if (V.p1) drawLens(ctx, X0 - 20, Y0, 130, V.p1 > 0); if (V.p2) drawLens(ctx, X0 + 20, Y0, 130, V.p2 > 0);
+    for (const yy of [-90, -45, 45, 90]) {
+      if (!Number.isFinite(F)) { ray(ctx, [[20, Y0 + yy], [780, Y0 + yy]], 1, { w: 2, arrows: false }); continue; }
+      const Fp = [X0 + F * s, Y0];
+      if (F > 0) ray(ctx, [[20, Y0 + yy], [X0, Y0 + yy], Fp, extend([X0, Y0 + yy], Fp, 790)], 1, { w: 2, arrows: false });
+      else { ray(ctx, [[20, Y0 + yy], [X0, Y0 + yy], extend(Fp, [X0, Y0 + yy], 790)], 1, { w: 2, arrows: false }); line(ctx, X0, Y0 + yy, Fp[0], Fp[1], { color: COL.ray, dash: [6, 5], alpha: .7 }); }
+    }
+    if (Number.isFinite(F)) { const Fx = X0 + F * s; if (Fx > 0 && Fx < 800) { dot(ctx, Fx, Y0, 6, COL.accent); text(ctx, 'F', Fx, Y0 + 26, { size: 16, align: 'center', bold: true }); } }
+    const fc = p => p ? fmt(100 / p, 1) + ' cm' : '∞';
+    return [['f₁', fc(V.p1)], ['f₂', fc(V.p2)], ['তুল্য ক্ষমতা P = P₁ + P₂', fmt(P, 2) + ' D'], ['তুল্য ফোকাস দূরত্ব F', fc(P)], ['সমবায়ের ধরন', P > 0 ? 'অভিসারী (উত্তল)' : (P < 0 ? 'অপসারী (অবতল)' : 'সমতল কাচের মতো')]];
+  } },
+
+// ---------------- Group 4 : instruments ----------------
+{ id: 'simple', g: 'বীক্ষণ যন্ত্র', name: 'সরল অণুবীক্ষণ (বিবর্ধক কাচ)', h: 400,
+  ctrls: [S('f', 'লেন্সের ফোকাস দূরত্ব f', 2, 25, 0.5, 5, ' cm'), S('D', 'স্পষ্ট দর্শনের ন্যূনতম দূরত্ব D', 15, 50, 0.5, 25, ' cm'), S('a', 'চোখ থেকে লেন্সের দূরত্ব a', 0, 10, 0.5, 0, ' cm')],
+  note: 'বিম্ব D দূরত্বে হলে m = 1 + D/f; চোখ a দূরে থাকলে m = 1 + (D−a)/f। f যত ছোট, বিবর্ধন তত বেশি। ক্ষীণদৃষ্টির (D ছোট) চোখে বিম্ব ছোট, দূরদৃষ্টির (D বড়) চোখে বড় দেখায়।',
+  draw(ctx, V) {
+    const { f, D, a } = V, X0 = 560, Y0 = 250, s = 470 / D, u = D * f / (D + f), m = 1 + D / f, h = 18 / m * 4;
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 }); drawLens(ctx, X0, Y0, 130, true); lensMarks(ctx, X0, Y0, f * s, true);
+    const ox = X0 - u * s, ix = X0 - D * s, hi = h * m;
+    objArrow(ctx, ox, Y0, h, COL.obj); objArrow(ctx, ix, Y0, hi, COL.img, { dash: [6, 5] });
+    ray(ctx, [[ox, Y0 - h], [X0, Y0 - h], extend([X0, Y0 - h], [X0 + f * s, Y0], 790)], 1, { w: 2.2 });
+    ray(ctx, [[ox, Y0 - h], [X0, Y0], extend([ox, Y0 - h], [X0, Y0], 790)], 1, { w: 2.2, color: '#7cf0d0' });
+    line(ctx, X0, Y0 - h, ix, Y0 - hi, { color: COL.ray, dash: [6, 5] }); line(ctx, X0, Y0, ix, Y0 - hi, { color: '#7cf0d0', dash: [6, 5] });
+    text(ctx, '👁', X0 + 30 + a * s * 0.5, Y0 + 8, { size: 26 });
+    text(ctx, 'অবাস্তব, সোজা, বিবর্ধিত বিম্ব (D দূরত্বে)', Math.max(10, ix), Y0 - hi - 12, { size: 15, color: COL.img });
+    return [['বস্তুর দূরত্ব u', fmt(u, 2) + ' cm'], ['m = 1 + D/f', fmt(m, 2)], ['m = 1 + (D−a)/f', fmt(1 + (D - a) / f, 2)], ['লেন্সের ক্ষমতা', fmt(100 / f, 1) + ' D']];
+  } },
+{ id: 'compound', g: 'বীক্ষণ যন্ত্র', name: 'যৌগিক অণুবীক্ষণ', h: 420,
+  ctrls: [S('f0', 'অভিলক্ষ্যের ফোকাস দূরত্ব f₀', 0.5, 3, 0.1, 1, ' cm'), S('fe', 'অভিনেত্রের ফোকাস দূরত্ব fₑ', 2, 8, 0.1, 4, ' cm'), S('k', 'বস্তুর দূরত্ব u₀ (f₀-এর গুণিতক)', 1.05, 1.8, 0.01, 1.2, ' × f₀')],
+  note: 'চূড়ান্ত বিম্ব D = 25 cm দূরে ধরে: m = −(v₀/u₀)(1 + D/fₑ), যন্ত্রের দৈর্ঘ্য L = v₀ + uₑ। অভিলক্ষ্য বাস্তব, উল্টো, বিবর্ধিত ১ম বিম্ব দেয়; অভিনেত্র সেটিকে আরও বড় অবাস্তব বিম্বে পরিণত করে। (উল্লম্ব মাপ সাংকেতিক)',
+  draw(ctx, V) {
+    const D = 25, f0 = V.f0, fe = V.fe, u0 = V.k * f0, v0 = u0 * f0 / (u0 - f0), ue = D * fe / (D + fe), L = v0 + ue, m0 = -v0 / u0, me = 1 + D / fe, m = m0 * me;
+    const Y0 = 230, s = 700 / Math.max(D, L + u0 + 1), xE = 750, xI = xE - ue * s, xO = xI - v0 * s, xo = xO - u0 * s, xF = xE - D * s;
+    const vs = 170 / Math.abs(m), h = Math.max(6, 1 * vs), hI = h * m0, hF = Math.max(-175, hI * me);
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 }); drawLens(ctx, xO, Y0, 60, true, { bulge: 26 }); drawLens(ctx, xE, Y0, 110, true, { bulge: 18 });
+    text(ctx, 'অভিলক্ষ্য', xO, Y0 + 80, { size: 14, align: 'center' }); text(ctx, 'অভিনেত্র', xE, Y0 + 128, { size: 14, align: 'center' });
+    objArrow(ctx, xo, Y0, h, COL.obj); objArrow(ctx, xI, Y0, hI, COL.ray2); objArrow(ctx, xF, Y0, hF, COL.img, { dash: [6, 5] });
+    ray(ctx, [[xo, Y0 - h], [xO, Y0], [xI, Y0 - hI]], 1, { w: 2 }); ray(ctx, [[xo, Y0 - h], [xO, Y0 - h], [xI, Y0 - hI]], 1, { w: 2, color: '#7cf0d0' });
+    const dirE = [xE - xI, (Y0) - (Y0 - hI)]; ray(ctx, [[xI, Y0 - hI], [xE, Y0], [xE + 150, Y0 + 150 * hI / (xE - xI)]], 1, { w: 2 });
+    line(ctx, xE, Y0, xF, Y0 - hF, { color: COL.ray, dash: [6, 5] });
+    text(ctx, '১ম বিম্ব (বাস্তব, উল্টো)', xI, Y0 - hI + 22, { size: 14, align: 'center', color: COL.ray2 }); text(ctx, 'চূড়ান্ত বিম্ব (অবাস্তব)', Math.max(70, xF), Y0 - hF + 24, { size: 14, align: 'center', color: COL.img });
+    return [['v₀ (অভিলক্ষ্য থেকে ১ম বিম্ব)', fmt(v0, 2) + ' cm'], ['uₑ (অভিনেত্র থেকে ১ম বিম্ব)', fmt(ue, 2) + ' cm'], ['যন্ত্রের দৈর্ঘ্য L = v₀ + uₑ', fmt(L, 2) + ' cm'], ['m₀ = −v₀/u₀', fmt(m0, 2)], ['mₑ = 1 + D/fₑ', fmt(me, 2)], ['মোট বিবর্ধন m = m₀ × mₑ', fmt(m, 1)]];
+  } },
+{ id: 'tele', g: 'বীক্ষণ যন্ত্র', name: 'নভো দূরবীক্ষণ', h: 400,
+  ctrls: [SEG('mode', 'ফোকাসিং', [['inf', 'অসীমে (স্বাভাবিক দর্শন)'], ['D', 'স্পষ্ট দর্শনের ন্যূনতম দূরত্বে']], 'inf'), S('f0', 'অভিলক্ষ্যের ফোকাস দূরত্ব f₀', 40, 200, 1, 100, ' cm'), S('fe', 'অভিনেত্রের ফোকাস দূরত্ব fₑ', 2, 20, 0.5, 5, ' cm')],
+  note: 'অসীমে: m = f₀/fₑ, L = f₀ + fₑ। স্পষ্ট দৃষ্টিতে (D = 25 cm): m = (f₀/fₑ)(1 + fₑ/D), L = f₀ + D·fₑ/(D + fₑ)। বিবর্ধন বাড়াতে: f₀ বাড়াও বা fₑ কমাও।',
+  draw(ctx, V) {
+    const D = 25, f0 = V.f0, fe = V.fe, inf = V.mode === 'inf', ue = inf ? fe : D * fe / (D + fe), L = f0 + ue, m = inf ? f0 / fe : (f0 / fe) * (1 + fe / D);
+    const Y0 = 200, s = 600 / L, xo = 110, xe = xo + L * s, xF = xo + f0 * s, ang = Math.min(0.07, 0.4 / m);
+    line(ctx, 0, Y0, 800, Y0, { color: COL.dim, w: 1.5 }); drawLens(ctx, xo, Y0, 120, true); drawLens(ctx, xe, Y0, 60, true, { bulge: 30 });
+    text(ctx, 'অভিলক্ষ্য (f₀)', xo, Y0 + 145, { size: 14, align: 'center' }); text(ctx, 'অভিনেত্র (fₑ)', xe, Y0 + 85, { size: 14, align: 'center' });
+    const Iy = Y0 + f0 * s * Math.tan(ang); dot(ctx, xF, Iy, 4, COL.ray2); line(ctx, xF, Y0, xF, Iy, { color: COL.ray2, w: 3 });
+    for (const yy of [-70, 0, 70]) { const yin = Y0 + yy, sx = 10, sy = yin - (xo - sx) * Math.tan(ang);
+      const ye = Iy + (Iy - yin) * (ue * s) / (f0 * s);
+      ray(ctx, [[sx, sy], [xo, yin], [xe, ye], [790, ye + (790 - xe) * (Y0 - Iy) / (xe - xF)]], 1, { w: 2, arrows: false }); }
+    text(ctx, '১ম বিম্ব (বাস্তব, উল্টো, ছোট)', xF, Iy + 24, { size: 13, align: 'center', color: COL.ray2 });
+    return [['বিবর্ধন m', fmt(m, 2)], ['যন্ত্রের দৈর্ঘ্য L', fmt(L, 2) + ' cm'], ['চূড়ান্ত বিম্ব', inf ? 'অসীমে — অবাস্তব, উল্টো' : 'D = 25 cm দূরে — অবাস্তব, উল্টো']];
+  } },
+];
+
+const nav = document.getElementById('nav'), host = document.getElementById('sim');
+let current = null, state = {};
+function setupCanvas(c, w, h){ const dpr = Math.min(2, window.devicePixelRatio||1); c.width = w*dpr; c.height = h*dpr; const x = c.getContext('2d'); x.scale(dpr,dpr); return x; }
+function show(id){
+  const sim = SIMS.find(s=>s.id===id); current = sim; state[id] = state[id] || Object.fromEntries(sim.ctrls.map(c=>[c.k,c.val]));
+  nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected', b.dataset.id===id));
+  const V = state[id];
+  host.innerHTML = `<h2>${sim.name}</h2><div class="stage"><canvas id="c1"></canvas></div>${sim.graph?'<div class="stage"><canvas id="c2"></canvas></div>':''}<div class="ctrl" id="ctrl"></div><div class="out" id="out"></div><p class="note">${sim.note}</p>`;
+  const ctx = setupCanvas(document.getElementById('c1'), 800, sim.h), g = sim.graph ? setupCanvas(document.getElementById('c2'), 800, sim.graph) : null;
+  const ctrl = document.getElementById('ctrl');
+  sim.ctrls.forEach(c=>{
+    const lab = document.createElement('label');
+    if (c.type==='seg'){ lab.innerHTML = `${c.label}<div class="seg">${c.opts.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${String(V[c.k])===String(v)}">${t}</button>`).join('')}</div>`;
+      lab.querySelectorAll('button').forEach(b=>b.onclick=()=>{ V[c.k]=b.dataset.v; lab.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); render(); }); }
+    else { lab.innerHTML = `<span>${c.label} = <span class="v"></span></span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${V[c.k]}">`;
+      const inp = lab.querySelector('input'), sp = lab.querySelector('.v'); const upd=()=>{ sp.textContent = (+V[c.k]).toString()+c.unit; };
+      inp.oninput = ()=>{ V[c.k] = +inp.value; upd(); render(); }; upd(); }
+    ctrl.appendChild(lab);
+  });
+  function render(){ clearC(ctx,800,sim.h); if(g) clearC(g,800,sim.graph); let o; try{ o = sim.draw(ctx, V, g) || []; }catch(e){ o=[['ত্রুটি', e.message]]; }
+    document.getElementById('out').innerHTML = o.map(([a,b])=>`<div><small>${a}</small><b>${b}</b></div>`).join(''); }
+  render(); current.render = render;
+}
+const groups = [...new Set(SIMS.map(s=>s.g))];
+nav.innerHTML = groups.map(gr=>`<div class="grp"><div class="gl">${gr}</div><div class="row">${SIMS.filter(s=>s.g===gr).map(s=>`<button type="button" data-id="${s.id}" aria-selected="false">${s.name}</button>`).join('')}</div></div>`).join('');
+nav.querySelectorAll('button').forEach(b=>b.onclick=()=>show(b.dataset.id));
+show('lens'); if (document.fonts) document.fonts.ready.then(()=>current&&current.render&&current.render());
+</script></body></html>
