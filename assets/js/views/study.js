@@ -1,11 +1,11 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021314';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021314';
-import { progressOf } from '../progress.js?v=202610021314';
-import { contentCount, chapterCount } from '../model.js?v=202610021314';
-import { lastVisit } from './shared.js?v=202610021314';
-import { alarmsBlock } from './alarms.js?v=202610021314';
+import { icon } from '../icons.js?v=202610021333';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021333';
+import { progressOf } from '../progress.js?v=202610021333';
+import { contentCount, chapterCount } from '../model.js?v=202610021333';
+import { lastVisit } from './shared.js?v=202610021333';
+import { alarmsBlock } from './alarms.js?v=202610021333';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 

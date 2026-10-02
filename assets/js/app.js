@@ -1,24 +1,24 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021314';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021314';
-import { buildIndex } from './search.js?v=202610021314';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021314';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021314';
-import { icon } from './icons.js?v=202610021314';
-import { crumbs, emptyState } from './components.js?v=202610021314';
-import { homeView } from './views/home.js?v=202610021314';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021314';
-import { sectionView } from './views/section.js?v=202610021314';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021314';
-import { progressView } from './views/progress.js?v=202610021314';
-import { moreView } from './views/more.js?v=202610021314';
-import { missionView, missionState } from './views/mission.js?v=202610021314';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021314';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021314';
-import { profileView } from './views/profile.js?v=202610021314';
-import { startLeaderboard } from './leaderboard.js?v=202610021314';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021314';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021333';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021333';
+import { buildIndex } from './search.js?v=202610021333';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021333';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021333';
+import { icon } from './icons.js?v=202610021333';
+import { crumbs, emptyState } from './components.js?v=202610021333';
+import { homeView } from './views/home.js?v=202610021333';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021333';
+import { sectionView } from './views/section.js?v=202610021333';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021333';
+import { progressView } from './views/progress.js?v=202610021333';
+import { moreView } from './views/more.js?v=202610021333';
+import { missionView, missionState } from './views/mission.js?v=202610021333';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021333';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021333';
+import { profileView } from './views/profile.js?v=202610021333';
+import { startLeaderboard } from './leaderboard.js?v=202610021333';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021333';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
