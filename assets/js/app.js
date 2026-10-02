@@ -1,24 +1,25 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021333';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021333';
-import { buildIndex } from './search.js?v=202610021333';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021333';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021333';
-import { icon } from './icons.js?v=202610021333';
-import { crumbs, emptyState } from './components.js?v=202610021333';
-import { homeView } from './views/home.js?v=202610021333';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021333';
-import { sectionView } from './views/section.js?v=202610021333';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021333';
-import { progressView } from './views/progress.js?v=202610021333';
-import { moreView } from './views/more.js?v=202610021333';
-import { missionView, missionState } from './views/mission.js?v=202610021333';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021333';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021333';
-import { profileView } from './views/profile.js?v=202610021333';
-import { startLeaderboard } from './leaderboard.js?v=202610021333';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021333';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021341';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021341';
+import { buildIndex } from './search.js?v=202610021341';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021341';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021341';
+import { icon } from './icons.js?v=202610021341';
+import { crumbs, emptyState } from './components.js?v=202610021341';
+import { homeView } from './views/home.js?v=202610021341';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021341';
+import { sectionView } from './views/section.js?v=202610021341';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021341';
+import { progressView } from './views/progress.js?v=202610021341';
+import { moreView } from './views/more.js?v=202610021341';
+import { missionView, missionState } from './views/mission.js?v=202610021341';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021341';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021341';
+import { profileView } from './views/profile.js?v=202610021341';
+import { startLeaderboard } from './leaderboard.js?v=202610021341';
+import { addVideo, deleteVideo } from './videos.js?v=202610021341';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021341';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -221,6 +222,20 @@ function onKey(e) {
 // ---------- mission planner ----------
 
 function onSubmit(e) {
+  if (e.target.matches('[data-video-form]')) {
+    e.preventDefault();
+    const f = e.target;
+    const res = addVideo(f.dataset.chapter, { url: f.url.value, topic: f.topic.value, title: f.title.value });
+    const msg = {
+      ok: `${icon('check')}<span>লিংক সেভ হয়েছে</span>`,
+      'bad-url': '<span>লিংকটা ঠিক নেই, আবার দেখো</span>',
+      duplicate: '<span>এই লিংক এই টপিকে আগেই আছে</span>',
+      storage: '<span>ফোনে জায়গা নেই, সেভ করা গেল না</span>',
+    }[res];
+    toast(msg);
+    if (res === 'ok') rerender();
+    return;
+  }
   if (e.target.matches('[data-profile-form]')) {
     e.preventDefault();
     updateProfile({ name: document.getElementById('pfName').value });
@@ -251,6 +266,33 @@ function rerender() {
   const y = window.scrollY;
   render({ keepScroll: true });
   window.scrollTo(0, y);
+}
+
+function onVideoClick(t) {
+  const play = t.closest('[data-video-play]');
+  if (play) {
+    const start = Number(play.dataset.start) || 0;
+    const src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(play.dataset.videoPlay)}?autoplay=1&rel=0&playsinline=1${start ? `&start=${start}` : ''}`;
+    play.outerHTML = `<div class="vd-frame"><iframe src="${src}" title="YouTube video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;
+    return true;
+  }
+  const del = t.closest('[data-video-del]');
+  if (del) {
+    if (confirm('এই লিংকটা মুছে ফেলবে?')) {
+      deleteVideo(del.dataset.chapter, del.dataset.videoDel);
+      rerender();
+    }
+    return true;
+  }
+  const add = t.closest('[data-video-topic]');
+  if (add) {
+    const f = document.querySelector('[data-video-form]');
+    f.topic.value = add.dataset.videoTopic;
+    f.url.focus();
+    f.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return true;
+  }
+  return false;
 }
 
 function onProfileClick(t) {
@@ -320,7 +362,7 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
-  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t)) return;
+  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {
