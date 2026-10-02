@@ -1,20 +1,20 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021217';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021217';
-import { buildIndex } from './search.js?v=202610021217';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021217';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021217';
-import { icon } from './icons.js?v=202610021217';
-import { crumbs, emptyState } from './components.js?v=202610021217';
-import { homeView } from './views/home.js?v=202610021217';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021217';
-import { sectionView } from './views/section.js?v=202610021217';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021217';
-import { progressView } from './views/progress.js?v=202610021217';
-import { moreView } from './views/more.js?v=202610021217';
-import { missionView, missionState } from './views/mission.js?v=202610021217';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021217';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021219';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021219';
+import { buildIndex } from './search.js?v=202610021219';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021219';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021219';
+import { icon } from './icons.js?v=202610021219';
+import { crumbs, emptyState } from './components.js?v=202610021219';
+import { homeView } from './views/home.js?v=202610021219';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021219';
+import { sectionView } from './views/section.js?v=202610021219';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021219';
+import { progressView } from './views/progress.js?v=202610021219';
+import { moreView } from './views/more.js?v=202610021219';
+import { missionView, missionState } from './views/mission.js?v=202610021219';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021219';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -213,6 +213,13 @@ function rerender() {
 }
 
 function onMissionClick(t) {
+  const weekBtn = t.closest('[data-mission-week]');
+  if (weekBtn) {
+    missionState.week += Number(weekBtn.dataset.missionWeek);
+    missionState.day = null;
+    rerender();
+    return true;
+  }
   const dayBtn = t.closest('[data-mission-day]');
   if (dayBtn) {
     missionState.day = dayBtn.dataset.missionDay;

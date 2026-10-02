@@ -29,16 +29,23 @@ export function dayKey(date) {
   return `${date.getFullYear()}-${p(date.getMonth() + 1)}-${p(date.getDate())}`;
 }
 
-// Today and the six days after it, as { key, date, offset }.
-export function week() {
-  const base = new Date();
-  base.setHours(12, 0, 0, 0);
+// One Saturday-to-Friday week (the Bangladesh school week) as { key, date, isToday }.
+// offset 0 is the current week, 1 the next one, -1 the previous one.
+export function week(offset = 0) {
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+  const start = new Date(today);
+  start.setDate(today.getDate() - ((today.getDay() + 1) % 7) + offset * 7);
+  const todayKey = dayKey(today);
   return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(base);
-    d.setDate(base.getDate() + i);
-    return { key: dayKey(d), date: d, offset: i };
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const key = dayKey(d);
+    return { key, date: d, isToday: key === todayKey };
   });
 }
+
+export const todayKey = () => dayKey(new Date());
 
 const day = (key) => (plan[key] ??= { tasks: [], note: '' });
 
@@ -69,10 +76,10 @@ export function setNote(key, text) {
   save();
 }
 
-// Unfinished tasks from days before today, newest first.
-export function leftovers(todayKey) {
+// Unfinished tasks from days before `beforeKey`, newest first.
+export function leftovers(beforeKey) {
   return Object.keys(plan)
-    .filter((k) => k < todayKey)
+    .filter((k) => k < beforeKey)
     .sort()
     .reverse()
     .flatMap((k) => plan[k].tasks.filter((t) => !t.done).map((t) => ({ key: k, ...t })));
