@@ -62,3 +62,10 @@ export function progressOf(node) {
       return 0;
   }
 }
+
+// Wipe all completion state on this device (More → Reset progress).
+export function resetProgress() {
+  state = {};
+  done = {};
+  write();
+}

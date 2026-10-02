@@ -1,5 +1,5 @@
 {
-  "$comment": "Every kind of sub-section a chapter can have. Section id = <chapterId>_<typeId>. contentKinds = future sub-categories inside the section; itemFields = future metadata of one item. These are STRUCTURE only — no educational content lives here. computed = rendered from data (Progress), not filled with content. trackable = counts toward progress %.",
+  "$comment": "Every kind of sub-section a chapter can have. Section id = <chapterId>_<typeId>. contentKinds = future sub-categories inside the section; itemFields = future metadata of one item. These are STRUCTURE only — no educational content lives here. computed = rendered from data (Progress), not filled with content. trackable = counts toward progress %. blurb = one-line description shown on section cards.",
   "sectionTypes": {
     "notes": {
       "label": "Notes",
@@ -43,7 +43,8 @@
         "body",
         "attachments",
         "source"
-      ]
+      ],
+      "blurb": "Concepts, explanations and key points"
     },
     "mcq": {
       "label": "MCQ",
@@ -63,7 +64,8 @@
         "difficulty",
         "topic",
         "chapter"
-      ]
+      ],
+      "blurb": "Practice questions with answers"
     },
     "cq": {
       "label": "Creative / CQ",
@@ -111,7 +113,8 @@
         "year",
         "topic",
         "chapter"
-      ]
+      ],
+      "blurb": "সৃজনশীল প্রশ্ন ও সমাধান"
     },
     "formula": {
       "label": "Formula",
@@ -127,7 +130,8 @@
         "condition",
         "relatedConcept",
         "example"
-      ]
+      ],
+      "blurb": "Important formulas with units and conditions"
     },
     "concept": {
       "label": "Concepts",
@@ -140,7 +144,8 @@
         "title",
         "body",
         "topic"
-      ]
+      ],
+      "blurb": "Core ideas, one at a time"
     },
     "simulation": {
       "label": "Simulation",
@@ -153,7 +158,8 @@
         "title",
         "embed",
         "instructions"
-      ]
+      ],
+      "blurb": "Interactive learning tools"
     },
     "mistakes": {
       "label": "Mistake Bank",
@@ -167,7 +173,8 @@
         "whatWentWrong",
         "correction",
         "date"
-      ]
+      ],
+      "blurb": "Your own errors, so you never repeat them"
     },
     "revision": {
       "label": "Revision",
@@ -180,7 +187,8 @@
         "title",
         "body",
         "dueDate"
-      ]
+      ],
+      "blurb": "Quick revision material"
     },
     "progress": {
       "label": "Progress",
@@ -190,7 +198,8 @@
       "trackable": false,
       "computed": true,
       "contentKinds": [],
-      "itemFields": []
+      "itemFields": [],
+      "blurb": "How far you have come in this chapter"
     },
     "reaction": {
       "label": "Reaction",
@@ -205,7 +214,8 @@
         "conditions",
         "type",
         "note"
-      ]
+      ],
+      "blurb": "Reactions with conditions"
     },
     "conversion": {
       "label": "Conversion",
@@ -218,7 +228,8 @@
         "from",
         "to",
         "steps"
-      ]
+      ],
+      "blurb": "Step-by-step conversions"
     },
     "mechanism": {
       "label": "Mechanism",
@@ -231,7 +242,8 @@
         "title",
         "steps",
         "diagram"
-      ]
+      ],
+      "blurb": "Reaction mechanisms"
     },
     "identification": {
       "label": "Identification Test",
@@ -245,7 +257,8 @@
         "reagent",
         "observation",
         "inference"
-      ]
+      ],
+      "blurb": "Tests to identify substances"
     },
     "derivation": {
       "label": "Derivation",
@@ -258,7 +271,8 @@
         "title",
         "steps",
         "result"
-      ]
+      ],
+      "blurb": "Derivations step by step"
     },
     "numerical": {
       "label": "Numerical",
@@ -273,7 +287,8 @@
         "solution",
         "answer",
         "source"
-      ]
+      ],
+      "blurb": "Numerical problems"
     },
     "graph": {
       "label": "Graph",
@@ -286,7 +301,8 @@
         "title",
         "image",
         "explanation"
-      ]
+      ],
+      "blurb": "Graphs and what they mean"
     },
     "diagram": {
       "label": "Diagram",
@@ -299,7 +315,8 @@
         "title",
         "image",
         "labels"
-      ]
+      ],
+      "blurb": "Labelled diagrams"
     },
     "theorem": {
       "label": "Theorem",
@@ -312,7 +329,8 @@
         "statement",
         "proof",
         "corollaries"
-      ]
+      ],
+      "blurb": "Theorems and proofs"
     },
     "problem_types": {
       "label": "Problem Types",
@@ -325,7 +343,8 @@
         "pattern",
         "approach",
         "examples"
-      ]
+      ],
+      "blurb": "Every kind of problem, sorted"
     },
     "solved": {
       "label": "Solved Problems",
@@ -338,7 +357,8 @@
         "problem",
         "solution",
         "source"
-      ]
+      ],
+      "blurb": "Worked examples"
     },
     "definition": {
       "label": "Definition",
@@ -350,7 +370,8 @@
       "itemFields": [
         "term",
         "definition"
-      ]
+      ],
+      "blurb": "Exact definitions"
     },
     "process": {
       "label": "Process",
@@ -363,7 +384,8 @@
         "title",
         "steps",
         "diagram"
-      ]
+      ],
+      "blurb": "Processes step by step"
     },
     "comparison": {
       "label": "Comparison",
@@ -376,7 +398,8 @@
         "itemA",
         "itemB",
         "points"
-      ]
+      ],
+      "blurb": "Side-by-side differences"
     },
     "classification": {
       "label": "Classification",
@@ -388,7 +411,8 @@
       "itemFields": [
         "title",
         "tree"
-      ]
+      ],
+      "blurb": "How things are grouped"
     },
     "rules": {
       "label": "Rules",
@@ -401,7 +425,8 @@
         "rule",
         "explanation",
         "exceptions"
-      ]
+      ],
+      "blurb": "Grammar rules"
     },
     "examples": {
       "label": "Examples",
@@ -414,7 +439,8 @@
         "sentence",
         "explanation",
         "ruleRef"
-      ]
+      ],
+      "blurb": "Examples in use"
     },
     "practice": {
       "label": "Practice",
@@ -427,7 +453,8 @@
         "question",
         "answer",
         "source"
-      ]
+      ],
+      "blurb": "Practice exercises"
     },
     "board": {
       "label": "Board Questions",
@@ -441,7 +468,8 @@
         "answer",
         "board",
         "year"
-      ]
+      ],
+      "blurb": "Past board questions"
     }
   }
 }
