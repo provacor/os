@@ -1,10 +1,10 @@
 // Home: personal dashboard + subject cards. Every number shown is real.
 
-import { icon } from '../icons.js?v=202610021057';
-import { esc, ring, subjectCard, sectionHue, chapterEyebrow } from '../components.js?v=202610021057';
-import { todayStats, streak, recentVisits } from '../activity.js?v=202610021057';
-import { progressOf } from '../progress.js?v=202610021057';
-import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021057';
+import { icon } from '../icons.js?v=202610021123';
+import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610021123';
+import { todayStats, streak, recentVisits } from '../activity.js?v=202610021123';
+import { progressOf } from '../progress.js?v=202610021123';
+import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021123';
 
 export function homeView(model) {
   const t = totals(model);
@@ -45,7 +45,7 @@ export function homeView(model) {
     ? `<section class="block"><div class="block-head"><h2>Recently opened</h2></div>
         <div class="h-scroll">${recents
           .map((c, i) => `<a class="mini-card acc-${esc(c.subject.accent)} rise tap" style="--i:${i}" href="#/c/${esc(c.id)}">
-              <span class="mini-top"><span class="s-icon sm">${icon(c.subject.id)}</span><span class="muted">${esc(c.subject.name)}</span></span>
+              <span class="mini-top"><span class="s-icon sm">${subjectGlyph(c.subject)}</span><span class="muted">${esc(c.subject.name)}</span></span>
               <span class="mini-title">${esc(c.name)}</span>
               <span class="mini-meta">${esc(c.paper.name)} · ${chapterEyebrow(c)} · ${progressOf(c)}%</span>
             </a>`)

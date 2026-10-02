@@ -1,10 +1,10 @@
 // Progress analytics. Only real data: completions and this device's study history.
 
-import { icon } from '../icons.js?v=202610021057';
-import { esc, plural, ring, bar, chapterNo, pad2 } from '../components.js?v=202610021057';
-import { progressOf } from '../progress.js?v=202610021057';
-import { dayKey, dayScore, streak, hasActivity } from '../activity.js?v=202610021057';
-import { totals } from './shared.js?v=202610021057';
+import { icon } from '../icons.js?v=202610021123';
+import { esc, plural, ring, bar, subjectGlyph, chapterNo, pad2 } from '../components.js?v=202610021123';
+import { progressOf } from '../progress.js?v=202610021123';
+import { dayKey, dayScore, streak, hasActivity } from '../activity.js?v=202610021123';
+import { totals } from './shared.js?v=202610021123';
 
 function heatmap() {
   const weeks = 16;
@@ -60,7 +60,7 @@ export function progressView(model) {
         })
         .join('');
       return `<section class="card subj-prog acc-${esc(s.accent)} rise" style="--i:${6 + si}">
-          <div class="sp-head"><span class="s-icon">${icon(s.id)}</span><h3>${esc(s.name)}</h3>${ring(progressOf(s), { size: 44 })}</div>
+          <div class="sp-head"><span class="s-icon">${subjectGlyph(s)}</span><h3>${esc(s.name)}</h3>${ring(progressOf(s), { size: 44 })}</div>
           ${papers}
         </section>`;
     })

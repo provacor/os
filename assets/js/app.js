@@ -1,18 +1,18 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021057';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021057';
-import { buildIndex } from './search.js?v=202610021057';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021057';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021057';
-import { icon } from './icons.js?v=202610021057';
-import { crumbs, emptyState } from './components.js?v=202610021057';
-import { homeView } from './views/home.js?v=202610021057';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021057';
-import { sectionView } from './views/section.js?v=202610021057';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021057';
-import { progressView } from './views/progress.js?v=202610021057';
-import { moreView } from './views/more.js?v=202610021057';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021123';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021123';
+import { buildIndex } from './search.js?v=202610021123';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021123';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021123';
+import { icon } from './icons.js?v=202610021123';
+import { crumbs, emptyState } from './components.js?v=202610021123';
+import { homeView } from './views/home.js?v=202610021123';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021123';
+import { sectionView } from './views/section.js?v=202610021123';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021123';
+import { progressView } from './views/progress.js?v=202610021123';
+import { moreView } from './views/more.js?v=202610021123';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');

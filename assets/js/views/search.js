@@ -1,9 +1,9 @@
 // Search: filters, recent searches, suggestions and grouped, highlighted results.
 
-import { icon } from '../icons.js?v=202610021057';
-import { esc, highlight, sectionHue } from '../components.js?v=202610021057';
-import { search } from '../search.js?v=202610021057';
-import { recentSearches } from '../activity.js?v=202610021057';
+import { icon } from '../icons.js?v=202610021123';
+import { esc, highlight, subjectGlyph, sectionHue } from '../components.js?v=202610021123';
+import { search } from '../search.js?v=202610021123';
+import { recentSearches } from '../activity.js?v=202610021123';
 
 const GROUPS = [
   ['subject', 'Subjects'],
@@ -27,8 +27,8 @@ export function hrefOf(r) {
 
 function iconFor(r) {
   const n = r.node;
-  if (n.level === 'subject') return `<span class="r-icon acc-${esc(n.accent)}">${icon(n.id)}</span>`;
-  if (n.level === 'paper') return `<span class="r-icon acc-${esc(n.subject.accent)}">${icon(n.subject.id)}</span>`;
+  if (n.level === 'subject') return `<span class="r-icon acc-${esc(n.accent)}">${subjectGlyph(n)}</span>`;
+  if (n.level === 'paper') return `<span class="r-icon acc-${esc(n.subject.accent)}">${subjectGlyph(n.subject)}</span>`;
   if (n.level === 'chapter') return `<span class="r-icon acc-${esc(n.subject.accent)}">${icon(r.level === 'topic' ? 'target' : 'layers')}</span>`;
   return `<span class="r-icon hue-${sectionHue(n.type)}">${icon(n.type)}</span>`;
 }
