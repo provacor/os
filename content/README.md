@@ -40,6 +40,8 @@ Put the file in `content/files/<sectionId>/` and point the item at it:
 
 The section screen shows an **Open PDF** button and a **Mark as done** toggle. Done items count toward progress.
 
+An item with `"format": "html"` (an interactive simulation) runs inline in the section screen, with a **Full screen** button. Example: `content/physics/physics_2nd_ch06_simulation.json`.
+
 ## Registry entry
 
 ```json

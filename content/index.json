@@ -9,6 +9,10 @@
     "physics_2nd_ch06_notes": {
       "file": "content/physics/physics_2nd_ch06_notes.json",
       "count": 1
+    },
+    "physics_2nd_ch06_simulation": {
+      "file": "content/physics/physics_2nd_ch06_simulation.json",
+      "count": 1
     }
   }
 }

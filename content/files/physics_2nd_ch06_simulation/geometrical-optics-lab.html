@@ -1,0 +1,415 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>জ্যামিতিক আলোকবিজ্ঞান — ইন্টারঅ্যাকটিভ ল্যাব</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--page:#e9eef4;--ink:#13263b;--muted:#5a7089;--rule:#c7d3e0;--chip:#ffffff;--chipOn:#13263b;--chipOnInk:#ffd23f;--board:#0f2236;--ray:#ffd23f;--readout:#ffffff;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--page:#0a1726;--ink:#e7eef6;--muted:#8ea6bf;--rule:#22384f;--chip:#12263b;--chipOn:#ffd23f;--chipOnInk:#0f2236;--readout:#102338}}
+:root[data-theme="dark"]{--page:#0a1726;--ink:#e7eef6;--muted:#8ea6bf;--rule:#22384f;--chip:#12263b;--chipOn:#ffd23f;--chipOnInk:#0f2236;--readout:#102338}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"Noto Serif Bengali","FreeSerif",serif;line-height:1.55}
+main{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:clamp(24px,5vw,38px);margin:6px 0 2px;line-height:1.2}
+.lede{color:var(--muted);margin:0 0 16px;font-size:15px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:thin}
+.tabs button{flex:0 0 auto;border:1px solid var(--rule);background:var(--chip);color:var(--ink);font:inherit;font-size:15px;padding:8px 14px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--chipOn);color:var(--chipOnInk);border-color:var(--chipOn);font-weight:700}
+.tabs button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
+.stage{background:var(--board);border-radius:14px;overflow:hidden;box-shadow:0 1px 0 var(--rule)}
+canvas{display:block;width:100%;height:auto}
+.ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 22px;margin:14px 2px}
+.ctrl label{display:flex;flex-direction:column;font-size:15px;gap:2px}
+.ctrl .v{font-weight:700}
+input[type=range]{width:100%;accent-color:#e0a800}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--rule);background:var(--chip);color:var(--ink);font:inherit;padding:5px 12px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--chipOn);color:var(--chipOnInk);font-weight:700}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0 4px}
+.out div{background:var(--readout);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.out small{display:block;color:var(--muted);font-size:13px}
+.out b{font-size:19px}
+.note{color:var(--muted);font-size:14px;margin:8px 2px 0}
+.panel{display:none}.panel.on{display:block}
+footer{color:var(--muted);font-size:13px;margin-top:26px;border-top:1px solid var(--rule);padding-top:10px}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
+</style></head><body><main>
+<h1>আলোকবিজ্ঞান ল্যাব</h1>
+<p class="lede">স্লাইডার টেনে নিজেই দেখো — রশ্মি কোথায় বাঁকে, বিম্ব কোথায় তৈরি হয়। চিহ্নের প্রথা: বাস্তব-ধনাত্মক (তোমার নোট অনুযায়ী) — 1/u + 1/v = 1/f, m = −v/u।</p>
+<div class="tabs" role="tablist">
+ <button role="tab" aria-selected="true" data-p="lens">লেন্স ও প্রতিবিম্ব</button>
+ <button role="tab" aria-selected="false" data-p="refr">প্রতিসরণ</button>
+ <button role="tab" aria-selected="false" data-p="tir">সংকট কোণ ও TIR</button>
+ <button role="tab" aria-selected="false" data-p="prism">প্রিজম ও ন্যূনতম বিচ্যুতি</button>
+</div>
+
+<section class="panel on" id="p-lens">
+ <div class="stage"><canvas id="cLens" width="800" height="440"></canvas></div>
+ <div class="ctrl">
+  <label>লেন্সের ধরন<div class="seg" id="lensType"><button aria-pressed="true" data-v="1">উত্তল</button><button aria-pressed="false" data-v="-1">অবতল</button></div></label>
+  <label>বস্তুর দূরত্ব u = <span class="v" id="uV"></span><input id="u" type="range" min="4" max="90" step="0.5" value="45"></label>
+  <label>ফোকাস দূরত্ব |f| = <span class="v" id="fV"></span><input id="f" type="range" min="5" max="40" step="0.5" value="15"></label>
+  <label>বস্তুর উচ্চতা h = <span class="v" id="hV"></span><input id="h" type="range" min="1" max="8" step="0.5" value="4"></label>
+ </div>
+ <div class="out" id="lensOut"></div>
+ <p class="note">দ্রুত দেখো: উত্তল লেন্সে u = 2f রাখলে m = −1 (সমান, উল্টো); u &lt; f হলে বিম্ব অবাস্তব ও সোজা। ডটেড রেখা = অবাস্তব রশ্মির পেছনের দিক।</p>
+</section>
+
+<section class="panel" id="p-refr">
+ <div class="stage"><canvas id="cRefr" width="800" height="440"></canvas></div>
+ <div class="ctrl">
+  <label>উপরের মাধ্যম μ₁ = <span class="v" id="n1V"></span><input id="n1" type="range" min="1" max="2.4" step="0.01" value="1"></label>
+  <label>নিচের মাধ্যম μ₂ = <span class="v" id="n2V"></span><input id="n2" type="range" min="1" max="2.4" step="0.01" value="1.5"></label>
+  <label>আপতন কোণ i = <span class="v" id="iV"></span><input id="i" type="range" min="0" max="89" step="0.5" value="40"></label>
+ </div>
+ <div class="out" id="refrOut"></div>
+ <p class="note">μ₁ &gt; μ₂ করে দেখো (ঘন → লঘু): i বাড়াতে থাকলে একসময় রশ্মি আর বের হয় না — পূর্ণ অভ্যন্তরীণ প্রতিফলন।</p>
+</section>
+
+<section class="panel" id="p-tir">
+ <div class="stage"><canvas id="cTir" width="800" height="440"></canvas></div>
+ <div class="ctrl">
+  <label>ঘন মাধ্যমের প্রতিসরাঙ্ক μ (লঘু মাধ্যম বায়ু) = <span class="v" id="muV"></span><input id="mu" type="range" min="1.1" max="2.42" step="0.01" value="1.5"></label>
+  <label>আপতন কোণ i = <span class="v" id="tiV"></span><input id="ti" type="range" min="0" max="89" step="0.5" value="30"></label>
+ </div>
+ <div class="out" id="tirOut"></div>
+ <p class="note">ডান পাশের লেখচিত্র: μ বাড়লে সংকট কোণ কমে (sin θc = 1/μ)। হীরার (μ ≈ 2.42) θc মাত্র ~24° — তাই হীরা এত ঝলমলে।</p>
+</section>
+
+<section class="panel" id="p-prism">
+ <div class="stage"><canvas id="cPrism" width="800" height="440"></canvas></div>
+ <div class="ctrl">
+  <label>প্রিজম কোণ A = <span class="v" id="AV"></span><input id="A" type="range" min="30" max="75" step="1" value="60"></label>
+  <label>প্রতিসরাঙ্ক μ = <span class="v" id="pmV"></span><input id="pm" type="range" min="1.3" max="1.8" step="0.01" value="1.5"></label>
+  <label>আপতন কোণ i₁ = <span class="v" id="piV"></span><input id="pi" type="range" min="20" max="89" step="0.5" value="40"></label>
+ </div>
+ <div class="out" id="prismOut"></div>
+ <div class="stage" style="margin-top:10px"><canvas id="cGraph" width="800" height="330"></canvas></div>
+ <p class="note">লেখচিত্রে লাল বিন্দু = ন্যূনতম বিচ্যুতি। সেখানে i₁ = i₂ এবং r₁ = r₂ = A/2 — প্রিজমের ভেতরে রশ্মি ভূমির সমান্তরাল।</p>
+</section>
+<footer>সূত্র: তোমার জ্যামিতিক আলোকবিজ্ঞান নোট (লেকচার স্লাইড + রেটিনা + জয়কলি)। মান হিসাবকৃত; গোলাকার করা।</footer>
+</main>
+<script>
+// ===== Shared optics drawing library (video + interactive) =====
+const COL = {
+  bg: '#0f2236', board: '#132b44', panel: 'rgba(255,255,255,0.06)', line: '#c9d6e6', dim: '#6f88a3',
+  ray: '#ffd23f', ray2: '#ff8a5b', normal: '#8fb3d9', glass: 'rgba(120,200,235,0.22)', glassEdge: '#7cc6e6',
+  water: 'rgba(80,150,230,0.20)', obj: '#7aa7ff', img: '#5ee3a1', virt: '#5ee3a1', text: '#eef3f8',
+  accent: '#ffd23f', warn: '#ff6b6b', ok: '#5ee3a1', head: '#ffd23f', sub: '#a9c3df'
+};
+let FONT = '"Noto Serif Bengali","FreeSerif",serif';
+const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const ease = x => { x = clamp(x, 0, 1); return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, s, d) => clamp((t - s) / d, 0, 1);       // 0..1 progress
+const fade = (t, s, d = 0.5) => ease(prog(t, s, d));
+
+function setFont(ctx, size, bold = false) { ctx.font = `${bold ? 'bold ' : ''}${size}px ${FONT}`; }
+
+function text(ctx, s, x, y, o = {}) {
+  const { size = 26, color = COL.text, align = 'left', bold = false, alpha = 1, base = 'alphabetic' } = o;
+  if (alpha <= 0) return 0;
+  ctx.save(); ctx.globalAlpha *= alpha; setFont(ctx, size, bold); ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = base;
+  ctx.fillText(s, x, y); const w = ctx.measureText(s).width; ctx.restore(); return w;
+}
+
+function line(ctx, x1, y1, x2, y2, o = {}) {
+  const { color = COL.line, w = 2, dash = null, alpha = 1 } = o;
+  if (alpha <= 0) return;
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+}
+
+function arrowHead(ctx, x, y, ang, color, size = 12, alpha = 1) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = color; ctx.translate(x, y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-size, -size * 0.45); ctx.lineTo(-size, size * 0.45); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+
+// draw polyline progressively, arrowheads at middle of each segment (glowing ray)
+function ray(ctx, pts, p = 1, o = {}) {
+  const { color = COL.ray, w = 3, dash = null, arrows = true, alpha = 1, glow = true } = o;
+  if (p <= 0 || alpha <= 0 || pts.length < 2) return;
+  let L = 0; const seg = [];
+  for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); L += d; }
+  let rem = L * clamp(p, 0, 1);
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round';
+  if (dash) ctx.setLineDash(dash);
+  if (glow) { ctx.shadowColor = color; ctx.shadowBlur = 10; }
+  ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+  const heads = [];
+  for (let i = 1; i < pts.length && rem > 0; i++) {
+    const d = seg[i - 1], k = Math.min(1, rem / d);
+    const x = lerp(pts[i - 1][0], pts[i][0], k), y = lerp(pts[i - 1][1], pts[i][1], k);
+    ctx.lineTo(x, y);
+    if (arrows && !dash && k > 0.5 && d > 40) heads.push([lerp(pts[i - 1][0], pts[i][0], .5), lerp(pts[i - 1][1], pts[i][1], .5), Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0])]);
+    rem -= d;
+  }
+  ctx.stroke(); ctx.restore();
+  heads.forEach(h => arrowHead(ctx, h[0] + 6 * Math.cos(h[2]), h[1] + 6 * Math.sin(h[2]), h[2], color, 13, alpha));
+}
+
+function dot(ctx, x, y, r = 5, color = COL.text, alpha = 1) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.restore();
+}
+
+function rrect(ctx, x, y, w, h, r = 12, fill = COL.panel, stroke = null, alpha = 1, lw = 1.5) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } ctx.restore();
+}
+
+// angle arc between two directions (radians, canvas coords) from center
+function angArc(ctx, cx, cy, a1, a2, r, color, label, o = {}) {
+  const { alpha = 1, size = 22 } = o; if (alpha <= 0) return;
+  let d = a2 - a1; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.beginPath();
+  ctx.arc(cx, cy, r, a1, a1 + d, d < 0); ctx.stroke(); ctx.restore();
+  if (label) { const m = a1 + d / 2; text(ctx, label, cx + (r + 18) * Math.cos(m), cy + (r + 18) * Math.sin(m) + 7, { size, color, align: 'center', alpha, bold: true }); }
+}
+
+// ---------- mini formula renderer ----------
+// syntax:  \f{num}{den}   _{sub}   ^{sup}
+function parseF(s) {
+  let i = 0;
+  function group() { // expects '{'
+    i++; const out = seq('}'); i++; return out;
+  }
+  function seq(end) {
+    const nodes = []; let buf = '';
+    const flush = () => { if (buf) { nodes.push({ t: 'txt', s: buf }); buf = ''; } };
+    while (i < s.length && s[i] !== end) {
+      if (s.startsWith('\\f{', i)) { flush(); i += 2; const n = group(); const d = group(); nodes.push({ t: 'frac', n, d }); }
+      else if ((s[i] === '_' || s[i] === '^') && s[i + 1] === '{') { flush(); const k = s[i]; i++; const g = group(); nodes.push({ t: k === '_' ? 'sub' : 'sup', g }); }
+      else { buf += s[i]; i++; }
+    }
+    flush(); return nodes;
+  }
+  return seq(null);
+}
+function measureNodes(ctx, nodes, size) {
+  let w = 0, up = size * 0.8, dn = size * 0.25;
+  for (const n of nodes) {
+    if (n.t === 'txt') { setFont(ctx, size); w += ctx.measureText(n.s).width; }
+    else if (n.t === 'sub' || n.t === 'sup') { const m = measureNodes(ctx, n.g, size * 0.62); w += m.w + 1; if (n.t === 'sub') dn = Math.max(dn, size * 0.45); else up = Math.max(up, size * 1.0); }
+    else if (n.t === 'frac') { const a = measureNodes(ctx, n.n, size * 0.86), b = measureNodes(ctx, n.d, size * 0.86); w += Math.max(a.w, b.w) + size * 0.3; up = Math.max(up, a.up + a.dn + size * 0.35); dn = Math.max(dn, b.up + b.dn + size * 0.05); }
+  }
+  return { w, up, dn };
+}
+function drawNodes(ctx, nodes, x, y, size, color) {
+  for (const n of nodes) {
+    if (n.t === 'txt') { setFont(ctx, size); ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(n.s, x, y); x += ctx.measureText(n.s).width; }
+    else if (n.t === 'sub') { const s2 = size * 0.62; x = drawNodes(ctx, n.g, x, y + size * 0.28, s2, color) + 1; }
+    else if (n.t === 'sup') { const s2 = size * 0.62; x = drawNodes(ctx, n.g, x, y - size * 0.42, s2, color) + 1; }
+    else if (n.t === 'frac') {
+      const s2 = size * 0.86, a = measureNodes(ctx, n.n, s2), b = measureNodes(ctx, n.d, s2), W = Math.max(a.w, b.w) + size * 0.15;
+      const barY = y - size * 0.3;
+      drawNodes(ctx, n.n, x + (W - a.w) / 2 + size * 0.07, barY - a.dn - size * 0.12, s2, color);
+      drawNodes(ctx, n.d, x + (W - b.w) / 2 + size * 0.07, barY + b.up + size * 0.08, s2, color);
+      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = Math.max(1.5, size / 16); ctx.beginPath(); ctx.moveTo(x + size * 0.04, barY); ctx.lineTo(x + W + size * 0.1, barY); ctx.stroke(); ctx.restore();
+      x += W + size * 0.3;
+    }
+  }
+  return x;
+}
+function fx(ctx, s, x, y, o = {}) {
+  const { size = 34, color = COL.text, align = 'left', alpha = 1 } = o; if (alpha <= 0) return 0;
+  const nodes = parseF(s); const m = measureNodes(ctx, nodes, size);
+  let x0 = x; if (align === 'center') x0 = x - m.w / 2; else if (align === 'right') x0 = x - m.w;
+  ctx.save(); ctx.globalAlpha *= alpha; drawNodes(ctx, nodes, x0, y, size, color); ctx.restore(); return m.w;
+}
+
+// ---------- physics helpers ----------
+function refractDir(d, n, eta) { // d unit incident, n unit normal pointing toward incident side, eta=n1/n2
+  const cosi = -(d[0] * n[0] + d[1] * n[1]); const k = 1 - eta * eta * (1 - cosi * cosi);
+  if (k < 0) return null; const a = eta * cosi - Math.sqrt(k); return [eta * d[0] + a * n[0], eta * d[1] + a * n[1]];
+}
+function reflectDir(d, n) { const k = 2 * (d[0] * n[0] + d[1] * n[1]); return [d[0] - k * n[0], d[1] - k * n[1]]; }
+function segIntersect(p, d, a, b) { // ray p + t d with segment a-b, return [t,s]
+  const ex = b[0] - a[0], ey = b[1] - a[1]; const den = d[0] * ey - d[1] * ex; if (Math.abs(den) < 1e-9) return null;
+  const t = ((a[0] - p[0]) * ey - (a[1] - p[1]) * ex) / den; const s = ((a[0] - p[0]) * d[1] - (a[1] - p[1]) * d[0]) / den;
+  return [t, s];
+}
+// prism trace: apex, left base, right base; incidence angle i (deg) at point fraction q along left face from apex
+function prismTrace(P, iDeg, mu, q = 0.55, Lin = 260, Lout = 300) {
+  const [T, BL, BR] = P;
+  const hit = [lerp(T[0], BL[0], q), lerp(T[1], BL[1], q)];
+  const fx_ = BL[0] - T[0], fy_ = BL[1] - T[1], fl = Math.hypot(fx_, fy_);
+  let nOut = [fy_ / fl, -fx_ / fl]; // perpendicular; make it point outward (away from centroid)
+  const C = [(T[0] + BL[0] + BR[0]) / 3, (T[1] + BL[1] + BR[1]) / 3];
+  if ((hit[0] - C[0]) * nOut[0] + (hit[1] - C[1]) * nOut[1] < 0) nOut = [-nOut[0], -nOut[1]];
+  const nIn = [-nOut[0], -nOut[1]];
+  // incident direction: rotate nIn by +i towards apex side reversed (ray comes from below-left going up-right)
+  const i = iDeg * D2R; const rot = (v, a) => [v[0] * Math.cos(a) - v[1] * Math.sin(a), v[0] * Math.sin(a) + v[1] * Math.cos(a)];
+  let d = rot(nIn, -i); // tilt so the ray rises toward the base side -> classic picture
+  const start = [hit[0] - d[0] * Lin, hit[1] - d[1] * Lin];
+  const din = refractDir(d, nOut, 1 / mu);
+  const tt = segIntersect(hit, din, T, BR); if (!tt) return null;
+  const hit2 = [hit[0] + din[0] * tt[0], hit[1] + din[1] * tt[0]];
+  const gx = BR[0] - T[0], gy = BR[1] - T[1], gl = Math.hypot(gx, gy);
+  let n2 = [gy / gl, -gx / gl]; if ((hit2[0] - C[0]) * n2[0] + (hit2[1] - C[1]) * n2[1] < 0) n2 = [-n2[0], -n2[1]];
+  const dout = refractDir(din, [-n2[0], -n2[1]], mu);
+  const r1 = Math.asin(Math.sin(i) / mu) * R2D; const A = Math.acos((-(fx_ * gx + fy_ * gy)) / (fl * gl) * -1) * R2D;
+  if (!dout) return { start, hit, hit2, d, din, dout: null, nOut, n2, r1, tir: true };
+  const end = [hit2[0] + dout[0] * Lout, hit2[1] + dout[1] * Lout];
+  const dev = Math.acos(clamp(d[0] * dout[0] + d[1] * dout[1], -1, 1)) * R2D;
+  return { start, hit, hit2, end, d, din, dout, nOut, n2, r1, dev, tir: false };
+}
+function prismDev(iDeg, mu, A) { const r1 = Math.asin(Math.sin(iDeg * D2R) / mu) * R2D, r2 = A - r1; const s = mu * Math.sin(r2 * D2R); if (s > 1) return null; const i2 = Math.asin(s) * R2D; return { r1, r2, i2, dev: iDeg + i2 - A }; }
+
+// ---------- lens helpers (real-is-positive: 1/u + 1/v = 1/f, m = -v/u) ----------
+function lensImage(u, f) { if (Math.abs(u - f) < 1e-6) return { v: Infinity, m: Infinity }; const v = u * f / (u - f); return { v, m: -v / u }; }
+function drawLens(ctx, x, y, h, convex = true, o = {}) {
+  const { alpha = 1, bulge = 22 } = o; ctx.save(); ctx.globalAlpha *= alpha; ctx.beginPath();
+  if (convex) { ctx.moveTo(x, y - h); ctx.quadraticCurveTo(x + bulge * 2, y, x, y + h); ctx.quadraticCurveTo(x - bulge * 2, y, x, y - h); }
+  else { const e = 16; ctx.moveTo(x - e, y - h); ctx.lineTo(x + e, y - h); ctx.quadraticCurveTo(x + 2, y, x + e, y + h); ctx.lineTo(x - e, y + h); ctx.quadraticCurveTo(x - 2, y, x - e, y - h); }
+  ctx.closePath(); ctx.fillStyle = COL.glass; ctx.fill(); ctx.strokeStyle = COL.glassEdge; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+}
+function objArrow(ctx, x, y0, h, color, o = {}) {
+  const { alpha = 1, dash = null, w = 4 } = o; if (alpha <= 0 || !isFinite(x) || !isFinite(h)) return;
+  line(ctx, x, y0, x, y0 - h, { color, w, dash, alpha }); arrowHead(ctx, x, y0 - h, h > 0 ? -Math.PI / 2 : Math.PI / 2, color, 14, alpha);
+}
+// line through two points clipped to x-range
+function extend(p, q, x) { const k = (x - p[0]) / (q[0] - p[0]); return [x, p[1] + (q[1] - p[1]) * k]; }
+
+// wrap text into lines (Bangla-safe: breaks on spaces only)
+function wrap(ctx, s, maxW, size, bold = false) {
+  setFont(ctx, size, bold); const words = s.split(' '); const out = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (ctx.measureText(t).width > maxW && cur) { out.push(cur); cur = w; } else cur = t; }
+  if (cur) out.push(cur); return out;
+}
+function para(ctx, s, x, y, maxW, o = {}) {
+  const { size = 24, lh = 1.45, color = COL.text, bold = false, alpha = 1 } = o;
+  const ls = wrap(ctx, s, maxW, size, bold); ls.forEach((l, k) => text(ctx, l, x, y + k * size * lh, { size, color, bold, alpha })); return ls.length * size * lh;
+}
+
+const $ = id => document.getElementById(id);
+function setup(c){ const dpr = Math.min(2, window.devicePixelRatio||1); const W0=c.width, H0=c.height; c.dataset.w=W0; c.dataset.h=H0; c.width=W0*dpr; c.height=H0*dpr; const x=c.getContext('2d'); x.scale(dpr,dpr); return x; }
+const CX = {lens:setup($('cLens')), refr:setup($('cRefr')), tir:setup($('cTir')), prism:setup($('cPrism')), graph:setup($('cGraph'))};
+function clear(ctx,w,h){ ctx.fillStyle=COL.bg; ctx.fillRect(0,0,w,h); ctx.save(); ctx.strokeStyle='rgba(255,255,255,0.04)'; for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();} for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();} ctx.restore(); }
+const fmt=(x,d=2)=>Number.isFinite(x)? (+x.toFixed(d)).toString():'∞';
+function out(id, pairs){ $(id).innerHTML = pairs.map(([a,b])=>`<div><small>${a}</small><b>${b}</b></div>`).join(''); }
+
+// ---------- Lens ----------
+let lensSign = 1;
+document.querySelectorAll('#lensType button').forEach(b=>b.onclick=()=>{ lensSign=+b.dataset.v; document.querySelectorAll('#lensType button').forEach(x=>x.setAttribute('aria-pressed', x===b)); drawLens2(); });
+function drawLens2(){
+  const ctx=CX.lens, Wc=800, Hc=440, u=+$('u').value, fa=+$('f').value, h=+$('h').value, f=lensSign*fa;
+  $('uV').textContent=u+' cm'; $('fV').textContent=fa+' cm'; $('hV').textContent=h+' cm';
+  clear(ctx,Wc,Hc); const X0=400, Y0=230, s=330/Math.max(u, 2*fa, 20), vs=13;
+  const X=x=>X0+x*s, Y=y=>Y0-y*vs;
+  line(ctx,0,Y0,Wc,Y0,{color:COL.dim,w:1.5});
+  drawLens(ctx,X0,Y0,150,f>0);
+  const lab = f>0?['2F₁','F₁','F₂','2F₂']:['2F₂','F₂','F₁','2F₁'];
+  [[-2,lab[0]],[-1,lab[1]],[1,lab[2]],[2,lab[3]]].forEach(([k,l])=>{ const xx=X(k*fa); if(xx>10&&xx<Wc-10){ dot(ctx,xx,Y0,4); text(ctx,l,xx,Y0+24,{size:15,align:'center'}); }});
+  dot(ctx,X0,Y0,4,COL.accent); text(ctx,'O',X0+8,Y0-8,{size:15,color:COL.accent});
+  const ox=X(-u), oy=Y(h); objArrow(ctx,ox,Y0,h*vs,COL.obj); text(ctx,'বস্তু',ox,Y0+42,{size:15,align:'center',color:COL.obj});
+  const im=lensImage(u,f); const L=1400;
+  // ray 1 : parallel then via focus
+  const d1=[fa, -h*Math.sign(f)]; const n1=Math.hypot(...d1);
+  const p1=[X(0),Y(h)], e1=[X(d1[0]/n1*L), Y(h+d1[1]/n1*L)];
+  ray(ctx,[[ox,oy],p1,e1],1,{w:2.4});
+  // ray 2 : through centre
+  const d2=[u,-h], n2=Math.hypot(...d2); ray(ctx,[[ox,oy],[X0,Y0],[X(d2[0]/n2*L*3), Y(-h/u*(d2[0]/n2*L*3))]],1,{w:2.4,color:'#7cf0d0'});
+  let pairs;
+  if(!Number.isFinite(im.v)){ pairs=[['v','∞ (অসীমে)'],['m','∞'],['প্রকৃতি','নির্গত রশ্মি সমান্তরাল — বিম্ব অসীমে'],['আকার','অত্যন্ত বড়']]; }
+  else{
+    const ix=X(im.v), ih=h*im.m;
+    if(im.v<0){ line(ctx,p1[0],p1[1],ix,Y(ih),{color:COL.ray,dash:[6,5]}); line(ctx,X0,Y0,ix,Y(ih),{color:'#7cf0d0',dash:[6,5]}); }
+    const vis = ix>-50&&ix<Wc+50;
+    if(vis) objArrow(ctx,ix,Y0,Math.max(-200,Math.min(200,ih*vs)),COL.img,{dash:im.v<0?[6,5]:null});
+    if(vis) text(ctx,'বিম্ব',ix,ih>0?Y0+42:Y0+18-Math.max(-200,ih*vs)+10,{size:15,align:'center',color:COL.img});
+    else text(ctx,'বিম্ব ক্যানভাসের বাইরে →',Wc-10,40,{size:16,align:'right',color:COL.img});
+    const real=im.v>0, am=Math.abs(im.m);
+    pairs=[['বিম্বের দূরত্ব v',fmt(im.v,1)+' cm'],['বিবর্ধন m = −v/u',fmt(im.m,2)],['প্রকৃতি',(real?'বাস্তব, উল্টো':'অবাস্তব, সোজা')],['আকার',am>1.005?'বিবর্ধিত':(am<0.995?'খর্বিত':'বস্তুর সমান')],['বিম্বের উচ্চতা',fmt(Math.abs(ih),2)+' cm'],['ক্ষমতা P',fmt(100/f,2)+' D']];
+  }
+  out('lensOut',pairs);
+}
+['u','f','h'].forEach(k=>$(k).oninput=drawLens2);
+
+// ---------- Refraction ----------
+function drawRefr(){
+  const ctx=CX.refr, Wc=800,Hc=440, n1=+$('n1').value, n2=+$('n2').value, i=+$('i').value;
+  $('n1V').textContent=n1.toFixed(2); $('n2V').textContent=n2.toFixed(2); $('iV').textContent=i+'°';
+  clear(ctx,Wc,Hc); const ox=400, oy=220;
+  ctx.save(); ctx.fillStyle=`rgba(120,200,235,${0.06+0.18*(n1-1)/1.4})`; ctx.fillRect(0,0,Wc,oy); ctx.fillStyle=`rgba(120,200,235,${0.06+0.18*(n2-1)/1.4})`; ctx.fillRect(0,oy,Wc,Hc-oy); ctx.restore();
+  line(ctx,0,oy,Wc,oy,{color:COL.glassEdge,w:2}); line(ctx,ox,10,ox,Hc-10,{color:COL.normal,dash:[7,6]});
+  text(ctx,'μ₁ = '+n1.toFixed(2),16,30,{size:17,color:COL.sub}); text(ctx,'μ₂ = '+n2.toFixed(2),16,Hc-14,{size:17,color:COL.sub});
+  const ir=i*D2R, L=230; const A=[ox-L*Math.sin(ir), oy-L*Math.cos(ir)]; ray(ctx,[A,[ox,oy]]);
+  angArc(ctx,ox,oy,-Math.PI/2,-Math.PI/2-ir,60,COL.accent,'i');
+  const s=n1*Math.sin(ir)/n2; let pairs;
+  if(s<=1){ const r=Math.asin(s); ray(ctx,[[ox,oy],[ox+L*Math.sin(r), oy+L*Math.cos(r)]],1,{color:COL.ray2}); angArc(ctx,ox,oy,Math.PI/2,Math.PI/2-r,78,COL.ray2,'r');
+    ray(ctx,[[ox,oy],[ox+L*.55*Math.sin(ir),oy-L*.55*Math.cos(ir)]],1,{alpha:.3,w:1.5,arrows:false});
+    const rd=r*R2D; pairs=[['প্রতিসরণ কোণ r',fmt(rd,1)+'°'],['sin i / sin r',i>0?fmt(Math.sin(ir)/Math.sin(r),3):'—'],['μ₂/μ₁',fmt(n2/n1,3)],['রশ্মি', n2>n1?'অভিলম্বের দিকে বাঁকে':(n2<n1?'অভিলম্ব থেকে দূরে সরে':'সোজা যায়')]];
+    if(n1>n2) pairs.push(['সংকট কোণ θc',fmt(Math.asin(n2/n1)*R2D,1)+'°']);
+  } else { ray(ctx,[[ox,oy],[ox+L*Math.sin(ir),oy-L*Math.cos(ir)]],1,{color:COL.ray}); text(ctx,'পূর্ণ অভ্যন্তরীণ প্রতিফলন!',ox+20,oy+50,{size:22,bold:true,color:COL.warn});
+    pairs=[['প্রতিসরণ','ঘটে না'],['কারণ','i > θc = '+fmt(Math.asin(n2/n1)*R2D,1)+'°'],['ফল','সব আলো ফিরে আসে (TIR)']]; }
+  out('refrOut',pairs);
+}
+['n1','n2','i'].forEach(k=>$(k).oninput=drawRefr);
+
+// ---------- TIR ----------
+function drawTir(){
+  const ctx=CX.tir, Wc=800,Hc=440, mu=+$('mu').value, i=+$('ti').value; $('muV').textContent=mu.toFixed(2); $('tiV').textContent=i+'°';
+  clear(ctx,Wc,Hc); const ox=250, oy=200, ic=Math.asin(1/mu)*R2D;
+  ctx.save(); ctx.fillStyle=COL.glass; ctx.fillRect(0,oy,500,Hc-oy); ctx.restore(); line(ctx,0,oy,500,oy,{color:COL.glassEdge,w:2}); line(ctx,ox,10,ox,Hc-10,{color:COL.normal,dash:[7,6]});
+  text(ctx,'বায়ু (লঘু)',14,28,{size:16,color:COL.sub}); text(ctx,'ঘন মাধ্যম μ = '+mu.toFixed(2),14,Hc-14,{size:16,color:COL.sub});
+  const ir=i*D2R, L=200, s=mu*Math.sin(ir); const A=[ox-L*Math.sin(ir), oy+L*Math.cos(ir)]; ray(ctx,[A,[ox,oy]]);
+  angArc(ctx,ox,oy,Math.PI/2,Math.PI/2+ir,55,COL.accent,'i');
+  let st;
+  if(s<0.9995){ const r=Math.asin(s); ray(ctx,[[ox,oy],[ox+L*Math.sin(r),oy-L*Math.cos(r)]],1,{color:COL.ray2}); ray(ctx,[[ox,oy],[ox+L*.6*Math.sin(ir),oy+L*.6*Math.cos(ir)]],1,{alpha:.3,w:1.5,arrows:false}); st='i < θc → প্রতিসরণ (সাথে আংশিক প্রতিফলন)'; }
+  else if(s<=1.0005){ ray(ctx,[[ox,oy],[ox+L,oy-1]],1,{color:COL.ray2}); st='i = θc → প্রতিসরণ কোণ 90°'; }
+  else { ray(ctx,[[ox,oy],[ox+L*Math.sin(ir),oy+L*Math.cos(ir)]],1); st='i > θc → পূর্ণ অভ্যন্তরীণ প্রতিফলন'; }
+  // graph θc vs μ
+  const gx=560,gy=380,gw=210,gh=300, M=v=>gx+(v-1.1)/(2.42-1.1)*gw, T=v=>gy-(v-20)/(70-20)*gh;
+  line(ctx,gx,gy,gx+gw,gy,{color:COL.line}); line(ctx,gx,gy,gx,gy-gh,{color:COL.line});
+  text(ctx,'μ',gx+gw,gy+22,{size:15,align:'right',color:COL.sub}); text(ctx,'θc (°)',gx+4,gy-gh-8,{size:15,color:COL.sub});
+  [1.2,1.6,2.0,2.4].forEach(v=>text(ctx,v.toFixed(1),M(v),gy+18,{size:12,align:'center',color:COL.dim})); [30,45,60].forEach(v=>text(ctx,v,gx-6,T(v)+4,{size:12,align:'right',color:COL.dim}));
+  const pts=[]; for(let v=1.1;v<=2.42;v+=0.02) pts.push([M(v),T(Math.asin(1/v)*R2D)]); ray(ctx,pts,1,{arrows:false,color:COL.accent,w:2.5});
+  dot(ctx,M(mu),T(ic),6,COL.warn);
+  out('tirOut',[['সংকট কোণ θc = sin⁻¹(1/μ)',fmt(ic,2)+'°'],['আপতন কোণ i',i+'°'],['অবস্থা',st]]);
+}
+['mu','ti'].forEach(k=>$(k).oninput=drawTir);
+
+// ---------- Prism ----------
+function drawPrism2(){
+  const A=+$('A').value, mu=+$('pm').value, i=+$('pi').value; $('AV').textContent=A+'°'; $('pmV').textContent=mu.toFixed(2); $('piV').textContent=i+'°';
+  const ctx=CX.prism, Wc=800,Hc=440; clear(ctx,Wc,Hc);
+  const S=330, T0=[400,50], a=A/2*D2R, P=[T0,[T0[0]-S*Math.sin(a),T0[1]+S*Math.cos(a)],[T0[0]+S*Math.sin(a),T0[1]+S*Math.cos(a)]];
+  ctx.beginPath(); ctx.moveTo(...P[0]); ctx.lineTo(...P[1]); ctx.lineTo(...P[2]); ctx.closePath(); ctx.fillStyle=COL.glass; ctx.fill(); ctx.strokeStyle=COL.glassEdge; ctx.lineWidth=2; ctx.stroke();
+  text(ctx,'A',T0[0],T0[1]+44,{size:18,bold:true,align:'center',color:COL.accent});
+  const r=prismTrace(P,i,mu,0.5,220,260); const d=prismDev(i,mu,A); let pairs;
+  if(r){ const nl=70; line(ctx,r.hit[0]+r.nOut[0]*nl,r.hit[1]+r.nOut[1]*nl,r.hit[0]-r.nOut[0]*nl,r.hit[1]-r.nOut[1]*nl,{color:COL.normal,dash:[6,6]});
+    ray(ctx,[r.start,r.hit,r.hit2]);
+    if(r.end){ line(ctx,r.hit2[0]+r.n2[0]*nl,r.hit2[1]+r.n2[1]*nl,r.hit2[0]-r.n2[0]*nl,r.hit2[1]-r.n2[1]*nl,{color:COL.normal,dash:[6,6]}); ray(ctx,[r.hit2,r.end],1,{color:COL.ray2});
+      line(ctx,r.hit[0],r.hit[1],r.hit[0]+r.d[0]*300,r.hit[1]+r.d[1]*300,{color:COL.ray,dash:[5,6],alpha:.7}); }
+    else text(ctx,'২য় তলে পূর্ণ অভ্যন্তরীণ প্রতিফলন — রশ্মি বের হয় না',400,420,{size:18,bold:true,align:'center',color:COL.warn}); }
+  const imin=Math.asin(Math.min(1,mu*Math.sin(A/2*D2R)))*R2D, dm=2*imin-A;
+  if(d){ pairs=[['r₁',fmt(d.r1,2)+'°'],['r₂ = A − r₁',fmt(d.r2,2)+'°'],['নির্গমন কোণ i₂',fmt(d.i2,2)+'°'],['বিচ্যুতি δ = i₁+i₂−A',fmt(d.dev,2)+'°']]; }
+  else pairs=[['r₁',fmt(Math.asin(Math.sin(i*D2R)/mu)*R2D,2)+'°'],['অবস্থা','২য় তলে TIR, i বাড়াও']];
+  pairs.push(['ন্যূনতম বিচ্যুতি δm',mu*Math.sin(A/2*D2R)<1?fmt(dm,2)+'° (i = '+fmt(imin,1)+'°)':'—']);
+  out('prismOut',pairs);
+  // graph
+  const g=CX.graph, Gw=800,Gh=330; clear(g,Gw,Gh);
+  const pts=[]; for(let v=1;v<=89.5;v+=0.25){ const q=prismDev(v,mu,A); if(q) pts.push([v,q.dev]); }
+  if(!pts.length){ text(g,'এই μ ও A-তে কোনো আপতন কোণেই রশ্মি বের হয় না',400,170,{size:18,align:'center',color:COL.warn}); return; }
+  const ilo=Math.floor(pts[0][0]/5)*5, dmax=Math.max(...pts.map(p=>p[1])), dmin=Math.min(...pts.map(p=>p[1]));
+  const gx=70,gy=290,gw=700,gh=240, Xg=v=>gx+(v-ilo)/(90-ilo)*gw, Yg=v=>gy-(v-(dmin-3))/(dmax+3-(dmin-3))*gh;
+  line(g,gx,gy,gx+gw,gy,{color:COL.line}); line(g,gx,gy,gx,gy-gh,{color:COL.line});
+  text(g,'আপতন কোণ i₁ (°)',gx+gw,gy+30,{size:15,align:'right',color:COL.sub}); text(g,'বিচ্যুতি δ (°)',gx+6,gy-gh-10,{size:15,color:COL.sub});
+  for(let v=Math.ceil(ilo/10)*10;v<=90;v+=10) text(g,v,Xg(v),gy+18,{size:12,align:'center',color:COL.dim});
+  const step=Math.max(2,Math.round((dmax-dmin)/5)); for(let v=Math.ceil((dmin-3)/step)*step;v<=dmax+3;v+=step) text(g,v,gx-8,Yg(v)+4,{size:12,align:'right',color:COL.dim});
+  ray(g,pts.map(p=>[Xg(p[0]),Yg(p[1])]),1,{arrows:false,color:COL.accent,w:2.5});
+  if(mu*Math.sin(A/2*D2R)<1){ dot(g,Xg(imin),Yg(dm),7,COL.warn); text(g,'δm = '+fmt(dm,2)+'°',Xg(imin)+10,Yg(dm)+26,{size:15,bold:true,color:COL.warn}); }
+  if(d) dot(g,Xg(i),Yg(d.dev),6,COL.ray2);
+}
+['A','pm','pi'].forEach(k=>$(k).oninput=drawPrism2);
+
+// tabs
+const DRAW={lens:drawLens2,refr:drawRefr,tir:drawTir,prism:drawPrism2};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b)); document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p)); DRAW[b.dataset.p](); });
+function all(){ drawLens2(); drawRefr(); drawTir(); drawPrism2(); }
+all(); if(document.fonts) document.fonts.ready.then(all);
+</script></body></html>
