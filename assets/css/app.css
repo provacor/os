@@ -691,3 +691,12 @@ th { color: var(--muted); font-weight: 600; font-size: .72rem; text-transform: u
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
   .sk-b, .sk-hero { animation: none !important; }
 }
+
+/* profile picture (brand mark) */
+.avatar {
+  display: block; flex: none; border-radius: 50%; object-fit: cover; background: #fff;
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px color-mix(in srgb, var(--brand) 55%, transparent);
+}
+.avatar.sm { width: 34px; height: 34px; }
+.avatar.lg { width: 56px; height: 56px; }
+.splash-mark.avatar { width: 72px; height: 72px; padding: 0; border-radius: 50%; }

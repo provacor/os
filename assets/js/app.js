@@ -1,18 +1,18 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021035';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021035';
-import { buildIndex } from './search.js?v=202610021035';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021035';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021035';
-import { icon } from './icons.js?v=202610021035';
-import { crumbs, emptyState } from './components.js?v=202610021035';
-import { homeView } from './views/home.js?v=202610021035';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021035';
-import { sectionView } from './views/section.js?v=202610021035';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021035';
-import { progressView } from './views/progress.js?v=202610021035';
-import { moreView } from './views/more.js?v=202610021035';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021057';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021057';
+import { buildIndex } from './search.js?v=202610021057';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021057';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021057';
+import { icon } from './icons.js?v=202610021057';
+import { crumbs, emptyState } from './components.js?v=202610021057';
+import { homeView } from './views/home.js?v=202610021057';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021057';
+import { sectionView } from './views/section.js?v=202610021057';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021057';
+import { progressView } from './views/progress.js?v=202610021057';
+import { moreView } from './views/more.js?v=202610021057';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -117,7 +117,7 @@ function render({ keepScroll = false } = {}) {
   // top bar: brand on top-level screens, back + title on deeper ones
   document.getElementById('tbLeft').innerHTML = out.back
     ? `<a class="icon-btn back" href="${out.back}" aria-label="Back">${icon('back')}</a>`
-    : `<a class="brand" href="#/"><span class="brand-mark sm">${icon('study')}</span><span>Provacor</span></a>`;
+    : `<a class="brand" href="#/"><img class="avatar sm" src="assets/img/avatar.jpg" alt="" width="34" height="34"><span>Provacor</span></a>`;
   document.getElementById('tbTitle').textContent = out.back ? out.title ?? '' : '';
   $crumbs.innerHTML = crumbs(out.crumbs ?? []);
   $crumbs.hidden = !out.crumbs?.length;
