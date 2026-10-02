@@ -1,8 +1,8 @@
 // Section screen: the content of one chapter section (Notes, MCQ, Simulation, …).
 
-import { icon } from '../icons.js?v=202610021400';
-import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021400';
-import { progressOf, isItemDone } from '../progress.js?v=202610021400';
+import { icon } from '../icons.js?v=202610021406';
+import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021406';
+import { progressOf, isItemDone } from '../progress.js?v=202610021406';
 
 const FORMAT = {
   pdf: { icon: 'file', open: 'Open PDF', label: 'PDF' },

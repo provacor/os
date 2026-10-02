@@ -1,9 +1,9 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610021400';
-import { esc } from '../components.js?v=202610021400';
-import { aiSettings, hasKey, chatHistory, DEFAULT_MODEL } from '../ai.js?v=202610021400';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021400';
+import { icon } from '../icons.js?v=202610021406';
+import { esc } from '../components.js?v=202610021406';
+import { aiSettings, hasKey, chatHistory, DEFAULT_MODEL, CLAUDE_MODELS } from '../ai.js?v=202610021406';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610021406';
 
 export const aiState = { images: [], busy: false, context: '' };
 
@@ -25,21 +25,42 @@ export function aiView(model, chapterId) {
   const list = chatHistory();
   const setup = !hasKey();
 
-  const settingsCard = `<details class="card ai-settings" ${setup ? 'open' : ''}>
-      <summary>${icon('key')} <span>AI সেটিংস</span>${setup ? '<span class="flag">দরকার</span>' : '<span class="ok-tag">চালু</span>'}</summary>
-      ${setup ? `<ol class="ai-steps">
+  const claude = s.provider === 'claude';
+  const providerSeg = `<div class="seg seg-2 ai-prov">
+      <button type="button" class="seg-btn ${claude ? '' : 'on'}" data-ai-provider="gemini" aria-pressed="${!claude}"><span>Gemini <small>ফ্রি</small></span></button>
+      <button type="button" class="seg-btn ${claude ? 'on' : ''}" data-ai-provider="claude" aria-pressed="${claude}"><span>Claude <small>পেইড</small></span></button>
+    </div>`;
+  const geminiForm = `${setup ? `<ol class="ai-steps">
           <li><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> খুলে Google অ্যাকাউন্ট দিয়ে ঢোকো।</li>
           <li><b>Create API key</b> চাপো, তারপর key-টা কপি করো।</li>
           <li>নিচের ঘরে পেস্ট করে <b>সেভ</b> চাপো। এটা ফ্রি।</li>
         </ol>` : ''}
-      <form class="ai-key-form" data-ai-settings>
+      <form class="ai-key-form" data-ai-settings data-provider="gemini">
         <label class="pf-label" for="aiKey">Gemini API key</label>
         <input id="aiKey" name="key" type="password" autocomplete="new-password" spellcheck="false" value="${esc(s.key)}" placeholder="AIza…">
         <label class="pf-label" for="aiModel">মডেল</label>
         <input id="aiModel" name="model" type="text" autocomplete="off" autocapitalize="off" data-lpignore="true" spellcheck="false" value="${esc(s.model)}" placeholder="${DEFAULT_MODEL}">
         <button class="btn btn-primary tap" type="submit">${icon('check')}<span>সেভ</span></button>
       </form>
-      <p class="muted small">key শুধু এই ফোনেই থাকে, সরাসরি Google-এর কাছে যায়। কাউকে key দেখাবে না।</p>
+      <p class="muted small">key শুধু এই ফোনেই থাকে, সরাসরি Google-এর কাছে যায়। কাউকে key দেখাবে না।</p>`;
+  const claudeForm = `${setup ? `<ol class="ai-steps">
+          <li><a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> খুলে অ্যাকাউন্ট বানাও।</li>
+          <li><b>Billing</b>-এ গিয়ে কিছু credit কেনো (Claude ফ্রি না, প্রতি প্রশ্নে অল্প খরচ হয়)।</li>
+          <li><b>API keys → Create key</b> চাপো, key কপি করে নিচে বসাও।</li>
+        </ol>` : ''}
+      <form class="ai-key-form" data-ai-settings data-provider="claude">
+        <label class="pf-label" for="aiClaudeKey">Claude API key</label>
+        <input id="aiClaudeKey" name="claudeKey" type="password" autocomplete="new-password" spellcheck="false" value="${esc(s.claudeKey)}" placeholder="sk-ant-…">
+        <label class="pf-label" for="aiClaudeModel">মডেল</label>
+        <select id="aiClaudeModel" name="claudeModel">${CLAUDE_MODELS.map(([id, label]) => `<option value="${id}" ${id === s.claudeModel ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select>
+        <button class="btn btn-primary tap" type="submit">${icon('check')}<span>সেভ</span></button>
+      </form>
+      <p class="muted small">key শুধু এই ফোনেই থাকে, সরাসরি Anthropic-এর কাছে যায়। কাউকে key দেখাবে না।</p>`;
+
+  const settingsCard = `<details class="card ai-settings" ${setup ? 'open' : ''}>
+      <summary>${icon('key')} <span>AI সেটিংস · ${claude ? 'Claude' : 'Gemini'}</span>${setup ? '<span class="flag">দরকার</span>' : '<span class="ok-tag">চালু</span>'}</summary>
+      ${providerSeg}
+      ${claude ? claudeForm : geminiForm}
     </details>`;
 
   const empty = `<div class="ai-empty">
