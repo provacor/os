@@ -1,0 +1,32 @@
+{
+  "$comment": "Ordered list of sub-sections every chapter gets, per template. Entry = section type id, or { type, label } to rename it for that template. Subjects pick a template in subjects.json (a paper or chapter may override with its own sectionTemplate). Science templates = the core (Notes, MCQ, Creative/CQ, Formula, Concepts, Simulation, Mistake Bank, Revision, Progress) + that subject's extra sections, in the order Notes, MCQ, CQ, Formula, Concepts, subject-specific, Simulation, Mistake Bank, Revision, Progress.",
+  "templates": {
+    "default": [
+      "notes", "mcq", "cq", "formula", "concept", "simulation", "mistakes", "revision", "progress"
+    ],
+    "physics": [
+      "notes", "mcq", "cq", "formula", "concept",
+      "derivation", "numerical", "graph", "diagram",
+      "simulation", "mistakes", "revision", "progress"
+    ],
+    "higher_math": [
+      "notes", "mcq", "cq", "formula", "concept",
+      "theorem", "problem_types", "solved", "graph",
+      "simulation", "mistakes", "revision", "progress"
+    ],
+    "chemistry": [
+      "notes", "mcq", "cq", "formula", "concept",
+      "reaction", "conversion", "mechanism", "identification",
+      "simulation", "mistakes", "revision", "progress"
+    ],
+    "biology": [
+      "notes", "mcq", "cq", "formula", "concept",
+      "definition", "diagram", "process", "comparison", "classification",
+      { "type": "simulation", "label": "Interactive Diagram / Simulation" },
+      "mistakes", "revision", "progress"
+    ],
+    "english_grammar_topic": [
+      "notes", "rules", "examples", "practice", "mcq", "board", "mistakes", "revision", "progress"
+    ]
+  }
+}

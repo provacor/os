@@ -1,0 +1,14 @@
+{
+  "$comment": "Content registry. Maps a section id to the file holding its items and the item count. Files live in content/<subjectId>/<sectionId>.json; attached files (PDFs) in content/files/<sectionId>/.",
+  "version": 1,
+  "sections": {
+    "english_2nd_article_notes": {
+      "file": "content/english/english_2nd_article_notes.json",
+      "count": 1
+    },
+    "physics_2nd_ch06_notes": {
+      "file": "content/physics/physics_2nd_ch06_notes.json",
+      "count": 1
+    }
+  }
+}

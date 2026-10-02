@@ -1,0 +1,94 @@
+{
+  "$comment": "Papers per subject. id = <subjectId>_<1st|2nd>. groups (optional) split a paper's chapter list into headed blocks, e.g. English 2nd Paper -> Grammar. sourceStatus tracks whether the chapter list has been extracted from the uploaded syllabus.",
+  "papers": [
+    {
+      "id": "english_2nd",
+      "subjectId": "english",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Topic",
+      "groups": [
+        {
+          "id": "english_2nd_grammar",
+          "name": "Grammar Topics",
+          "order": 1
+        }
+      ],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "higher_math_1st",
+      "subjectId": "higher_math",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "needs_verification"
+    },
+    {
+      "id": "higher_math_2nd",
+      "subjectId": "higher_math",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "needs_verification"
+    },
+    {
+      "id": "physics_1st",
+      "subjectId": "physics",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "physics_2nd",
+      "subjectId": "physics",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "chemistry_1st",
+      "subjectId": "chemistry",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "chemistry_2nd",
+      "subjectId": "chemistry",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified"
+    },
+    {
+      "id": "biology_1st",
+      "subjectId": "biology",
+      "name": "1st Paper",
+      "paperNo": 1,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified",
+      "subtitle": "উদ্ভিদবিজ্ঞান"
+    },
+    {
+      "id": "biology_2nd",
+      "subjectId": "biology",
+      "name": "2nd Paper",
+      "paperNo": 2,
+      "unitLabel": "Chapter",
+      "groups": [],
+      "sourceStatus": "verified",
+      "subtitle": "প্রাণিবিজ্ঞান"
+    }
+  ]
+}
