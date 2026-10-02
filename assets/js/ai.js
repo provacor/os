@@ -1,12 +1,9 @@
-// AI tutor: Google Gemini (free key from AI Studio) or Anthropic Claude (paid key from
-// the Claude Console), called straight from the browser with the person's own key.
-// Keys and the chat stay in this browser; nothing goes through a Provacor server, so
-// no shared key can leak from the site.
+// AI tutor on Anthropic Claude, called straight from the browser with the person's own
+// API key from the Claude Console. The key and the chat stay in this browser; nothing
+// goes through a Provacor server, so no shared key can leak from the site.
 
 const SETTINGS = 'hscos:ai:v1';
 const CHAT = 'hscos:ai-chat:v1';
-const API = 'https://generativelanguage.googleapis.com/v1beta/models';
-export const DEFAULT_MODEL = 'gemini-2.5-flash';
 export const CLAUDE_MODELS = [
   ['claude-opus-5-5', 'Claude Opus 5.5 — সবচেয়ে ভালো'],
   ['claude-sonnet-5-5', 'Claude Sonnet 5.5 — দ্রুত, কম খরচ'],
@@ -32,29 +29,21 @@ function write(key, value) {
   }
 }
 
-// A Gemini model id like "gemini-2.5-flash". Anything else (an autofilled email,
-// a pasted key, extra text) falls back to the default instead of breaking requests.
-export function cleanModel(m) {
-  const id = String(m ?? '').trim().replace(/^models\//, '').toLowerCase();
-  return /^gemini-[a-z0-9][a-z0-9.-]*$/.test(id) ? id : DEFAULT_MODEL;
-}
-
 const cleanClaude = (m) => (CLAUDE_MODELS.some(([id]) => id === m) ? m : CLAUDE_DEFAULT);
 
-// key/model are Gemini's (kept under their original names); claudeKey/claudeModel are Claude's.
-let settings = { provider: 'gemini', key: '', model: DEFAULT_MODEL, claudeKey: '', claudeModel: CLAUDE_DEFAULT, ...read(SETTINGS, {}) };
-settings.model = cleanModel(settings.model);
+let settings = { claudeKey: '', claudeModel: CLAUDE_DEFAULT, ...read(SETTINGS, {}) };
+// an older Gemini setup may still be stored; drop it
+delete settings.key;
+delete settings.model;
+delete settings.provider;
 settings.claudeModel = cleanClaude(settings.claudeModel);
 let chat = read(CHAT, []);
 
 export const aiSettings = () => settings;
-export const hasKey = () => !!(settings.provider === 'claude' ? settings.claudeKey : settings.key);
+export const hasKey = () => !!settings.claudeKey;
 export function saveSettings(patch) {
   settings = { ...settings, ...patch };
-  settings.provider = settings.provider === 'claude' ? 'claude' : 'gemini';
-  settings.key = String(settings.key ?? '').trim();
   settings.claudeKey = String(settings.claudeKey ?? '').trim();
-  settings.model = cleanModel(settings.model);
   settings.claudeModel = cleanClaude(settings.claudeModel);
   write(SETTINGS, settings);
 }
@@ -136,105 +125,10 @@ export async function ask({ text, images = [], context = '' }, onText) {
     text: m.text || (m.thumbs?.length ? '[ছবি পাঠানো হয়েছিল]' : '…'),
   }));
   const thumbs = await Promise.all(images.map(thumbOf));
-  const out = settings.provider === 'claude'
-    ? await askClaude({ text, images, system, prior }, onText)
-    : await askGemini({ text, images, system, prior }, onText);
+  const out = await askClaude({ text, images, system, prior }, onText);
   // keep the question only together with its answer, so failed tries don't pile up
   remember({ role: 'user', text, thumbs, at: Date.now() });
   remember({ role: 'ai', text: out, at: Date.now() });
-  return out;
-}
-
-async function askGemini({ text, images, system, prior: history }, onText) {
-  const parts = [];
-  if (text) parts.push({ text });
-  for (const d of images) parts.push({ inline_data: { mime_type: 'image/jpeg', data: d.split(',')[1] } });
-  const prior = history.map((m) => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.text }] }));
-
-  const body = {
-    systemInstruction: { parts: [{ text: system }] },
-    contents: [...prior, { role: 'user', parts }],
-    generationConfig: { temperature: 0.4 },
-  };
-
-  const call = (model) =>
-    fetch(`${API}/${model}:streamGenerateContent?alt=sse`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': settings.key },
-      body: JSON.stringify(body),
-    });
-  const failure = async (r) => {
-    let msg = '';
-    try { msg = (await r.json()).error?.message ?? ''; } catch { /* ignore */ }
-    if (r.status === 400 && /api key/i.test(msg)) return new AiError('bad-key', msg);
-    if (r.status === 401 || r.status === 403) return new AiError('bad-key', msg);
-    if (r.status === 404 || (r.status === 400 && /model/i.test(msg))) return new AiError('bad-model', msg);
-    if (r.status === 429) return new AiError('quota', msg);
-    return new AiError('api', msg || `HTTP ${r.status}`);
-  };
-
-  // Ask Google which models this key can use and pick the newest "flash" one.
-  const discover = async () => {
-    try {
-      const r = await fetch(`${API}?pageSize=200`, { headers: { 'x-goog-api-key': settings.key } });
-      if (!r.ok) return null;
-      const ids = ((await r.json()).models ?? [])
-        .filter((m) => m.supportedGenerationMethods?.includes('generateContent'))
-        .map((m) => m.name.replace(/^models\//, ''))
-        .filter((id) => /^gemini-[\d.]+-flash$/.test(id));
-      ids.sort((a, b) => parseFloat(b.slice(7)) - parseFloat(a.slice(7)));
-      return ids[0] ?? null;
-    } catch {
-      return null;
-    }
-  };
-
-  let res;
-  try {
-    res = await call(settings.model);
-    if (!res.ok) {
-      let err = await failure(res);
-      // an unknown or retired model: retry once with the default and keep it if it works
-      for (const next of err.kind === 'bad-model' ? [DEFAULT_MODEL, 'discover'] : []) {
-        const model = next === 'discover' ? await discover() : next;
-        if (!model || model === settings.model) continue;
-        res = await call(model);
-        if (res.ok) { saveSettings({ model }); break; }
-        err = await failure(res);
-        if (err.kind !== 'bad-model') break;
-      }
-      if (!res.ok) throw err;
-    }
-  } catch (e) {
-    throw e instanceof AiError ? e : new AiError('network');
-  }
-
-  let out = '';
-  let blocked = '';
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf = '';
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buf += dec.decode(value, { stream: true });
-    let i;
-    while ((i = buf.indexOf('\n')) >= 0) {
-      const line = buf.slice(0, i).trim();
-      buf = buf.slice(i + 1);
-      if (!line.startsWith('data:')) continue;
-      try {
-        const j = JSON.parse(line.slice(5));
-        const c = j.candidates?.[0];
-        const t = c?.content?.parts?.map((p) => p.text ?? '').join('') ?? '';
-        if (t) { out += t; onText?.(out); }
-        if (c?.finishReason === 'SAFETY' || j.promptFeedback?.blockReason) blocked = 'safety';
-      } catch {
-        /* partial line */
-      }
-    }
-  }
-  if (!out) throw new AiError(blocked || 'empty-answer');
   return out;
 }
 
@@ -293,7 +187,7 @@ export const ERRORS = {
   'no-key': 'আগে উপরের AI সেটিংসে তোমার API key বসাও।',
   'bad-key': 'API key ঠিক নেই। নতুন key কপি করে আবার বসাও।',
   credit: 'Claude অ্যাকাউন্টে টাকা (credit) নেই। Claude Console-এ Billing থেকে credit যোগ করো।',
-  'bad-model': 'এই মডেলের নাম পাওয়া যায়নি। সেটিংসে মডেলের নাম ঠিক করো।',
+  'bad-model': 'এই মডেল পাওয়া যায়নি। সেটিংসে অন্য মডেল বেছে নাও।',
   quota: 'আজকের ফ্রি লিমিট শেষ বা খুব দ্রুত প্রশ্ন করা হচ্ছে। একটু পরে আবার চেষ্টা করো।',
   network: 'ইন্টারনেট সংযোগ নেই।',
   safety: 'এই প্রশ্নের উত্তর দেওয়া যায়নি।',

@@ -1,9 +1,9 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610021406';
-import { esc } from '../components.js?v=202610021406';
-import { themePref } from '../theme.js?v=202610021406';
-import { getProfile } from '../profile.js?v=202610021406';
+import { icon } from '../icons.js?v=202610021409';
+import { esc } from '../components.js?v=202610021409';
+import { themePref } from '../theme.js?v=202610021409';
+import { getProfile } from '../profile.js?v=202610021409';
 
 export function moreView(model) {
   const pref = themePref();

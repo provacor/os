@@ -1,28 +1,28 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021406';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021406';
-import { buildIndex } from './search.js?v=202610021406';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021406';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021406';
-import { icon } from './icons.js?v=202610021406';
-import { crumbs, emptyState } from './components.js?v=202610021406';
-import { homeView } from './views/home.js?v=202610021406';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021406';
-import { sectionView } from './views/section.js?v=202610021406';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021406';
-import { progressView } from './views/progress.js?v=202610021406';
-import { moreView } from './views/more.js?v=202610021406';
-import { missionView, missionState } from './views/mission.js?v=202610021406';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021406';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021406';
-import { profileView } from './views/profile.js?v=202610021406';
-import { startLeaderboard } from './leaderboard.js?v=202610021406';
-import { addVideo, deleteVideo } from './videos.js?v=202610021406';
-import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021406';
-import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021406';
-import { renderMarkdown, typesetMath } from './markdown.js?v=202610021406';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021406';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021409';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021409';
+import { buildIndex } from './search.js?v=202610021409';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021409';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021409';
+import { icon } from './icons.js?v=202610021409';
+import { crumbs, emptyState } from './components.js?v=202610021409';
+import { homeView } from './views/home.js?v=202610021409';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021409';
+import { sectionView } from './views/section.js?v=202610021409';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021409';
+import { progressView } from './views/progress.js?v=202610021409';
+import { moreView } from './views/more.js?v=202610021409';
+import { missionView, missionState } from './views/mission.js?v=202610021409';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021409';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021409';
+import { profileView } from './views/profile.js?v=202610021409';
+import { startLeaderboard } from './leaderboard.js?v=202610021409';
+import { addVideo, deleteVideo } from './videos.js?v=202610021409';
+import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021409';
+import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021409';
+import { renderMarkdown, typesetMath } from './markdown.js?v=202610021409';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021409';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -252,9 +252,7 @@ function onSubmit(e) {
   if (e.target.matches('[data-ai-settings]')) {
     e.preventDefault();
     const f = e.target;
-    saveSettings(f.dataset.provider === 'claude'
-      ? { provider: 'claude', claudeKey: f.claudeKey.value, claudeModel: f.claudeModel.value }
-      : { provider: 'gemini', key: f.key.value, model: f.model.value });
+    saveSettings({ claudeKey: f.claudeKey.value, claudeModel: f.claudeModel.value });
     toast(`${icon('check')}<span>AI সেটিংস সেভ হয়েছে</span>`);
     rerender();
     return;
@@ -382,13 +380,6 @@ async function sendAi() {
 }
 
 function onAiClick(t) {
-  const prov = t.closest('[data-ai-provider]');
-  if (prov) {
-    saveSettings({ provider: prov.dataset.aiProvider });
-    rerender();
-    document.querySelector('.ai-settings')?.setAttribute('open', '');
-    return true;
-  }
   const un = t.closest('[data-ai-unpick]');
   if (un) {
     aiState.images.splice(Number(un.dataset.aiUnpick), 1);

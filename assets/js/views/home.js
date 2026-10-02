@@ -1,10 +1,10 @@
 // Home: personal dashboard + subject cards. Every number shown is real.
 
-import { icon } from '../icons.js?v=202610021406';
-import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610021406';
-import { todayStats, streak, recentVisits } from '../activity.js?v=202610021406';
-import { progressOf } from '../progress.js?v=202610021406';
-import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021406';
+import { icon } from '../icons.js?v=202610021409';
+import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610021409';
+import { todayStats, streak, recentVisits } from '../activity.js?v=202610021409';
+import { progressOf } from '../progress.js?v=202610021409';
+import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610021409';
 
 export function homeView(model) {
   const t = totals(model);
