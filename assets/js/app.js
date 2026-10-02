@@ -1,18 +1,18 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js';
-import { buildIndex } from './search.js';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js';
-import { applyTheme, setTheme, toggleTheme } from './theme.js';
-import { icon } from './icons.js';
-import { crumbs, emptyState } from './components.js';
-import { homeView } from './views/home.js';
-import { subjectView, chapterView, studyMap } from './views/study.js';
-import { sectionView } from './views/section.js';
-import { searchView, resultsHtml, searchState } from './views/search.js';
-import { progressView } from './views/progress.js';
-import { moreView } from './views/more.js';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021035';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021035';
+import { buildIndex } from './search.js?v=202610021035';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021035';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021035';
+import { icon } from './icons.js?v=202610021035';
+import { crumbs, emptyState } from './components.js?v=202610021035';
+import { homeView } from './views/home.js?v=202610021035';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021035';
+import { sectionView } from './views/section.js?v=202610021035';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021035';
+import { progressView } from './views/progress.js?v=202610021035';
+import { moreView } from './views/more.js?v=202610021035';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');

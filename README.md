@@ -10,7 +10,10 @@ A personal, mobile-first HSC Science study app:
 ```bash
 node tools/serve.mjs        # → http://localhost:8080
 node tools/validate.mjs     # check the structure data
+node tools/bump-version.mjs # after changing anything in assets/: stamps a new version on CSS/JS
 ```
+
+Always run `bump-version` before deploying UI changes. Phones cache files, and without a new version a phone can mix new HTML with old CSS/JS, which breaks the layout.
 
 The app is static (HTML + CSS + ES modules, no dependencies), so it also runs on GitHub Pages: Settings → Pages → deploy from branch, root folder. On Android, open the URL in Chrome and use **Add to Home screen**.
 
