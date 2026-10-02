@@ -146,8 +146,8 @@ function homeView() {
   return {
     nav: 'home',
     html: `<section class="hero">
-        <h1>HSC SCIENCE STUDY OS</h1>
-        <p class="muted">Subject → Paper → Chapter → Section</p>
+        <h1>PROVACOR</h1>
+        <p class="muted">HSC Science Study</p>
         <a class="search-entry" href="#/search"><span aria-hidden="true">🔍</span> Search subject, chapter, section…</a>
       </section>
       ${pending ? `<a class="banner" href="#/syllabus"><strong>${pending} of ${model.papers.length} papers</strong> have chapters that need checking against the syllabus images. Tap to see which.</a>` : ''}
