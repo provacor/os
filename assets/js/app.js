@@ -1,23 +1,24 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021310';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021310';
-import { buildIndex } from './search.js?v=202610021310';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021310';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021310';
-import { icon } from './icons.js?v=202610021310';
-import { crumbs, emptyState } from './components.js?v=202610021310';
-import { homeView } from './views/home.js?v=202610021310';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021310';
-import { sectionView } from './views/section.js?v=202610021310';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021310';
-import { progressView } from './views/progress.js?v=202610021310';
-import { moreView } from './views/more.js?v=202610021310';
-import { missionView, missionState } from './views/mission.js?v=202610021310';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021310';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021310';
-import { profileView } from './views/profile.js?v=202610021310';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021310';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021314';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021314';
+import { buildIndex } from './search.js?v=202610021314';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021314';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021314';
+import { icon } from './icons.js?v=202610021314';
+import { crumbs, emptyState } from './components.js?v=202610021314';
+import { homeView } from './views/home.js?v=202610021314';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021314';
+import { sectionView } from './views/section.js?v=202610021314';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021314';
+import { progressView } from './views/progress.js?v=202610021314';
+import { moreView } from './views/more.js?v=202610021314';
+import { missionView, missionState } from './views/mission.js?v=202610021314';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021314';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021314';
+import { profileView } from './views/profile.js?v=202610021314';
+import { startLeaderboard } from './leaderboard.js?v=202610021314';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021314';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -79,6 +80,7 @@ async function boot() {
   render();
   // An alarm that just went off: refresh the Study tab unless the user is typing a new one.
   startUsage();
+  startLeaderboard();
   startAlarms(() => {
     if (route().kind === 'study' && !document.activeElement?.closest('[data-alarm-form]')) rerender();
   });
@@ -252,9 +254,9 @@ function rerender() {
 }
 
 function onProfileClick(t) {
-  const anon = t.closest('[data-profile-anon]');
-  if (anon) {
-    updateProfile({ anonymous: anon.dataset.profileAnon === '1' });
+  const mode = t.closest('[data-profile-mode]')?.dataset.profileMode;
+  if (mode) {
+    updateProfile(mode === 'off' ? { leaderboard: false } : { leaderboard: true, anonymous: mode === 'anon' });
     rerender();
     return true;
   }
