@@ -67,6 +67,7 @@ export function buildModel(raw) {
           itemFields: def.itemFields ?? [],
           contentFile: reg?.file ?? null,
           contentCount: reg?.count ?? 0,
+          items: [],
           chapter,
           paper,
           subject,
@@ -80,7 +81,16 @@ export function buildModel(raw) {
     });
 
   const sections = chapters.flatMap((c) => c.sections);
-  return { subjects, papers, chapters, sections, sectionTypes, templates, byId };
+  return { subjects, papers, chapters, sections, sectionTypes, templates, byId, contentIndex };
+}
+
+// Attach a loaded content file ({ sectionId, items[] }) to its section.
+export function attachContent(model, file) {
+  const section = model.byId.get(file.sectionId);
+  if (!section || section.level !== 'section') return null;
+  section.items = file.items ?? [];
+  section.contentCount = section.items.length;
+  return section;
 }
 
 // ---- counting helpers (content, not progress) ----

@@ -219,3 +219,9 @@ th { color: var(--muted); font-weight: 600; font-size: .78rem; }
 .paper-card:active { transform: scale(.985); }
 .paper-head { display: flex; align-items: center; gap: 12px; }
 .paper-head > div { flex: 1; min-width: 0; }
+
+/* content items */
+.item-card h3 { margin: 0 0 4px; font-size: 1rem; line-height: 1.35; overflow-wrap: anywhere; }
+.item-card p { margin: 2px 0; }
+.item-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.item-actions .btn { flex: 1 1 140px; }

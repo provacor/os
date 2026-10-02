@@ -5,7 +5,7 @@
 import { chapterTitle, pathOf } from './model.js';
 
 const norm = (s) => String(s ?? '').toLowerCase().normalize('NFC');
-const RANK = { subject: 0, paper: 1, chapter: 2, topic: 3, section: 4 };
+const RANK = { subject: 0, paper: 1, chapter: 2, topic: 3, section: 4, content: 5 };
 
 export function buildIndex(model) {
   const items = [];
@@ -24,7 +24,15 @@ export function buildIndex(model) {
       items.push({ node: c, level: 'topic', title: name, path: pathOf(c), hay: norm([...pathOf(c), name].join(' ')) });
     });
   });
-  model.sections.forEach((s) => add(s, 'section', s.label, [s.type, s.screenTitle, ...s.contentKinds.map((k) => k.label)]));
+  model.sections.forEach((s) => {
+    add(s, 'section', s.label, [s.type, s.screenTitle, ...s.contentKinds.map((k) => k.label)]);
+    // Content items: searchable by their text fields, open their section.
+    s.items.forEach((it) => {
+      const kind = s.contentKinds.find((k) => k.id === it.kind)?.label;
+      const text = [it.title, it.question, it.body, it.formula, kind].filter(Boolean);
+      items.push({ node: s, level: 'content', title: it.title ?? it.question ?? it.id, path: pathOf(s), hay: norm([...pathOf(s), s.label, ...text].join(' ')) });
+    });
+  });
   return items;
 }
 

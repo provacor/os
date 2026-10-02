@@ -156,72 +156,22 @@
       "note": "Listed separately in the source; may be the same item as Right Form of Verbs. Merge if so."
     },
     {
-      "id": "english_2nd_formal_letter",
+      "id": "english_2nd_article",
       "paperId": "english_2nd",
-      "groupId": "english_2nd_writing",
+      "groupId": "english_2nd_grammar",
       "kind": "topic",
       "number": null,
       "order": 10,
-      "name": "Formal Letter",
+      "name": "Article",
       "topics": [],
       "source": {
-        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Formal Letter / Formal Letter-10",
-        "origin": "syllabus_image"
+        "image": null,
+        "wording": "ইংলিশে গ্রামারে আর্টিকেল",
+        "origin": "user_added"
       },
       "confidence": "high",
-      "verification": "verified"
-    },
-    {
-      "id": "english_2nd_writing_paragraph",
-      "paperId": "english_2nd",
-      "groupId": "english_2nd_writing",
-      "kind": "topic",
-      "number": null,
-      "order": 11,
-      "name": "Writing Paragraph",
-      "topics": [],
-      "source": {
-        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Writing Paragraph-15 / Writing paragraph-10",
-        "origin": "syllabus_image"
-      },
-      "confidence": "high",
-      "verification": "verified"
-    },
-    {
-      "id": "english_2nd_writing_essay",
-      "paperId": "english_2nd",
-      "groupId": "english_2nd_writing",
-      "kind": "topic",
-      "number": null,
-      "order": 12,
-      "name": "Writing Essay",
-      "topics": [],
-      "source": {
-        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Writing Essay-10",
-        "origin": "syllabus_image"
-      },
-      "confidence": "high",
-      "verification": "verified"
-    },
-    {
-      "id": "english_2nd_report_writing",
-      "paperId": "english_2nd",
-      "groupId": "english_2nd_writing",
-      "kind": "topic",
-      "number": null,
-      "order": 13,
-      "name": "Report Writing",
-      "topics": [],
-      "source": {
-        "image": "docs/syllabus-source/01-english-half-yearly-annual.jpg + docs/syllabus-source/02-english-pre-test-test.jpg",
-        "wording": "Report Writing-10",
-        "origin": "syllabus_image"
-      },
-      "confidence": "high",
-      "verification": "verified"
+      "verification": "verified",
+      "note": "Not in the syllabus images; added at the user's request together with its notes."
     },
     {
       "id": "higher_math_1st_ch01",
@@ -795,7 +745,32 @@
       "number": 6,
       "order": 6,
       "name": "জ্যামিতিক আলোক বিজ্ঞান",
-      "topics": [],
+      "topics": [
+        {
+          "name": "আলোর প্রতিফলন, প্রতিসরণ ও পূর্ণ অভ্যন্তরীণ প্রতিফলন",
+          "origin": "notes_pdf_toc"
+        },
+        {
+          "name": "প্রিজম ও ন্যূনতম বিচ্যুতি",
+          "origin": "notes_pdf_toc"
+        },
+        {
+          "name": "গোলীয় তলে প্রতিসরণ ও লেন্স",
+          "origin": "notes_pdf_toc"
+        },
+        {
+          "name": "বীক্ষণ যন্ত্র: অণুবীক্ষণ ও দূরবীক্ষণ",
+          "origin": "notes_pdf_toc"
+        },
+        {
+          "name": "ফার্মাটের নীতি ও আলোক পথ",
+          "origin": "notes_pdf_toc"
+        },
+        {
+          "name": "সরু প্রিজম, আলোর বিচ্ছুরণ ও বিক্ষেপণ",
+          "origin": "notes_pdf_toc"
+        }
+      ],
       "source": {
         "image": "docs/syllabus-source/05-physics.jpg",
         "wording": "অধ্যায়-৬ : জ্যামিতিক আলোক বিজ্ঞান",

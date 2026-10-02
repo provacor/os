@@ -29,6 +29,17 @@ content/
 - `id`: `<sectionId>_<NNNN>`. Never reuse or renumber an ID, because progress and mistake-bank entries point to it.
 - `kind`: one of the section type's `contentKinds`, for example `short` for Short Notes. Use `null` when the type has no kinds.
 
+## Attached files (PDF and similar)
+
+Put the file in `content/files/<sectionId>/` and point the item at it:
+
+```json
+{ "id": "physics_2nd_ch06_notes_0001", "kind": "full", "title": "…", "format": "pdf",
+  "file": "content/files/physics_2nd_ch06_notes/geometrical-optics-slides-retina-notes.pdf", "pages": 68 }
+```
+
+The section screen shows an **Open PDF** button and a **Mark as done** toggle. Done items count toward progress.
+
 ## Registry entry
 
 ```json

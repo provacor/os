@@ -15,7 +15,7 @@ This covers the seven "first deliverable" items: subjects, papers, chapters, sec
 ## 2. Papers
 
 `english_2nd`, `higher_math_1st`, `higher_math_2nd`, `physics_1st`, `physics_2nd`, `chemistry_1st`, `chemistry_2nd`, `biology_1st`, `biology_2nd`.
-English 2nd Paper has two groups, **Grammar Topics** and **Writing**. Each item works like a chapter.
+English 2nd Paper has one group, **Grammar Topics**. Each topic works like a chapter.
 
 ## 3. Chapters
 
@@ -23,7 +23,7 @@ Extracted from the syllabus images in `docs/syllabus-source/`. The full list, wi
 
 | Paper | Chapters |
 |-------|----------|
-| English 2nd Paper | 9 Grammar Topics + 4 Writing items |
+| English 2nd Paper | 10 Grammar Topics (Article added by the user) |
 | Higher Math 1st / 2nd | 10 / 10 (2nd Paper chapter 5 was supplied by the user, not the image) |
 | Physics 1st / 2nd | 10 / 11 |
 | Chemistry 1st / 2nd | 5 / 5 |

@@ -32,11 +32,12 @@ The 7 images received on 2026-10-02 are stored in `docs/syllabus-source/`:
 | 6 | Chemistry: chapter numbers | No chapter numbers are printed. The order follows the নির্বাচনী column, which lists each paper in full. |
 | 7 | Chemistry 2nd Paper: পরিমাণগত রসায়ন | The বার্ষিক column prints "পরিমাণগত পরিবর্তন". Treated as the same chapter, not a new one. [NEEDS VERIFICATION] |
 | 8 | Chemistry 1st Paper: মৌলের পর্যায়বৃত্ত ধর্ম ও রাসায়নিক বন্ধন | The source splits it into "(১ম অংশ)" and "(২য় অংশ)" across exams. Kept as one chapter. |
-| 9 | English 2nd Paper: Writing group | The 2nd Paper columns also list Writing Test items (Formal Letter, Writing Paragraph, Writing Essay, Report Writing). They are kept as a separate **Writing** group next to Grammar Topics. Remove them if you want Grammar only. |
+| 9 | English 2nd Paper: Writing items | ✅ Removed at the user's request. English keeps only Grammar. |
+| 10 | English: Article | Not in the syllabus images. Added at the user's request (2026-10-02) together with its notes PDF. |
 
 Confidence: **High** = read clearly · **Medium** = readable, some doubt (see table above).
 
-## English 2nd Paper (Grammar Topics 1–9, Writing 10–13)
+## English 2nd Paper (Grammar Topics)
 
 | Subject | Paper | Chapter | Source wording | Confidence |
 |---------|-------|---------|----------------|------------|
@@ -49,10 +50,7 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 | English | 2nd Paper | Punctuation | Punctuation | High |
 | English | 2nd Paper | Changing Sentences According to Direction | Changing sentences acording to direction | High |
 | English | 2nd Paper | Correction of Verbs [NEEDS VERIFICATION] | Corrction of verbs | Medium |
-| English | 2nd Paper | Formal Letter | Formal Letter / Formal Letter-10 | High |
-| English | 2nd Paper | Writing Paragraph | Writing Paragraph-15 / Writing paragraph-10 | High |
-| English | 2nd Paper | Writing Essay | Writing Essay-10 | High |
-| English | 2nd Paper | Report Writing | Report Writing-10 | High |
+| English | 2nd Paper | Article | not in image; added by user | High (user) |
 
 ## Higher Mathematics
 
@@ -153,7 +151,7 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 
 | Paper | Chapters | Status |
 |-------|----------|--------|
-| English 2nd Paper | 9 grammar topics + 4 writing items | 1 to confirm |
+| English 2nd Paper | 10 grammar topics | 1 to confirm |
 | Higher Math 1st Paper | 10 | 2 chapter numbers to confirm |
 | Higher Math 2nd Paper | 10 | 1 chapter number to confirm |
 | Physics 1st Paper | 10 | complete |
@@ -164,3 +162,9 @@ Confidence: **High** = read clearly · **Medium** = readable, some doubt (see ta
 | Biology 2nd Paper | 12 | complete |
 
 `node tools/validate.mjs` rejects duplicate chapter names within a paper and any `exams` field on a chapter.
+
+## Chapter topics added from notes
+
+| Chapter | Topics | Source |
+|---------|--------|--------|
+| Physics 2nd Paper, 6. জ্যামিতিক আলোক বিজ্ঞান | আলোর প্রতিফলন, প্রতিসরণ ও পূর্ণ অভ্যন্তরীণ প্রতিফলন · প্রিজম ও ন্যূনতম বিচ্যুতি · গোলীয় তলে প্রতিসরণ ও লেন্স · বীক্ষণ যন্ত্র: অণুবীক্ষণ ও দূরবীক্ষণ · ফার্মাটের নীতি ও আলোক পথ · সরু প্রিজম, আলোর বিচ্ছুরণ ও বিক্ষেপণ | সূচিপত্র of the user's notes PDF |

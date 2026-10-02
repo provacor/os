@@ -12,11 +12,6 @@
           "id": "english_2nd_grammar",
           "name": "Grammar Topics",
           "order": 1
-        },
-        {
-          "id": "english_2nd_writing",
-          "name": "Writing",
-          "order": 2
         }
       ],
       "sourceStatus": "verified"

@@ -1,6 +1,6 @@
 // Structure integrity check. Run: node tools/validate.mjs
 // Uses the same buildModel() as the app, so what passes here is what the UI shows.
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { DATA_FILES, buildModel } from '../assets/js/model.js';
@@ -72,8 +72,20 @@ for (const c of raw.chapters.chapters) {
 
 const model = buildModel(raw);
 model.sections.forEach((s) => checkId(s.id, 'section'));
-for (const id of Object.keys(raw.content.sections ?? {})) {
-  if (!model.byId.get(id) || model.byId.get(id).level !== 'section') err(`content/index.json: "${id}" is not a known section id`);
+for (const [id, reg] of Object.entries(raw.content.sections ?? {})) {
+  const sec = model.byId.get(id);
+  if (!sec || sec.level !== 'section') { err(`content/index.json: "${id}" is not a known section id`); continue; }
+  if (!existsSync(join(root, reg.file))) { err(`content/index.json: ${id} file ${reg.file} is missing`); continue; }
+  const data = JSON.parse(readFileSync(join(root, reg.file), 'utf8'));
+  if (data.sectionId !== id) err(`${reg.file}: sectionId "${data.sectionId}" should be "${id}"`);
+  if ((data.items ?? []).length !== reg.count) err(`content/index.json: ${id} count ${reg.count} but file has ${(data.items ?? []).length} items`);
+  const kinds = new Set(sec.contentKinds.map((k) => k.id));
+  for (const it of data.items ?? []) {
+    if (!/^.+_\d{4}$/.test(it.id) || !it.id.startsWith(`${id}_`)) err(`${reg.file}: item id "${it.id}" should be ${id}_NNNN`);
+    checkId(it.id, 'content item');
+    if (it.kind != null && !kinds.has(it.kind)) err(`${reg.file}: item ${it.id} has unknown kind "${it.kind}"`);
+    if (it.file && !existsSync(join(root, it.file))) err(`${reg.file}: item ${it.id} file ${it.file} is missing`);
+  }
 }
 model.papers.filter((p) => !p.chapters.length).forEach((p) => warnings.push(`${p.id} has no chapters yet (awaiting syllabus source)`));
 

@@ -3,7 +3,7 @@
 A personal, mobile-first study app for HSC Science:
 **Subject → Paper → Chapter → Section → Content**.
 
-> **Phase 1: structure only.** All sections are empty on purpose. No notes, MCQ, CQ, formulas or other study content are included.
+> The full structure is in place. Content is added section by section from the user's own material (see `content/`). The first notes added are Physics 2nd Paper ch. 6 and English Article.
 
 ## Run
 
@@ -19,4 +19,4 @@ The app is static (HTML + CSS + ES modules, no dependencies), so it also runs on
 - `SYLLABUS_STRUCTURE_AUDIT.md`: what was extracted from the syllabus, the source and confidence for each item, and what still **needs verification**.
 - `docs/ARCHITECTURE.md`: subjects, papers, section templates, ID scheme, folder layout, navigation, and how future content is added.
 - `data/*.json`: the structure. Edit these, not the UI code.
-- `content/`: where content will go (empty now).
+- `content/`: added content (section JSON files + attached PDFs).

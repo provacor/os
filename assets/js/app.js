@@ -1,5 +1,5 @@
-import { DATA_FILES, buildModel, contentCount, chapterCount, chapterTitle } from './model.js';
-import { progressOf } from './progress.js';
+import { DATA_FILES, buildModel, attachContent, contentCount, chapterCount, chapterTitle } from './model.js';
+import { progressOf, isItemDone, toggleItemDone } from './progress.js';
 import { buildIndex, search } from './search.js';
 
 const $view = document.getElementById('view');
@@ -26,6 +26,14 @@ async function boot() {
       }),
     );
     model = buildModel(Object.fromEntries(entries));
+    const files = await Promise.all(
+      Object.values(model.contentIndex).map(async ({ file }) => {
+        const res = await fetch(file, { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
+        return res.json();
+      }),
+    );
+    files.forEach((f) => attachContent(model, f));
     index = buildIndex(model);
   } catch (err) {
     $view.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h2>Could not load study data</h2>
@@ -218,7 +226,7 @@ function chapterItem(ch, i, open) {
       (s) => `<a class="section-tile" href="#/x/${esc(s.id)}">
         <span class="tile-icon" aria-hidden="true">${s.icon}</span>
         <span class="tile-label">${esc(s.label)}</span>
-        <span class="tile-meta">${s.computed ? `${pct}%` : s.contentCount ? s.contentCount : 'Empty'}</span></a>`,
+        <span class="tile-meta">${s.computed ? `${pct}%` : s.contentCount ? plural(s.contentCount, 'item') : 'Empty'}</span></a>`,
     )
     .join('');
   return `<article class="acc-item ${open ? 'open' : ''}" id="ch-${esc(ch.id)}">
@@ -251,6 +259,18 @@ function sectionView(sec) {
       .map((s) => `<div class="prog-row"><a href="#/x/${esc(s.id)}">${s.icon} ${esc(s.label)}</a><span>${progressOf(s)}%</span></div>${bar(progressOf(s))}`)
       .join('')}
       <div class="prog-row total"><strong>Overall</strong><strong>${progressOf(ch)}%</strong></div>${bar(progressOf(ch))}</div>`;
+  } else if (sec.items.length) {
+    const count = (kind) => sec.items.filter((it) => it.kind === kind).length;
+    const kinds = sec.contentKinds.length
+      ? `<h2 class="sub-title">Categories</h2><ul class="chips">${sec.contentKinds
+          .map((k) => `<li class="chip ${count(k.id) ? 'on' : ''}">${esc(k.label)} · ${count(k.id)}</li>`)
+          .join('')}</ul>`
+      : '';
+    body = `<div class="card"><div class="prog-row"><strong>Section progress</strong><strong id="sec-pct">${progressOf(sec)}%</strong></div>${bar(progressOf(sec))}</div>
+      ${kinds}
+      <h2 class="sub-title">${plural(sec.items.length, 'item')}</h2>
+      <div class="stack">${sec.items.map((it) => itemCard(it, sec)).join('')}</div>
+      <p class="muted small id-line">Section ID: <code>${esc(sec.id)}</code></p>`;
   } else {
     const kinds = sec.contentKinds.length
       ? `<h2 class="sub-title">Categories</h2><div class="kind-list">${sec.contentKinds
@@ -286,13 +306,28 @@ function sectionView(sec) {
   };
 }
 
+function itemCard(it, sec) {
+  const kind = sec.contentKinds.find((k) => k.id === it.kind)?.label;
+  const doneNow = isItemDone(it.id);
+  const meta = [kind, it.format?.toUpperCase(), it.pages ? `${it.pages} pages` : null].filter(Boolean).join(' · ');
+  return `<article class="card item-card">
+      <h3>${it.format === 'pdf' ? '📄 ' : ''}${esc(it.title ?? it.id)}</h3>
+      <p class="muted small">${esc(meta)}</p>
+      ${it.source ? `<p class="muted small">${esc(it.source)}</p>` : ''}
+      <div class="item-actions">
+        ${it.file ? `<a class="btn" href="${esc(encodeURI(it.file))}" target="_blank" rel="noopener">Open ${it.format === 'pdf' ? 'PDF' : 'file'}</a>` : ''}
+        <button class="btn ghost" data-action="toggle-done" data-item="${esc(it.id)}" aria-pressed="${doneNow}">${doneNow ? '✓ Done' : 'Mark as done'}</button>
+      </div>
+    </article>`;
+}
+
 function searchView() {
   return {
     nav: 'search',
     crumbs: [['Search', '#/search']],
     html: `<h1 class="page-title">Search</h1>
       <input id="q" class="search-input" type="search" placeholder="e.g. physics 1st notes, preposition, reaction" autocomplete="off" value="${esc(lastQuery)}" aria-label="Search the study structure">
-      <p class="muted small">Searches subjects, papers, chapters, topics and sections.</p>
+      <p class="muted small">Searches subjects, papers, chapters, topics, sections and added content.</p>
       <div id="results"></div>`,
     after: () => {
       const q = document.getElementById('q');
@@ -368,6 +403,14 @@ function onClick(e) {
     }
     const { a } = route();
     history.replaceState(null, '', willOpen ? `#/p/${a}/${head.dataset.chapter}` : `#/p/${a}`);
+    return;
+  }
+  const toggle = e.target.closest('[data-action="toggle-done"]');
+  if (toggle) {
+    toggleItemDone(toggle.dataset.item);
+    const y = window.scrollY;
+    render();
+    window.scrollTo(0, y);
     return;
   }
   const add = e.target.closest('[data-action="add-content"]');
