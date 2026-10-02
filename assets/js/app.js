@@ -1,21 +1,23 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021225';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021225';
-import { buildIndex } from './search.js?v=202610021225';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021225';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021225';
-import { icon } from './icons.js?v=202610021225';
-import { crumbs, emptyState } from './components.js?v=202610021225';
-import { homeView } from './views/home.js?v=202610021225';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021225';
-import { sectionView } from './views/section.js?v=202610021225';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021225';
-import { progressView } from './views/progress.js?v=202610021225';
-import { moreView } from './views/more.js?v=202610021225';
-import { missionView, missionState } from './views/mission.js?v=202610021225';
-import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021225';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021225';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021310';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021310';
+import { buildIndex } from './search.js?v=202610021310';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021310';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021310';
+import { icon } from './icons.js?v=202610021310';
+import { crumbs, emptyState } from './components.js?v=202610021310';
+import { homeView } from './views/home.js?v=202610021310';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021310';
+import { sectionView } from './views/section.js?v=202610021310';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021310';
+import { progressView } from './views/progress.js?v=202610021310';
+import { moreView } from './views/more.js?v=202610021310';
+import { missionView, missionState } from './views/mission.js?v=202610021310';
+import { addTask, toggleTask, deleteTask, moveTask, setNote } from './mission.js?v=202610021310';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021310';
+import { profileView } from './views/profile.js?v=202610021310';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021310';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -64,9 +66,19 @@ async function boot() {
   document.getElementById('themeBtn').addEventListener('click', () => toggleTheme());
   document.addEventListener('change', (e) => {
     if (e.target.matches('[data-alarm-awake]')) setKeepAwake(e.target.checked);
+    if (e.target.matches('[data-profile-photo]')) {
+      imageToAvatar(e.target.files?.[0])
+        .then((photo) => {
+          if (!updateProfile({ photo })) throw new Error('storage');
+          toast(`${icon('check')}<span>ছবি সেভ হয়েছে</span>`);
+          rerender();
+        })
+        .catch(() => toast('<span>ছবিটা সেভ করা গেল না, অন্য ছবি চেষ্টা করো</span>'));
+    }
   });
   render();
   // An alarm that just went off: refresh the Study tab unless the user is typing a new one.
+  startUsage();
   startAlarms(() => {
     if (route().kind === 'study' && !document.activeElement?.closest('[data-alarm-form]')) rerender();
   });
@@ -107,6 +119,7 @@ function resolve(r) {
     case 'syllabus': return studyMap(model);
     case 'progress': return progressView(model);
     case 'more': return moreView(model);
+    case 'profile': return profileView();
     case 'mission': return missionView();
     case '': return homeView(model);
     default: return null;
@@ -206,6 +219,13 @@ function onKey(e) {
 // ---------- mission planner ----------
 
 function onSubmit(e) {
+  if (e.target.matches('[data-profile-form]')) {
+    e.preventDefault();
+    updateProfile({ name: document.getElementById('pfName').value });
+    toast(`${icon('check')}<span>নাম সেভ হয়েছে</span>`);
+    rerender();
+    return;
+  }
   if (e.target.matches('[data-alarm-form]')) {
     e.preventDefault();
     const m = Number(document.getElementById('alarmH').value) * 60 + Number(document.getElementById('alarmM').value);
@@ -229,6 +249,21 @@ function rerender() {
   const y = window.scrollY;
   render({ keepScroll: true });
   window.scrollTo(0, y);
+}
+
+function onProfileClick(t) {
+  const anon = t.closest('[data-profile-anon]');
+  if (anon) {
+    updateProfile({ anonymous: anon.dataset.profileAnon === '1' });
+    rerender();
+    return true;
+  }
+  if (t.closest('[data-profile-photo-remove]')) {
+    updateProfile({ photo: '' });
+    rerender();
+    return true;
+  }
+  return false;
 }
 
 function onAlarmClick(t) {
@@ -283,7 +318,7 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
-  if (onMissionClick(t) || onAlarmClick(t)) return;
+  if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');
   if (foldHead) {

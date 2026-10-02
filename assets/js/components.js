@@ -1,8 +1,8 @@
 // Reusable UI building blocks. Each returns an HTML string; views compose them.
 
-import { icon } from './icons.js?v=202610021225';
-import { progressOf } from './progress.js?v=202610021225';
-import { contentCount, chapterCount } from './model.js?v=202610021225';
+import { icon } from './icons.js?v=202610021310';
+import { progressOf } from './progress.js?v=202610021310';
+import { contentCount, chapterCount } from './model.js?v=202610021310';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);

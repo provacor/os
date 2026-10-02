@@ -1,8 +1,9 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610021225';
-import { esc } from '../components.js?v=202610021225';
-import { themePref } from '../theme.js?v=202610021225';
+import { icon } from '../icons.js?v=202610021310';
+import { esc } from '../components.js?v=202610021310';
+import { themePref } from '../theme.js?v=202610021310';
+import { getProfile } from '../profile.js?v=202610021310';
 
 export function moreView(model) {
   const pref = themePref();
@@ -19,10 +20,18 @@ export function moreView(model) {
     .join('');
   const content = model.sections.reduce((n, s) => n + s.items.length, 0);
 
+  const me = getProfile();
+  const profileRow = `<a class="card pf-link rise" href="#/profile" style="--i:0">
+      ${me.photo ? `<img class="pf-mini" src="${esc(me.photo)}" alt="">` : `<span class="pf-mini pf-blank">${icon('user')}</span>`}
+      <span class="pf-link-text"><b>${esc(me.name || 'প্রোফাইল বানাও')}</b><small class="muted">নাম, ছবি · লিডারবোর্ড · ব্যবহারের সময়</small></span>
+      ${icon('chevron')}
+    </a>`;
+
   return {
     nav: 'more',
     title: 'More',
     html: `<header class="page-title rise"><h1>More</h1></header>
+      ${profileRow}
       <section class="card rise" style="--i:1"><h2 class="card-title">${icon('sun')} Appearance</h2><div class="seg">${seg}</div></section>
       <section class="card rise" style="--i:2"><h2 class="card-title">${icon('map')} Syllabus source</h2>
         <p class="muted small">Chapter names come from the syllabus photos. Items still marked <span class="flag">verify</span> need a check.</p>
