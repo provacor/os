@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>HSC Study OS</title>
+  <meta name="description" content="Personal HSC Science study structure: Subject → Paper → Chapter → Section.">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <script>
+    try { var t = localStorage.getItem('hscos:theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/"><span aria-hidden="true">🎓</span> HSC Study OS</a>
+    <button id="themeBtn" class="icon-btn" aria-label="Toggle dark / light mode">🌓</button>
+  </header>
+  <nav id="crumbs" class="crumbs" aria-label="Breadcrumb"></nav>
+  <main id="view" class="container"><p class="muted loading">Loading…</p></main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <nav class="bottom-nav" aria-label="Main">
+    <a href="#/" data-nav="home"><span aria-hidden="true">🏠</span>Home</a>
+    <a href="#/search" data-nav="search"><span aria-hidden="true">🔍</span>Search</a>
+    <a href="#/progress" data-nav="progress"><span aria-hidden="true">📊</span>Progress</a>
+    <a href="#/syllabus" data-nav="syllabus"><span aria-hidden="true">📋</span>Syllabus</a>
+  </nav>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+{
+  "$comment": "Every kind of sub-section a chapter can have. Section id = <chapterId>_<typeId>. contentKinds = future sub-categories inside the section; itemFields = future metadata of one item. These are STRUCTURE only — no educational content lives here. computed = rendered from data (Progress), not filled with content. trackable = counts toward progress %.",
+  "sectionTypes": {
+    "notes": {
+      "label": "Notes", "icon": "📚",
+      "screenTitle": "Chapter Notes", "emptyText": "No notes added yet.",
+      "trackable": true,
+      "contentKinds": [
+        { "id": "full", "label": "Full Notes" },
+        { "id": "short", "label": "Short Notes" },
+        { "id": "revision", "label": "Revision Notes" },
+        { "id": "important", "label": "Important Points" },
+        { "id": "diagram", "label": "Diagram" },
+        { "id": "formula", "label": "Formula" },
+        { "id": "example", "label": "Example" }
+      ],
+      "itemFields": ["kind", "title", "body", "attachments", "source"]
+    },
+    "mcq": {
+      "label": "MCQ", "icon": "📝",
+      "screenTitle": "Chapter MCQ", "emptyText": "No MCQ added yet.",
+      "trackable": true,
+      "contentKinds": [],
+      "itemFields": ["question", "options", "correctAnswer", "explanation", "source", "board", "year", "difficulty", "topic", "chapter"]
+    },
+    "cq": {
+      "label": "Creative / CQ", "icon": "✍️",
+      "screenTitle": "Creative Questions (CQ)", "emptyText": "No creative questions added yet.",
+      "trackable": true,
+      "contentKinds": [
+        { "id": "cq", "label": "CQ" },
+        { "id": "board", "label": "Board CQ" },
+        { "id": "model", "label": "Model CQ" },
+        { "id": "concept", "label": "Concept-based CQ" },
+        { "id": "pattern", "label": "Question Pattern" },
+        { "id": "solution", "label": "Solution" },
+        { "id": "marks", "label": "Mark Distribution" }
+      ],
+      "itemFields": ["stem", "questions", "solution", "markDistribution", "source", "board", "year", "topic", "chapter"]
+    },
+    "formula": {
+      "label": "Formula", "icon": "📐",
+      "screenTitle": "Formula", "emptyText": "No formula added yet.",
+      "trackable": true,
+      "contentKinds": [],
+      "itemFields": ["formula", "symbolMeaning", "unit", "condition", "relatedConcept", "example"]
+    },
+    "concept": {
+      "label": "Concepts", "icon": "💡",
+      "screenTitle": "Concepts", "emptyText": "No concepts added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "body", "topic"]
+    },
+    "simulation": {
+      "label": "Simulation", "icon": "🔬",
+      "screenTitle": "Simulation", "emptyText": "No simulation added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "embed", "instructions"]
+    },
+    "mistakes": {
+      "label": "Mistake Bank", "icon": "❌",
+      "screenTitle": "Mistake Bank", "emptyText": "No mistakes logged yet.",
+      "trackable": false, "contentKinds": [], "itemFields": ["refItemId", "whatWentWrong", "correction", "date"]
+    },
+    "revision": {
+      "label": "Revision", "icon": "🔄",
+      "screenTitle": "Revision", "emptyText": "No revision material added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "body", "dueDate"]
+    },
+    "progress": {
+      "label": "Progress", "icon": "📊",
+      "screenTitle": "Chapter Progress", "emptyText": "",
+      "trackable": false, "computed": true, "contentKinds": [], "itemFields": []
+    },
+
+    "reaction": {
+      "label": "Reaction", "icon": "⚗️",
+      "screenTitle": "Reactions", "emptyText": "No reactions added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["reactants", "products", "conditions", "type", "note"]
+    },
+    "conversion": {
+      "label": "Conversion", "icon": "🔁",
+      "screenTitle": "Conversions", "emptyText": "No conversions added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["from", "to", "steps"]
+    },
+    "mechanism": {
+      "label": "Mechanism", "icon": "⚙️",
+      "screenTitle": "Mechanisms", "emptyText": "No mechanisms added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "steps", "diagram"]
+    },
+    "identification": {
+      "label": "Identification Test", "icon": "🔍",
+      "screenTitle": "Identification Tests", "emptyText": "No identification tests added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["target", "reagent", "observation", "inference"]
+    },
+
+    "derivation": {
+      "label": "Derivation", "icon": "✏️",
+      "screenTitle": "Derivations", "emptyText": "No derivations added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "steps", "result"]
+    },
+    "numerical": {
+      "label": "Numerical", "icon": "🔢",
+      "screenTitle": "Numerical Problems", "emptyText": "No numericals added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["problem", "given", "solution", "answer", "source"]
+    },
+    "graph": {
+      "label": "Graph", "icon": "📈",
+      "screenTitle": "Graphs", "emptyText": "No graphs added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "image", "explanation"]
+    },
+    "diagram": {
+      "label": "Diagram", "icon": "🖼️",
+      "screenTitle": "Diagrams", "emptyText": "No diagrams added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "image", "labels"]
+    },
+
+    "theorem": {
+      "label": "Theorem", "icon": "📜",
+      "screenTitle": "Theorems", "emptyText": "No theorems added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["statement", "proof", "corollaries"]
+    },
+    "problem_types": {
+      "label": "Problem Types", "icon": "🧩",
+      "screenTitle": "Problem Types", "emptyText": "No problem types added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["pattern", "approach", "examples"]
+    },
+    "solved": {
+      "label": "Solved Problems", "icon": "📗",
+      "screenTitle": "Solved Problems", "emptyText": "No solved problems added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["problem", "solution", "source"]
+    },
+
+    "definition": {
+      "label": "Definition", "icon": "📖",
+      "screenTitle": "Definitions", "emptyText": "No definitions added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["term", "definition"]
+    },
+    "process": {
+      "label": "Process", "icon": "⏩",
+      "screenTitle": "Processes", "emptyText": "No processes added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "steps", "diagram"]
+    },
+    "comparison": {
+      "label": "Comparison", "icon": "⚖️",
+      "screenTitle": "Comparisons", "emptyText": "No comparisons added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["itemA", "itemB", "points"]
+    },
+    "classification": {
+      "label": "Classification", "icon": "🗂️",
+      "screenTitle": "Classification", "emptyText": "No classification added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["title", "tree"]
+    },
+
+    "practice": {
+      "label": "Practice", "icon": "🏋️",
+      "screenTitle": "Practice", "emptyText": "No practice items added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["question", "answer", "source"]
+    },
+    "board": {
+      "label": "Board Questions", "icon": "🏛️",
+      "screenTitle": "Board Questions", "emptyText": "No board questions added yet.",
+      "trackable": true, "contentKinds": [], "itemFields": ["question", "answer", "board", "year"]
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "$comment": "Content registry. Maps a section id to the file holding its items, e.g. \"physics_1st_ch03_notes\": { \"file\": \"content/physics/physics_1st_ch03_notes.json\", \"count\": 12 }. EMPTY in the structure phase — no content has been added.",
+  "version": 1,
+  "sections": {}
+}

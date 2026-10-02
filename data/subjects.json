@@ -1,0 +1,46 @@
+{
+  "$comment": "Subjects of the Science Group. Order = dashboard order. sectionTemplate decides which sub-sections every chapter of this subject gets (see section-templates.json).",
+  "subjects": [
+    {
+      "id": "english",
+      "name": "English",
+      "icon": "📘",
+      "accent": "blue",
+      "order": 1,
+      "sectionTemplate": "english_grammar_unit",
+      "note": "Only English 2nd Paper is kept. English 1st Paper is intentionally excluded."
+    },
+    {
+      "id": "higher_math",
+      "name": "Higher Mathematics",
+      "icon": "📐",
+      "accent": "violet",
+      "order": 2,
+      "sectionTemplate": "higher_math"
+    },
+    {
+      "id": "physics",
+      "name": "Physics",
+      "icon": "⚡",
+      "accent": "amber",
+      "order": 3,
+      "sectionTemplate": "physics"
+    },
+    {
+      "id": "chemistry",
+      "name": "Chemistry",
+      "icon": "🧪",
+      "accent": "teal",
+      "order": 4,
+      "sectionTemplate": "chemistry"
+    },
+    {
+      "id": "biology",
+      "name": "Biology",
+      "icon": "🧬",
+      "accent": "green",
+      "order": 5,
+      "sectionTemplate": "biology"
+    }
+  ]
+}
