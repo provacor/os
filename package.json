@@ -1,8 +1,8 @@
 {
-  "name": "hsc-science-study-os",
+  "name": "provacor",
   "version": "0.1.0",
   "private": true,
-  "description": "Personal HSC Science study structure (Subject → Paper → Chapter → Section). Structure only, no content yet.",
+  "description": "Provacor: personal HSC Science study app (Subject → Paper → Chapter → Section → Content).",
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs",

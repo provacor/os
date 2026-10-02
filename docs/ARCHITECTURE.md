@@ -1,4 +1,4 @@
-# HSC Science Study OS: structure and architecture
+# Provacor: structure and architecture
 
 This covers the seven "first deliverable" items: subjects, papers, chapters, section structure, data architecture, folder structure and UI navigation.
 

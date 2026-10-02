@@ -1,6 +1,6 @@
-# HSC Science Study OS
+# Provacor
 
-A personal, mobile-first study app for HSC Science:
+A personal, mobile-first HSC Science study app:
 **Subject → Paper → Chapter → Section → Content**.
 
 > The full structure is in place. Content is added section by section from the user's own material (see `content/`). The first notes added are Physics 2nd Paper ch. 6 and English Article.

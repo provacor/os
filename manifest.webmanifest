@@ -1,6 +1,6 @@
 {
-  "name": "HSC Science Study OS",
-  "short_name": "HSC Study OS",
+  "name": "Provacor",
+  "short_name": "Provacor",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
