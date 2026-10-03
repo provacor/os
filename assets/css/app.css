@@ -1250,3 +1250,36 @@ body.focus-on { padding-bottom: 0; }
 .mo-leaf label { display: flex; align-items: flex-start; gap: 8px; padding: 6px 10px; font-size: .86rem; cursor: pointer; }
 .mo-leaf input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--green); flex: none; }
 .mo-leaf.done span { color: var(--muted); text-decoration: line-through; }
+
+/* question / formula / figure items */
+.pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.topic-head { font-size: .95rem; font-weight: 700; margin: 14px 2px 0; color: var(--text-2); }
+.topic-head:first-child { margin-top: 0; }
+.qa-title { font-size: 1rem; line-height: 1.45; font-weight: 650; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.qa-title .chip, .cq-q .chip, .qa-chips .chip { font-size: .68rem; padding: 2px 8px; min-height: 0; }
+.qa-chips:empty { display: none; }
+.qa-chips { margin-top: 6px; }
+.cq-stem { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); line-height: 1.6; }
+.cq-part { margin-top: 12px; }
+.cq-q { line-height: 1.55; }
+.ans { margin-top: 8px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); }
+.ans > summary { cursor: pointer; padding: 9px 12px; font-size: .86rem; font-weight: 600; color: var(--hue, var(--blue)); list-style: none; }
+.ans > summary::-webkit-details-marker { display: none; }
+.ans > summary::before { content: '▸ '; }
+.ans[open] > summary::before { content: '▾ '; }
+.ans > .pre, .ans > .tbl-wrap { padding: 0 12px 12px; line-height: 1.65; color: var(--text-2); font-size: .92rem; }
+.formula-lines { margin-top: 10px; display: grid; gap: 6px; }
+.formula-lines > div { padding: 8px 12px; border-radius: 10px; background: color-mix(in srgb, var(--hue, var(--violet)) 10%, var(--surface-2)); font-weight: 600; overflow-wrap: anywhere; }
+.tbl-wrap { overflow-x: auto; }
+.sym-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.sym-table td { border-top: 1px solid var(--border); padding: 6px 6px; vertical-align: top; }
+.sym-table td:first-child { font-weight: 650; white-space: nowrap; }
+.item-note { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-size: .85rem; line-height: 1.6; background: color-mix(in srgb, var(--amber) 10%, var(--surface-2)); }
+.steps { margin: 10px 0 0; padding-left: 22px; display: grid; gap: 6px; line-height: 1.6; color: var(--text-2); }
+.result { margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-weight: 700; background: color-mix(in srgb, var(--green) 12%, var(--surface-2)); overflow-wrap: anywhere; }
+.fig-wrap { margin: 10px 0 0; padding: 8px; border-radius: 12px; background: var(--surface-2); }
+.fig { display: block; width: 100%; height: auto; color: var(--text); font-family: inherit; }
+.fig .f-a { color: var(--blue); } .fig .f-b { color: var(--amber); } .fig .f-c { color: var(--teal); }
+.fig-wrap + .pre { margin-top: 10px; color: var(--text-2); line-height: 1.6; }
+.qa-title .chip, .cq-q .chip, .qa-chips .chip { white-space: normal; overflow-wrap: anywhere; text-align: left; height: auto; line-height: 1.4; }
+.item-card { min-width: 0; overflow-wrap: anywhere; }
