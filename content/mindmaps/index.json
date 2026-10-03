@@ -1,0 +1,7 @@
+{
+ "$comment": "Mind maps built from notes. chapterId -> file. Chapters not listed get an outline built from the concept map.",
+ "maps": {
+  "physics_2nd_ch06": "content/mindmaps/physics_2nd_ch06.json",
+  "english_2nd_article": "content/mindmaps/english_2nd_article.json"
+ }
+}

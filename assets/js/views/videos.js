@@ -1,8 +1,8 @@
 // Video links block for a chapter: add YouTube (or any) links per topic, watch them inline.
 
-import { icon } from '../icons.js?v=202610021514';
-import { esc } from '../components.js?v=202610021514';
-import { videosOf, startTime } from '../videos.js?v=202610021514';
+import { icon } from '../icons.js?v=202610030202';
+import { esc } from '../components.js?v=202610030202';
+import { videosOf, startTime } from '../videos.js?v=202610030202';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const NO_TOPIC = 'সাধারণ (পুরো অধ্যায়)';

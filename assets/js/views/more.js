@@ -1,9 +1,10 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610021514';
-import { esc } from '../components.js?v=202610021514';
-import { themePref } from '../theme.js?v=202610021514';
-import { getProfile } from '../profile.js?v=202610021514';
+import { icon } from '../icons.js?v=202610030202';
+import { esc } from '../components.js?v=202610030202';
+import { themePref } from '../theme.js?v=202610030202';
+import { a11y } from '../a11y.js?v=202610030202';
+import { getProfile } from '../profile.js?v=202610030202';
 
 export function moreView(model) {
   const pref = themePref();
@@ -39,7 +40,13 @@ export function moreView(model) {
       ${profileRow}
       ${a11yRow}
       <a class="card pf-link rise" href="#/backup" style="--i:0"><span class="pf-mini pf-blank a11y-ico">${icon('key')}</span><span class="pf-link-text"><b>Backup · ব্যাকআপ ও রিস্টোর</b><small class="muted">পাসওয়ার্ড দিয়ে এনক্রিপ্ট করা ফাইল, ফোন হারালেও তথ্য থাকবে</small></span>${icon('chevron')}</a>
-      <section class="card rise" style="--i:1"><h2 class="card-title">${icon('sun')} Appearance</h2><div class="seg">${seg}</div></section>
+      <section class="card rise" style="--i:1"><h2 class="card-title">${icon('sun')} Appearance</h2><div class="seg">${seg}</div>
+        <div class="bright">
+          <label class="pf-label" for="brightRange">উজ্জ্বলতা (Brightness) <b id="brightVal">${a11y().bright}%</b></label>
+          <div class="bright-row">${icon('moon')}<input id="brightRange" type="range" min="50" max="130" step="5" value="${a11y().bright}" data-bright aria-label="উজ্জ্বলতা">${icon('sun')}</div>
+          <div class="chip-row">${[[60, 'রাতে পড়া'], [80, 'চোখের আরাম'], [100, 'স্বাভাবিক'], [120, 'বেশি উজ্জ্বল']].map(([v, l]) => `<button class="chip ${a11y().bright === v ? 'on' : ''}" data-bright-set="${v}">${l}</button>`).join('')}</div>
+          <p class="muted small">অ্যাপের ভেতরের উজ্জ্বলতা বদলায়, ফোনের নিজের brightness নয়।</p>
+        </div></section>
       <section class="card rise" style="--i:2"><h2 class="card-title">${icon('map')} Syllabus source</h2>
         <p class="muted small">Chapter names come from the syllabus photos. Items still marked <span class="flag">verify</span> need a check.</p>
         <div class="table-wrap"><table><thead><tr><th>Subject</th><th>Paper</th><th>Ch.</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>

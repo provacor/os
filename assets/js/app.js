@@ -1,43 +1,44 @@
 // App shell: boot, routing, page transitions and interactions. Views live in ./views.
 
-import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610021514';
-import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610021514';
-import { buildIndex } from './search.js?v=202610021514';
-import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610021514';
-import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610021514';
-import { icon } from './icons.js?v=202610021514';
-import { crumbs, emptyState } from './components.js?v=202610021514';
-import { homeView } from './views/home.js?v=202610021514';
-import { subjectView, chapterView, studyMap } from './views/study.js?v=202610021514';
-import { sectionView } from './views/section.js?v=202610021514';
-import { searchView, resultsHtml, searchState } from './views/search.js?v=202610021514';
-import { progressView } from './views/progress.js?v=202610021514';
-import { moreView } from './views/more.js?v=202610021514';
-import { missionView, missionState } from './views/mission.js?v=202610021514';
-import { addTask, toggleTask, deleteTask, moveTask, setNote, todayKey, tasksOf } from './mission.js?v=202610021514';
-import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610021514';
-import { profileView } from './views/profile.js?v=202610021514';
-import { startLeaderboard } from './leaderboard.js?v=202610021514';
-import { addVideo, deleteVideo } from './videos.js?v=202610021514';
-import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610021514';
-import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610021514';
-import { renderMarkdown, typesetMath } from './markdown.js?v=202610021514';
-import { a11yView } from './views/a11y.js?v=202610021514';
-import { a11y, setA11y, applyA11y, motionReduced, speak, stopSpeaking, isSpeaking, canListen, listen, voiceCommand } from './a11y.js?v=202610021514';
-import { speakBtn } from './views/ai.js?v=202610021514';
-import { setConcepts } from './concepts.js?v=202610021514';
-import { setSearchModel } from './views/search.js?v=202610021514';
-import { mistakesView, mistakeState } from './views/mistakes.js?v=202610021514';
-import { recordMcqMistake, addManualMistake, updateMistake, deleteMistake, mistakeById } from './mistakes.js?v=202610021514';
-import { classifyMistake } from './ai.js?v=202610021514';
-import { graphView, graphState } from './views/graph.js?v=202610021514';
-import { plannerView, plannerState, planSummary } from './views/planner.js?v=202610021514';
-import { buildPlan, clearPlan, autoRebuild } from './planner.js?v=202610021514';
-import { focusView, focusState, clock } from './views/focus.js?v=202610021514';
-import { focusRun, startFocus, togglePause, endFocus, reviewFocus, noteLeave, rewake, elapsedMs, totalMs } from './focus.js?v=202610021514';
-import { backupView } from './views/backup.js?v=202610021514';
-import { makeBackup, readBackup, restore, saveOrShare } from './backup.js?v=202610021514';
-import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610021514';
+import { DATA_FILES, buildModel, attachContent } from './model.js?v=202610030202';
+import { toggleItemDone, progressOf, resetProgress } from './progress.js?v=202610030202';
+import { buildIndex } from './search.js?v=202610030202';
+import { recordVisit, recordDone, addSearch, clearSearches, resetActivity } from './activity.js?v=202610030202';
+import { applyTheme, setTheme, toggleTheme } from './theme.js?v=202610030202';
+import { icon } from './icons.js?v=202610030202';
+import { crumbs, emptyState } from './components.js?v=202610030202';
+import { homeView } from './views/home.js?v=202610030202';
+import { subjectView, chapterView, studyMap } from './views/study.js?v=202610030202';
+import { sectionView } from './views/section.js?v=202610030202';
+import { searchView, resultsHtml, searchState } from './views/search.js?v=202610030202';
+import { progressView } from './views/progress.js?v=202610030202';
+import { moreView } from './views/more.js?v=202610030202';
+import { missionView, missionState } from './views/mission.js?v=202610030202';
+import { addTask, toggleTask, deleteTask, moveTask, setNote, todayKey, tasksOf } from './mission.js?v=202610030202';
+import { startAlarms, addAlarm, removeAlarm, stopAlarm, restartAlarm, setKeepAwake, MAX_MINUTES } from './alarms.js?v=202610030202';
+import { profileView } from './views/profile.js?v=202610030202';
+import { startLeaderboard } from './leaderboard.js?v=202610030202';
+import { addVideo, deleteVideo } from './videos.js?v=202610030202';
+import { aiView, aiState, messageHtml, pendingHtml } from './views/ai.js?v=202610030202';
+import { ask, saveSettings, clearChat, shrinkImage, AiError, ERRORS } from './ai.js?v=202610030202';
+import { renderMarkdown, typesetMath } from './markdown.js?v=202610030202';
+import { a11yView } from './views/a11y.js?v=202610030202';
+import { a11y, setA11y, applyA11y, applyBrightness, motionReduced, speak, stopSpeaking, isSpeaking, canListen, listen, voiceCommand } from './a11y.js?v=202610030202';
+import { speakBtn } from './views/ai.js?v=202610030202';
+import { setConcepts } from './concepts.js?v=202610030202';
+import { setSearchModel } from './views/search.js?v=202610030202';
+import { mistakesView, mistakeState } from './views/mistakes.js?v=202610030202';
+import { recordMcqMistake, addManualMistake, updateMistake, deleteMistake, mistakeById } from './mistakes.js?v=202610030202';
+import { classifyMistake } from './ai.js?v=202610030202';
+import { graphView, graphState } from './views/graph.js?v=202610030202';
+import { plannerView, plannerState, planSummary } from './views/planner.js?v=202610030202';
+import { buildPlan, clearPlan, autoRebuild } from './planner.js?v=202610030202';
+import { focusView, focusState, clock } from './views/focus.js?v=202610030202';
+import { focusRun, startFocus, togglePause, endFocus, reviewFocus, noteLeave, rewake, elapsedMs, totalMs } from './focus.js?v=202610030202';
+import { backupView } from './views/backup.js?v=202610030202';
+import { mindmapView, mindmapAction, outlineToggle, mapIndex } from './views/mindmap.js?v=202610030202';
+import { makeBackup, readBackup, restore, saveOrShare } from './backup.js?v=202610030202';
+import { getProfile, updateProfile, imageToAvatar, startUsage } from './profile.js?v=202610030202';
 
 const $view = document.getElementById('view');
 const $crumbs = document.getElementById('crumbs');
@@ -77,6 +78,7 @@ async function boot() {
       /* the concept map is optional: search and the app still work without it */
     }
     setSearchModel(model);
+    await mapIndex();
     index = buildIndex(model);
   } catch (err) {
     hideSplash();
@@ -97,6 +99,11 @@ async function boot() {
   vb.addEventListener('click', runVoice);
   document.addEventListener('change', (e) => {
     if (e.target.matches('[data-alarm-awake]')) setKeepAwake(e.target.checked);
+    if (e.target.matches('[data-mo]')) outlineToggle(e.target);
+    if (e.target.matches('[data-bright]')) {
+      setA11y({ bright: Number(e.target.value) });
+      document.querySelectorAll('[data-bright-set]').forEach((c) => c.classList.toggle('on', Number(c.dataset.brightSet) === Number(e.target.value)));
+    }
     if (e.target.matches('[data-mk-kind]')) {
       updateMistake(e.target.dataset.mkKind, { kind: e.target.value || null });
       rerender();
@@ -187,6 +194,7 @@ function resolve(r) {
     case 'planner': return plannerView(model);
     case 'focus': return focusView();
     case 'backup': return backupView();
+    case 'mm': return mindmapView(model, r.a);
     case 'ai': return aiView(model, r.a);
     case 'mission': return missionView();
     case '': return homeView(model);
@@ -235,7 +243,7 @@ function render({ keepScroll = false } = {}) {
   document.body.classList.toggle('focus-on', !!out.focus);
   const fab = document.getElementById('aiFab');
   if (fab) {
-    fab.hidden = route().kind === 'ai' || !!out.focus;
+    fab.hidden = ['ai', 'mm'].includes(route().kind) || !!out.focus;
     fab.href = out.visit?.chapterId ? `#/ai/${encodeURIComponent(out.visit.chapterId)}` : '#/ai';
   }
 
@@ -278,6 +286,12 @@ function setQuery(v, { save = false } = {}) {
 
 let noteTimer;
 function onInput(e) {
+  if (e.target.matches?.('[data-bright]')) {
+    applyBrightness(e.target.value);
+    const v = document.getElementById('brightVal');
+    if (v) v.textContent = `${e.target.value}%`;
+    return;
+  }
   if (e.target.id === 'aiInput') {
     e.target.style.height = 'auto';
     e.target.style.height = `${Math.min(e.target.scrollHeight, 160)}px`;
@@ -723,6 +737,10 @@ function onMissionClick(t) {
 
 function onClick(e) {
   const t = e.target;
+  const mm = t.closest('[data-mm-act],[data-mm-mode]');
+  if (mm) { mindmapAction(mm); return; }
+  const bs = t.closest('[data-bright-set]');
+  if (bs) { setA11y({ bright: Number(bs.dataset.brightSet) }); rerender(); return; }
   if (onMissionClick(t) || onAlarmClick(t) || onProfileClick(t) || onVideoClick(t) || onAiClick(t) || onA11yClick(t) || onToolsClick(t)) return;
 
   const foldHead = t.closest('[data-fold]');

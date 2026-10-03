@@ -1,0 +1,408 @@
+{
+ "chapterId": "english_2nd_article",
+ "source": "english_2nd_article_notes_0001",
+ "updated": "2026-10-03",
+ "note": "Built from the chapter's notes PDF.",
+ "root": {
+  "text": "Article",
+  "children": [
+   {
+    "text": "এক নজরে (Master Map)",
+    "children": [
+     {
+      "text": "A — singular countable, অনির্দিষ্ট, consonant sound",
+      "id": "n.1.1"
+     },
+     {
+      "text": "AN — singular countable, অনির্দিষ্ট, vowel sound",
+      "id": "n.1.2"
+     },
+     {
+      "text": "THE — নির্দিষ্ট, unique, superlative, ordinal",
+      "id": "n.1.3"
+     },
+     {
+      "text": "× Zero — general plural, uncountable, abstract",
+      "id": "n.1.4"
+     }
+    ],
+    "id": "n.1"
+   },
+   {
+    "text": "A",
+    "children": [
+     {
+      "text": "Singular countable (non-specific)",
+      "hint": "a book",
+      "id": "n.2.1"
+     },
+     {
+      "text": "পেশা ও পরিচয়",
+      "hint": "He is a doctor.",
+      "id": "n.2.2"
+     },
+     {
+      "text": "A + adjective + noun",
+      "hint": "a very religious man",
+      "id": "n.2.3"
+     },
+     {
+      "text": "শ্রেণির প্রতিনিধি",
+      "hint": "A tiger is a dangerous animal.",
+      "id": "n.2.4"
+     },
+     {
+      "text": "Of-phrase",
+      "hint": "a piece of gold, a wink of sleep",
+      "id": "n.2.5"
+     },
+     {
+      "text": "A number of / a lot of",
+      "hint": "a number of + plural + plural verb",
+      "id": "n.2.6"
+     },
+     {
+      "text": "প্রতি (per) অর্থে",
+      "hint": "twice a day, Rs 50 a kilo",
+      "id": "n.2.7"
+     },
+     {
+      "text": "Exclamation ও নির্দিষ্ট expression",
+      "hint": "What a surprise! Many a man",
+      "id": "n.2.8"
+     },
+     {
+      "text": "Subject / object / preposition-এর পরে",
+      "id": "n.2.9"
+     },
+     {
+      "text": "Possessive থাকলে article নেই",
+      "hint": "✗ a my book",
+      "id": "n.2.10"
+     }
+    ],
+    "id": "n.2"
+   },
+   {
+    "text": "AN",
+    "children": [
+     {
+      "text": "Vowel sound-এর আগে",
+      "hint": "an apple, an idea",
+      "id": "n.3.1"
+     },
+     {
+      "text": "Spelling নয়, sound",
+      "children": [
+       {
+        "text": "an hour, an honest man (h silent)",
+        "id": "n.3.2.1"
+       },
+       {
+        "text": "a university, a European, a one-eyed man",
+        "id": "n.3.2.2"
+       }
+      ],
+      "id": "n.3.2"
+     },
+     {
+      "text": "AN + adjective / পেশা",
+      "hint": "an engineer, an international language",
+      "id": "n.3.3"
+     },
+     {
+      "text": "Plural-এর আগে AN নয়",
+      "hint": "✗ an industrious insects",
+      "id": "n.3.4"
+     },
+     {
+      "text": "Abbreviation",
+      "children": [
+       {
+        "text": "F H L M N R S X → an (an MP, an NGO)",
+        "id": "n.3.5.1"
+       },
+       {
+        "text": "B C D G K P T → a (a PhD, a BBC report)",
+        "id": "n.3.5.2"
+       }
+      ],
+      "id": "n.3.5"
+     }
+    ],
+    "id": "n.3"
+   },
+   {
+    "text": "THE",
+    "children": [
+     {
+      "text": "নির্দিষ্ট (specific) noun",
+      "hint": "The book I bought",
+      "id": "n.4.1"
+     },
+     {
+      "text": "আগে উল্লেখিত noun",
+      "hint": "a boy … the boy",
+      "id": "n.4.2"
+     },
+     {
+      "text": "Superlative",
+      "hint": "the best · ব্যতিক্রম: my best friend",
+      "id": "n.4.3"
+     },
+     {
+      "text": "Ordinal",
+      "hint": "the first prize",
+      "id": "n.4.4"
+     },
+     {
+      "text": "Unique জিনিস",
+      "hint": "the sun, the earth, the east",
+      "id": "n.4.5"
+     },
+     {
+      "text": "THE + adjective = শ্রেণি",
+      "hint": "the rich, the poor",
+      "id": "n.4.6"
+     },
+     {
+      "text": "The + of-phrase",
+      "hint": "the capital of Bangladesh",
+      "id": "n.4.7"
+     },
+     {
+      "text": "বিখ্যাত স্থান, ভবন, গ্রন্থ, পত্রিকা",
+      "hint": "the Taj Mahal, the Quran, the Daily Star",
+      "id": "n.4.8"
+     },
+     {
+      "text": "সরকারি সংস্থা ও বাহিনী",
+      "hint": "the Army, the police, the Parliament",
+      "id": "n.4.9"
+     },
+     {
+      "text": "Geographical name (category অনুযায়ী)",
+      "id": "n.4.10"
+     },
+     {
+      "text": "কিছু ঐতিহাসিক নাম",
+      "hint": "the First World War",
+      "id": "n.4.11"
+     },
+     {
+      "text": "The + comparative",
+      "hint": "The more we read, the more we know.",
+      "id": "n.4.12"
+     },
+     {
+      "text": "Preposition-এর পরে নির্দিষ্ট noun",
+      "hint": "in the morning, on the way",
+      "id": "n.4.13"
+     }
+    ],
+    "id": "n.4"
+   },
+   {
+    "text": "× Zero article",
+    "children": [
+     {
+      "text": "General plural",
+      "hint": "Books are useful.",
+      "id": "n.5.1"
+     },
+     {
+      "text": "General uncountable",
+      "hint": "Water is essential.",
+      "id": "n.5.2"
+     },
+     {
+      "text": "Abstract noun",
+      "hint": "Honesty is a virtue.",
+      "id": "n.5.3"
+     },
+     {
+      "text": "Language",
+      "hint": "English is international.",
+      "id": "n.5.4"
+     },
+     {
+      "text": "নাম, খাবার, খেলা, দিন, মাস",
+      "hint": "have lunch, play cricket, on Friday",
+      "id": "n.5.5"
+     },
+     {
+      "text": "Possessive ও all-এর আগে নয়",
+      "hint": "love all",
+      "id": "n.5.6"
+     }
+    ],
+    "id": "n.5"
+   },
+   {
+    "text": "Geographical names",
+    "children": [
+     {
+      "text": "THE বসে",
+      "children": [
+       {
+        "text": "নদী — the Padma",
+        "id": "n.6.1.1"
+       },
+       {
+        "text": "সাগর, উপসাগর — the Bay of Bengal",
+        "id": "n.6.1.2"
+       },
+       {
+        "text": "মরুভূমি — the Sahara",
+        "id": "n.6.1.3"
+       },
+       {
+        "text": "পর্বতমালা — the Himalayas",
+        "id": "n.6.1.4"
+       },
+       {
+        "text": "বহুবচন দেশ/দ্বীপ — the Maldives",
+        "id": "n.6.1.5"
+       },
+       {
+        "text": "Union/Kingdom — the USA, the UK",
+        "id": "n.6.1.6"
+       },
+       {
+        "text": "the Sundarbans",
+        "id": "n.6.1.7"
+       }
+      ],
+      "id": "n.6.1"
+     },
+     {
+      "text": "ZERO",
+      "children": [
+       {
+        "text": "একক পর্বত — Mount Everest",
+        "id": "n.6.2.1"
+       },
+       {
+        "text": "দেশ — Bangladesh",
+        "id": "n.6.2.2"
+       },
+       {
+        "text": "শহর — Dhaka",
+        "id": "n.6.2.3"
+       },
+       {
+        "text": "মহাদেশ, হ্রদ, রাস্তা",
+        "id": "n.6.2.4"
+       }
+      ],
+      "id": "n.6.2"
+     },
+     {
+      "text": "of থাকলে সাধারণত the",
+      "hint": "the University of Dhaka",
+      "id": "n.6.3"
+     }
+    ],
+    "id": "n.6"
+   },
+   {
+    "text": "পার্থক্য ও বিশেষ জোড়া",
+    "children": [
+     {
+      "text": "General (×) বনাম Specific (THE)",
+      "hint": "Water is essential. / The water in this bottle",
+      "id": "n.7.1"
+     },
+     {
+      "text": "শ্রেণি বোঝাতে A ও THE দুটোই চলে",
+      "id": "n.7.2"
+     },
+     {
+      "text": "Countable বনাম uncountable",
+      "hint": "✗ an advice → a piece of advice",
+      "id": "n.7.3"
+     },
+     {
+      "text": "A number of বনাম The number of",
+      "hint": "are / is",
+      "id": "n.7.4"
+     },
+     {
+      "text": "Few বনাম a few, little বনাম a little",
+      "id": "n.7.5"
+     },
+     {
+      "text": "Institution: go to school বনাম go to the school",
+      "id": "n.7.6"
+     },
+     {
+      "text": "Instrument: play the violin, খেলা: play cricket",
+      "id": "n.7.7"
+     }
+    ],
+    "id": "n.7"
+   },
+   {
+    "text": "পরীক্ষার ফাঁদ (Exam traps)",
+    "children": [
+     {
+      "text": "Sound trap: a university, an hour",
+      "id": "n.8.1"
+     },
+     {
+      "text": "He is the best student",
+      "id": "n.8.2"
+     },
+     {
+      "text": "Honesty is a virtue (the নয়)",
+      "id": "n.8.3"
+     },
+     {
+      "text": "English is easy (the নয়)",
+      "id": "n.8.4"
+     },
+     {
+      "text": "the Sundarbans are famous",
+      "id": "n.8.5"
+     }
+    ],
+    "id": "n.8"
+   },
+   {
+    "text": "১০ সেকেন্ডের সিদ্ধান্ত",
+    "children": [
+     {
+      "text": "১. Possessive আছে? → article নেই",
+      "id": "n.9.1"
+     },
+     {
+      "text": "২. Superlative / ordinal? → THE",
+      "id": "n.9.2"
+     },
+     {
+      "text": "৩. Unique / আগে উল্লেখিত / নির্দিষ্ট? → THE",
+      "id": "n.9.3"
+     },
+     {
+      "text": "৪. Geographical name? → category দেখো",
+      "id": "n.9.4"
+     },
+     {
+      "text": "৫. Plural / uncountable / abstract / ভাষা / খাবার / খেলা? → ×",
+      "id": "n.9.5"
+     },
+     {
+      "text": "৬. Singular countable অনির্দিষ্ট? → A / AN",
+      "id": "n.9.6"
+     },
+     {
+      "text": "৭. Sound দেখো: vowel → AN, consonant → A",
+      "id": "n.9.7"
+     }
+    ],
+    "id": "n.9"
+   }
+  ],
+  "id": "n"
+ }
+}
