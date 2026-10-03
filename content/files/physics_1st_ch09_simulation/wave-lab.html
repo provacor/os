@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>তরঙ্গ ল্যাব — ৯ম অধ্যায়ের ১০টি সিমুলেশন</title>
+<style>
+  :root {
+    --bg: #0d1017; --panel: #151a24; --panel2: #1c2230; --line: #2a3242; --text: #e9edf4; --muted: #8e98ab;
+    --a: #7ea6ff; --b: #f7c35c; --c: #4fd8c4; --d: #fb8fb0; --e: #6ee7a0; --grid: rgba(255,255,255,.06);
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f4f6fa; --panel: #fff; --panel2: #f1f4f9; --line: #dde3ec; --text: #0f172a; --muted: #5b6577;
+      --a: #3b6cf6; --b: #c58a06; --c: #0f9f8e; --d: #e2457a; --e: #16a34a; --grid: rgba(15,23,42,.07); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Noto Sans Bengali", "Inter", system-ui, sans-serif; }
+  header { padding: 14px 14px 6px; }
+  h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 99px; padding: 7px 12px; font: inherit; font-size: .82rem; cursor: pointer; white-space: nowrap; }
+  .tabs button.on { background: var(--a); border-color: transparent; color: #fff; }
+  main { padding: 6px 14px 24px; max-width: 900px; margin: 0 auto; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+  h2 { margin: 2px 0 2px; font-size: 1.05rem; }
+  .sub { color: var(--muted); font-size: .82rem; margin: 0 0 10px; }
+  canvas { width: 100%; height: 260px; display: block; background: var(--panel2); border-radius: 12px; touch-action: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .row button { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 10px; padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+  .row button.on { border-color: var(--a); color: var(--a); }
+  .ctl { display: grid; gap: 8px; margin-top: 10px; }
+  .ctl label { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: .84rem; }
+  .ctl label b { color: var(--a); font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--a); }
+  .info { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: var(--panel2); font-size: .86rem; }
+  .info code { font-family: ui-monospace, monospace; color: var(--c); }
+  .info .big { font-size: 1.05rem; font-weight: 700; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: .78rem; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>তরঙ্গ ল্যাব</h1>
+  <p>পদার্থবিজ্ঞান ১ম পত্র · ৯ম অধ্যায় — নোটের প্রতিটি টপিকের হাতে-কলমে সিমুলেশন। স্লাইডার বদলে দেখো কী হয়।</p>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<main><section class="card">
+  <h2 id="title"></h2>
+  <p class="sub" id="sub"></p>
+  <canvas id="cv"></canvas>
+  <div class="legend" id="legend"></div>
+  <div class="row" id="buttons"></div>
+  <div class="ctl" id="ctl"></div>
+  <div class="info" id="info"></div>
+  <p class="note" id="note"></p>
+</section></main>
+
+<script>
+(() => {
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const bn = (x, d = 2) => {
+    const s = typeof x === 'number' ? (Number.isInteger(x) ? String(x) : x.toFixed(d)) : String(x);
+    return s.replace(/\d/g, (c) => '০১২৩৪৫৬৭৮৯'[c]);
+  };
+  const TAU = Math.PI * 2;
+
+  // ---------- drawing helpers ----------
+  function grid(w, h, midY = h / 2) {
+    ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = midY % 40; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.strokeStyle = css('--line'); ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
+  }
+  function curve(fn, x0, x1, color, width = 2.4, step = 2) {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    for (let x = x0; x <= x1; x += step) { const y = fn(x); x === x0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  function dot(x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+  function text(s, x, y, color = css('--muted'), size = 12, align = 'left') {
+    ctx.fillStyle = color; ctx.font = `${size}px "Noto Sans Bengali", system-ui, sans-serif`; ctx.textAlign = align; ctx.fillText(s, x, y);
+  }
+  function arrowLine(x1, y1, x2, y2, color, label) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    for (const [ax, ay, bx] of [[x1, y1, x2], [x2, y2, x1]]) {
+      const d = Math.sign(bx - ax) || 1;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + 7 * d, ay - 4); ctx.lineTo(ax + 7 * d, ay + 4); ctx.fill();
+    }
+    if (label) text(label, (x1 + x2) / 2, y1 - 6, color, 12, 'center');
+  }
+
+  // ---------- audio (optional, user starts it) ----------
+  let audio = null;
+  function playTones(freqs, gains) {
+    stopTones();
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const out = ac.createGain(); out.gain.value = 0.18; out.connect(ac.destination);
+    const oscs = freqs.map((f, i) => {
+      const o = ac.createOscillator(); o.frequency.value = f;
+      const g = ac.createGain(); g.gain.value = gains ? gains[i] : 1 / freqs.length;
+      o.connect(g).connect(out); o.start(); return o;
+    });
+    audio = { ac, oscs };
+    setTimeout(stopTones, 3500);
+  }
+  function stopTones() { if (audio) { try { audio.ac.close(); } catch (e) {} audio = null; } }
+
+  // ---------- simulations ----------
+  const S = [];
+
+  S.push({
+    id: 'types', tab: '১. আড় ও লম্বিক',
+    title: 'আড় তরঙ্গ বনাম লম্বিক তরঙ্গ',
+    sub: 'আড় তরঙ্গে কণা প্রবাহের লম্বদিকে কাঁপে (শীর্ষ ও পাদ); লম্বিক তরঙ্গে প্রবাহের দিকেই কাঁপে (সংকোচন ও প্রসারণ)। কণা নিজে এগিয়ে যায় না, শুধু শক্তি এগোয়।',
+    controls: [['A', 'বিস্তার a', 5, 40, 1, 24, 'px'], ['f', 'কম্পাঙ্ক f', 0.2, 2, 0.1, 0.6, 'Hz'], ['lam', 'তরঙ্গদৈর্ঘ্য λ', 60, 240, 10, 150, 'px']],
+    legend: [['--a', 'আড় তরঙ্গের কণা'], ['--b', 'লম্বিক তরঙ্গের কণা'], ['--d', 'একটি কণাকে চিহ্নিত']],
+    draw(w, h, t, p) {
+      const k = TAU / p.lam, wt = TAU * p.f * t;
+      const y1 = h * 0.28, y2 = h * 0.74;
+      grid(w, h, -1);
+      text('আড় তরঙ্গ', 8, 18, css('--a'), 13);
+      text('লম্বিক তরঙ্গ', 8, h * 0.52, css('--b'), 13);
+      for (let x = 10; x < w; x += 14) {
+        const y = y1 - p.A * Math.sin(wt - k * x);
+        dot(x, y, x === 10 + 14 * 12 ? 5 : 3, x === 10 + 14 * 12 ? css('--d') : css('--a'));
+      }
+      for (let x0 = 10; x0 < w; x0 += 10) {
+        const x = x0 + p.A * 0.6 * Math.sin(wt - k * x0);
+        for (let j = -2; j <= 2; j++) dot(x, y2 + j * 12, 2.2, x0 === 10 + 10 * 18 ? css('--d') : css('--b'));
+      }
+      const speed = p.f * p.lam;
+      this.info = `<span class="big">v = fλ = ${bn(p.f, 1)} × ${bn(p.lam, 0)} = ${bn(speed, 0)} px/s</span><br>লাল দাগের কণাটা শুধু নিজের জায়গায় ওঠানামা/আগে-পিছে করছে — তরঙ্গের সাথে চলে যাচ্ছে না।`;
+    },
+  });
+
+  S.push({
+    id: 'progressive', tab: '২. অগ্রগামী তরঙ্গ',
+    title: 'অগ্রগামী তরঙ্গ ও সমীকরণ',
+    sub: 'y = a sin (2π/λ)(vt − x)। দুটি বিন্দু P ও Q-এর মধ্যে পথ পার্থক্য x হলে দশা পার্থক্য δ = (2π/λ)·x।',
+    controls: [['A', 'বিস্তার a', 10, 70, 1, 45, 'px'], ['lam', 'তরঙ্গদৈর্ঘ্য λ', 80, 320, 10, 200, 'px'], ['v', 'বেগ v', 20, 200, 10, 80, 'px/s'], ['dx', 'P ও Q-এর দূরত্ব x', 0, 320, 5, 100, 'px']],
+    legend: [['--a', 'তরঙ্গ'], ['--b', 'P বিন্দু'], ['--c', 'Q বিন্দু']],
+    draw(w, h, t, p) {
+      const mid = h / 2, k = TAU / p.lam;
+      grid(w, h, mid);
+      const y = (x) => mid - p.A * Math.sin(k * (p.v * t - x));
+      curve(y, 0, w, css('--a'));
+      const xp = 60, xq = Math.min(w - 10, xp + p.dx);
+      ctx.setLineDash([4, 4]); ctx.strokeStyle = css('--line');
+      for (const xx of [xp, xq]) { ctx.beginPath(); ctx.moveTo(xx, 10); ctx.lineTo(xx, h - 10); ctx.stroke(); }
+      ctx.setLineDash([]);
+      dot(xp, y(xp), 7, css('--b')); dot(xq, y(xq), 7, css('--c'));
+      text('P', xp + 10, y(xp) - 8, css('--b'), 13); text('Q', xq + 10, y(xq) - 8, css('--c'), 13);
+      arrowLine(60, h - 18, 60 + p.lam, h - 18, css('--muted'), 'λ');
+      const deg = ((p.dx / p.lam) * 360) % 360;
+      const f = p.v / p.lam;
+      this.info = `কম্পাঙ্ক f = v/λ = <b>${bn(f, 2)} Hz</b> · পর্যায়কাল T = 1/f = <b>${bn(1 / f, 2)} s</b><br>দশা পার্থক্য δ = (2π/λ)·x = <b>${bn((p.dx / p.lam) * 2, 2)}π rad</b> (${bn(deg, 0)}°)` +
+        (Math.abs(deg) < 3 || Math.abs(deg - 360) < 3 ? ' — P ও Q একই দশায়!' : Math.abs(deg - 180) < 3 ? ' — P ও Q বিপরীত দশায়!' : '');
+    },
+  });
+
+  S.push({
+    id: 'superposition', tab: '৩. উপরিপাতন',
+    title: 'তরঙ্গের উপরিপাতন নীতি',
+    sub: 'একই বিন্দুতে দুটি তরঙ্গ মিললে লব্ধি সরণ = আলাদা সরণের বীজগাণিতিক যোগফল। দশা পার্থক্য 0 হলে গঠনমূলক, π হলে ধ্বংসাত্মক।',
+    controls: [['A1', 'প্রথম তরঙ্গের বিস্তার', 0, 50, 1, 35, 'px'], ['A2', 'দ্বিতীয় তরঙ্গের বিস্তার', 0, 50, 1, 35, 'px'], ['ph', 'দশা পার্থক্য', 0, 360, 5, 0, '°']],
+    legend: [['--a', 'তরঙ্গ ১'], ['--b', 'তরঙ্গ ২'], ['--d', 'লব্ধি']],
+    draw(w, h, t, p) {
+      const mid = h / 2, k = TAU / 180, wt = TAU * 0.4 * t, phi = (p.ph * Math.PI) / 180;
+      grid(w, h, mid);
+      const f1 = (x) => p.A1 * Math.sin(wt - k * x), f2 = (x) => p.A2 * Math.sin(wt - k * x + phi);
+      curve((x) => mid - f1(x), 0, w, css('--a'), 1.6);
+      curve((x) => mid - f2(x), 0, w, css('--b'), 1.6);
+      curve((x) => mid - f1(x) - f2(x), 0, w, css('--d'), 3);
+      const R = Math.sqrt(p.A1 ** 2 + p.A2 ** 2 + 2 * p.A1 * p.A2 * Math.cos(phi));
+      const kind = p.ph % 360 === 0 ? 'গঠনমূলক — বিস্তার সর্বোচ্চ (a₁ + a₂)' : p.ph === 180 ? 'ধ্বংসাত্মক — বিস্তার সর্বনিম্ন |a₁ − a₂|' : 'মাঝামাঝি';
+      this.info = `লব্ধি বিস্তার R = √(a₁² + a₂² + 2a₁a₂cos δ) = <b>${bn(R, 1)} px</b><br>${kind}`;
+    },
+  });
+
+  S.push({
+    id: 'stationary', tab: '৪. স্থির তরঙ্গ',
+    title: 'স্থির তরঙ্গ — সুস্পন্দ ও নিস্পন্দ বিন্দু',
+    sub: 'সমান বিস্তার ও কম্পাঙ্কের দুটি তরঙ্গ বিপরীত দিক থেকে এলে স্থির তরঙ্গ হয়: y = 2a sin(2πx/λ) cos(2πvt/λ)। পরপর দুই নিস্পন্দ বিন্দুর দূরত্ব λ/2, নিস্পন্দ থেকে সুস্পন্দ λ/4।',
+    controls: [['A', 'প্রতিটি তরঙ্গের বিস্তার a', 10, 45, 1, 30, 'px'], ['lam', 'তরঙ্গদৈর্ঘ্য λ', 80, 300, 10, 160, 'px']],
+    buttons: [['parts', 'আলাদা তরঙ্গ দুটো দেখাও', true]],
+    legend: [['--a', 'ডানে চলা তরঙ্গ'], ['--b', 'বামে চলা তরঙ্গ'], ['--d', 'লব্ধি (স্থির তরঙ্গ)'], ['--c', 'N = নিস্পন্দ, A = সুস্পন্দ']],
+    draw(w, h, t, p, b) {
+      const mid = h / 2, k = TAU / p.lam, wt = TAU * 0.5 * t;
+      grid(w, h, mid);
+      if (b.parts) {
+        curve((x) => mid - p.A * Math.sin(wt - k * x), 0, w, css('--a'), 1.4);
+        curve((x) => mid - p.A * Math.sin(wt + k * x), 0, w, css('--b'), 1.4);
+      }
+      curve((x) => mid - 2 * p.A * Math.sin(k * x) * Math.cos(wt), 0, w, css('--d'), 3);
+      ctx.globalAlpha = 0.25;
+      curve((x) => mid - 2 * p.A * Math.sin(k * x), 0, w, css('--d'), 1);
+      curve((x) => mid + 2 * p.A * Math.sin(k * x), 0, w, css('--d'), 1);
+      ctx.globalAlpha = 1;
+      for (let n = 0; n * p.lam / 2 <= w; n++) {
+        const x = n * p.lam / 2; dot(x, mid, 4, css('--c')); text('N', x, mid + 18, css('--c'), 12, 'center');
+        const xa = x + p.lam / 4; if (xa < w) text('A', xa, mid - 2 * p.A - 6, css('--c'), 12, 'center');
+      }
+      this.info = `পরপর দুই নিস্পন্দ বিন্দুর দূরত্ব = λ/2 = <b>${bn(p.lam / 2, 0)} px</b> · নিস্পন্দ থেকে সুস্পন্দ = λ/4 = <b>${bn(p.lam / 4, 0)} px</b><br>সুস্পন্দ বিন্দুর বিস্তার = 2a = <b>${bn(2 * p.A, 0)} px</b>; নিস্পন্দ বিন্দু সবসময় স্থির। স্থির তরঙ্গ শক্তি বহন করে সামনে এগোয় না।`;
+    },
+  });
+
+  S.push({
+    id: 'resonance', tab: '৫. অনুনাদ',
+    title: 'মুক্ত কম্পন, পরবশ কম্পন ও অনুনাদ',
+    sub: 'বাইরের পর্যায়বৃত্ত বলের কম্পাঙ্ক বস্তুর স্বাভাবিক কম্পাঙ্কের সমান হলে বিস্তার সবচেয়ে বেশি হয় — এটাই অনুনাদ। বাধা (damping) যত কম, চূড়া তত উঁচু ও সরু।',
+    controls: [['f0', 'স্বাভাবিক কম্পাঙ্ক f₀', 0.5, 3, 0.1, 1.5, 'Hz'], ['fd', 'প্রযুক্ত বলের কম্পাঙ্ক f', 0.2, 4, 0.05, 1.0, 'Hz'], ['g', 'বাধা (damping)', 0.05, 1, 0.05, 0.2, '']],
+    legend: [['--a', 'বিস্তার বনাম কম্পাঙ্ক'], ['--d', 'এখনকার f'], ['--b', 'দোলক']],
+    draw(w, h, t, p) {
+      grid(w, h, h - 24);
+      const amp = (f) => 1 / Math.sqrt((p.f0 ** 2 - f ** 2) ** 2 + (p.g * f) ** 2);
+      const maxA = amp(p.f0 * Math.sqrt(Math.max(0.01, 1 - (p.g ** 2) / (2 * p.f0 ** 2))));
+      const X = (f) => 20 + ((w * 0.62 - 30) * f) / 4, Y = (a) => h - 24 - (h - 50) * Math.min(1, a / maxA);
+      curve((x) => Y(amp(((x - 20) * 4) / (w * 0.62 - 30))), 20, w * 0.62, css('--a'));
+      ctx.strokeStyle = css('--d'); ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(X(p.fd), 10); ctx.lineTo(X(p.fd), h - 24); ctx.stroke(); ctx.setLineDash([]);
+      dot(X(p.fd), Y(amp(p.fd)), 6, css('--d'));
+      text('কম্পাঙ্ক →', w * 0.62 - 70, h - 8); text('বিস্তার', 22, 16);
+      const rel = amp(p.fd) / maxA;
+      const cx = w * 0.82, top = 20, L = h * 0.55;
+      const ang = 0.6 * rel * Math.sin(TAU * p.fd * t * 0.6);
+      ctx.strokeStyle = css('--muted'); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx - 40, top); ctx.lineTo(cx + 40, top); ctx.stroke();
+      const bx = cx + L * Math.sin(ang), by = top + L * Math.cos(ang);
+      ctx.beginPath(); ctx.moveTo(cx, top); ctx.lineTo(bx, by); ctx.stroke(); dot(bx, by, 12, css('--b'));
+      const state = Math.abs(p.fd - p.f0) < 0.08 ? '<b>অনুনাদ!</b> f ≈ f₀ — বিস্তার সর্বোচ্চ।' : p.fd < p.f0 ? 'f < f₀ — পরবশ কম্পন, বিস্তার কম।' : 'f > f₀ — পরবশ কম্পন, বিস্তার কম।';
+      this.info = `${state} আপেক্ষিক বিস্তার = <b>${bn(rel * 100, 0)}%</b><br>উদাহরণ: ব্রিজে সৈন্যদল পা মিলিয়ে চলে না; ট্যাকোমা ন্যারো ব্রিজ ভেঙেছিল অনুনাদে।`;
+    },
+  });
+
+  S.push({
+    id: 'string', tab: '৬. টানা তার',
+    title: 'টানা তারে আড় কম্পন (সনোমিটার)',
+    sub: 'n = (p/2l)√(T/μ)। দৈর্ঘ্যের সূত্র n ∝ 1/l, টানের সূত্র n ∝ √T, ভরের সূত্র n ∝ 1/√μ। p = 1 হলে মূল সুর, p = 2, 3… হলে উপসুর/সমমেল।',
+    controls: [['l', 'তারের দৈর্ঘ্য l', 0.2, 1.2, 0.05, 0.6, 'm'], ['T', 'টান T', 10, 200, 5, 80, 'N'], ['mu', 'একক দৈর্ঘ্যের ভর μ', 0.001, 0.02, 0.001, 0.005, 'kg/m'], ['p', 'কম্পনের ধাপ p', 1, 6, 1, 1, '']],
+    buttons: [['play', '🔊 শব্দ শোনো', false, true]],
+    draw(w, h, t, p) {
+      const mid = h / 2, x0 = 30, x1 = 30 + (w - 60) * (p.l / 1.2);
+      grid(w, h, mid);
+      const n = (p.p / (2 * p.l)) * Math.sqrt(p.T / p.mu);
+      const A = 34 * Math.cos(TAU * 0.8 * t);
+      curve((x) => mid - A * Math.sin((p.p * Math.PI * (x - x0)) / (x1 - x0)), x0, x1, css('--a'), 3, 1);
+      ctx.globalAlpha = 0.25;
+      curve((x) => mid - 34 * Math.sin((p.p * Math.PI * (x - x0)) / (x1 - x0)), x0, x1, css('--a'), 1, 1);
+      ctx.globalAlpha = 1;
+      for (const x of [x0, x1]) { ctx.fillStyle = css('--muted'); ctx.fillRect(x - 3, mid - 26, 6, 52); }
+      for (let i = 1; i < p.p; i++) dot(x0 + ((x1 - x0) * i) / p.p, mid, 4, css('--c'));
+      const v = Math.sqrt(p.T / p.mu);
+      this.freq = n;
+      this.info = `তরঙ্গের বেগ v = √(T/μ) = <b>${bn(v, 1)} m/s</b><br><span class="big">কম্পাঙ্ক n = ${bn(n, 1)} Hz</span> (${p.p === 1 ? 'মূল সুর' : `${bn(p.p, 0)}-তম সমমেল / ${bn(p.p - 1, 0)}-তম উপসুর`}) · লুপ সংখ্যা ${bn(p.p, 0)}, মাঝের নিস্পন্দ ${bn(p.p - 1, 0)}টি`;
+    },
+    action(key) { if (key === 'play') playTones([Math.min(2000, Math.max(60, this.freq))]); },
+  });
+
+  S.push({
+    id: 'pipe', tab: '৭. বায়ুস্তম্ভ',
+    title: 'বায়ুস্তম্ভের কম্পন — বদ্ধ নল ও খোলা নল',
+    sub: 'বদ্ধ প্রান্তে নিস্পন্দ, খোলা প্রান্তে সুস্পন্দ। বদ্ধ নলে মূল সুর λ = 4l (n = v/4l) আর শুধু বিজোড় সমমেল; খোলা নলে মূল সুর λ = 2l (n = v/2l) আর সব সমমেল।',
+    controls: [['l', 'নলের দৈর্ঘ্য l', 0.1, 1, 0.01, 0.5, 'm'], ['m', 'কত নম্বর সুর (মূল = ১)', 1, 4, 1, 1, ''], ['v', 'শব্দের বেগ v', 300, 360, 1, 332, 'm/s']],
+    buttons: [['closed', 'বদ্ধ নল', true, false, 'type'], ['open', 'খোলা নল', false, false, 'type'], ['play', '🔊 শব্দ শোনো', false, true]],
+    draw(w, h, t, p, b) {
+      const closed = b.type !== 'open';
+      const mid = h / 2, x0 = 40, x1 = w - 40, H = 46;
+      grid(w, h, -1);
+      ctx.strokeStyle = css('--muted'); ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(x0, mid - H); ctx.lineTo(x1, mid - H); ctx.moveTo(x0, mid + H); ctx.lineTo(x1, mid + H); ctx.stroke();
+      if (closed) { ctx.beginPath(); ctx.moveTo(x0, mid - H); ctx.lineTo(x0, mid + H); ctx.stroke(); }
+      const harmonic = closed ? 2 * p.m - 1 : p.m;
+      const lam = closed ? (4 * p.l) / harmonic : (2 * p.l) / harmonic;
+      const L = x1 - x0;
+      const env = (x) => {
+        const s = (x - x0) / L * p.l;
+        return closed ? Math.sin((TAU / lam) * s) : Math.cos((TAU / lam) * s);
+      };
+      const A = (H - 6) * Math.cos(TAU * 0.7 * t);
+      curve((x) => mid - A * env(x), x0, x1, css('--a'), 2.6, 1);
+      curve((x) => mid + A * env(x), x0, x1, css('--b'), 2.6, 1);
+      const n = p.v / lam;
+      this.freq = n;
+      text(closed ? 'বদ্ধ প্রান্ত (N)' : 'খোলা প্রান্ত (A)', x0, mid + H + 18, css('--c'), 12);
+      text('খোলা প্রান্ত (A)', x1, mid + H + 18, css('--c'), 12, 'right');
+      this.info = `${closed ? 'বদ্ধ নল' : 'খোলা নল'} · ${bn(harmonic, 0)}-তম সমমেল ${harmonic === 1 ? '(মূল সুর)' : ''}<br>তরঙ্গদৈর্ঘ্য λ = <b>${bn(lam, 3)} m</b> · <span class="big">কম্পাঙ্ক n = v/λ = ${bn(n, 1)} Hz</span>` +
+        (closed ? '<br>বদ্ধ নলে শুধু বিজোড় সমমেল (১, ৩, ৫…) হয় — তাই স্লাইডারের ধাপ ১, ২, ৩ মানে সমমেল ১, ৩, ৫।' : '<br>খোলা নলে জোড়-বিজোড় সব সমমেল হয়।');
+    },
+    action(key) { if (key === 'play') playTones([Math.min(2000, Math.max(60, this.freq))]); },
+  });
+
+  S.push({
+    id: 'intensity', tab: '৮. তীব্রতা লেভেল',
+    title: 'শব্দের তীব্রতা ও তীব্রতা লেভেল (dB)',
+    sub: 'β = 10 log(I/I₀) dB, যেখানে প্রমাণ তীব্রতা I₀ = 10⁻¹² W m⁻²। বিন্দু উৎস থেকে তীব্রতা দূরত্বের বর্গের ব্যস্তানুপাতিক: I = P/(4πr²)। দূরত্ব দ্বিগুণ হলে লেভেল প্রায় 6 dB কমে।',
+    controls: [['P', 'উৎসের ক্ষমতা P', 0.0001, 1, 0.0001, 0.01, 'W'], ['r', 'উৎস থেকে দূরত্ব r', 1, 50, 0.5, 5, 'm']],
+    draw(w, h, t, p) {
+      const I = p.P / (4 * Math.PI * p.r * p.r);
+      const beta = 10 * Math.log10(I / 1e-12);
+      grid(w, h, -1);
+      const sx = 40, sy = h / 2;
+      dot(sx, sy, 10, css('--d'));
+      for (let i = 0; i < 6; i++) {
+        const rad = ((t * 60 + i * 40) % 240);
+        ctx.strokeStyle = css('--a'); ctx.globalAlpha = Math.max(0, 1 - rad / 240); ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(sx, sy, rad, -0.9, 0.9); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      const ex = sx + Math.min(w - 120, 20 + (p.r / 50) * (w - 140));
+      text('👂', ex, sy + 8, css('--text'), 22, 'center');
+      const bx = w - 60, bh = h - 40, filled = Math.max(0, Math.min(1, beta / 140)) * bh;
+      ctx.fillStyle = css('--line'); ctx.fillRect(bx, 20, 24, bh);
+      ctx.fillStyle = beta > 85 ? css('--d') : beta > 60 ? css('--b') : css('--e'); ctx.fillRect(bx, 20 + bh - filled, 24, filled);
+      text(`${bn(beta, 0)} dB`, bx + 12, 14, css('--text'), 12, 'center');
+      const what = beta < 30 ? 'ফিসফিস কথার মতো' : beta < 60 ? 'সাধারণ কথাবার্তা' : beta < 85 ? 'ব্যস্ত রাস্তা' : beta < 120 ? 'কানের জন্য ক্ষতিকর হতে পারে' : 'ব্যথার সীমা!';
+      this.info = `তীব্রতা I = P/(4πr²) = <b>${I.toExponential(2)} W m⁻²</b><br><span class="big">তীব্রতা লেভেল β = ${bn(beta, 1)} dB</span> — ${what}`;
+    },
+  });
+
+  S.push({
+    id: 'beats', tab: '৯. বীট',
+    title: 'বীট বা স্বরকম্প',
+    sub: 'প্রায় সমান কম্পাঙ্ক ও তীব্রতার দুটি শব্দ একসাথে হলে শব্দের তীব্রতা পর্যায়ক্রমে বাড়ে-কমে। প্রতি সেকেন্ডে বীট সংখ্যা N = |n₁ − n₂|। প্রতি সেকেন্ডে ১০টির বেশি বীট আলাদা করে শোনা যায় না।',
+    controls: [['n1', 'প্রথম উৎসের কম্পাঙ্ক n₁', 200, 280, 1, 256, 'Hz'], ['n2', 'দ্বিতীয় উৎসের কম্পাঙ্ক n₂', 200, 280, 1, 252, 'Hz']],
+    buttons: [['play', '🔊 দুটো একসাথে শোনো', false, true]],
+    legend: [['--a', 'লব্ধি তরঙ্গ'], ['--d', 'বীটের খাম (envelope)']],
+    draw(w, h, t, p) {
+      const mid = h / 2, N = Math.abs(p.n1 - p.n2);
+      grid(w, h, mid);
+      // time axis: 1 second across the canvas, carrier slowed down for display
+      const scale = 1 / w, carrier = 40;
+      const env = (x) => Math.abs(Math.cos(Math.PI * N * (x * scale + t * 0.15)));
+      curve((x) => mid - 70 * env(x) * Math.sin(TAU * carrier * x * scale + t * 6), 0, w, css('--a'), 1.3, 1);
+      curve((x) => mid - 70 * env(x), 0, w, css('--d'), 2);
+      curve((x) => mid + 70 * env(x), 0, w, css('--d'), 2);
+      text('← ১ সেকেন্ড →', w / 2, h - 8, css('--muted'), 12, 'center');
+      this.info = `<span class="big">বীট সংখ্যা N = |n₁ − n₂| = ${bn(N, 0)} প্রতি সেকেন্ডে</span><br>` +
+        (N === 0 ? 'কম্পাঙ্ক সমান — কোনো বীট নেই।' : N > 10 ? 'N > 10 — বীট আলাদা করে শোনা যাবে না, কর্কশ শোনাবে।' : `প্রতি ${bn(1 / N, 2)} সেকেন্ডে একবার শব্দ জোরালো হয়।`) +
+        '<br>ব্যবহার: সুরশলাকার অজানা কম্পাঙ্ক নির্ণয়, বাদ্যযন্ত্রের সুর মেলানো, খনিতে দূষিত গ্যাস শনাক্ত।';
+    },
+    action(key, p) { if (key === 'play') playTones([p.n1, p.n2], [0.5, 0.5]); },
+  });
+
+  S.push({
+    id: 'quality', tab: '১০. সুর ও উপসুর',
+    title: 'সুর, উপসুর ও শব্দের গুণ (জাতি)',
+    sub: 'একই কম্পাঙ্কের (তীক্ষ্ণতা) শব্দ দুটো বাদ্যযন্ত্রে আলাদা শোনায় কারণ মূল সুরের সাথে মেশানো উপসুরগুলোর পরিমাণ আলাদা — একেই শব্দের গুণ বা জাতি বলে। তরঙ্গের আকার বদলায়, কম্পাঙ্ক বদলায় না।',
+    controls: [['h1', 'মূল সুর (১ম সমমেল)', 0, 1, 0.05, 1, ''], ['h2', '২য় সমমেল', 0, 1, 0.05, 0.5, ''], ['h3', '৩য় সমমেল', 0, 1, 0.05, 0.3, ''], ['h4', '৪র্থ সমমেল', 0, 1, 0.05, 0, '']],
+    buttons: [['play', '🔊 শোনো (220 Hz)', false, true]],
+    legend: [['--d', 'মিলিত তরঙ্গের আকার'], ['--a', 'আলাদা সমমেল']],
+    draw(w, h, t, p) {
+      const mid = h / 2, k = (TAU * 2) / w, hs = [p.h1, p.h2, p.h3, p.h4];
+      grid(w, h, mid);
+      const total = hs.reduce((a, b) => a + b, 0) || 1;
+      ctx.globalAlpha = 0.45;
+      hs.forEach((a, i) => { if (a) curve((x) => mid - (60 * a / total) * Math.sin((i + 1) * (k * x - t * 2)), 0, w, css('--a'), 1, 2); });
+      ctx.globalAlpha = 1;
+      curve((x) => mid - (60 / total) * hs.reduce((s, a, i) => s + a * Math.sin((i + 1) * (k * x - t * 2)), 0), 0, w, css('--d'), 3, 1);
+      const over = hs.slice(1).filter((x) => x > 0).length;
+      this.info = `কম্পাঙ্ক (তীক্ষ্ণতা) একই থাকে: মূল সুরের কম্পাঙ্ক। ${over ? `${bn(over, 0)}টি উপসুর মেশানো আছে — তাই আকার আর গুণ বদলেছে।` : 'শুধু মূল সুর — একদম মসৃণ সাইন তরঙ্গ (বিশুদ্ধ সুর)।'}<br>শব্দের তিন বৈশিষ্ট্য: তীব্রতা (বিস্তার), তীক্ষ্ণতা (কম্পাঙ্ক), গুণ (উপসুর)।`;
+    },
+    action(key, p) { if (key === 'play') { const hs = [p.h1, p.h2, p.h3, p.h4]; const s = hs.reduce((a, b) => a + b, 0) || 1; playTones([220, 440, 660, 880], hs.map((a) => a / s)); } },
+  });
+
+  // ---------- runner ----------
+  let cur = null, params = {}, btn = {}, t0 = performance.now(), paused = false;
+  const $ = (id) => document.getElementById(id);
+  $('tabs').innerHTML = S.map((s, i) => `<button data-i="${i}">${s.tab}</button>`).join('');
+  $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) select(Number(b.dataset.i)); });
+
+  function select(i) {
+    stopTones();
+    cur = S[i];
+    document.querySelectorAll('#tabs button').forEach((b, j) => b.classList.toggle('on', j === i));
+    $('title').textContent = cur.title;
+    $('sub').textContent = cur.sub;
+    params = {}; btn = {};
+    $('ctl').innerHTML = cur.controls.map(([k, label, min, max, step, val, unit]) => {
+      params[k] = val;
+      return `<label>${label}<b id="v_${k}">${bn(val, step < 0.01 ? 3 : step < 1 ? 2 : 0)} ${unit}</b><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-k="${k}" data-u="${unit}" data-s="${step}"></label>`;
+    }).join('');
+    $('buttons').innerHTML = `<button data-b="pause">${paused ? '▶ চালাও' : '⏸ থামাও'}</button>` + (cur.buttons ?? []).map(([k, label, on, isAction, group]) => {
+      if (group) { if (on) btn[group] = k; } else if (!isAction) btn[k] = on;
+      return `<button data-b="${k}" ${group ? `data-g="${group}"` : ''} ${isAction ? 'data-a="1"' : ''} class="${on ? 'on' : ''}">${label}</button>`;
+    }).join('');
+    $('legend').innerHTML = (cur.legend ?? []).map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+    $('note').textContent = 'নোট: পর্দায় দেখানোর জন্য তরঙ্গের গতি ধীর করা হয়েছে; হিসাবগুলো সূত্র অনুযায়ী আসল মানে।';
+    resize();
+  }
+
+  $('ctl').addEventListener('input', (e) => {
+    const r = e.target; if (!r.dataset.k) return;
+    params[r.dataset.k] = Number(r.value);
+    const s = Number(r.dataset.s);
+    $(`v_${r.dataset.k}`).textContent = `${bn(Number(r.value), s < 0.01 ? 3 : s < 1 ? 2 : 0)} ${r.dataset.u}`;
+  });
+  $('buttons').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = b.dataset.b;
+    if (k === 'pause') { paused = !paused; b.textContent = paused ? '▶ চালাও' : '⏸ থামাও'; return; }
+    if (b.dataset.a) { cur.action?.call(cur, k, params); return; }
+    if (b.dataset.g) { btn[b.dataset.g] = k; document.querySelectorAll(`[data-g="${b.dataset.g}"]`).forEach((x) => x.classList.toggle('on', x === b)); return; }
+    btn[k] = !btn[k]; b.classList.toggle('on', btn[k]);
+  });
+
+  let W = 0, H = 0, simT = 0, last = performance.now();
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (!paused) simT += dt;
+    if (cur) {
+      ctx.clearRect(0, 0, W, H);
+      cur.draw(W, H, simT, params, btn);
+      $('info').innerHTML = cur.info ?? '';
+    }
+    requestAnimationFrame(frame);
+  }
+  select(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
