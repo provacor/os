@@ -29,6 +29,102 @@
     "physics_2nd_ch07_simulation": {
       "file": "content/physics/physics_2nd_ch07_simulation.json",
       "count": 1
+    },
+    "physics_2nd_ch06_concept": {
+      "file": "content/physics/physics_2nd_ch06_concept.json",
+      "count": 13
+    },
+    "physics_2nd_ch06_cq": {
+      "file": "content/physics/physics_2nd_ch06_cq.json",
+      "count": 25
+    },
+    "physics_2nd_ch06_derivation": {
+      "file": "content/physics/physics_2nd_ch06_derivation.json",
+      "count": 7
+    },
+    "physics_2nd_ch06_diagram": {
+      "file": "content/physics/physics_2nd_ch06_diagram.json",
+      "count": 4
+    },
+    "physics_2nd_ch06_formula": {
+      "file": "content/physics/physics_2nd_ch06_formula.json",
+      "count": 10
+    },
+    "physics_2nd_ch06_graph": {
+      "file": "content/physics/physics_2nd_ch06_graph.json",
+      "count": 4
+    },
+    "physics_2nd_ch06_ka": {
+      "file": "content/physics/physics_2nd_ch06_ka.json",
+      "count": 57
+    },
+    "physics_2nd_ch06_kha": {
+      "file": "content/physics/physics_2nd_ch06_kha.json",
+      "count": 44
+    },
+    "physics_2nd_ch06_mcq": {
+      "file": "content/physics/physics_2nd_ch06_mcq.json",
+      "count": 131
+    },
+    "physics_2nd_ch06_mistakes": {
+      "file": "content/physics/physics_2nd_ch06_mistakes.json",
+      "count": 21
+    },
+    "physics_2nd_ch06_numerical": {
+      "file": "content/physics/physics_2nd_ch06_numerical.json",
+      "count": 17
+    },
+    "physics_2nd_ch06_revision": {
+      "file": "content/physics/physics_2nd_ch06_revision.json",
+      "count": 5
+    },
+    "physics_2nd_ch07_concept": {
+      "file": "content/physics/physics_2nd_ch07_concept.json",
+      "count": 13
+    },
+    "physics_2nd_ch07_cq": {
+      "file": "content/physics/physics_2nd_ch07_cq.json",
+      "count": 21
+    },
+    "physics_2nd_ch07_derivation": {
+      "file": "content/physics/physics_2nd_ch07_derivation.json",
+      "count": 7
+    },
+    "physics_2nd_ch07_diagram": {
+      "file": "content/physics/physics_2nd_ch07_diagram.json",
+      "count": 4
+    },
+    "physics_2nd_ch07_formula": {
+      "file": "content/physics/physics_2nd_ch07_formula.json",
+      "count": 13
+    },
+    "physics_2nd_ch07_graph": {
+      "file": "content/physics/physics_2nd_ch07_graph.json",
+      "count": 4
+    },
+    "physics_2nd_ch07_ka": {
+      "file": "content/physics/physics_2nd_ch07_ka.json",
+      "count": 30
+    },
+    "physics_2nd_ch07_kha": {
+      "file": "content/physics/physics_2nd_ch07_kha.json",
+      "count": 25
+    },
+    "physics_2nd_ch07_mcq": {
+      "file": "content/physics/physics_2nd_ch07_mcq.json",
+      "count": 149
+    },
+    "physics_2nd_ch07_mistakes": {
+      "file": "content/physics/physics_2nd_ch07_mistakes.json",
+      "count": 16
+    },
+    "physics_2nd_ch07_numerical": {
+      "file": "content/physics/physics_2nd_ch07_numerical.json",
+      "count": 20
+    },
+    "physics_2nd_ch07_revision": {
+      "file": "content/physics/physics_2nd_ch07_revision.json",
+      "count": 7
     }
   }
 }

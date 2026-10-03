@@ -2,7 +2,7 @@
 // Every query token must appear somewhere in the item's full path text,
 // so "physics 1st notes" or "chemistry reaction" both work.
 
-import { chapterTitle, pathOf } from './model.js?v=202610030752';
+import { chapterTitle, pathOf } from './model.js?v=202610031335';
 
 const norm = (s) => String(s ?? '').toLowerCase().normalize('NFC');
 const RANK = { subject: 0, paper: 1, chapter: 2, topic: 3, section: 4, content: 5 };
@@ -29,7 +29,7 @@ export function buildIndex(model) {
     // Content items: searchable by their text fields, open their section.
     s.items.forEach((it) => {
       const kind = s.contentKinds.find((k) => k.id === it.kind)?.label;
-      const text = [it.title, it.question, it.body, it.formula, kind].filter(Boolean);
+      const text = [it.title, it.question, it.body, it.formula, it.stem, it.topic, ...(it.formulas ?? []), kind].filter(Boolean);
       items.push({ node: s, level: 'content', title: it.title ?? it.question ?? it.id, path: pathOf(s), hay: norm([...pathOf(s), s.label, ...text].join(' ')) });
     });
   });
