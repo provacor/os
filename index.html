@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="assets/css/app.css?v=202610021514">
+  <link rel="stylesheet" href="assets/css/app.css?v=202610030202">
   <script>
     try {
       var a = JSON.parse(localStorage.getItem('hscos:a11y:v1') || '{}'), h = document.documentElement;
@@ -19,6 +19,10 @@
       h.dataset.dyslexia = a.dyslexia ? 'on' : 'off';
       h.dataset.contrast = a.contrast ? 'high' : 'normal';
       h.dataset.motion = a.motion || 'system';
+      var b = Math.min(130, Math.max(50, Number(a.bright) || 100));
+      h.style.setProperty('--dim', b < 100 ? (100 - b) / 100 : 0);
+      h.style.setProperty('--boost', b > 100 ? b / 100 : 1);
+      h.dataset.bright = b === 100 ? 'normal' : b < 100 ? 'dim' : 'boost';
     } catch (e) {}
     try {
       var p = localStorage.getItem('hscos:theme') || 'dark';
@@ -61,6 +65,7 @@
 
   <a class="ai-fab" id="aiFab" href="#/ai" aria-label="AI শিক্ষককে জিজ্ঞেস করো"><svg width="24" height="24" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg><span>AI</span></a>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="dimmer" aria-hidden="true"></div>
 
   <nav class="bottom-nav" id="bottomNav" aria-label="Main">
     <span class="nav-ind" aria-hidden="true"></span>
@@ -71,6 +76,6 @@
     <a href="#/progress" data-nav="progress"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 21h18"/><path d="M6 17v-5M11 17V7M16 17v-8"/></svg><span>Progress</span></a>
     <a href="#/more" data-nav="more"><svg width="22" height="22" class="ic" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>More</span></a>
   </nav>
-  <script type="module" src="assets/js/app.js?v=202610021514"></script>
+  <script type="module" src="assets/js/app.js?v=202610030202"></script>
 </body>
 </html>

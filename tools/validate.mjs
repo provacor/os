@@ -87,6 +87,25 @@ for (const [id, reg] of Object.entries(raw.content.sections ?? {})) {
     if (it.file && !existsSync(join(root, it.file))) err(`${reg.file}: item ${it.id} file ${it.file} is missing`);
   }
 }
+// Mind maps built from notes: known chapters, files present, every node has text.
+const mmIndex = join(root, 'content/mindmaps/index.json');
+if (existsSync(mmIndex)) {
+  for (const [chId, file] of Object.entries(JSON.parse(readFileSync(mmIndex, 'utf8')).maps ?? {})) {
+    if (model.byId.get(chId)?.level !== 'chapter') err(`mindmaps: unknown chapter ${chId}`);
+    if (!existsSync(join(root, file))) { err(`mindmaps: ${file} is missing`); continue; }
+    const mm = JSON.parse(readFileSync(join(root, file), 'utf8'));
+    if (mm.chapterId !== chId) err(`${file}: chapterId should be ${chId}`);
+    const ids = new Set();
+    const check = (n) => {
+      if (!n?.text) err(`${file}: a node has no text`);
+      if (ids.has(n.id)) err(`${file}: duplicate node id ${n.id}`);
+      ids.add(n.id);
+      (n.children ?? []).forEach(check);
+    };
+    check(mm.root);
+  }
+}
+
 // Concept map (universal search + knowledge graph): known chapters/subjects, known prereqs, no cycles.
 const conceptsPath = join(root, 'data/concepts.json');
 if (existsSync(conceptsPath)) {

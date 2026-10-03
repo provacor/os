@@ -1,9 +1,9 @@
 // Exam planner page.
 
-import { icon } from '../icons.js?v=202610021514';
-import { esc } from '../components.js?v=202610021514';
-import { planSettings, daysUntil, missedPlanTasks, fmtMin, SUBJECT_ORDER } from '../planner.js?v=202610021514';
-import { allPlanTasks, todayKey } from '../mission.js?v=202610021514';
+import { icon } from '../icons.js?v=202610030202';
+import { esc } from '../components.js?v=202610030202';
+import { planSettings, daysUntil, missedPlanTasks, fmtMin, SUBJECT_ORDER } from '../planner.js?v=202610030202';
+import { allPlanTasks, todayKey } from '../mission.js?v=202610030202';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 export const plannerState = { result: null };

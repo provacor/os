@@ -5,7 +5,7 @@
 
 const KEY = 'hscos:a11y:v1';
 export const FONT_STEPS = [[0.9, 'ছোট'], [1, 'সাধারণ'], [1.15, 'বড়'], [1.3, 'আরও বড়'], [1.5, 'সবচেয়ে বড়']];
-const DEFAULTS = { font: 1, dyslexia: false, contrast: false, motion: 'system', captions: true, rate: 1 };
+const DEFAULTS = { font: 1, dyslexia: false, contrast: false, motion: 'system', captions: true, rate: 1, bright: 100 };
 
 function read() {
   try {
@@ -27,6 +27,15 @@ export function setA11y(patch) {
   applyA11y();
 }
 
+// App brightness (50–130%): below 100 a black veil dims the screen, above 100 the content is brightened.
+export function applyBrightness(v) {
+  const b = Math.min(130, Math.max(50, Number(v) || 100));
+  const h = document.documentElement;
+  h.style.setProperty('--dim', String(b < 100 ? (100 - b) / 100 : 0));
+  h.style.setProperty('--boost', String(b > 100 ? b / 100 : 1));
+  h.dataset.bright = b === 100 ? 'normal' : b < 100 ? 'dim' : 'boost';
+}
+
 let lexend = false;
 export function applyA11y() {
   const h = document.documentElement;
@@ -34,6 +43,7 @@ export function applyA11y() {
   h.dataset.dyslexia = prefs.dyslexia ? 'on' : 'off';
   h.dataset.contrast = prefs.contrast ? 'high' : 'normal';
   h.dataset.motion = prefs.motion;
+  applyBrightness(prefs.bright);
   if (prefs.dyslexia && !lexend) {
     lexend = true;
     const l = document.createElement('link');

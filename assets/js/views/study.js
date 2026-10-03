@@ -1,12 +1,14 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610021514';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021514';
-import { progressOf } from '../progress.js?v=202610021514';
-import { contentCount, chapterCount } from '../model.js?v=202610021514';
-import { lastVisit } from './shared.js?v=202610021514';
-import { videosBlock } from './videos.js?v=202610021514';
-import { alarmsBlock } from './alarms.js?v=202610021514';
+import { icon } from '../icons.js?v=202610030202';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610030202';
+import { progressOf } from '../progress.js?v=202610030202';
+import { contentCount, chapterCount } from '../model.js?v=202610030202';
+import { lastVisit } from './shared.js?v=202610030202';
+import { videosBlock } from './videos.js?v=202610030202';
+import { alarmsBlock } from './alarms.js?v=202610030202';
+import { hasFullMapSync } from './mindmap.js?v=202610030202';
+import { conceptsOfChapter } from '../concepts.js?v=202610030202';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -126,8 +128,20 @@ export function chapterView(model, ch) {
     crumbs: [subjectCrumb(ch.subject), [ch.paper.name, `#/p/${ch.paper.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`]],
     accent: ch.subject.accent,
     visit: { chapterId: ch.id },
-    html: hero + readyHtml + videosBlock(ch) + restHtml + progressHtml + pager,
+    html: hero + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
   };
+}
+
+// Mind map entry, placed right after the chapter's notes.
+function mindmapCard(ch) {
+  const full = hasFullMapSync(ch.id);
+  const n = conceptsOfChapter(ch.id).length;
+  return `<section class="block"><a class="mm-card rise ${full ? 'full' : ''}" href="#/mm/${esc(ch.id)}">
+      <span class="mm-card-art" aria-hidden="true"><svg viewBox="0 0 64 48" width="64" height="48"><path d="M14 24 C24 24 24 8 34 8 M14 24 C24 24 24 24 34 24 M14 24 C24 24 24 40 34 40 M44 8 C50 8 50 3 56 3 M44 8 C50 8 50 13 56 13" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="24" r="6" fill="currentColor"/><rect x="34" y="4" width="10" height="8" rx="3" fill="currentColor" opacity=".8"/><rect x="34" y="20" width="10" height="8" rx="3" fill="currentColor" opacity=".6"/><rect x="34" y="36" width="10" height="8" rx="3" fill="currentColor" opacity=".45"/></svg></span>
+      <span class="mm-card-body"><b>মাইন্ড ম্যাপ</b>
+        <small>${full ? 'নোট থেকে তৈরি · টপিক → উপটপিক → কী কী পড়তে হবে' : n ? 'খসড়া · নোট দিলে পুরো ম্যাপ তৈরি হবে' : 'নোট দিলে এই অধ্যায়ের ম্যাপ তৈরি হবে'}</small></span>
+      ${full ? '<span class="ok-tag">পূর্ণ</span>' : '<span class="flag">খসড়া</span>'}${icon('chevron', 'cc-chev')}
+    </a></section>`;
 }
 
 // ---------- Curriculum map ----------

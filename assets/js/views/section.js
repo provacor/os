@@ -1,8 +1,8 @@
 // Section screen: the content of one chapter section (Notes, MCQ, Simulation, …).
 
-import { icon } from '../icons.js?v=202610021514';
-import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610021514';
-import { progressOf, isItemDone } from '../progress.js?v=202610021514';
+import { icon } from '../icons.js?v=202610030202';
+import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610030202';
+import { progressOf, isItemDone } from '../progress.js?v=202610030202';
 
 const FORMAT = {
   pdf: { icon: 'file', open: 'Open PDF', label: 'PDF' },
@@ -102,7 +102,8 @@ export function sectionView(model, sec) {
         <div><p class="eyebrow">${esc(ch.subject.name)} · ${esc(chapterEyebrow(ch))}</p><h1>${esc(sec.screenTitle)}</h1><p class="muted bn">${esc(ch.name)}</p></div>
       </header>
       <nav class="seg-tabs" aria-label="Sections of this chapter">${tabs}</nav>
-      ${body}`,
+      ${body}
+      ${sec.type === 'notes' ? `<a class="btn btn-primary tap mm-after-notes" href="#/mm/${esc(ch.id)}">${icon('map')}<span>এই অধ্যায়ের মাইন্ড ম্যাপ দেখো</span></a>` : ''}`,
     after: () => document.querySelector('.seg-tab.on')?.scrollIntoView({ inline: 'center', block: 'nearest' }),
   };
 }
