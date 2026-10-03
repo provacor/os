@@ -1,8 +1,8 @@
 // Reusable UI building blocks. Each returns an HTML string; views compose them.
 
-import { icon } from './icons.js?v=202610030202';
-import { progressOf } from './progress.js?v=202610030202';
-import { contentCount, chapterCount } from './model.js?v=202610030202';
+import { icon } from './icons.js?v=202610030752';
+import { progressOf } from './progress.js?v=202610030752';
+import { contentCount, chapterCount } from './model.js?v=202610030752';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -20,7 +20,7 @@ export function subjectGlyph(s) {
 
 // Each section type gets a hue so the chapter workspace reads at a glance.
 const SECTION_HUE = {
-  notes: 'blue', mcq: 'amber', cq: 'rose', formula: 'violet', concept: 'yellow', simulation: 'teal',
+  notes: 'blue', mcq: 'amber', cq: 'rose', ka: 'blue', kha: 'violet', formula: 'violet', concept: 'yellow', simulation: 'teal',
   mistakes: 'red', revision: 'cyan', progress: 'green', reaction: 'teal', conversion: 'cyan', mechanism: 'violet',
   identification: 'blue', derivation: 'violet', numerical: 'amber', graph: 'cyan', diagram: 'green', theorem: 'violet',
   problem_types: 'amber', solved: 'green', definition: 'blue', process: 'cyan', comparison: 'rose', classification: 'green',
