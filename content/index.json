@@ -17,6 +17,10 @@
     "physics_1st_ch09_notes": {
       "file": "content/physics/physics_1st_ch09_notes.json",
       "count": 1
+    },
+    "physics_1st_ch09_simulation": {
+      "file": "content/physics/physics_1st_ch09_simulation.json",
+      "count": 1
     }
   }
 }
