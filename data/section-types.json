@@ -116,6 +116,40 @@
       ],
       "blurb": "সৃজনশীল প্রশ্ন ও সমাধান"
     },
+    "ka": {
+      "label": "ক",
+      "icon": "📝",
+      "screenTitle": "ক — জ্ঞানমূলক প্রশ্ন",
+      "emptyText": "এখনো কোনো প্রশ্ন যোগ করা হয়নি।",
+      "trackable": true,
+      "contentKinds": [],
+      "itemFields": [
+        "question",
+        "answer",
+        "source",
+        "board",
+        "year",
+        "topic"
+      ],
+      "blurb": "ক নং প্রশ্ন: জ্ঞানমূলক (সংজ্ঞা, কী, কাকে বলে)"
+    },
+    "kha": {
+      "label": "খ",
+      "icon": "📝",
+      "screenTitle": "খ — অনুধাবনমূলক প্রশ্ন",
+      "emptyText": "এখনো কোনো প্রশ্ন যোগ করা হয়নি।",
+      "trackable": true,
+      "contentKinds": [],
+      "itemFields": [
+        "question",
+        "answer",
+        "source",
+        "board",
+        "year",
+        "topic"
+      ],
+      "blurb": "খ নং প্রশ্ন: অনুধাবনমূলক (কেন, ব্যাখ্যা কর)"
+    },
     "formula": {
       "label": "Formula",
       "icon": "📐",

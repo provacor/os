@@ -5,7 +5,7 @@
       "notes", "mcq", "cq", "formula", "concept", "simulation", "mistakes", "revision", "progress"
     ],
     "physics": [
-      "notes", "mcq", "cq", "formula", "concept",
+      "notes", "mcq", "cq", "ka", "kha", "formula", "concept",
       "derivation", "numerical", "graph", "diagram",
       "simulation", "mistakes", "revision", "progress"
     ],
@@ -15,7 +15,7 @@
       "simulation", "mistakes", "revision", "progress"
     ],
     "chemistry": [
-      "notes", "mcq", "cq", "formula", "concept",
+      "notes", "mcq", "cq", "ka", "kha", "formula", "concept",
       "reaction", "conversion", "mechanism", "identification",
       "simulation", "mistakes", "revision", "progress"
     ],

@@ -53,6 +53,8 @@ const P = {
   notes: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M8 7h8M8 11h6"/>',
   mcq: '<path d="M10 6h10M10 12h10M10 18h10"/><path d="m3.5 6 1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"/>',
   cq: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m14 6 4 4"/>',
+  ka: '<rect x="3" y="3" width="18" height="18" rx="4"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor" stroke="none">ক</text>',
+  kha: '<rect x="3" y="3" width="18" height="18" rx="4"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor" stroke="none">খ</text>',
   formula: '<path d="M18 5H6l6.5 7L6 19h12"/>',
   concept: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.6 1 2.5h6c0-.9.3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
   simulation: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M10.5 8.5v5l4-2.5z"/>',

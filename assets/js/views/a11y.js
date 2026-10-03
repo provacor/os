@@ -1,7 +1,7 @@
 // Accessibility settings page.
 
-import { icon } from '../icons.js?v=202610030202';
-import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610030202';
+import { icon } from '../icons.js?v=202610030752';
+import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610030752';
 
 const toggle = (key, on, title, text) => `<label class="a11y-row">
     <span><b>${title}</b><small class="muted">${text}</small></span>

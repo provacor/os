@@ -1,14 +1,14 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610030202';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610030202';
-import { progressOf } from '../progress.js?v=202610030202';
-import { contentCount, chapterCount } from '../model.js?v=202610030202';
-import { lastVisit } from './shared.js?v=202610030202';
-import { videosBlock } from './videos.js?v=202610030202';
-import { alarmsBlock } from './alarms.js?v=202610030202';
-import { hasFullMapSync } from './mindmap.js?v=202610030202';
-import { conceptsOfChapter } from '../concepts.js?v=202610030202';
+import { icon } from '../icons.js?v=202610030752';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610030752';
+import { progressOf } from '../progress.js?v=202610030752';
+import { contentCount, chapterCount } from '../model.js?v=202610030752';
+import { lastVisit } from './shared.js?v=202610030752';
+import { videosBlock } from './videos.js?v=202610030752';
+import { alarmsBlock } from './alarms.js?v=202610030752';
+import { hasFullMapSync } from './mindmap.js?v=202610030752';
+import { conceptsOfChapter } from '../concepts.js?v=202610030752';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
