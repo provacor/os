@@ -1,0 +1,14 @@
+{
+  "sectionId": "physics_2nd_ch07_simulation",
+  "updated": "2026-10-03",
+  "items": [
+    {
+      "id": "physics_2nd_ch07_simulation_0001",
+      "kind": null,
+      "title": "ভৌত আলোকবিজ্ঞান ল্যাব — ১১টি সিমুলেশন (দশা ও পথ পার্থক্য · ইয়ং এর দ্বি-চিড় · ব্যতিচার নকশা · হাইগেনসের নীতি · একক চিড়ে অপবর্তন · গ্রেটিং · তড়িৎচৌম্বক তরঙ্গ · ম্যালাসের সূত্র · ব্রুস্টারের সূত্র · তড়িৎচৌম্বক বর্ণালী · দীপন তীব্রতা)",
+      "format": "html",
+      "file": "content/files/physics_2nd_ch07_simulation/physical-optics-lab.html",
+      "source": "Built from the user's physical optics notes (Provacor)"
+    }
+  ]
+}

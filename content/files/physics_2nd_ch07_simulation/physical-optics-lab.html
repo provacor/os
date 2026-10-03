@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ভৌত আলোকবিজ্ঞান ল্যাব — ৭ম অধ্যায়ের ১১টি সিমুলেশন</title>
+<style>
+  :root {
+    --bg: #0d1017; --panel: #151a24; --panel2: #1c2230; --line: #2a3242; --text: #e9edf4; --muted: #8e98ab;
+    --a: #7ea6ff; --b: #f7c35c; --c: #4fd8c4; --d: #fb8fb0; --e: #6ee7a0; --grid: rgba(255,255,255,.06);
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f4f6fa; --panel: #fff; --panel2: #f1f4f9; --line: #dde3ec; --text: #0f172a; --muted: #5b6577;
+      --a: #3b6cf6; --b: #c58a06; --c: #0f9f8e; --d: #e2457a; --e: #16a34a; --grid: rgba(15,23,42,.07); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Noto Sans Bengali", "Inter", system-ui, sans-serif; }
+  header { padding: 14px 14px 6px; }
+  h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 99px; padding: 7px 12px; font: inherit; font-size: .82rem; cursor: pointer; white-space: nowrap; }
+  .tabs button.on { background: var(--a); border-color: transparent; color: #fff; }
+  main { padding: 6px 14px 24px; max-width: 900px; margin: 0 auto; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+  h2 { margin: 2px 0 2px; font-size: 1.05rem; }
+  .sub { color: var(--muted); font-size: .82rem; margin: 0 0 10px; }
+  canvas { width: 100%; height: 260px; display: block; background: var(--panel2); border-radius: 12px; touch-action: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .row button { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 10px; padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+  .row button.on { border-color: var(--a); color: var(--a); }
+  .ctl { display: grid; gap: 8px; margin-top: 10px; }
+  .ctl label { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: .84rem; }
+  .ctl label b { color: var(--a); font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--a); }
+  .info { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: var(--panel2); font-size: .86rem; }
+  .info code { font-family: ui-monospace, monospace; color: var(--c); }
+  .info .big { font-size: 1.05rem; font-weight: 700; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: .78rem; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ভৌত আলোকবিজ্ঞান ল্যাব</h1>
+  <p>পদার্থবিজ্ঞান ২য় পত্র · ৭ম অধ্যায় — নোটের প্রতিটি টপিকের হাতে-কলমে সিমুলেশন। স্লাইডার বদলে দেখো কী হয়।</p>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<main><section class="card">
+  <h2 id="title"></h2>
+  <p class="sub" id="sub"></p>
+  <canvas id="cv"></canvas>
+  <div class="legend" id="legend"></div>
+  <div class="row" id="buttons"></div>
+  <div class="ctl" id="ctl"></div>
+  <div class="info" id="info"></div>
+  <p class="note" id="note"></p>
+</section></main>
+
+<script>
+(() => {
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const bn = (x, d = 2) => {
+    const s = typeof x === 'number' ? (Number.isInteger(x) ? String(x) : x.toFixed(d)) : String(x);
+    return s.replace(/\d/g, (c) => '০১২৩৪৫৬৭৮৯'[c]);
+  };
+  const TAU = Math.PI * 2;
+
+  // ---------- drawing helpers ----------
+  function grid(w, h, midY = h / 2) {
+    ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = midY % 40; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.strokeStyle = css('--line'); ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
+  }
+  function curve(fn, x0, x1, color, width = 2.4, step = 2) {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    for (let x = x0; x <= x1; x += step) { const y = fn(x); x === x0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  function dot(x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+  function text(s, x, y, color = css('--muted'), size = 12, align = 'left') {
+    ctx.fillStyle = color; ctx.font = `${size}px "Noto Sans Bengali", system-ui, sans-serif`; ctx.textAlign = align; ctx.fillText(s, x, y);
+  }
+  function arrowLine(x1, y1, x2, y2, color, label) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    for (const [ax, ay, bx] of [[x1, y1, x2], [x2, y2, x1]]) {
+      const d = Math.sign(bx - ax) || 1;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + 7 * d, ay - 4); ctx.lineTo(ax + 7 * d, ay + 4); ctx.fill();
+    }
+    if (label) text(label, (x1 + x2) / 2, y1 - 6, color, 12, 'center');
+  }
+
+  // ---------- audio (optional, user starts it) ----------
+  let audio = null;
+  function playTones(freqs, gains) {
+    stopTones();
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const out = ac.createGain(); out.gain.value = 0.18; out.connect(ac.destination);
+    const oscs = freqs.map((f, i) => {
+      const o = ac.createOscillator(); o.frequency.value = f;
+      const g = ac.createGain(); g.gain.value = gains ? gains[i] : 1 / freqs.length;
+      o.connect(g).connect(out); o.start(); return o;
+    });
+    audio = { ac, oscs };
+    setTimeout(stopTones, 3500);
+  }
+  function stopTones() { if (audio) { try { audio.ac.close(); } catch (e) {} audio = null; } }
+
+  // ---------- simulations ----------
+  // ---------- optics helpers ----------
+  const C0 = 2.998e8, H0 = 6.626e-34, EV = 1.602e-19, MU0 = 4 * Math.PI * 1e-7, EPS0 = 8.854e-12;
+  const sup = (n) => String(n).replace(/[-0-9]/g, (c) => '⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(c)]);
+  function sci(x, d = 2) {
+    if (!isFinite(x)) return '—';
+    if (x === 0) return '০';
+    const e = Math.floor(Math.log10(Math.abs(x)));
+    if (e >= -2 && e < 4) return bn(Number(x.toFixed(d)), d);
+    let m = x / 10 ** e;
+    if (Math.abs(Number(m.toFixed(d))) >= 10) return `${bn(m / 10, d)} × 10${sup(e + 1)}`;
+    return `${bn(m, d)} × 10${sup(e)}`;
+  }
+  const deg = (r) => (r * 180) / Math.PI, rad = (d) => (d * Math.PI) / 180;
+  // wavelength (nm) -> [r,g,b] 0..1
+  function wl(nm) {
+    let r = 0, g = 0, b = 0;
+    if (nm < 440) { r = -(nm - 440) / 60; b = 1; } else if (nm < 490) { g = (nm - 440) / 50; b = 1; }
+    else if (nm < 510) { g = 1; b = -(nm - 510) / 20; } else if (nm < 580) { r = (nm - 510) / 70; g = 1; }
+    else if (nm < 645) { r = 1; g = -(nm - 645) / 65; } else { r = 1; }
+    const f = nm < 420 ? 0.3 + 0.7 * (nm - 380) / 40 : nm > 700 ? 0.3 + 0.7 * (780 - nm) / 80 : 1;
+    return [r * f, g * f, b * f];
+  }
+  const rgb = (c, k = 1) => `rgb(${c.map((v) => Math.round(255 * Math.max(0, Math.min(1, v * k)))).join(',')})`;
+  function colourName(nm) {
+    return nm < 425 ? 'বেগুনি' : nm < 445 ? 'নীল' : nm < 500 ? 'আসমানি' : nm < 575 ? 'সবুজ' : nm < 585 ? 'হলুদ' : nm < 620 ? 'কমলা' : 'লাল';
+  }
+  function setParam(k, v) {
+    const r = document.querySelector(`#ctl input[data-k="${k}"]`);
+    if (!r) return;
+    r.value = v; r.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  function line(x1, y1, x2, y2, color, wdt = 1.5, dash) {
+    ctx.strokeStyle = color; ctx.lineWidth = wdt; if (dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function arrow(x1, y1, x2, y2, color, wdt = 1.6) {
+    line(x1, y1, x2, y2, color, wdt);
+    const a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 8 * Math.cos(a - 0.4), y2 - 8 * Math.sin(a - 0.4));
+    ctx.lineTo(x2 - 8 * Math.cos(a + 0.4), y2 - 8 * Math.sin(a + 0.4)); ctx.fill();
+  }
+  // small axes box for a graph; returns mapper
+  function graphBox(x0, y0, x1, y1, xmax, ymax, xl, yl) {
+    line(x0, y1, x1, y1, css('--line'), 1); line(x0, y0, x0, y1, css('--line'), 1);
+    if (xl) text(xl, x1, y1 + 13, css('--muted'), 10, 'right');
+    if (yl) text(yl, x0 + 3, y0 + 9, css('--muted'), 10);
+    return { X: (v) => x0 + (v / xmax) * (x1 - x0), Y: (v) => y1 - (v / ymax) * (y1 - y0) };
+  }
+  // screen strip + intensity plot shared by double slit / single slit
+  function screenAndPlot(w, h, xs, view, I, colourAt, labels) {
+    const top = 10, bot = h - 10, mid = h / 2, half = (bot - top) / 2;
+    const yOf = (py) => ((mid - py) / half) * view;
+    const gx0 = xs + 40, gx1 = w - 12;
+    ctx.fillStyle = '#000'; ctx.fillRect(xs, top, 26, bot - top);
+    const pts = [];
+    for (let py = top; py < bot; py++) {
+      const y = yOf(py + 0.5);
+      ctx.fillStyle = colourAt(y); ctx.fillRect(xs, py, 26, 1);
+      pts.push([gx0 + I(y) * (gx1 - gx0), py + 0.5]);
+    }
+    line(gx0, top, gx0, bot, css('--line'), 1);
+    ctx.strokeStyle = css('--a'); ctx.lineWidth = 2; ctx.beginPath();
+    pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke();
+    text('পর্দা', xs + 13, bot + 0, css('--muted'), 10, 'center');
+    text('তীব্রতা →', gx1, bot + 0, css('--muted'), 10, 'right');
+    for (const [y, label, col] of labels) {
+      if (Math.abs(y) > view) continue;
+      const py = mid - (y / view) * half;
+      line(xs + 26, py, gx0, py, css('--line'), 1, [2, 3]);
+      text(label, xs + 29, py - 2, col ?? css('--muted'), 10);
+    }
+    return { yPx: (y) => mid - (y / view) * half };
+  }
+
+  // ---------- simulations ----------
+  const S = [];
+
+  S.push({
+    id: 'phase', tab: '১. দশা ও পথ পার্থক্য',
+    title: 'পথ পার্থক্য, দশা পার্থক্য ও উপরিপাতন',
+    sub: 'একই কম্পাঙ্ক ও বিস্তারের দুটি তরঙ্গ একটি বিন্দুতে মিলিত হলো। দশা পার্থক্য δ = (2π/λ) × পথ পার্থক্য। লব্ধি বিস্তার R = 2a|cos(δ/2)|, আর তীব্রতা ∝ R²।',
+    controls: [['dx', 'পথ পার্থক্য', 0, 3, 0.05, 0.25, 'λ'], ['A', 'প্রতিটি তরঙ্গের বিস্তার a', 10, 30, 1, 24, 'px']],
+    legend: [['--a', '১ম তরঙ্গ'], ['--b', '২য় তরঙ্গ'], ['--d', 'লব্ধি তরঙ্গ']],
+    height: 300,
+    draw(w, h, t, p) {
+      const lamPx = 120, k = TAU / lamPx, wt = TAU * 0.5 * t, d = TAU * p.dx;
+      const ys = [h * 0.17, h * 0.42, h * 0.76];
+      ctx.strokeStyle = css('--grid');
+      for (const y of ys) line(0, y, w, y, css('--line'), 1);
+      text('১ম তরঙ্গ', 6, ys[0] - p.A - 4, css('--a'), 11);
+      text('২য় তরঙ্গ', 6, ys[1] - p.A - 4, css('--b'), 11);
+      text('লব্ধি = ১ম + ২য়', 6, ys[2] - 2 * p.A - 4, css('--d'), 11);
+      curve((x) => ys[0] - p.A * Math.sin(k * x - wt), 0, w, css('--a'), 2);
+      curve((x) => ys[1] - p.A * Math.sin(k * x - wt - d), 0, w, css('--b'), 2);
+      curve((x) => ys[2] - p.A * (Math.sin(k * x - wt) + Math.sin(k * x - wt - d)), 0, w, css('--d'), 2.6);
+      const R = 2 * Math.abs(Math.cos(d / 2)), I = Math.cos(d / 2) ** 2;
+      const m = p.dx * 2, r = Math.round(m);
+      let verdict = 'আংশিক — পুরো উজ্জ্বলও না, পুরো অন্ধকারও না।';
+      if (Math.abs(m - r) < 0.03) verdict = r % 2 === 0
+        ? `<b>গঠনমূলক ব্যতিচার</b> — পথ পার্থক্য = ${bn(r)}·λ/2 (λ/2-এর যুগ্ম গুণিতক) → উজ্জ্বল`
+        : `<b>ধ্বংসাত্মক ব্যতিচার</b> — পথ পার্থক্য = ${bn(r)}·λ/2 (λ/2-এর অযুগ্ম গুণিতক) → অন্ধকার`;
+      this.info = `<span class="big">δ = (2π/λ) × ${bn(p.dx, 2)}λ = ${bn(p.dx * 2, 2)}π rad</span><br>` +
+        `লব্ধি বিস্তার R = 2a|cos(δ/2)| = <b>${bn(R, 2)}a</b> · তীব্রতা = <b>${bn(I * 100, 0)}%</b> (সর্বোচ্চের)<br>${verdict}` +
+        `<br><small>মনে রাখো: গঠনমূলক → δ = 2nπ; ধ্বংসাত্মক → δ = (2n+1)π (π/2 নয়)।</small>`;
+    },
+  });
+
+  S.push({
+    id: 'young', tab: '২. ইয়ং এর দ্বি-চিড়',
+    title: 'ইয়ং এর দ্বি-চিড় পরীক্ষা',
+    sub: 'সুসংগত আলো দুটি চিড় পেরিয়ে পর্দায় উজ্জ্বল-অন্ধকার ডোরা তৈরি করে। ডোরা ব্যবধান β = λD/a; n-তম উজ্জ্বল ডোরা Yₙ = nλD/a, n-তম অন্ধকার ডোরা Yₙ = (2n−1)λD/2a।',
+    controls: [['lam', 'তরঙ্গদৈর্ঘ্য λ', 380, 780, 5, 589, 'nm'], ['a', 'চিড়দ্বয়ের দূরত্ব a', 0.1, 2, 0.05, 0.5, 'mm'], ['D', 'চিড় থেকে পর্দার দূরত্ব D', 0.5, 3, 0.1, 1, 'm'], ['n', 'ক্রম n', 1, 5, 1, 1, ''], ['view', 'পর্দার যতটুকু দেখাচ্ছে (±)', 2, 20, 1, 6, 'mm']],
+    buttons: [['mono', 'একবর্ণী আলো', true, false, 'light'], ['white', 'সাদা আলো', false, false, 'light']],
+    legend: [['--b', 'চিড় থেকে n-তম উজ্জ্বল ডোরায় যাওয়া রশ্মি']],
+    height: 300,
+    draw(w, h, t, p, b) {
+      const mid = h / 2, xs = Math.max(150, w * 0.42);
+      const phase = (y, nm) => (Math.PI * p.a * y) / (nm * 1e-6 * p.D * 1000); // all in mm
+      const white = b.light === 'white';
+      const WL = []; for (let nm = 400; nm <= 700; nm += 15) WL.push(nm);
+      const I = (y) => white ? WL.reduce((s, nm) => s + Math.cos(phase(y, nm)) ** 2, 0) / WL.length : Math.cos(phase(y, p.lam)) ** 2;
+      const colourAt = (y) => {
+        if (!white) return rgb(wl(p.lam), Math.cos(phase(y, p.lam)) ** 2);
+        const c = [0, 0, 0];
+        for (const nm of WL) { const k = Math.cos(phase(y, nm)) ** 2, q = wl(nm); c[0] += q[0] * k; c[1] += q[1] * k; c[2] += q[2] * k; }
+        return rgb(c, 2.6 / WL.length);
+      };
+      const beta = (p.lam * 1e-6 * p.D * 1000) / p.a; // mm
+      const labels = [];
+      if (!white) {
+        labels.push([0, 'CM', css('--e')]);
+        for (let k = 1; k <= 12; k++) { labels.push([k * beta, `${bn(k)}L`]); labels.push([-k * beta, `${bn(k)}L`]); }
+        const pxPerMm = (h - 20) / 2 / p.view;
+        if (beta * pxPerMm < 14) labels.splice(1);
+      } else labels.push([0, 'সাদা', css('--e')]);
+      const sp = screenAndPlot(w, h, xs, p.view, I, colourAt, labels);
+      // apparatus
+      const sx = 22, bx = Math.min(xs * 0.38, 90), g = 8 + p.a * 9;
+      dot(sx, mid, 8, white ? '#fff' : rgb(wl(p.lam)));
+      text('উৎস', sx, mid + 22, css('--muted'), 10, 'center');
+      line(bx, 8, bx, mid - g - 3, css('--text'), 3); line(bx, mid - g + 3, bx, mid + g - 3, css('--text'), 3); line(bx, mid + g + 3, bx, h - 8, css('--text'), 3);
+      text('S₁', bx - 14, mid - g + 4, css('--muted'), 10); text('S₂', bx - 14, mid + g + 4, css('--muted'), 10);
+      for (const yy of [mid - g, mid + g]) line(sx, mid, bx, yy, css('--line'), 1, [3, 3]);
+      const yn = p.n * beta;
+      if (!white && yn <= p.view) {
+        const py = sp.yPx(yn);
+        line(bx, mid - g, xs, py, css('--b'), 1.4); line(bx, mid + g, xs, py, css('--b'), 1.4);
+        dot(xs, py, 4, css('--b'));
+      }
+      line(bx, h - 14, xs, h - 14, css('--muted'), 1); text('D', (bx + xs) / 2, h - 18, css('--muted'), 11, 'center');
+      const lam = p.lam * 1e-9, a = p.a * 1e-3;
+      const yBright = (p.n * lam * p.D) / a * 1000, yDark = ((2 * p.n - 1) * lam * p.D) / (2 * a) * 1000, ang = lam / a;
+      this.info = white
+        ? 'সাদা আলোয় প্রতিটি রঙের ডোরা ব্যবধান আলাদা (β ∝ λ)। তাই কেন্দ্রীয় ডোরা সাদা, আর দুই পাশে রঙিন ডোরা — ভেতরের দিকে বেগুনি, বাইরের দিকে লাল।'
+        : `<span class="big">ডোরা ব্যবধান β = λD/a = ${sci(beta, 3)} mm</span><br>` +
+          `${bn(p.n)}-তম উজ্জ্বল ডোরা: Yₙ = nλD/a = <b>${sci(yBright, 3)} mm</b> · ${bn(p.n)}-তম অন্ধকার ডোরা: Yₙ = (2n−1)λD/2a = <b>${sci(yDark, 3)} mm</b><br>` +
+          `কৌণিক ডোরা প্রস্থ θ = λ/a = ${sci(ang, 2)} rad (${sci(deg(ang), 3)}°) · রং: ${colourName(p.lam)}<br>` +
+          '<small>λ বা D বাড়ালে ডোরা চওড়া হয়, a বাড়ালে সরু হয়।</small>';
+    },
+  });
+
+  S.push({
+    id: 'ripple', tab: '৩. ব্যতিচার নকশা',
+    title: 'দুটি সুসংগত উৎসের ব্যতিচার নকশা',
+    sub: 'S₁ ও S₂ থেকে একই দশায় তরঙ্গ বের হচ্ছে। যেখানে পথ পার্থক্য nλ সেখানে শীর্ষে-শীর্ষে মিলে উজ্জ্বল, যেখানে (2n+1)λ/2 সেখানে শীর্ষে-পাদে মিলে অন্ধকার। অসুসংগত উৎসে (যেমন দুটি মোমবাতি) দশা এলোমেলো বদলায়, তাই স্থির ঝালর হয় না।',
+    controls: [['s', 'উৎস দুটির দূরত্ব', 20, 160, 5, 80, 'px'], ['lam', 'তরঙ্গদৈর্ঘ্য λ', 15, 60, 1, 28, 'px']],
+    buttons: [['live', 'চলমান তরঙ্গ', true, false, 'view'], ['avg', 'গড় তীব্রতা (ঝালর)', false, false, 'view'], ['incoh', 'অসুসংগত উৎস (দুটি মোমবাতি)', false]],
+    height: 300,
+    draw(w, h, t, p, b) {
+      const cell = 5, k = TAU / p.lam, wt = TAU * 1.2 * t, sx = 14, s1 = h / 2 - p.s / 2, s2 = h / 2 + p.s / 2;
+      if (b.incoh) { if (!(t < this.tNext) || this.tNext - t > 1) { this.phi = Math.random() * TAU; this.tNext = t + 0.18; } } else this.phi = 0;
+      for (let y = 0; y < h; y += cell) for (let x = sx; x < w; x += cell) {
+        const r1 = Math.hypot(x - sx, y - s1), r2 = Math.hypot(x - sx, y - s2);
+        let v;
+        if (b.view === 'avg') v = b.incoh ? 0.5 : Math.cos((k * (r1 - r2)) / 2) ** 2;
+        else v = (Math.cos(k * r1 - wt) + Math.cos(k * r2 - wt + this.phi) + 2) / 4;
+        ctx.fillStyle = `rgb(${Math.round(20 + 150 * v)},${Math.round(40 + 190 * v)},${Math.round(80 + 175 * v)})`;
+        ctx.fillRect(x, y, cell, cell);
+      }
+      dot(sx, s1, 5, css('--b')); dot(sx, s2, 5, css('--b'));
+      text('S₁', sx + 8, s1 - 6, '#fff', 11); text('S₂', sx + 8, s2 + 14, '#fff', 11);
+      const nLines = 2 * Math.floor(p.s / p.lam) + 1;
+      this.info = b.incoh
+        ? '<b>অসুসংগত উৎস:</b> দুটি উৎসের দশা পার্থক্য প্রতি মুহূর্তে বদলাচ্ছে। তাই উজ্জ্বল-অন্ধকার জায়গা স্থির থাকে না, গড়ে সব জায়গা সমান আলোকিত — ব্যতিচার দেখা যায় না।'
+        : `উজ্জ্বল (গঠনমূলক) রেখার সংখ্যা ≈ 2⌊d/λ⌋ + 1 = <b>${bn(nLines)}</b><br>পথ পার্থক্য S₂P − S₁P = nλ → উজ্জ্বল · (2n+1)λ/2 → অন্ধকার<br><small>উৎস কাছাকাছি আনলে (d কমালে) রেখাগুলো ছড়িয়ে যায়; λ বাড়ালেও ছড়ায়।</small>`;
+    },
+  });
+
+  S.push({
+    id: 'huygens', tab: '৪. হাইগেনসের নীতি',
+    title: 'তরঙ্গমুখ ও হাইগেনসের নীতি',
+    sub: 'তরঙ্গমুখের প্রতিটি বিন্দু একটি গৌণ উৎস। গৌণ তরঙ্গগুলো মূল তরঙ্গের সমান বেগে সামনে এগোয়; এদের স্পর্শক তলই নতুন তরঙ্গমুখ। রশ্মি সবসময় তরঙ্গমুখের লম্ব বরাবর।',
+    controls: [['N', 'গৌণ উৎসের সংখ্যা', 4, 20, 1, 9, 'টি'], ['v', 'তরঙ্গের বেগ v', 15, 80, 1, 35, 'px/s']],
+    buttons: [['plane', 'সমতল তরঙ্গমুখ', true, false, 'shape'], ['sph', 'গোলকীয় তরঙ্গমুখ', false, false, 'shape']],
+    legend: [['--a', 'বর্তমান তরঙ্গমুখ'], ['--c', 'গৌণ তরঙ্গ'], ['--b', 'নতুন তরঙ্গমুখ (স্পর্শক তল)']],
+    height: 280,
+    draw(w, h, t, p, b) {
+      const Rmax = 60, mid = h / 2, dist = p.v * t, cyc = Math.floor(dist / Rmax), r = dist - cyc * Rmax;
+      grid(w, h, -1);
+      if (b.shape === 'plane') {
+        const steps = Math.max(1, Math.floor((w - 80) / Rmax)), x0 = 30 + (cyc % steps) * Rmax, y0 = 24, y1 = h - 24;
+        line(x0, y0, x0, y1, css('--a'), 3);
+        for (let i = 0; i < p.N; i++) {
+          const y = y0 + ((y1 - y0) * i) / (p.N - 1);
+          ctx.strokeStyle = css('--c'); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x0, y, r, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+          dot(x0, y, 3.5, css('--a'));
+        }
+        line(x0 + r, y0 - r * 0.0, x0 + r, y1, css('--b'), 2.4, [6, 4]);
+        for (const y of [y0 + 10, mid, y1 - 10]) arrow(x0 + r + 6, y, x0 + r + 34, y, css('--muted'), 1.3);
+      } else {
+        const steps = Math.max(1, Math.floor((Math.min(w - 40, 2.2 * h) - 60) / Rmax)), R0 = 30 + (cyc % steps) * Rmax, sx = 16;
+        dot(sx, mid, 6, css('--b')); text('উৎস', sx - 4, mid + 20, css('--muted'), 10);
+        const span = Math.min(1.2, Math.asin(Math.min(1, (mid - 14) / (R0 + Rmax))));
+        ctx.strokeStyle = css('--a'); ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(sx, mid, R0, -span, span); ctx.stroke();
+        for (let i = 0; i < p.N; i++) {
+          const a = -span + (2 * span * i) / (p.N - 1), px = sx + R0 * Math.cos(a), py = mid + R0 * Math.sin(a);
+          ctx.strokeStyle = css('--c'); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(px, py, r, a - Math.PI / 2, a + Math.PI / 2); ctx.stroke();
+          dot(px, py, 3.5, css('--a'));
+        }
+        ctx.strokeStyle = css('--b'); ctx.lineWidth = 2.4; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.arc(sx, mid, R0 + r, -span, span); ctx.stroke(); ctx.setLineDash([]);
+        for (const a of [-span * 0.8, 0, span * 0.8]) arrow(sx + (R0 + r + 6) * Math.cos(a), mid + (R0 + r + 6) * Math.sin(a), sx + (R0 + r + 32) * Math.cos(a), mid + (R0 + r + 32) * Math.sin(a), css('--muted'), 1.3);
+      }
+      this.info = `t সময় পরে প্রতিটি গৌণ তরঙ্গের ব্যাসার্ধ r = vt = <b>${bn(r, 0)} px</b>; সব গৌণ তরঙ্গকে ছুঁয়ে আঁকা তলটাই নতুন তরঙ্গমুখ।<br>` +
+        (b.shape === 'plane' ? 'সমতল তরঙ্গমুখ থেকে নতুন তরঙ্গমুখও সমতল (যেমন দূরের সূর্য বা নক্ষত্রের আলো)।' : 'বিন্দু উৎসের কাছে তরঙ্গমুখ গোলকীয়; যত দূরে যায় বক্রতা তত কমে, অনেক দূরে প্রায় সমতল।') +
+        '<br><small>গৌণ তরঙ্গ পিছনের দিকে যায় না (θ = 180° এ বিস্তার শূন্য), তাই শুধু সামনের অর্ধেক আঁকা হয়েছে।</small>';
+    },
+  });
+
+  S.push({
+    id: 'single', tab: '৫. একক চিড়ে অপবর্তন',
+    title: 'একক চিড়ে ফ্রনহফার অপবর্তন',
+    sub: 'চিড়ের প্রস্থ a আলোর তরঙ্গদৈর্ঘ্যের কাছাকাছি হলে আলো বেঁকে পর্দায় অপবর্তন ঝালর তৈরি করে। অন্ধকার বিন্দু: a sinθ = nλ; গৌণ উজ্জ্বল: a sinθ = (2n+1)λ/2।',
+    controls: [['lam', 'তরঙ্গদৈর্ঘ্য λ', 380, 780, 5, 600, 'nm'], ['a', 'চিড়ের প্রস্থ a', 0.02, 0.5, 0.01, 0.1, 'mm'], ['D', 'চিড় থেকে পর্দার দূরত্ব D', 0.5, 3, 0.1, 1, 'm'], ['view', 'পর্দার যতটুকু দেখাচ্ছে (±)', 2, 40, 1, 20, 'mm']],
+    buttons: [['cmp', 'ব্যতিচারের সাথে তুলনা', false], ['zoom', 'পাশের পট্টি ১০ গুণ বড় করে দেখাও', true]],
+    legend: [['--a', 'অপবর্তন তীব্রতা'], ['--c', '১০ গুণ বড় করে'], ['--d', 'ব্যতিচার (তুলনার জন্য)']],
+    height: 300,
+    draw(w, h, t, p, b) {
+      const mid = h / 2, xs = Math.max(120, w * 0.3);
+      const L = p.lam * 1e-6, Dm = p.D * 1000; // mm
+      const I = (y) => { const be = (Math.PI * p.a * y) / (L * Dm); return be === 0 ? 1 : (Math.sin(be) / be) ** 2; };
+      const labels = [[0, 'কেন্দ্রীয় চরম', css('--e')]];
+      for (let n = 1; n <= 8; n++) { const y = (n * L * Dm) / p.a; labels.push([y, `অবম ${bn(n)}`]); labels.push([-y, `অবম ${bn(n)}`]); }
+      if ((L * Dm) / p.a * ((h - 20) / 2 / p.view) < 14) labels.splice(1);
+      const sp = screenAndPlot(w, h, xs, p.view, I, (y) => rgb(wl(p.lam), Math.sqrt(I(y))), labels);
+      const gx0 = xs + 40, gx1 = w - 12;
+      if (b.zoom) {
+        ctx.strokeStyle = css('--c'); ctx.lineWidth = 1.2; ctx.beginPath();
+        for (let py = 10; py < h - 10; py++) { const y = ((mid - py) / ((h - 20) / 2)) * p.view; const x = gx0 + Math.min(1, 10 * I(y)) * (gx1 - gx0); py === 10 ? ctx.moveTo(x, py) : ctx.lineTo(x, py); }
+        ctx.stroke();
+      }
+      if (b.cmp) {
+        ctx.strokeStyle = css('--d'); ctx.lineWidth = 1.4; ctx.setLineDash([4, 3]); ctx.beginPath();
+        for (let py = 10; py < h - 10; py++) { const y = ((mid - py) / ((h - 20) / 2)) * p.view; const x = gx0 + Math.cos((Math.PI * p.a * y) / (L * Dm)) ** 2 * (gx1 - gx0); py === 10 ? ctx.moveTo(x, py) : ctx.lineTo(x, py); }
+        ctx.stroke(); ctx.setLineDash([]);
+      }
+      const bx = Math.min(xs * 0.35, 70), g = 3 + p.a * 22;
+      for (let i = 0; i < 5; i++) arrow(8, mid - 40 + i * 20, bx - 6, mid - 40 + i * 20, rgb(wl(p.lam)), 1.2);
+      line(bx, 8, bx, mid - g, css('--text'), 3); line(bx, mid + g, bx, h - 8, css('--text'), 3);
+      for (const y of [mid - 0.7 * (h / 2 - 12), mid, mid + 0.7 * (h / 2 - 12)]) line(bx, mid, xs, y, rgb(wl(p.lam), 0.8), 1, [3, 3]);
+      text('a', bx + 6, mid + 4, css('--muted'), 11);
+      const w0 = (2 * L * Dm) / p.a, s1 = (p.lam * 1e-9) / (p.a * 1e-3);
+      this.info = `<span class="big">কেন্দ্রীয় উজ্জ্বল পট্টির প্রস্থ = 2λD/a = ${sci(w0, 3)} mm</span><br>` +
+        `প্রথম অবম: sinθ = λ/a = ${sci(s1, 2)} → θ = ${sci(deg(Math.asin(Math.min(1, s1))), 3)}°<br>` +
+        '<small>a কমালে বা λ বাড়ালে অপবর্তন বাড়ে (ঝালর চওড়া হয়)। কেন্দ্রীয় পট্টি সবচেয়ে উজ্জ্বল ও দ্বিগুণ চওড়া, পাশের পট্টিগুলো ক্রমশ ম্লান; অন্ধকার পট্টিতেও কিছু আলো থাকে — ব্যতিচারের সাথে এটাই পার্থক্য। (পর্দায় ম্লান পট্টি দেখানোর জন্য উজ্জ্বলতা বাড়ানো হয়েছে।)</small>';
+    },
+  });
+
+  S.push({
+    id: 'grating', tab: '৬. অপবর্তন গ্রেটিং',
+    title: 'অপবর্তন গ্রেটিং: d sinθ = nλ',
+    sub: 'অনেকগুলো সমপ্রস্থের চিড় পাশাপাশি। গ্রেটিং ধ্রুবক d = a + b = 1/N। n-তম ক্রমের উজ্জ্বল রেখা d sinθ = nλ কোণে; sinθ ≤ 1 বলে সর্বোচ্চ ক্রম n < d/λ।',
+    controls: [['N', 'প্রতি সেমি-তে রেখা N', 1000, 15000, 500, 5000, '/cm'], ['lam', 'তরঙ্গদৈর্ঘ্য λ', 380, 780, 5, 589, 'nm']],
+    buttons: [['mono', 'একবর্ণী আলো', true, false, 'light'], ['white', 'সাদা আলো', false, false, 'light']],
+    height: 300,
+    draw(w, h, t, p, b) {
+      const gx = 40, mid = h / 2, R = Math.min(w - gx - 30, mid - 14), d = 1e-2 / p.N, white = b.light === 'white';
+      grid(w, h, -1);
+      ctx.strokeStyle = css('--line'); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(gx, mid, R, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+      line(gx, 10, gx, h - 10, css('--text'), 3);
+      for (let y = 14; y < h - 10; y += 6) line(gx - 4, y, gx + 4, y, css('--panel2'), 2);
+      for (let i = 0; i < 4; i++) arrow(4, mid - 30 + i * 20, gx - 6, mid - 30 + i * 20, white ? css('--text') : rgb(wl(p.lam)), 1.2);
+      line(gx, mid, gx + R, mid, css('--line'), 1, [3, 3]);
+      const rows = [];
+      if (!white) {
+        const lam = p.lam * 1e-9, nmax = Math.floor(d / lam - 1e-9);
+        for (let n = -nmax; n <= nmax; n++) {
+          const th = Math.asin((n * lam) / d), x = gx + R * Math.cos(th), y = mid - R * Math.sin(th);
+          line(gx, mid, x, y, rgb(wl(p.lam), n === 0 ? 1 : 0.9), n === 0 ? 2.4 : 1.6);
+          dot(x, y, 5, rgb(wl(p.lam)));
+          text(n === 0 ? '০' : bn(Math.abs(n)), x + 8 * Math.cos(th) + 2, y - 8 * Math.sin(th) + 4, css('--text'), 11);
+          if (n > 0) rows.push(`n = ${bn(n)}: θ = ${bn(deg(th), 2)}°`);
+        }
+        this.info = `<span class="big">d = 1/N = ${sci(d, 3)} m = ${sci(d * 1e6, 3)} μm</span><br>${rows.join(' · ') || 'কোনো ক্রম নেই'}<br>সর্বোচ্চ ক্রম = ⌊d/λ⌋ = <b>${bn(nmax)}</b> (d/λ = ${bn(d / lam, 2)})<br><small>N বাড়ালে d ছোট হয়, তাই রেখাগুলো বেশি কোণে সরে যায় এবং কম সংখ্যক ক্রম দেখা যায়।</small>`;
+      } else {
+        dot(gx + R, mid, 6, '#fff'); text('০ (সাদা)', gx + R - 6, mid - 10, css('--text'), 10, 'right');
+        for (let n = 1; n <= 4; n++) for (const sg of [1, -1]) for (let nm = 380; nm <= 780; nm += 4) {
+          const s = (n * nm * 1e-9) / d; if (s > 1) continue;
+          const th = sg * Math.asin(s);
+          ctx.fillStyle = rgb(wl(nm)); ctx.beginPath(); ctx.arc(gx + (R - 4 * (n - 1)) * Math.cos(th), mid - (R - 4 * (n - 1)) * Math.sin(th), 3, 0, TAU); ctx.fill();
+        }
+        const ov = (2 * 780) / (3 * 380) > 1;
+        this.info = `d = ${sci(d * 1e6, 3)} μm · প্রতিটি ক্রমে বেগুনি (ছোট λ) কম বাঁকে আর লাল (বড় λ) বেশি বাঁকে — প্রিজমের ঠিক উল্টো।` +
+          (ov ? '<br>দ্বিতীয় ক্রমের লাল আর তৃতীয় ক্রমের বেগুনি একে অপরের উপর পড়তে পারে (2×780 > 3×380)।' : '');
+      }
+    },
+  });
+
+  S.push({
+    id: 'em', tab: '৭. তড়িৎচৌম্বক তরঙ্গ',
+    title: 'তড়িৎচৌম্বকীয় তরঙ্গ',
+    sub: 'তড়িৎক্ষেত্র E ও চৌম্বকক্ষেত্র B পরস্পর লম্ব, আর দুটোই সঞ্চালনের দিকের লম্ব — তাই এটি আড় তরঙ্গ। মাধ্যম লাগে না; শূন্যে বেগ c = 1/√(μ₀ε₀) = E/B।',
+    controls: [['E0', 'তড়িৎ ক্ষেত্রের বিস্তার E₀', 1, 1000, 1, 300, 'V/m'], ['lam', 'তরঙ্গদৈর্ঘ্য (পর্দায়)', 60, 240, 10, 140, 'px']],
+    buttons: [['E', 'E দেখাও', true], ['B', 'B দেখাও', true], ['S', 'পয়েন্টিং ভেক্টর S', true]],
+    legend: [['--a', 'তড়িৎক্ষেত্র E'], ['--d', 'চৌম্বকক্ষেত্র B'], ['--e', 'S = E × B / μ₀ (শক্তি প্রবাহের দিক)']],
+    height: 280,
+    draw(w, h, t, p, b) {
+      const x0 = 34, x1 = w - 20, mid = h * 0.52, A = h * 0.3, k = TAU / p.lam, wt = TAU * 0.6 * t, zx = -0.55, zy = 0.42;
+      arrow(x0, mid, x1, mid, css('--muted'), 1.4); text('x (সঞ্চালন)', x1 - 4, mid + 16, css('--muted'), 10, 'right');
+      arrow(x0, mid, x0, mid - A - 14, css('--muted'), 1); text('E', x0 + 6, mid - A - 6, css('--a'), 12);
+      arrow(x0, mid, x0 + zx * (A + 6) * 0.8, mid + zy * (A + 6) * 0.8 + 8, css('--muted'), 1); text('B', x0 + zx * A * 0.8 - 12, mid + zy * A * 0.8 + 18, css('--d'), 12);
+      for (let x = x0; x < x1 - 4; x += 8) {
+        const f = Math.sin(k * (x - x0) - wt);
+        if (b.E) line(x, mid, x, mid - A * f, css('--a'), 1.2);
+        if (b.B) line(x, mid, x + zx * A * 0.75 * f, mid + zy * A * 0.75 * f, css('--d'), 1.2);
+      }
+      if (b.E) curve((x) => mid - A * Math.sin(k * (x - x0) - wt), x0, x1 - 4, css('--a'), 2.2);
+      if (b.B) { ctx.strokeStyle = css('--d'); ctx.lineWidth = 2.2; ctx.beginPath();
+        for (let x = x0; x < x1 - 4; x += 2) { const f = Math.sin(k * (x - x0) - wt), X = x + zx * A * 0.75 * f, Y = mid + zy * A * 0.75 * f; x === x0 ? ctx.moveTo(X, Y) : ctx.lineTo(X, Y); } ctx.stroke(); }
+      if (b.S) { arrow(w * 0.55, 18, w * 0.55 + 70, 18, css('--e'), 2.4); text('S', w * 0.55 + 76, 22, css('--e'), 13); }
+      const c = 1 / Math.sqrt(MU0 * EPS0), B0 = p.E0 / c, Smax = (p.E0 * B0) / MU0, Savg = Smax / 2;
+      this.info = `<span class="big">c = 1/√(μ₀ε₀) = ${sci(c, 3)} m/s</span> (μ₀ = 4π×10⁻⁷, ε₀ = 8.85×10⁻¹²)<br>` +
+        `B₀ = E₀/c = ${bn(p.E0, 0)} / (3×10⁸) = <b>${sci(B0, 3)} T</b><br>` +
+        `পয়েন্টিং ভেক্টর: S = (1/μ₀)E×B → সর্বোচ্চ S = E₀B₀/μ₀ = <b>${sci(Smax, 3)} W m⁻²</b> · গড় = ${sci(Savg, 3)} W m⁻²<br>` +
+        '<small>E ও B একই দশায় বাড়ে-কমে; যেকোনো মুহূর্তে E/B = c। উৎস: ত্বরিত বা দোলায়মান আধান।</small>';
+    },
+  });
+
+  S.push({
+    id: 'malus', tab: '৮. সমবর্তন ও ম্যালাস',
+    title: 'আলোর সমবর্তন ও ম্যালাসের সূত্র',
+    sub: 'অসমবর্তিত আলো সমবর্তক (পোলারয়েড/টুর্ম্যালিন) পেরিয়ে একটি তলে কম্পমান (রেখা সমবর্তিত) হয়। বিশ্লেষককে θ কোণে ঘোরালে নির্গত তীব্রতা I = I₀cos²θ।',
+    controls: [['th', 'বিশ্লেষকের কোণ θ', 0, 360, 1, 30, '°'], ['I0', 'বিশ্লেষকে আপতিত তীব্রতা I₀', 10, 100, 1, 100, '%']],
+    buttons: [['spin', 'বিশ্লেষক ঘোরাও', false]],
+    legend: [['--b', 'আলোর কম্পন'], ['--a', 'I = I₀cos²θ গ্রাফ']],
+    height: 320,
+    draw(w, h, t, p, b) {
+      const th = b.spin ? (t * 45) % 360 : p.th, c2 = Math.cos(rad(th)) ** 2, I = p.I0 * c2, my = h * 0.27, R = Math.min(32, h * 0.1);
+      const xP = w * 0.33, xA = w * 0.64, xE = w - 28;
+      line(14, my, xE, my, css('--line'), 1, [3, 3]);
+      dot(18, my, 9, '#ffd36b'); text('উৎস', 18, my + R + 14, css('--muted'), 10, 'center');
+      const star = (x) => { for (let a = 0; a < 180; a += 30) { const dx = 11 * Math.cos(rad(a)), dy = 11 * Math.sin(rad(a)); line(x - dx, my - dy, x + dx, my + dy, css('--b'), 1.6); } };
+      star(xP * 0.45 + 10); star(xP * 0.8);
+      const disc = (x, ang, label) => {
+        ctx.strokeStyle = css('--text'); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, my, R, 0, TAU); ctx.stroke();
+        const dx = R * Math.sin(rad(ang)), dy = R * Math.cos(rad(ang));
+        line(x - dx, my + dy, x + dx, my - dy, css('--a'), 2.4);
+        text(label, x, my + R + 14, css('--muted'), 10, 'center');
+      };
+      disc(xP, 0, 'সমবর্তক'); disc(xA, th, 'বিশ্লেষক');
+      for (const x of [(xP + xA) / 2 - 18, (xP + xA) / 2 + 18]) arrow(x, my + 12, x, my - 12, css('--b'), 1.8), arrow(x, my - 12, x, my + 12, css('--b'), 1.8);
+      const out = 12 * Math.abs(Math.cos(rad(th)));
+      const ox = (xA + xE) / 2, dx = out * Math.sin(rad(th)), dy = out * Math.cos(rad(th));
+      if (out > 0.5) { arrow(ox - dx, my + dy, ox + dx, my - dy, css('--b'), 1.8); arrow(ox + dx, my - dy, ox - dx, my + dy, css('--b'), 1.8); }
+      ctx.fillStyle = `rgba(255,214,107,${0.08 + 0.92 * I / 100})`; ctx.fillRect(xE - 8, my - R, 14, 2 * R);
+      ctx.strokeStyle = css('--line'); ctx.strokeRect(xE - 8, my - R, 14, 2 * R);
+      text('পর্দা', xE - 1, my + R + 14, css('--muted'), 10, 'center');
+      const g = graphBox(34, h * 0.56, w - 16, h - 22, 360, 100, 'θ (°)', 'I (%)');
+      for (const v of [90, 180, 270, 360]) text(bn(v), g.X(v), h - 8, css('--muted'), 9, 'center');
+      curve((x) => g.Y(p.I0 * Math.cos(rad(((x - 34) / (w - 50)) * 360)) ** 2), 34, w - 16, css('--a'), 2);
+      dot(g.X(th), g.Y(I), 5, css('--d'));
+      this.info = `<span class="big">I = I₀cos²θ = ${bn(p.I0, 0)} × cos²(${bn(th, 0)}°) = ${bn(I, 1)}%</span><br>` +
+        (Math.abs(c2) < 0.002 ? '<b>সমবর্তক ও বিশ্লেষকের অক্ষ লম্ব — কোনো আলো বের হচ্ছে না (অন্ধকার)।</b>' : c2 > 0.998 ? '<b>অক্ষ দুটি সমান্তরাল — পুরো আলো বেরোচ্ছে।</b>' : 'বিশ্লেষক ঘোরালে এক পূর্ণ ঘূর্ণনে দুবার উজ্জ্বল ও দুবার অন্ধকার হয়।') +
+        '<br><small>শুধু আড় তরঙ্গের সমবর্তন হয় — এভাবেই প্রমাণ হয় আলো আড় তরঙ্গ (শব্দের সমবর্তন হয় না)।</small>';
+    },
+  });
+
+  S.push({
+    id: 'brewster', tab: '৯. ব্রুস্টারের সূত্র',
+    title: 'প্রতিফলনে সমবর্তন: ব্রুস্টারের সূত্র μ = tan iₚ',
+    sub: 'একটি বিশেষ আপতন কোণে (সমবর্তন কোণ iₚ) প্রতিফলিত আলো সম্পূর্ণ সমবর্তিত হয়। তখন প্রতিফলিত ও প্রতিসৃত রশ্মি পরস্পর লম্ব (iₚ + r = 90°)।',
+    controls: [['mu', 'প্রতিসরাঙ্ক μ', 1.1, 2.5, 0.01, 1.5, ''], ['i', 'আপতন কোণ i', 0, 89, 0.5, 40, '°']],
+    buttons: [['set', 'i = iₚ বসাও', false, true]],
+    legend: [['--b', '● আপতন তলের লম্বে কম্পন'], ['--c', '↕ আপতন তলে কম্পন'], ['--a', 'Rs'], ['--d', 'Rp']],
+    height: 300,
+    action(k, p) { if (k === 'set') setParam('i', Math.round(deg(Math.atan(p.mu)) * 2) / 2); },
+    draw(w, h, t, p) {
+      const split = w > 520 ? w * 0.55 : w, mid = h * (split === w ? 0.5 : 0.5), x0 = split * 0.5, L = Math.min(x0 - 10, mid - 12);
+      const i = rad(p.i), r = Math.asin(Math.sin(i) / p.mu), ci = Math.cos(i), cr = Math.cos(r);
+      const rs = (ci - p.mu * cr) / (ci + p.mu * cr), rp = (p.mu * ci - cr) / (p.mu * ci + cr), Rs = rs * rs, Rp = rp * rp, Rav = (Rs + Rp) / 2;
+      ctx.fillStyle = css('--panel'); ctx.fillRect(0, mid, split, h - mid);
+      ctx.fillStyle = 'rgba(126,166,255,.12)'; ctx.fillRect(0, mid, split, h - mid);
+      line(0, mid, split, mid, css('--text'), 1.5); line(x0, 8, x0, h - 8, css('--line'), 1, [4, 4]);
+      text('বায়ু', 6, mid - 6, css('--muted'), 10); text(`মাধ্যম (μ = ${bn(p.mu, 2)})`, 6, mid + 14, css('--muted'), 10);
+      const A = [x0 - L * Math.sin(i), mid - L * ci], Rf = [x0 + L * Math.sin(i), mid - L * ci], T = [x0 + L * Math.sin(r), mid + L * cr];
+      arrow(A[0], A[1], x0, mid, '#ffd36b', 3);
+      ctx.globalAlpha = Math.min(1, 0.25 + Rav * 4); arrow(x0, mid, Rf[0], Rf[1], '#ffd36b', 1 + 6 * Rav); ctx.globalAlpha = 1;
+      arrow(x0, mid, T[0], T[1], '#ffd36b', 1 + 2.5 * (1 - Rav));
+      const marks = (P, Q, sAmp, pAmp) => {
+        for (const f of [0.35, 0.6, 0.85]) {
+          const x = P[0] + (Q[0] - P[0]) * f, y = P[1] + (Q[1] - P[1]) * f, a = Math.atan2(Q[1] - P[1], Q[0] - P[0]) + Math.PI / 2;
+          if (sAmp > 0.02) dot(x, y, 2 + 2.5 * sAmp, css('--b'));
+          if (pAmp > 0.02) line(x - 11 * pAmp * Math.cos(a), y - 11 * pAmp * Math.sin(a), x + 11 * pAmp * Math.cos(a), y + 11 * pAmp * Math.sin(a), css('--c'), 2);
+        }
+      };
+      marks(A, [x0, mid], 1, 1);
+      const mx = Math.max(Rs, Rp, 1e-9); marks([x0, mid], Rf, Rs / mx, Rp / mx);
+      const between = 180 - p.i - deg(r);
+      text(`i = ${bn(p.i, 1)}°`, x0 - 8, mid - 16, css('--text'), 11, 'right');
+      text(`r = ${bn(deg(r), 1)}°`, x0 + 8, mid + 30, css('--text'), 11);
+      if (split < w) {
+        const g = graphBox(split + 22, 18, w - 12, h - 24, 90, 1, 'i (°)', 'R');
+        for (const v of [30, 60, 90]) text(bn(v), g.X(v), h - 10, css('--muted'), 9, 'center');
+        const RsAt = (d) => { const a = rad(d), b2 = Math.asin(Math.sin(a) / p.mu); return ((Math.cos(a) - p.mu * Math.cos(b2)) / (Math.cos(a) + p.mu * Math.cos(b2))) ** 2; };
+        const RpAt = (d) => { const a = rad(d), b2 = Math.asin(Math.sin(a) / p.mu); return ((p.mu * Math.cos(a) - Math.cos(b2)) / (p.mu * Math.cos(a) + Math.cos(b2))) ** 2; };
+        curve((x) => g.Y(RsAt(((x - split - 22) / (w - 34 - split)) * 89.9)), split + 22, w - 12, css('--a'), 2);
+        curve((x) => g.Y(RpAt(((x - split - 22) / (w - 34 - split)) * 89.9)), split + 22, w - 12, css('--d'), 2);
+        const ip = deg(Math.atan(p.mu));
+        line(g.X(ip), 18, g.X(ip), h - 24, css('--e'), 1, [3, 3]); text('iₚ', g.X(ip) + 3, 30, css('--e'), 11);
+        line(g.X(p.i), 18, g.X(p.i), h - 24, css('--b'), 1.2);
+      }
+      const ip = deg(Math.atan(p.mu)), at = Math.abs(p.i - ip) < 0.6;
+      this.info = `<span class="big">সমবর্তন কোণ iₚ = tan⁻¹μ = tan⁻¹(${bn(p.mu, 2)}) = ${bn(ip, 1)}°</span><br>` +
+        `প্রতিফলন: Rs = ${bn(Rs * 100, 1)}% · Rp = ${bn(Rp * 100, 2)}% · প্রতিফলিত ও প্রতিসৃত রশ্মির মাঝের কোণ = ${bn(between, 1)}°<br>` +
+        (at ? '<b>এখন i = iₚ: প্রতিফলিত আলোয় শুধু ● কম্পন — সম্পূর্ণ সমবর্তিত, আর রশ্মি দুটি পরস্পর লম্ব!</b>' : 'i-কে iₚ-এর কাছে নাও — প্রতিফলিত রশ্মি থেকে ↕ কম্পন হারিয়ে যাবে।') +
+        '<br><small>কাচ (μ ≈ 1.5) → iₚ ≈ 56°; পানি (μ ≈ 1.33) → iₚ ≈ 53°।</small>';
+    },
+  });
+
+  const BANDS = [
+    [-16, -11, 'গামা রশ্মি', '#b07cff', 'তেজস্ক্রিয় বস্তু, নিউক্লীয় ফিশন ও ফিউশন', 'ক্যান্সার কোষ ধ্বংস, ধাতুর খুঁত নির্ণয়'],
+    [-11, -8, 'এক্স-রে', '#7f8cff', 'এক্স-রে টিউব (দ্রুত ইলেকট্রনের মন্দন)', 'ভাঙা হাড়ের ছবি, নিরাপত্তা তল্লাশি, চোরাচালান রোধ'],
+    [-8, Math.log10(3.8e-7), 'অতিবেগুনি', '#6aa8ff', 'আর্ক ল্যাম্প, পারদ বাতি, সূর্য', 'ভিটামিন D তৈরি, জীবাণুনাশ, নকল নোট শনাক্ত'],
+    [Math.log10(3.8e-7), Math.log10(7.8e-7), 'দৃশ্যমান আলো', '#ffffff', 'বাতি, অগ্নিশিখা, লেজার, সূর্য', 'দেখা, সালোকসংশ্লেষণ, ফটোগ্রাফি'],
+    [Math.log10(7.8e-7), -3, 'অবলোহিত', '#ff7a6b', 'উত্তপ্ত সকল বস্তু, IR ল্যাম্প, সূর্য', 'নাইট গগলস, ফিজিওথেরাপি, রিমোট'],
+    [-3, -1, 'মাইক্রোওয়েভ', '#ffb35c', 'ক্লাইস্ট্রন, ম্যাগনেট্রন, মেসার', 'রাডার, মাইক্রোওয়েভ ওভেন, স্যাটেলাইট যোগাযোগ'],
+    [-1, 5, 'বেতার তরঙ্গ', '#ffe066', 'অ্যান্টেনায় দোলায়িত আধান', 'রেডিও, টেলিভিশন, বেতার যোগাযোগ'],
+  ];
+  S.push({
+    id: 'spectrum', tab: '১০. তড়িৎচৌম্বক বর্ণালী',
+    title: 'তড়িৎচৌম্বক বর্ণালী: c = νλ, E = hc/λ',
+    sub: 'তরঙ্গদৈর্ঘ্য যত ছোট, কম্পাঙ্ক ও শক্তি তত বেশি। ক্রম (λ বাড়ার দিকে): গামা → এক্স-রে → অতিবেগুনি → দৃশ্যমান → অবলোহিত → মাইক্রোওয়েভ → বেতার। সীমাগুলো আনুমানিক।',
+    controls: [['L', 'তরঙ্গদৈর্ঘ্য λ = 10^x মিটার, x =', -14, 4, 0.02, -6.27, '']],
+    height: 260,
+    draw(w, h, t, p) {
+      const x0 = 10, x1 = w - 10, lo = -14, hi = 4, X = (v) => x0 + ((v - lo) / (hi - lo)) * (x1 - x0), by = 34, bh = 30;
+      for (const [a, b2, name, col] of BANDS) {
+        const xa = X(Math.max(lo, a)), xb = X(Math.min(hi, b2));
+        if (name === 'দৃশ্যমান আলো') { for (let x = xa; x < xb; x++) { ctx.fillStyle = rgb(wl(380 + ((x - xa) / (xb - xa)) * 400)); ctx.fillRect(x, by, 1.2, bh); } }
+        else { ctx.fillStyle = col; ctx.globalAlpha = 0.35; ctx.fillRect(xa, by, xb - xa, bh); ctx.globalAlpha = 1; }
+        line(xb, by, xb, by + bh, css('--line'), 1);
+      }
+      const short = ['গামা', 'এক্স', 'UV', '', 'IR', 'মাইক্রো', 'বেতার'];
+      BANDS.forEach(([a, b2], j) => { if (short[j]) text(short[j], (X(Math.max(lo, a)) + X(Math.min(hi, b2))) / 2, by + 19, css('--text'), 10, 'center'); });
+      text('দৃশ্যমান', X(-6.27), by - 6, css('--muted'), 9, 'center');
+      for (let e = -14; e <= 4; e += 3) text(`10${sup(e)}`, X(e), by + bh + 14, css('--muted'), 9, 'center');
+      text('ছোট λ, বেশি শক্তি ←', x0, 14, css('--muted'), 10); text('→ বড় λ, কম শক্তি', x1, 14, css('--muted'), 10, 'right');
+      const mx = X(p.L);
+      ctx.fillStyle = css('--d'); ctx.beginPath(); ctx.moveTo(mx, by - 2); ctx.lineTo(mx - 6, by - 11); ctx.lineTo(mx + 6, by - 11); ctx.fill();
+      line(mx, by, mx, by + bh, css('--d'), 2);
+      // visible zoom strip
+      const vy = by + bh + 28;
+      for (let x = x0; x < x1; x++) { ctx.fillStyle = rgb(wl(380 + ((x - x0) / (x1 - x0)) * 400)); ctx.fillRect(x, vy, 1.2, 16); }
+      text('দৃশ্যমান অংশ বড় করে: ৩৮০ nm', x0, vy + 28, css('--muted'), 9); text('৭৮০ nm', x1, vy + 28, css('--muted'), 9, 'right');
+      const lam = 10 ** p.L, nm = lam * 1e9;
+      if (nm >= 380 && nm <= 780) { const vx = x0 + ((nm - 380) / 400) * (x1 - x0); line(vx, vy - 4, vx, vy + 20, css('--text'), 2); }
+      // schematic wave
+      const wy = h - 34, px = 8 + ((p.L - lo) / (hi - lo)) * 150;
+      curve((x) => wy - 14 * Math.sin((TAU * (x - x0)) / px - TAU * t), x0, x1, nm >= 380 && nm <= 780 ? rgb(wl(nm)) : css('--a'), 2);
+      text('(তরঙ্গের ছবি প্রতীকী)', x1, h - 6, css('--muted'), 9, 'right');
+      const band = BANDS.find(([a, b2]) => p.L >= a && p.L < b2) ?? BANDS[BANDS.length - 1];
+      const nu = C0 / lam, E = (H0 * C0) / lam;
+      this.info = `<span class="big">${band[2]}${nm >= 380 && nm <= 780 ? ` — ${colourName(nm)}` : ''}</span><br>` +
+        `λ = ${sci(lam, 2)} m${nm >= 1 && nm < 1e5 ? ` (${sci(nm, 1)} nm)` : ''} · ν = c/λ = <b>${sci(nu, 2)} Hz</b><br>` +
+        `শক্তি E = hc/λ = ${sci(E, 2)} J = <b>${sci(E / EV, 2)} eV</b><br>` +
+        `উৎস: ${band[4]}<br>ব্যবহার: ${band[5]}`;
+    },
+  });
+
+  S.push({
+    id: 'lux', tab: '১১. দীপন তীব্রতা',
+    title: 'দীপন তীব্রতা: E = P cosθ / r²',
+    sub: 'P দীপন ক্ষমতার (ক্যান্ডেলা) উৎস থেকে r দূরত্বে রাখা তলে আলো θ কোণে পড়লে দীপন তীব্রতা E = P cosθ / r² (লাক্স)। দূরত্ব দ্বিগুণ হলে তীব্রতা এক-চতুর্থাংশ — বিপরীত বর্গ সূত্র।',
+    controls: [['P', 'দীপন ক্ষমতা P', 10, 500, 10, 100, 'cd'], ['r', 'দূরত্ব r', 0.5, 5, 0.1, 1.5, 'm'], ['th', 'আপতন কোণ θ (অভিলম্বের সাথে)', 0, 80, 1, 0, '°']],
+    legend: [['--a', 'E বনাম r (θ = ০°)'], ['--d', 'বর্তমান মান']],
+    height: 280,
+    draw(w, h, t, p) {
+      const split = w > 480 ? w * 0.55 : w, my = h * (split === w ? 0.42 : 0.5), lx = 34, scale = (split - lx - 30) / 5;
+      const E = (p.P * Math.cos(rad(p.th))) / (p.r * p.r);
+      dot(lx, my, 10, '#ffd36b'); text('উৎস', lx, my + 26, css('--muted'), 10, 'center');
+      const sx = lx + p.r * scale, half = 26, a = rad(p.th);
+      const dx = half * Math.sin(a), dy = half * Math.cos(a);
+      ctx.fillStyle = 'rgba(255,214,107,.12)'; ctx.beginPath(); ctx.moveTo(lx, my); ctx.lineTo(sx - dx, my - dy); ctx.lineTo(sx + dx, my + dy); ctx.fill();
+      const br = Math.min(1, E / 200);
+      line(sx - dx, my - dy, sx + dx, my + dy, `rgba(255,214,107,${0.25 + 0.75 * br})`, 6);
+      line(sx, my, sx + 26 * Math.cos(a), my - 26 * Math.sin(a), css('--muted'), 1, [3, 3]);
+      line(lx, my + 40, sx, my + 40, css('--muted'), 1); text(`r = ${bn(p.r, 1)} m`, (lx + sx) / 2, my + 54, css('--muted'), 10, 'center');
+      if (split < w) {
+        const g = graphBox(split + 26, 16, w - 12, h - 24, 5, Math.max(50, p.P / 0.25), 'r (m)', 'E (lux)');
+        for (const v of [1, 2, 3, 4, 5]) text(bn(v), g.X(v), h - 10, css('--muted'), 9, 'center');
+        curve((x) => g.Y(Math.min(p.P / 0.25, p.P / (((x - split - 26) / (w - 38 - split)) * 5) ** 2)), split + 28, w - 12, css('--a'), 2);
+        dot(g.X(p.r), g.Y(E), 5, css('--d'));
+      }
+      this.info = `<span class="big">E = P cosθ / r² = ${bn(p.P, 0)} × cos${bn(p.th, 0)}° / ${bn(p.r, 1)}² = ${bn(E, 1)} lux</span><br>` +
+        `r দ্বিগুণ করলে E = ${bn(E / 4, 1)} lux (এক-চতুর্থাংশ)।<br><small>আলোক প্রবাহের একক লুমেন; দীপন ক্ষমতা P = Q/4π (ক্যান্ডেলা)।</small>`;
+    },
+  });
+
+  // ---------- runner ----------
+  let cur = null, params = {}, btn = {}, t0 = performance.now(), paused = false;
+  const $ = (id) => document.getElementById(id);
+  $('tabs').innerHTML = S.map((s, i) => `<button data-i="${i}">${s.tab}</button>`).join('');
+  $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) select(Number(b.dataset.i)); });
+
+  function select(i) {
+    stopTones();
+    cur = S[i];
+    document.querySelectorAll('#tabs button').forEach((b, j) => b.classList.toggle('on', j === i));
+    $('title').textContent = cur.title;
+    $('sub').textContent = cur.sub;
+    params = {}; btn = {};
+    $('ctl').innerHTML = cur.controls.map(([k, label, min, max, step, val, unit]) => {
+      params[k] = val;
+      return `<label>${label}<b id="v_${k}">${bn(val, step < 0.01 ? 3 : step < 1 ? 2 : 0)} ${unit}</b><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-k="${k}" data-u="${unit}" data-s="${step}"></label>`;
+    }).join('');
+    $('buttons').innerHTML = `<button data-b="pause">${paused ? '▶ চালাও' : '⏸ থামাও'}</button>` + (cur.buttons ?? []).map(([k, label, on, isAction, group]) => {
+      if (group) { if (on) btn[group] = k; } else if (!isAction) btn[k] = on;
+      return `<button data-b="${k}" ${group ? `data-g="${group}"` : ''} ${isAction ? 'data-a="1"' : ''} class="${on ? 'on' : ''}">${label}</button>`;
+    }).join('');
+    $('legend').innerHTML = (cur.legend ?? []).map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+    $('note').textContent = 'নোট: ছবিগুলো বোঝানোর জন্য মাপমতো আঁকা নয় এবং গতি ধীর করা হয়েছে; হিসাবগুলো সূত্র অনুযায়ী আসল মানে।';
+    cv.style.height = `${cur.height ?? 260}px`;
+    resize();
+  }
+
+  $('ctl').addEventListener('input', (e) => {
+    const r = e.target; if (!r.dataset.k) return;
+    params[r.dataset.k] = Number(r.value);
+    const s = Number(r.dataset.s);
+    $(`v_${r.dataset.k}`).textContent = `${bn(Number(r.value), s < 0.01 ? 3 : s < 1 ? 2 : 0)} ${r.dataset.u}`;
+  });
+  $('buttons').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = b.dataset.b;
+    if (k === 'pause') { paused = !paused; b.textContent = paused ? '▶ চালাও' : '⏸ থামাও'; return; }
+    if (b.dataset.a) { cur.action?.call(cur, k, params); return; }
+    if (b.dataset.g) { btn[b.dataset.g] = k; document.querySelectorAll(`[data-g="${b.dataset.g}"]`).forEach((x) => x.classList.toggle('on', x === b)); return; }
+    btn[k] = !btn[k]; b.classList.toggle('on', btn[k]);
+  });
+
+  let W = 0, H = 0, simT = 0, last = performance.now();
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (!paused) simT += dt;
+    if (cur) {
+      ctx.clearRect(0, 0, W, H);
+      cur.draw(W, H, simT, params, btn);
+      $('info').innerHTML = cur.info ?? '';
+    }
+    requestAnimationFrame(frame);
+  }
+  select(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
