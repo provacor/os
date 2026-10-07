@@ -1,10 +1,10 @@
 // Visual knowledge graph: concepts of a subject laid out in prerequisite layers.
 // Tap a concept to light up what must come before it and what it leads to.
 
-import { icon } from '../icons.js?v=202610031335';
-import { esc } from '../components.js?v=202610031335';
-import { allConcepts, conceptById, ancestors, descendants, depthOf } from '../concepts.js?v=202610031335';
-import { progressOf } from '../progress.js?v=202610031335';
+import { icon } from '../icons.js?v=202610071239';
+import { esc } from '../components.js?v=202610071239';
+import { allConcepts, conceptById, ancestors, descendants, depthOf } from '../concepts.js?v=202610071239';
+import { progressOf } from '../progress.js?v=202610071239';
 
 export const graphState = { subject: 'physics', sel: null };
 const SUBJECTS = [['physics', 'পদার্থ'], ['chemistry', 'রসায়ন'], ['higher_math', 'উচ্চতর গণিত'], ['biology', 'জীববিজ্ঞান']];

@@ -1,7 +1,7 @@
 // Backup & restore page.
 
-import { icon } from '../icons.js?v=202610031335';
-import { lastBackupAt, snapshot } from '../backup.js?v=202610031335';
+import { icon } from '../icons.js?v=202610071239';
+import { lastBackupAt, snapshot } from '../backup.js?v=202610071239';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 
