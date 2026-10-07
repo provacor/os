@@ -3,9 +3,9 @@
 // more time — leaves the last days for revision, and writes the tasks into Mission.
 // Missed days are detected and the rest of the plan is rebuilt from today.
 
-import { dayKey, todayKey, setPlanTasks, allPlanTasks } from './mission.js?v=202610031335';
-import { progressOf } from './progress.js?v=202610031335';
-import { mistakeWeight } from './mistakes.js?v=202610031335';
+import { dayKey, todayKey, setPlanTasks, allPlanTasks } from './mission.js?v=202610071239';
+import { progressOf } from './progress.js?v=202610071239';
+import { mistakeWeight } from './mistakes.js?v=202610071239';
 
 const KEY = 'hscos:plan:v1';
 const read = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } };

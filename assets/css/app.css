@@ -1281,5 +1281,5 @@ body.focus-on { padding-bottom: 0; }
 .fig { display: block; width: 100%; height: auto; color: var(--text); font-family: inherit; }
 .fig .f-a { color: var(--blue); } .fig .f-b { color: var(--amber); } .fig .f-c { color: var(--teal); }
 .fig-wrap + .pre { margin-top: 10px; color: var(--text-2); line-height: 1.6; }
-.qa-title .chip, .cq-q .chip, .qa-chips .chip { white-space: normal; overflow-wrap: anywhere; text-align: left; height: auto; line-height: 1.4; }
+.qa-title .chip, .cq-q .chip, .qa-chips .chip, .item-foot span.chip { white-space: normal; overflow-wrap: anywhere; text-align: left; height: auto; line-height: 1.4; }
 .item-card { min-width: 0; overflow-wrap: anywhere; }
