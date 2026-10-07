@@ -125,6 +125,26 @@
     "physics_2nd_ch07_revision": {
       "file": "content/physics/physics_2nd_ch07_revision.json",
       "count": 7
+    },
+    "chemistry_2nd_ch01_cq": {
+      "file": "content/chemistry/chemistry_2nd_ch01_cq.json",
+      "count": 46
+    },
+    "chemistry_2nd_ch01_ka": {
+      "file": "content/chemistry/chemistry_2nd_ch01_ka.json",
+      "count": 33
+    },
+    "chemistry_2nd_ch01_kha": {
+      "file": "content/chemistry/chemistry_2nd_ch01_kha.json",
+      "count": 35
+    },
+    "chemistry_2nd_ch01_mcq": {
+      "file": "content/chemistry/chemistry_2nd_ch01_mcq.json",
+      "count": 160
+    },
+    "chemistry_2nd_ch01_formula": {
+      "file": "content/chemistry/chemistry_2nd_ch01_formula.json",
+      "count": 7
     }
   }
 }
