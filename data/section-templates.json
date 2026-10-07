@@ -20,7 +20,7 @@
       "simulation", "mistakes", "revision", "progress"
     ],
     "biology": [
-      "notes", "mcq", "cq", "formula", "concept",
+      "notes", "mcq", "cq", "ka", "kha", "formula", "concept",
       "definition", "diagram", "process", "comparison", "classification",
       { "type": "simulation", "label": "Interactive Diagram / Simulation" },
       "mistakes", "revision", "progress"
