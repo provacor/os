@@ -225,6 +225,38 @@
     "chemistry_2nd_ch02_formula": {
       "file": "content/chemistry/chemistry_2nd_ch02_formula.json",
       "count": 3
+    },
+    "biology_2nd_ch07_cq": {
+      "file": "content/biology/biology_2nd_ch07_cq.json",
+      "count": 14
+    },
+    "biology_2nd_ch07_ka": {
+      "file": "content/biology/biology_2nd_ch07_ka.json",
+      "count": 20
+    },
+    "biology_2nd_ch07_kha": {
+      "file": "content/biology/biology_2nd_ch07_kha.json",
+      "count": 19
+    },
+    "biology_2nd_ch07_mcq": {
+      "file": "content/biology/biology_2nd_ch07_mcq.json",
+      "count": 142
+    },
+    "biology_2nd_ch08_cq": {
+      "file": "content/biology/biology_2nd_ch08_cq.json",
+      "count": 18
+    },
+    "biology_2nd_ch08_ka": {
+      "file": "content/biology/biology_2nd_ch08_ka.json",
+      "count": 32
+    },
+    "biology_2nd_ch08_kha": {
+      "file": "content/biology/biology_2nd_ch08_kha.json",
+      "count": 25
+    },
+    "biology_2nd_ch08_mcq": {
+      "file": "content/biology/biology_2nd_ch08_mcq.json",
+      "count": 150
     }
   }
 }
