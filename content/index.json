@@ -205,6 +205,26 @@
     "chemistry_2nd_ch05_formula": {
       "file": "content/chemistry/chemistry_2nd_ch05_formula.json",
       "count": 3
+    },
+    "chemistry_2nd_ch02_cq": {
+      "file": "content/chemistry/chemistry_2nd_ch02_cq.json",
+      "count": 79
+    },
+    "chemistry_2nd_ch02_ka": {
+      "file": "content/chemistry/chemistry_2nd_ch02_ka.json",
+      "count": 56
+    },
+    "chemistry_2nd_ch02_kha": {
+      "file": "content/chemistry/chemistry_2nd_ch02_kha.json",
+      "count": 68
+    },
+    "chemistry_2nd_ch02_mcq": {
+      "file": "content/chemistry/chemistry_2nd_ch02_mcq.json",
+      "count": 423
+    },
+    "chemistry_2nd_ch02_formula": {
+      "file": "content/chemistry/chemistry_2nd_ch02_formula.json",
+      "count": 3
     }
   }
 }
