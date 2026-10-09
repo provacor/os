@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>জৈব রসায়ন ল্যাব — ২য় অধ্যায়ের ৯টি সিমুলেশন</title>
+<style>
+  :root {
+    --bg: #0d1017; --panel: #151a24; --panel2: #1c2230; --line: #2a3242; --text: #e9edf4; --muted: #8e98ab;
+    --a: #7ea6ff; --b: #f7c35c; --c: #4fd8c4; --d: #fb8fb0; --e: #6ee7a0; --f: #c49bff; --grid: rgba(255,255,255,.06);
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f4f6fa; --panel: #fff; --panel2: #f1f4f9; --line: #dde3ec; --text: #0f172a; --muted: #5b6577;
+      --a: #3b6cf6; --b: #c58a06; --c: #0f9f8e; --d: #e2457a; --e: #16a34a; --f: #7c3aed; --grid: rgba(15,23,42,.07); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Noto Sans Bengali", "Inter", system-ui, sans-serif; }
+  header { padding: 14px 14px 6px; }
+  h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 99px; padding: 7px 12px; font: inherit; font-size: .82rem; cursor: pointer; white-space: nowrap; }
+  .tabs button.on { background: var(--a); border-color: transparent; color: #fff; }
+  main { padding: 6px 14px 24px; max-width: 900px; margin: 0 auto; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+  h2 { margin: 2px 0 2px; font-size: 1.05rem; }
+  .sub { color: var(--muted); font-size: .82rem; margin: 0 0 10px; }
+  canvas { width: 100%; height: 300px; display: block; background: var(--panel2); border-radius: 12px; touch-action: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .row .gl { width: 100%; font-size: .74rem; color: var(--muted); margin: 2px 0 -4px; }
+  .row button { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 10px; padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+  .row button.on { border-color: var(--a); color: var(--a); }
+  .ctl { display: grid; gap: 8px; margin-top: 10px; }
+  .ctl label { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: .84rem; }
+  .ctl label b { color: var(--a); font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--a); }
+  .info { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: var(--panel2); font-size: .86rem; }
+  .info code { font-family: ui-monospace, monospace; color: var(--c); }
+  .info .big { font-size: 1.05rem; font-weight: 700; }
+  .info .ok { color: var(--e); font-weight: 700; }
+  .info .no { color: var(--d); font-weight: 700; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>জৈব রসায়ন ল্যাব</h1>
+  <p>রসায়ন ২য় পত্র · ২য় অধ্যায় — নোটের নিয়ম, ক্রম ও বিক্রিয়াগুলো হাতে-কলমে দেখো। বোতাম চাপো, স্লাইডার টানো; নিচের হিসাব সাথে সাথে বদলাবে।</p>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<main><section class="card">
+  <h2 id="title"></h2>
+  <p class="sub" id="sub"></p>
+  <canvas id="cv"></canvas>
+  <div class="row" id="buttons"></div>
+  <div class="ctl" id="ctl"></div>
+  <div class="info" id="info"></div>
+  <p class="note" id="note"></p>
+</section></main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const cv = $('cv');
+  const ctx = cv.getContext('2d');
+  const BD = '০১২৩৪৫৬৭৮৯';
+  const bn = (x) => String(x).replace(/\d/g, (c) => BD[c]);
+  const SUB = '₀₁₂₃₄₅₆₇₈₉';
+  const sub = (n) => (n === 1 ? '' : String(n).replace(/\d/g, (c) => SUB[c]));
+  const TAU = Math.PI * 2;
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const ease = (t) => (t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t));
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  // ---------- drawing helpers ----------
+  function text(x, y, s, col = '--text', size = 15, weight = 600, align = 'center') {
+    ctx.fillStyle = col.startsWith('--') ? css(col) : col;
+    ctx.font = `${weight} ${size}px "Noto Sans Bengali", system-ui, sans-serif`;
+    ctx.textAlign = align; ctx.textBaseline = 'middle';
+    ctx.fillText(s, x, y);
+  }
+  function bond(x1, y1, x2, y2, order = 1, col = '--muted', s1 = 11, s2 = 11, w = 2) {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, px = -uy, py = ux;
+    const ax = x1 + ux * s1, ay = y1 + uy * s1, bx = x2 - ux * s2, by = y2 - uy * s2;
+    ctx.strokeStyle = col.startsWith('--') ? css(col) : col; ctx.lineWidth = w; ctx.lineCap = 'round';
+    const offs = order === 1 ? [0] : order === 2 ? [-2.6, 2.6] : [-4.5, 0, 4.5];
+    for (const o of offs) { ctx.beginPath(); ctx.moveTo(ax + px * o, ay + py * o); ctx.lineTo(bx + px * o, by + py * o); ctx.stroke(); }
+  }
+  function dot(x, y, r, col) { ctx.fillStyle = col.startsWith('--') ? css(col) : col; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+  function ring(x, y, r, col) { ctx.strokeStyle = col.startsWith('--') ? css(col) : col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.stroke(); }
+  function poly(cx, cy, r, n, rot = -Math.PI / 2) {
+    return Array.from({ length: n }, (_, i) => [cx + r * Math.cos(rot + (i * TAU) / n), cy + r * Math.sin(rot + (i * TAU) / n)]);
+  }
+  function arrow(x1, y1, x2, y2, col = '--b', w = 2) {
+    const c = col.startsWith('--') ? css(col) : col;
+    ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = w;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    const a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - 9 * Math.cos(a - 0.4), y2 - 9 * Math.sin(a - 0.4)); ctx.lineTo(x2 - 9 * Math.cos(a + 0.4), y2 - 9 * Math.sin(a + 0.4)); ctx.closePath(); ctx.fill();
+  }
+  function hbar(x, y, w, h, frac, col, label) {
+    ctx.fillStyle = css('--line'); ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = css(col); ctx.fillRect(x, y, w * clamp(frac, 0, 1), h);
+    if (label) text(x - 6, y + h / 2, label, '--text', 13, 600, 'right');
+  }
+  function roundRect(x, y, w, h, r, fill, stroke) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.5; ctx.stroke(); }
+  }
+
+  // ---------- 1. homologous series ----------
+  const PFX = ['মিথ', 'ইথ', 'প্রোপ', 'বিউট', 'পেন্ট', 'হেক্স', 'হেপ্ট', 'অক্ট', 'নন', 'ডেক'];
+  const SERIES = {
+    alkane: { label: 'অ্যালকেন', gen: 'CₙH₂ₙ₊₂', mf: 'M = 14n + 2', min: 1, M: (n) => 14 * n + 2, f: (n) => `C${sub(n)}H${sub(2 * n + 2)}`,
+      name: (n) => PFX[n - 1] + 'েন', state: [[1, 4, 'গ্যাস'], [5, 17, 'তরল'], [18, 20, 'কঠিন']] },
+    alkene: { label: 'অ্যালকিন', gen: 'CₙH₂ₙ', mf: 'M = 14n', min: 2, M: (n) => 14 * n, f: (n) => `C${sub(n)}H${sub(2 * n)}`,
+      name: (n) => (n <= 3 ? PFX[n - 1] + 'িন' : PFX[n - 1] + '-1-ইন'), state: [[2, 4, 'গ্যাস'], [5, 15, 'তরল'], [16, 20, 'কঠিন']] },
+    alkyne: { label: 'অ্যালকাইন', gen: 'CₙH₂ₙ₋₂', mf: 'M = 14n − 2', min: 2, M: (n) => 14 * n - 2, f: (n) => `C${sub(n)}H${sub(2 * n - 2)}`,
+      name: (n) => (n <= 3 ? PFX[n - 1] + 'াইন' : PFX[n - 1] + '-1-আইন'), state: [[2, 4, 'গ্যাস'], [5, 11, 'তরল'], [12, 20, 'কঠিন']] },
+    alcohol: { label: 'অ্যালকোহল', gen: 'CₙH₂ₙ₊₁OH', mf: 'M = 14n + 18', min: 1, M: (n) => 14 * n + 18, f: (n) => (n === 1 ? 'CH₃OH' : `C${sub(n)}H${sub(2 * n + 1)}OH`),
+      name: (n) => (n <= 2 ? PFX[n - 1] + 'ানল' : PFX[n - 1] + 'ান-1-অল') },
+    aldehyde: { label: 'অ্যালডিহাইড', gen: 'CₙH₂ₙO', mf: 'M = 14n + 16', min: 1, M: (n) => 14 * n + 16, f: (n) => (n === 1 ? 'HCHO' : `C${sub(n - 1)}H${sub(2 * n - 1)}CHO`),
+      name: (n) => PFX[n - 1] + 'ান্যাল' },
+    acid: { label: 'কার্বক্সিলিক এসিড', gen: 'CₙH₂ₙO₂', mf: 'M = 14n + 32', min: 1, M: (n) => 14 * n + 32, f: (n) => (n === 1 ? 'HCOOH' : `C${sub(n - 1)}H${sub(2 * n - 1)}COOH`),
+      name: (n) => PFX[n - 1] + 'ানয়িক এসিড', state: [[1, 9, 'তরল'], [10, 20, 'কঠিন']] },
+  };
+
+  const sims = [];
+
+  sims.push({
+    title: 'সমগোত্রীয় শ্রেণি: সংকেত, আণবিক ভর ও ভৌত অবস্থা',
+    sub: 'শ্রেণি বেছে n (কার্বন সংখ্যা) টানো — সাধারণ সংকেত, আণবিক ভর M ও ভৌত অবস্থা সাথে সাথে বদলাবে। পাশাপাশি দুই সদস্যের পার্থক্য সবসময় –CH₂– (ভর 14)।',
+    groups: [['s', 'শ্রেণি', Object.entries(SERIES).map(([k, v]) => [k, v.label]), 'alkane']],
+    controls: [['n', 'কার্বন সংখ্যা n', 1, 20, 1, 4, '']],
+    draw(W, H, t, p, g) {
+      const S = SERIES[g.s];
+      const n = Math.max(S.min, p.n);
+      const step = Math.min(42, (W - 120) / Math.max(n, 2));
+      const x0 = W / 2 - (step * (n - 1)) / 2, yA = H * 0.36, yB = H * 0.36 + 26;
+      const pts = Array.from({ length: n }, (_, i) => [x0 + i * step, i % 2 ? yB : yA]);
+      for (let i = 0; i < n - 1; i++) {
+        const order = i === 0 && g.s === 'alkene' ? 2 : i === 0 && g.s === 'alkyne' ? 3 : 1;
+        bond(pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], order, order > 1 ? '--a' : '--muted', 8, 8, 2.2);
+      }
+      pts.forEach(([x, y], i) => { dot(x, y, 8, i === 0 && g.s !== 'alkane' ? '--a' : '--c'); text(x, y, 'C', '#06121c', 10, 800); });
+      const [fx, fy] = pts[0];
+      if (g.s === 'alcohol') { bond(fx, fy, fx - 34, fy - 26, 1, '--d', 8, 10); text(fx - 48, fy - 34, 'OH', '--d', 15, 800); }
+      if (g.s === 'aldehyde') { bond(fx, fy, fx - 34, fy - 26, 2, '--d', 8, 10); text(fx - 42, fy - 34, 'O', '--d', 15, 800); text(fx - 26, fy + 16, 'H', '--muted', 13); }
+      if (g.s === 'acid') { bond(fx, fy, fx - 34, fy - 26, 2, '--d', 8, 10); text(fx - 42, fy - 34, 'O', '--d', 15, 800); bond(fx, fy, fx - 34, fy + 22, 1, '--d', 8, 10); text(fx - 50, fy + 28, 'OH', '--d', 15, 800); }
+      text(W / 2, 30, `${S.f(n)}   ·   M = ${bn(S.M(n))} g mol⁻¹`, '--text', 18, 800);
+      if (S.state) {
+        const bx = 40, bw = W - 80, by = H - 62;
+        const col = { 'গ্যাস': '--c', 'তরল': '--a', 'কঠিন': '--b' };
+        S.state.forEach(([a, b, s]) => {
+          const xa = bx + ((a - 1) / 20) * bw, xb = bx + (b / 20) * bw;
+          ctx.fillStyle = css(col[s]); ctx.globalAlpha = 0.35; ctx.fillRect(xa, by, xb - xa, 18); ctx.globalAlpha = 1;
+          text((xa + xb) / 2, by + 9, s, '--text', 12, 700);
+        });
+        const mx = bx + ((n - 0.5) / 20) * bw;
+        ctx.fillStyle = css('--d'); ctx.beginPath(); ctx.moveTo(mx, by - 2); ctx.lineTo(mx - 6, by - 12); ctx.lineTo(mx + 6, by - 12); ctx.fill();
+        text(bx, by + 32, 'C₁', '--muted', 11, 600, 'left'); text(bx + bw, by + 32, 'C₂₀', '--muted', 11, 600, 'right');
+        text(W / 2, by + 32, 'কক্ষ তাপমাত্রায় ভৌত অবস্থা (নোটের সারণি)', '--muted', 11);
+      } else {
+        text(W / 2, H - 50, 'এই শ্রেণির ভৌত অবস্থার সীমা নোটে আলাদা করে দেওয়া নেই', '--muted', 12);
+      }
+      const st = S.state?.find(([a, b]) => n >= a && n <= b)?.[2];
+      const nm = n <= 10 ? S.name(n) : '— (n > 10: শুধু সংকেত দেখাও)';
+      this.info = `<span class="big">${S.label}: ${S.gen}</span> · <code>${S.mf}</code><br>
+        n = ${bn(n)} → <b>${S.f(n)}</b>, নাম: <b>${nm}</b><br>
+        আণবিক ভর: ${bn(S.mf.replace('M = ', '').replace('n', ` × ${n}`))} = <b>${bn(S.M(n))}</b> g mol⁻¹${st ? ` · অবস্থা: <b>${st}</b>` : ''}
+        ${p.n < S.min ? `<br><span class="no">এই শ্রেণির প্রথম সদস্য n = ${bn(S.min)} থেকে শুরু।</span>` : ''}`;
+    },
+  });
+
+  // ---------- 2. Hückel ----------
+  const HUCKEL = {
+    benzene: { label: 'বেনজিন', rings: 1, size: 6, pi: 6, calc: '6', cyc: true, deloc: true, arom: true },
+    naph: { label: 'ন্যাফথালিন', rings: 2, size: 6, pi: 10, calc: '10', cyc: true, deloc: true, arom: true },
+    anth: { label: 'অ্যানথ্রাসিন', rings: 3, size: 6, pi: 14, calc: '14', cyc: true, deloc: true, arom: true },
+    pyridine: { label: 'পিরিডিন', rings: 1, size: 6, pi: 6, calc: '6 + 0', het: 'N', cyc: true, deloc: true, arom: true },
+    furan: { label: 'ফিউরান', rings: 1, size: 5, pi: 6, calc: '4 + 2 (O এর নিঃসঙ্গ জোড়)', het: 'O', cyc: true, deloc: true, arom: true },
+    pyrrole: { label: 'পাইরোল', rings: 1, size: 5, pi: 6, calc: '4 + 2 (N এর নিঃসঙ্গ জোড়)', het: 'NH', cyc: true, deloc: true, arom: true },
+    thio: { label: 'থায়োফিন', rings: 1, size: 5, pi: 6, calc: '4 + 2 (S এর নিঃসঙ্গ জোড়)', het: 'S', cyc: true, deloc: true, arom: true },
+    cpcat: { label: 'সাইক্লোপ্রোপিনাইল ক্যাটায়ন', rings: 1, size: 3, pi: 2, calc: '2', charge: '+', cyc: true, deloc: true, arom: true },
+    cp: { label: 'সাইক্লোপ্রোপিন', rings: 1, size: 3, pi: 2, calc: '2 (একটি sp³ C)', cyc: true, deloc: false, arom: false },
+    cpan: { label: 'সাইক্লোপ্রোপিনাইল অ্যানায়ন', rings: 1, size: 3, pi: 4, calc: '2 + 2', charge: '−', cyc: true, deloc: null, arom: false },
+    cbd: { label: 'সাইক্লোবিউটাডাইন', rings: 1, size: 4, pi: 4, calc: '4', cyc: true, deloc: null, arom: false },
+  };
+  const isHuckel = (e) => e >= 2 && (e - 2) % 4 === 0;
+  sims.push({
+    title: 'হাকেল নীতি (4n + 2) — কোন যৌগ অ্যারোমেটিক?',
+    sub: 'অণু বেছে নাও: বলয়ে সঞ্চরণশীল π ইলেকট্রন ঘুরছে কিনা আর সংখ্যাটি 4n + 2 কিনা দেখো। নিচের স্লাইডারে যেকোনো π ইলেকট্রন সংখ্যা যাচাই করো।',
+    groups: [['m', 'অণু', Object.entries(HUCKEL).map(([k, v]) => [k, v.label]), 'benzene']],
+    controls: [['e', 'নিজে যাচাই: π ইলেকট্রন সংখ্যা', 0, 22, 1, 6, 'টি']],
+    draw(W, H, t, p, g) {
+      const M = HUCKEL[g.m];
+      const r = M.size === 6 ? Math.min(52, H * 0.2) : M.size === 5 ? 50 : M.size === 4 ? 46 : 44;
+      const cy = H * 0.44;
+      const dx = r * Math.sqrt(3);
+      const centers = Array.from({ length: M.rings }, (_, i) => [W / 2 + (i - (M.rings - 1) / 2) * dx, cy]);
+      const rot = M.size === 6 ? -Math.PI / 2 : M.size === 4 ? -Math.PI / 4 : -Math.PI / 2;
+      const allV = [];
+      centers.forEach(([cx, cyy]) => {
+        const v = poly(cx, cyy, r, M.size, rot);
+        allV.push(v);
+        v.forEach((a, i) => { const b = v[(i + 1) % v.length]; bond(a[0], a[1], b[0], b[1], 1, '--muted', 0, 0, 2.4); });
+        if (M.size === 4) { bond(v[0][0], v[0][1], v[1][0], v[1][1], 2, '--muted', 0, 0, 2.4); bond(v[2][0], v[2][1], v[3][0], v[3][1], 2, '--muted', 0, 0, 2.4); }
+        if (g.m === 'cp') bond(v[1][0], v[1][1], v[2][0], v[2][1], 2, '--muted', 0, 0, 2.4);
+      });
+      if (M.het) { const [hx, hy] = allV[0][0]; dot(hx, hy, 13, '--panel2'); text(hx, hy, M.het, '--d', 15, 800); }
+      if (g.m === 'cp') { const [hx, hy] = allV[0][0]; text(hx, hy - 16, 'CH₂ (sp³)', '--b', 12, 700); }
+      if (M.charge) text(centers[0][0] + r + 14, cy - r, M.charge, '--d', 22, 800);
+      // π electrons
+      const perRing = Math.ceil(M.pi / M.rings);
+      let left = M.pi;
+      centers.forEach(([cx, cyy], k) => {
+        const cnt = Math.min(perRing, left); left -= cnt;
+        for (let i = 0; i < cnt; i++) {
+          const base = (i / cnt) * TAU + (k % 2 ? Math.PI / cnt : 0);
+          const a = M.deloc ? base + t * 1.2 * (k % 2 ? -1 : 1) : base;
+          const rr = r * 0.55;
+          dot(cx + rr * Math.cos(a), cyy + rr * Math.sin(a), 4.5, M.deloc ? '--a' : '--muted');
+        }
+        if (M.deloc && M.arom) { ctx.globalAlpha = 0.25 + 0.1 * Math.sin(t * 3); ring(cx, cyy, r * 0.55, '--a'); ctx.globalAlpha = 1; }
+      });
+      const n = (M.pi - 2) / 4;
+      text(W / 2, 26, bn(`π-e⁻ = ${M.calc} = ${M.pi}`), '--text', 16, 800);
+      text(W / 2, H - 42, M.arom ? 'অ্যারোমেটিক ✓' : 'অ্যারোমেটিক নয় ✗', M.arom ? '--e' : '--d', 18, 800);
+      // custom check strip
+      const e = p.e, okE = isHuckel(e);
+      text(W / 2, H - 16, `স্লাইডার: ${bn(e)}টি π ইলেকট্রন → ${okE ? `হাকেল সংখ্যা (n = ${bn((e - 2) / 4)})` : 'হাকেল সংখ্যা নয়'}`, okE ? '--e' : '--muted', 13, 700);
+      const ck = (b) => (b == null ? '—' : b ? '<span class="ok">✓</span>' : '<span class="no">✗</span>');
+      this.info = `<span class="big">${M.label}</span><br>
+        চাক্রিক ${ck(M.cyc)} · সমতলীয় ও সঞ্চরণশীল π ইলেকট্রন ${ck(M.deloc)} · 4n + 2 সংখ্যক π ইলেকট্রন ${ck(isHuckel(M.pi))}
+        (<code>4n + 2 = ${bn(M.pi)} → n = ${Number.isInteger(n) ? bn(n) : '½'}</code>)<br>
+        সিদ্ধান্ত: ${M.arom ? '<span class="ok">অ্যারোমেটিক</span>' : '<span class="no">অ্যারোমেটিক নয়</span>'}
+        ${g.m === 'cp' ? ' — sp³ কার্বনের কারণে π ইলেকট্রন বলয়ে সঞ্চারিত হতে পারে না।' : ''}`;
+    },
+  });
+
+  // ---------- 3. Markovnikov / Kharasch ----------
+  const MK = {
+    hbr: { label: 'HBr', E: 'H⁺', Nu: 'Br⁻', X: 'Br', path: 'ion', major: 'CH₃–CHBr–CH₃', minor: 'CH₃–CH₂–CH₂Br', pM: 90, rule: 'মার্কনিকভ নীতি' },
+    hbrp: { label: 'HBr + পারক্সাইড', E: 'Br•', Nu: 'H–Br', X: 'Br', path: 'rad', major: 'CH₃–CH₂–CH₂Br', minor: 'CH₃–CHBr–CH₃', pM: 99, rule: 'বিপরীত মার্কনিকভ (খারাস / পারক্সাইড প্রভাব)' },
+    hcl: { label: 'HCl', E: 'H⁺', Nu: 'Cl⁻', X: 'Cl', path: 'ion', major: 'CH₃–CHCl–CH₃', minor: 'CH₃–CH₂–CH₂Cl', pM: 90, rule: 'মার্কনিকভ নীতি' },
+    hclp: { label: 'HCl + পারক্সাইড', E: 'H⁺', Nu: 'Cl⁻', X: 'Cl', path: 'ion', major: 'CH₃–CHCl–CH₃', minor: 'CH₃–CH₂–CH₂Cl', pM: 90, rule: 'মার্কনিকভ নীতি (পারক্সাইড প্রভাব শুধু HBr এ খাটে)' },
+    h2o: { label: 'H₂O (H₂SO₄)', E: 'H⁺', Nu: 'H₂O', X: 'OH', path: 'ion', major: 'CH₃–CH(OH)–CH₃', minor: 'CH₃–CH₂–CH₂OH', pM: 90, rule: 'মার্কনিকভ নীতি' },
+  };
+  sims.push({
+    title: 'প্রোপিনে সংযোজন: মার্কনিকভ বনাম খারাস',
+    sub: 'CH₃–CH=CH₂ এ বিকারক যোগ করো। প্রথম ধাপে যে অন্তর্বর্তী (C⁺ বা C•) বেশি স্থায়ী — 2° > 1° — সেটিই প্রধান উৎপাদ ঠিক করে।',
+    groups: [['r', 'বিকারক', Object.entries(MK).map(([k, v]) => [k, v.label]), 'hbr']],
+    draw(W, H, t, p, g) {
+      const R = MK[g.r];
+      const ph = (t % 6) / 6 * 3; // 0..3
+      const cx = W / 2, y = H * 0.36, s = Math.min(70, W / 7);
+      const C1 = [cx - s, y], C2 = [cx, y], C3 = [cx + s, y];
+      const st = ph < 1 ? 0 : ph < 2 ? 1 : 2;
+      text(C1[0], C1[1], 'CH₃', '--text', 16, 800);
+      text(C2[0], C2[1], st === 0 ? 'CH' : st === 1 ? (R.path === 'ion' ? 'C⁺H' : 'C•H') : (R.path === 'ion' ? `CH(${R.X})` : 'CH₂'), st === 1 ? '--d' : '--text', 16, 800);
+      text(C3[0], C3[1], st === 0 ? 'CH₂' : R.path === 'ion' ? 'CH₃' : (st === 1 ? 'CH₂Br' : 'CH₂Br'), '--text', 16, 800);
+      bond(C1[0], C1[1], C2[0], C2[1], 1, '--muted', 20, 18);
+      bond(C2[0], C2[1], C3[0], C3[1], st === 0 ? 2 : 1, st === 0 ? '--a' : '--muted', 18, 24);
+      if (ph < 1) {
+        const k = ease(ph);
+        const ex = lerp(cx + s * 2.4, C3[0] + 6, k), ey = lerp(y - 70, y - 22, k);
+        text(ex, ey, R.E, '--b', 16, 800);
+        text(W / 2, H * 0.12, `ধাপ ১: ${R.path === 'ion' ? 'ইলেকট্রোফাইল H⁺ দ্বিবন্ধনের প্রান্তীয় C এ যুক্ত হয়' : 'H₂O₂ → 2•OH; HBr + •OH → H₂O + Br•; Br• প্রান্তীয় C এ যুক্ত হয়'}`, '--muted', 12);
+      } else if (ph < 2) {
+        text(W / 2, H * 0.12, `ধাপ ২: অন্তর্বর্তী — 2° ${R.path === 'ion' ? 'কার্বোক্যাটায়ন' : 'মুক্তমূলক'} বেশি স্থায়ী`, '--muted', 12);
+        const k = ease((ph - 1) * 2);
+        text(lerp(cx - s * 2.2, C2[0], k), lerp(y + 70, y + 24, k), R.Nu, '--c', 15, 800);
+      } else {
+        text(W / 2, H * 0.12, 'ধাপ ৩: উৎপাদ', '--muted', 12);
+      }
+      const bx = 24, bw = W - 84, by = H * 0.6;
+      text(bx, by - 10, `${R.major} (প্রধান)`, '--text', 13, 700, 'left');
+      hbar(bx, by, bw, 14, (R.pM / 100) * clamp(ph - 0.6, 0, 1), '--e');
+      text(bx, by + 30, R.minor, '--text', 13, 700, 'left');
+      hbar(bx, by + 40, bw, 14, ((100 - R.pM) / 100) * clamp(ph - 0.6, 0, 1), '--d');
+      text(bx + bw + 6, by + 7, `${bn(R.pM)}%`, '--e', 13, 800, 'left');
+      text(bx + bw + 6, by + 47, `${bn(100 - R.pM)}%`, '--d', 13, 800, 'left');
+      text(W / 2, H - 18, R.rule, '--a', 14, 800);
+      this.info = `<span class="big">CH₃–CH=CH₂ + ${R.label}</span><br>
+        প্রধান উৎপাদ: <b>${R.major}</b> (${bn(R.pM)}%) · অপ্রধান: ${R.minor} (${bn(100 - R.pM)}%)<br>
+        ${R.path === 'ion'
+          ? 'কারণ: কার্বোক্যাটায়নের স্থায়িত্ব 3° > 2° > 1°; 2° C⁺ বেশি তৈরি হয় → বিকারকের H দ্বিবন্ধনের যে C এ বেশি H আছে সেখানে যুক্ত হয়।'
+          : 'কারণ: মুক্তমূলকের স্থায়িত্ব 3° > 2° > 1°; Br• প্রান্তীয় C এ বসে 2° C• তৈরি করে, তারপর H–Br থেকে H নেয়। শুধু HBr + পারক্সাইডে খাটে।'}`;
+    },
+  });
+
+  // ---------- 4. directing groups ----------
+  const DIR = {
+    ch3: { g: '–CH₃', op: true, act: true, why: 'হাইপারকনজুগেশনে o ও p অবস্থানে (−) চার্জ' },
+    oh: { g: '–OH', op: true, act: true, why: 'O এর নিঃসঙ্গ জোড় বলয়ে ঢুকে o ও p অবস্থানে (−) চার্জ' },
+    nh2: { g: '–NH₂', op: true, act: true, why: 'N এর নিঃসঙ্গ জোড় থেকে o ও p অবস্থানে (−) চার্জ' },
+    och3: { g: '–OCH₃', op: true, act: true, why: 'অ্যালকক্সি মূলকে শুধু একক বন্ধন → বলয়ে e⁻ দেয়' },
+    cl: { g: '–Cl', op: true, act: false, why: 'ব্যতিক্রম: হ্যালোজেন o-p নির্দেশক হলেও বলয়কে নিষ্ক্রিয় করে' },
+    no2: { g: '–NO₂', op: false, act: false, why: 'বলয় থেকে e⁻ টানে; o ও p অবস্থানে (+) চার্জ, মেটা তুলনামূলক e⁻ সমৃদ্ধ' },
+    cho: { g: '–CHO', op: false, act: false, why: 'দ্বিবন্ধনযুক্ত মূলক — বলয় থেকে e⁻ টানে' },
+    cooh: { g: '–COOH', op: false, act: false, why: 'দ্বিবন্ধনযুক্ত মূলক — বলয় থেকে e⁻ টানে' },
+    so3h: { g: '–SO₃H', op: false, act: false, why: 'বলয় নিষ্ক্রিয়কারী মেটা নির্দেশক' },
+    cn: { g: '–CN', op: false, act: false, why: 'ত্রিবন্ধনযুক্ত মূলক — বলয় থেকে e⁻ টানে' },
+  };
+  sims.push({
+    title: 'বেনজিন বলয়ে নির্দেশক প্রভাব (o-p বনাম মেটা)',
+    sub: 'বলয়ে একটি মূলক বসাও। দ্বিতীয় ইলেকট্রোফাইল (E⁺) কোন অবস্থানে আক্রমণ করবে আর বলয় সক্রিয় না নিষ্ক্রিয় হবে দেখো।',
+    groups: [['x', 'মূলক', Object.entries(DIR).map(([k, v]) => [k, v.g]), 'ch3']],
+    draw(W, H, t, p, g) {
+      const D = DIR[g.x];
+      const cx = W * 0.36, cy = H * 0.55, r = Math.min(60, H * 0.2);
+      const v = poly(cx, cy, r, 6);
+      v.forEach((a, i) => { const b = v[(i + 1) % 6]; bond(a[0], a[1], b[0], b[1], 1, '--muted', 0, 0, 2.4); });
+      ring(cx, cy, r * 0.58, '--muted');
+      bond(v[0][0], v[0][1], v[0][0], v[0][1] - 30, 1, '--muted', 0, 6);
+      text(v[0][0], v[0][1] - 42, D.g, '--d', 17, 800);
+      const pos = D.op ? [1, 3, 5] : [2, 4];
+      const names = { 1: 'অর্থো', 2: 'মেটা', 3: 'প্যারা', 4: 'মেটা', 5: 'অর্থো' };
+      const pulse = 0.5 + 0.5 * Math.sin(t * 4);
+      for (let i = 1; i < 6; i++) {
+        const [x, y] = v[i];
+        const on = pos.includes(i);
+        dot(x, y, on ? 9 + 3 * pulse : 6, on ? (D.op ? '--e' : '--b') : '--line');
+        const ox = x + (x - cx) * 0.45, oy = y + (y - cy) * 0.45;
+        text(ox, oy, names[i], on ? '--text' : '--muted', 11, on ? 800 : 500);
+      }
+      const k = (t % 2) / 2;
+      pos.forEach((i) => { const [x, y] = v[i]; const fx = x + (x - cx) * 1.6, fy = y + (y - cy) * 1.6; ctx.globalAlpha = 1 - k * 0.6; arrow(lerp(fx, x, 0), lerp(fy, y, 0), lerp(fx, x + (x - cx) * 0.25, ease(k)), lerp(fy, y + (y - cy) * 0.25, ease(k)), D.op ? '--e' : '--b'); ctx.globalAlpha = 1; });
+      // reactivity bars
+      const bx = W * 0.72, bw = W * 0.22, rows = [['ফিনাইল–' + D.g.slice(1), D.act ? 0.85 : 0.3, D.act ? '--e' : '--d'], ['বেনজিন', 0.55, '--a']];
+      text(bx + bw / 2, H * 0.2, 'Eₚ প্রতিস্থাপনে সক্রিয়তা', '--muted', 12, 700);
+      rows.forEach(([l, f, c], i) => { hbar(bx, H * 0.3 + i * 44, bw, 14, f, c); text(bx, H * 0.3 + i * 44 - 10, l, '--text', 12, 700, 'left'); });
+      text(bx + bw / 2, H * 0.3 + 2 * 44, D.act ? 'বলয় সক্রিয়কারী ↑' : 'বলয় নিষ্ক্রিয়কারী ↓', D.act ? '--e' : '--d', 13, 800);
+      text(bx + bw / 2, H * 0.3 + 2 * 44 + 22, '(গুণগত তুলনা)', '--muted', 11);
+      this.info = `<span class="big">${D.g}: ${D.op ? 'অর্থো-প্যারা নির্দেশক' : 'মেটা নির্দেশক'} · ${D.act ? 'বলয় সক্রিয়কারী' : 'বলয় নিষ্ক্রিয়কারী'}</span><br>
+        কারণ: ${D.why}।<br>
+        নিয়ম: বলয়ে যুক্ত পরমাণু X এর তড়িৎ ঋণাত্মকতা পাশের Y এর চেয়ে বেশি (X<sup>δ−</sup>) → o-p; কম (X<sup>δ+</sup>) → মেটা। সক্রিয়তা: o-p নির্দেশক যুক্ত > বেনজিন > মেটা নির্দেশক যুক্ত (টলুইন > বেনজিন > নাইট্রোবেনজিন)।`;
+    },
+  });
+
+  // ---------- 5. SN1 vs SN2 ----------
+  const RX = {
+    me: { label: 'CH₃–X', deg: 0, sn1: 0.08, sn2: 1, fav: 'S_N2' },
+    p: { label: '1° RX', deg: 1, sn1: 0.25, sn2: 0.75, fav: 'S_N2' },
+    s: { label: '2° RX', deg: 2, sn1: 0.55, sn2: 0.45, fav: 'দুটোই সম্ভব (পোলার দ্রাবকে S_N1)' },
+    t: { label: '3° RX', deg: 3, sn1: 1, sn2: 0.08, fav: 'S_N1' },
+  };
+  sims.push({
+    title: 'S_N1 বনাম S_N2: ক্রিয়াকৌশল ও সক্রিয়তা',
+    sub: 'অ্যালকাইল হ্যালাইডের ধরন ও ক্রিয়াকৌশল বেছে নাও। S_N2 এক ধাপে পিছন থেকে আক্রমণ করে ছাতার মতো উল্টে দেয়; S_N1 দুই ধাপে সমতলীয় কার্বোক্যাটায়ন হয়ে রেসিমিক মিশ্রণ দেয়।',
+    groups: [['rx', 'অ্যালকাইল হ্যালাইড', Object.entries(RX).map(([k, v]) => [k, v.label]), 'p'], ['m', 'ক্রিয়াকৌশল', [['sn2', 'S_N2'], ['sn1', 'S_N1']], 'sn2']],
+    draw(W, H, t, p, g) {
+      const R = RX[g.rx];
+      const nar = W < 560, cx = nar ? W / 2 : W * 0.4, cy = nar ? H * 0.36 : H * 0.48, L = 46, D = Math.min(170, W * 0.4);
+      const ph = (t % 5) / 5;
+      const subs = ['H', 'H', 'H'].map((h, i) => (i < R.deg ? 'R' : h));
+      let umb, nuX, xX, nuShow = true, plane = false, label = '';
+      if (g.m === 'sn2') {
+        const k = ease(clamp((ph - 0.15) / 0.6, 0, 1));
+        umb = lerp(1, -1, k);
+        nuX = lerp(cx - D, cx - L - 6, ease(clamp(ph / 0.5, 0, 1)));
+        xX = lerp(cx + L + 10, cx + D, ease(clamp((ph - 0.45) / 0.4, 0, 1)));
+        label = ph < 0.45 ? 'Nu⁻ পিছন থেকে আসে' : ph < 0.6 ? 'অবস্থান্তর অবস্থা [Nu···C···X]' : 'X⁻ বের হয়, কনফিগারেশন উল্টে যায় (Walden inversion)';
+        if (Math.abs(umb) < 0.25) { ctx.setLineDash([4, 4]); bond(nuX, cy, cx, cy, 1, '--c', 10, 10); bond(cx, cy, xX, cy, 1, '--d', 10, 10); ctx.setLineDash([]); }
+      } else {
+        const k1 = ease(clamp(ph / 0.35, 0, 1));
+        xX = lerp(cx + L + 10, cx + D, k1);
+        plane = ph > 0.3 && ph < 0.6;
+        const side = Math.floor(t / 5) % 2 ? 1 : -1;
+        const k2 = ease(clamp((ph - 0.55) / 0.35, 0, 1));
+        umb = ph < 0.35 ? lerp(1, 0, k1) : ph < 0.55 ? 0 : lerp(0, -side, k2);
+        nuX = ph < 0.55 ? (side < 0 ? cx - D : cx + D) : lerp(side < 0 ? cx - D : cx + D, side < 0 ? cx - L - 6 : cx + L + 6, k2);
+        nuShow = ph > 0.5;
+        label = ph < 0.35 ? 'ধাপ ১ (মন্থর): C–X ভাঙে, X⁻ বের হয়' : ph < 0.55 ? 'সমতলীয় কার্বোক্যাটায়ন' : `ধাপ ২ (দ্রুত): Nu⁻ ${side < 0 ? 'বাম' : 'ডান'} দিক থেকে আক্রমণ → রেসিমিক মিশ্রণ`;
+      }
+      // three substituents as umbrella
+      [[0, -42, 1], [-10, 34, 1], [12, 20, 0.55]].forEach(([ox, oy, al], i) => {
+        const sx = cx - umb * 26 + ox * (1 - Math.abs(umb) * 0.3), sy = cy + oy;
+        ctx.globalAlpha = al;
+        bond(cx, cy, sx, sy, 1, '--muted', 12, 9);
+        text(sx - umb * 8, sy + (oy < 0 ? -6 : 6), subs[i], subs[i] === 'R' ? '--b' : '--text', 14, 700);
+        ctx.globalAlpha = 1;
+      });
+      dot(cx, cy, 12, plane ? '--d' : '--a'); text(cx, cy, plane ? 'C⁺' : 'C', '#06121c', 12, 800);
+      if (xX < cx + L + 30 && g.m === 'sn2' && umb > 0.25) bond(cx, cy, xX, cy, 1, '--d', 12, 10);
+      if (g.m === 'sn1' && ph < 0.1) bond(cx, cy, xX, cy, 1, '--d', 12, 10);
+      text(xX + 8, cy, umb > 0.25 && xX < cx + L + 30 ? 'X' : 'X⁻', '--d', 15, 800);
+      if (nuShow) text(nuX, cy, g.m === 'sn2' && umb < -0.25 ? 'Nu' : 'Nu⁻', '--c', 15, 800);
+      if ((g.m === 'sn2' && umb < -0.25) || (g.m === 'sn1' && ph > 0.9)) bond(nuX, cy, cx, cy, 1, '--c', 14, 12);
+      text(cx, H * 0.1, label, '--muted', 12, 700);
+      // rate bars
+      const bx = nar ? 64 : W * 0.74, bw = nar ? W - 90 : W * 0.2, b1 = nar ? H * 0.66 : H * 0.34, b2 = nar ? H * 0.78 : H * 0.5;
+      text(nar ? W / 2 : bx + bw / 2, nar ? H * 0.57 : H * 0.24, 'আপেক্ষিক সক্রিয়তা (গুণগত)', '--muted', 11, 700);
+      hbar(bx, b1, bw, 14, R.sn1, '--b'); text(nar ? bx - 8 : bx, nar ? b1 + 7 : b1 - 10, 'S_N1', '--text', 12, 700, nar ? 'right' : 'left');
+      hbar(bx, b2, bw, 14, R.sn2, '--c'); text(nar ? bx - 8 : bx, nar ? b2 + 7 : b2 - 10, 'S_N2', '--text', 12, 700, nar ? 'right' : 'left');
+      text(nar ? W / 2 : bx + bw / 2, nar ? H - 16 : H * 0.66, `পছন্দ: ${R.fav}`, '--e', 12, 800);
+      this.info = `<span class="big">${R.label} → ${R.fav}</span><br>
+        S_N1: দুই ধাপ, এক আণবিক, ১ম ক্রম, মধ্যবর্তী কার্বোক্যাটায়ন, পোলার দ্রাবক, দুর্বল নিউক্লিওফাইল; RX এর সক্রিয়তা <code>3° > 2° > 1° > CH₃X</code><br>
+        S_N2: এক ধাপ, দুই আণবিক, ২য় ক্রম, কোনো মধ্যবর্তী নেই, তীব্র নিউক্লিওফাইল (OH⁻, RO⁻); RX এর সক্রিয়তা <code>CH₃X > 1° > 2° > 3°</code>`;
+    },
+  });
+
+  // ---------- 6. ozonolysis ----------
+  const CARB = {
+    'HCHO': { ald: true, aH: false, ch3co: false },
+    'CH₃–CHO': { ald: true, aH: true, ch3co: true },
+    'CH₃–CH₂–CHO': { ald: true, aH: true, ch3co: false },
+    'CH₃–CO–CH₃': { ald: false, aH: true, ch3co: true },
+    'OHC–CHO': { ald: true, aH: false, ch3co: false },
+  };
+  const OZ = {
+    ethene: { label: 'ইথিন', L: 'H₂C', R: 'CH₂', p: ['HCHO', 'HCHO'] },
+    propene: { label: 'প্রোপিন', L: 'CH₃–CH', R: 'CH₂', p: ['CH₃–CHO', 'HCHO'] },
+    but1: { label: 'বিউট-1-ইন', L: 'CH₃–CH₂–CH', R: 'CH₂', p: ['CH₃–CH₂–CHO', 'HCHO'] },
+    but2: { label: 'বিউট-2-ইন', L: 'CH₃–CH', R: 'CH–CH₃', p: ['CH₃–CHO', 'CH₃–CHO'] },
+    mprop: { label: '2-মিথাইল প্রোপিন', L: '(CH₃)₂C', R: 'CH₂', p: ['CH₃–CO–CH₃', 'HCHO'] },
+    mbut: { label: '2-মিথাইল বিউট-2-ইন', L: '(CH₃)₂C', R: 'CH–CH₃', p: ['CH₃–CO–CH₃', 'CH₃–CHO'] },
+    ethyne: { label: 'ইথাইন', L: 'HC', R: 'CH', triple: true, p: ['OHC–CHO'] },
+  };
+  sims.push({
+    title: 'ওজোনীকরণ: দ্বিবন্ধন কেটে কার্বনিল যৌগ',
+    sub: 'অ্যালকিন (বা ইথাইন) বেছে নাও। O₃/CCl₄ তে ওজোনাইড, তারপর Zn/H₂O তে আর্দ্র বিশ্লেষণ — দ্বিবন্ধনের দুই C এ =O বসে। উৎপাদগুলো কোন পরীক্ষা দেয় তাও দেখো।',
+    groups: [['a', 'মাতৃযৌগ', Object.entries(OZ).map(([k, v]) => [k, v.label]), 'propene']],
+    draw(W, H, t, p, g) {
+      const O = OZ[g.a];
+      const ph = (t % 6) / 6;
+      const cy = H * 0.32;
+      const gap = ph < 0.35 ? 0 : ease((ph - 0.35) / 0.35) * 60;
+      const lx = W / 2 - 34 - gap, rx = W / 2 + 34 + gap;
+      if (O.triple) {
+        const k = ph > 0.35;
+        text(lx, cy, k ? 'OHC' : 'HC', '--text', 18, 800, 'right'); text(rx, cy, k ? 'CHO' : 'CH', '--text', 18, 800, 'left');
+        if (!k) bond(lx + 4, cy, rx - 4, cy, 3, '--a', 0, 0); else bond(lx + 4, cy, rx - 4, cy, 1, '--muted', 0, 0);
+        if (k) text(W / 2, cy + 30, 'C≡C কেটে গিয়ে দুই প্রান্তে –CHO (একক বন্ধন টিকে থাকে)', '--muted', 11);
+      } else {
+        text(lx, cy, O.L, '--text', 18, 800, 'right'); text(rx, cy, O.R, '--text', 18, 800, 'left');
+        if (ph < 0.35) bond(lx + 4, cy, rx - 4, cy, 2, '--a', 0, 0);
+        if (ph >= 0.35) { text(lx + 14, cy, '=O', '--d', 18, 800, 'left'); text(rx - 14, cy, 'O=', '--d', 18, 800, 'right'); }
+      }
+      if (ph < 0.35) { const k = ease(ph / 0.3); text(W / 2, lerp(cy - 80, cy - 26, k), 'O₃', '--b', 16, 800); }
+      text(W / 2, 18, ph < 0.35 ? 'ধাপ ১: O₃ / CCl₄ → ওজোনাইড' : 'ধাপ ২: Zn / H₂O → আর্দ্র বিশ্লেষণ (Zn, H₂O₂ নষ্ট করে)', '--muted', 12, 700);
+      // product table
+      const uniq = [...new Set(O.p)];
+      const tests = [['টলেন (অ্যালডিহাইড)', (c) => c.ald], ['আয়োডোফর্ম (CH₃CO–)', (c) => c.ch3co], ['অ্যালডল (α-H আছে)', (c) => c.aH], ['ক্যানিজারো (α-H নেই অ্যালডিহাইড)', (c) => c.ald && !c.aH]];
+      const tx = 20, ty = H * 0.56, colW = (W - 200) / Math.max(uniq.length, 1);
+      uniq.forEach((u, j) => text(200 + colW * (j + 0.5), ty, u, '--c', 14, 800));
+      tests.forEach(([nm, f], i) => {
+        const y = ty + 26 + i * 24;
+        text(tx, y, nm, '--muted', 12, 600, 'left');
+        uniq.forEach((u, j) => { const ok = f(CARB[u]); text(200 + colW * (j + 0.5), y, ok ? '✓' : '✗', ok ? '--e' : '--d', 15, 800); });
+      });
+      const eq = O.p.length === 2 && O.p[0] === O.p[1] ? `2${O.p[0]}` : O.p.join(' + ');
+      this.info = `<span class="big">${O.label} —O₃, Zn/H₂O→ ${eq}</span><br>
+        শর্টকাট: দ্বিবন্ধন কেটে দুই প্রান্তের C এ =O বসাও; যে C এ H আছে → অ্যালডিহাইড, H নেই → কিটোন।<br>
+        উল্টো দিক: দুটি কার্বনিল O সরিয়ে C দুটিকে দ্বিবন্ধনে জোড়া দিলে মাতৃ অ্যালকিন পাওয়া যায়।`;
+    },
+  });
+
+  // ---------- 7. identification tests ----------
+  const CMP = { ethene: 'ইথিন', ethyne: 'ইথাইন', benzene: 'বেনজিন', ethanol: 'ইথানল', phenol: 'ফেনল', ethanal: 'ইথান্যাল', methanal: 'মিথান্যাল', propanone: 'প্রোপানোন', acid: 'ইথানয়িক এসিড' };
+  const RG = {
+    br2: { label: 'ব্রোমিন দ্রবণ / পানি', col: '#b5482a' },
+    baeyer: { label: 'বেয়ার (ক্ষারীয় KMnO₄)', col: '#8a2bb8' },
+    tollens: { label: 'টলেন / অ্যামোনিয়াযুক্ত AgNO₃', col: '#dfe6ee' },
+    cu: { label: 'অ্যামোনিয়াযুক্ত Cu₂Cl₂', col: '#7fb3d8' },
+    fehling: { label: 'ফেহলিং দ্রবণ', col: '#2a5bd7' },
+    dnp: { label: '2,4-DNP', col: '#e9b949' },
+    iodo: { label: 'I₂ + NaOH (আয়োডোফর্ম)', col: '#c99a3f' },
+    nahco3: { label: 'NaHCO₃ দ্রবণ', col: '#e8eef3' },
+    fecl3: { label: 'FeCl₃ দ্রবণ', col: '#d9b23a' },
+    lucas: { label: 'লুকাস বিকারক', col: '#e8eef3' },
+  };
+  // [result colour, precipitate colour|null, bubbles?, text] — only pairs stated in the notes.
+  const RES = {
+    br2: { ethene: ['#e8eef3', null, false, 'লালচে বাদামি বর্ণ বর্ণহীন হয় (CH₂=CH₂ + Br₂ → BrCH₂–CH₂Br)'], ethyne: ['#e8eef3', null, false, 'লাল বর্ণ দূরীভূত হয় — অসম্পৃক্ততা'], benzene: [null, null, false, 'বিবর্ণ হয় না — বেনজিনের বিশেষ ধরনের অসম্পৃক্ততা'], phenol: [null, '#f3ecc8', false, '২,৪,৬-ট্রাইব্রোমোফেনলের হলদে সাদা অধঃক্ষেপ'] },
+    baeyer: { ethene: ['#e8eef3', null, false, 'বেগুনি/গোলাপি বর্ণ দ্রুত বর্ণহীন হয় (ইথিলিন গ্লাইকল)'], ethyne: ['#e8eef3', null, false, 'বেগুনি বর্ণ বর্ণহীন হয় (অক্সালিক এসিড)'], benzene: [null, null, false, 'বর্ণ অপরিবর্তিত — বেনজিন বেয়ার পরীক্ষা দেয় না'] },
+    tollens: { ethyne: [null, '#f4f4f4', false, 'সিলভার অ্যাসিটিলাইডের সাদা অধঃক্ষেপ'], ethene: [null, null, false, 'কোনো অধঃক্ষেপ নেই — ইথিন ও ইথাইন পার্থক্য'], ethanal: [null, 'mirror', false, 'সিলভার দর্পণ (CH₃CHO → CH₃COOH + Ag↓)'], methanal: [null, 'mirror', false, 'সিলভার দর্পণ'], propanone: [null, null, false, 'বিক্রিয়া হয় না — কিটোন টলেন দেয় না'] },
+    cu: { ethyne: [null, '#b3261e', false, 'কপার অ্যাসিটিলাইডের লাল অধঃক্ষেপ'], ethene: [null, null, false, 'কোনো অধঃক্ষেপ নেই'] },
+    fehling: { ethanal: ['#5d7fbf', '#b3261e', false, 'Cu₂O এর ইটের মতো লাল অধঃক্ষেপ'], methanal: ['#5d7fbf', '#b3261e', false, 'Cu₂O এর লাল অধঃক্ষেপ'], propanone: [null, null, false, 'বিক্রিয়া হয় না — কিটোন ফেহলিং দেয় না'] },
+    dnp: { ethanal: [null, '#e88a1a', false, 'হলুদ/কমলা অধঃক্ষেপ — কার্বনিল মূলক'], methanal: [null, '#e88a1a', false, 'হলুদ/কমলা অধঃক্ষেপ'], propanone: [null, '#e88a1a', false, 'হলুদ/কমলা অধঃক্ষেপ'] },
+    iodo: { ethanol: ['#efe3b8', '#f2c614', false, 'আয়োডোফর্ম CHI₃ এর হলুদ অধঃক্ষেপ'], ethanal: ['#efe3b8', '#f2c614', false, 'হলুদ CHI₃ অধঃক্ষেপ'], propanone: ['#efe3b8', '#f2c614', false, 'হলুদ CHI₃ অধঃক্ষেপ'], methanal: [null, null, false, 'আয়োডোফর্ম দেয় না (CH₃CO– নেই)'], acid: [null, null, false, 'আয়োডোফর্ম দেয় না'] },
+    nahco3: { acid: [null, null, true, 'CO₂ এর বুদবুদ — চুনের পানি ঘোলা করে'], phenol: [null, null, false, 'বিক্রিয়া হয় না — ফেনল কার্বক্সিলিক এসিডের চেয়ে মৃদু এসিড'] },
+    fecl3: { phenol: ['#6b2fa3', null, false, 'বেগুনি বর্ণের দ্রবণ — ফেনলিক –OH'] },
+    lucas: { ethanol: [null, null, false, '1° অ্যালকোহল: কক্ষ তাপমাত্রায় ঘোলাটে ভাব হয় না'], phenol: [null, null, false, 'কোনো বিক্রিয়া নেই'] },
+  };
+  sims.push({
+    title: 'শনাক্তকরণ পরীক্ষা: টেস্টটিউবে বিকারক যোগ',
+    sub: 'একটি যৌগ আর একটি বিকারক বেছে নাও — টেস্টটিউবে বর্ণ পরিবর্তন, অধঃক্ষেপ বা বুদবুদ দেখো। শুধু নোটে দেওয়া পরীক্ষার ফলগুলো দেখানো হয়েছে।',
+    groups: [['c', 'যৌগ', Object.entries(CMP), 'ethene'], ['r', 'বিকারক', Object.entries(RG).map(([k, v]) => [k, v.label]), 'br2']],
+    draw(W, H, t, p, g) {
+      const rg = RG[g.r], res = RES[g.r]?.[g.c];
+      const ph = (t % 5) / 5, k = ease(clamp((ph - 0.2) / 0.5, 0, 1));
+      const tx = W / 2 - 34, tw = 68, ty = 40, th = H - 80;
+      const ly = ty + th * 0.35;
+      // liquid colour
+      const from = rg.col, to = res?.[0] ?? from;
+      const mix = (a, b, f) => { const h = (s) => [1, 3, 5].map((i) => parseInt(s.slice(i, i + 2), 16)); const A = h(a), B = h(b); return `rgb(${A.map((x, i) => Math.round(x + (B[i] - x) * f)).join(',')})`; };
+      ctx.save();
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx, ty + th - tw / 2); ctx.arc(tx + tw / 2, ty + th - tw / 2, tw / 2, Math.PI, 0, true); ctx.lineTo(tx + tw, ty); ctx.closePath(); ctx.clip();
+      ctx.fillStyle = mix(from, to, k); ctx.globalAlpha = 0.85; ctx.fillRect(tx, ly, tw, th);
+      ctx.globalAlpha = 1;
+      if (res?.[1] && k > 0.2) {
+        if (res[1] === 'mirror') { const gr = ctx.createLinearGradient(tx, 0, tx + tw, 0); gr.addColorStop(0, '#9aa3ad'); gr.addColorStop(0.5, '#f5f7fa'); gr.addColorStop(1, '#8b939c'); ctx.fillStyle = gr; ctx.globalAlpha = k; ctx.fillRect(tx, ly, 7, th); ctx.fillRect(tx + tw - 7, ly, 7, th); ctx.globalAlpha = 1; }
+        else { ctx.fillStyle = res[1]; for (let i = 0; i < 70 * k; i++) { const sx = tx + 6 + ((i * 37) % (tw - 12)), sy = ty + th - 8 - ((i * 13) % 26) - 4 * Math.sin(i); dot(sx, sy, 2.6, res[1]); } }
+      }
+      if (res?.[2]) for (let i = 0; i < 9; i++) { const by = ty + th - ((t * 60 + i * 37) % (th - th * 0.35)); dot(tx + 12 + ((i * 23) % (tw - 24)), by, 3, '#ffffff'); }
+      ctx.restore();
+      ctx.strokeStyle = css('--text'); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx, ty + th - tw / 2); ctx.arc(tx + tw / 2, ty + th - tw / 2, tw / 2, Math.PI, 0, true); ctx.lineTo(tx + tw, ty); ctx.stroke();
+      if (ph < 0.25) { const dy = lerp(ty - 30, ly, ph / 0.25); dot(W / 2, dy, 5, rg.col); }
+      text(W / 2, 20, `${CMP[g.c]} + ${rg.label}`, '--text', 14, 800);
+      text(W * 0.15, H / 2, 'যৌগ', '--muted', 12); text(W * 0.15, H / 2 + 20, CMP[g.c], '--c', 15, 800);
+      text(W * 0.85, H / 2, 'বিকারক', '--muted', 12); text(W * 0.85, H / 2 + 20, rg.label, '--b', 12, 800);
+      this.info = res
+        ? `<span class="big">${CMP[g.c]} + ${rg.label}</span><br>পর্যবেক্ষণ: <b>${res[3]}</b>`
+        : `<span class="big">${CMP[g.c]} + ${rg.label}</span><br><span class="no">নোটে এই জোড়ার পরীক্ষার ফল দেওয়া নেই</span> — এই যৌগ শনাক্ত করতে অন্য বিকারক বেছে দেখো।`;
+    },
+  });
+
+  // ---------- 8. optical isomers ----------
+  sims.push({
+    title: 'আলোক সমাণুর সংখ্যা (2ⁿ সূত্র)',
+    sub: 'কাইরাল কার্বনের সংখ্যা n টানো এবং কাইরাল কেন্দ্রগুলো অসদৃশ নাকি সদৃশ বেছে নাও — আলোক সক্রিয় সমাণু, এনানশিওমার জোড়া ও মেসো যৌগের সংখ্যা দেখো।',
+    groups: [['k', 'কাইরাল কেন্দ্র', [['u', 'অসদৃশ'], ['s', 'সদৃশ (প্রতিসম অণু)']], 'u']],
+    controls: [['n', 'কাইরাল কার্বনের সংখ্যা n', 1, 8, 1, 2, '']],
+    draw(W, H, t, p, g) {
+      const n = p.n;
+      let act, meso, f1, f2;
+      if (g.k === 'u' || n < 2) {
+        act = 2 ** n; meso = 0; f1 = `2ⁿ = 2${sup(n)} = ${act}`; f2 = 'মেসো = 0';
+      } else if (n % 2 === 0) {
+        act = 2 ** (n - 1); meso = 2 ** ((n - 2) / 2); f1 = `2ⁿ⁻¹ = 2${sup(n - 1)} = ${act}`; f2 = `মেসো = 2^((n−2)/2) = ${meso}`;
+      } else {
+        act = 2 ** (n - 1) - 2 ** ((n - 1) / 2); meso = 2 ** ((n - 1) / 2); f1 = `2ⁿ⁻¹ − 2^((n−1)/2) = ${2 ** (n - 1)} − ${meso} = ${act}`; f2 = `মেসো = 2^((n−1)/2) = ${meso}`;
+      }
+      const pairs = act / 2, total = act + meso;
+      const cells = Math.min(total, 160), cols = Math.ceil(Math.sqrt(cells * (W / H) * 1.1)), rows = Math.ceil(cells / cols);
+      const cw = Math.min(46, (W - 40) / cols), chh = Math.min(30, (H - 90) / rows);
+      const x0 = W / 2 - (cols * cw) / 2, y0 = 60;
+      for (let i = 0; i < cells; i++) {
+        const x = x0 + (i % cols) * cw, y = y0 + Math.floor(i / cols) * chh;
+        const isM = i >= act;
+        const pop = clamp(t * 3 - i * 0.05, 0, 1);
+        ctx.globalAlpha = pop;
+        roundRect(x + 2, y + 2, cw - 4, chh - 4, 6, css(isM ? '--line' : i % 2 ? '--d' : '--a'));
+        if (cw > 30) text(x + cw / 2, y + chh / 2, isM ? 'মেসো' : i % 2 ? 'l' : 'd', '#fff', 11, 800);
+        ctx.globalAlpha = 1;
+      }
+      if (total > cells) text(W / 2, H - 14, `(${bn(total)}টির মধ্যে প্রথম ${bn(cells)}টি দেখানো হলো)`, '--muted', 11);
+      text(W / 2, 22, `মোট আলোক সমাণু = ${bn(total)}`, '--text', 17, 800);
+      text(W / 2, 42, 'নীল = d, গোলাপি = l (প্রতি জোড়া এনানশিওমার), ধূসর = মেসো (আলোক নিষ্ক্রিয়)', '--muted', 11);
+      this.info = `<span class="big">n = ${bn(n)} (${g.k === 'u' || n < 2 ? 'অসদৃশ' : 'সদৃশ'} কাইরাল C)</span><br>
+        আলোক সক্রিয়: <code>${bn(f1)}</code> · এনানশিওমার জোড়া = ${bn(pairs)}<br><code>${bn(f2)}</code>
+        ${g.k === 's' && n < 2 ? '<br><span class="no">সদৃশ কাইরাল কেন্দ্রের জন্য অন্তত ২টি কাইরাল C লাগে।</span>' : ''}<br>
+        উদাহরণ: ল্যাকটিক এসিড (n = ১) → ২; টারটারিক এসিড (n = ২, সদৃশ) → ২টি সক্রিয় + ১টি মেসো; গ্লুকোজ (n = ৪, অসদৃশ) → ১৬।`;
+    },
+  });
+  function sup(n) { return String(n).replace(/\d/g, (c) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[c]); }
+
+  // ---------- 9. nucleophilic addition to carbonyl ----------
+  const CO = [
+    { k: 'hcho', L: 'H', R: 'H', name: 'HCHO (মিথান্যাল)' },
+    { k: 'ald', L: 'CH₃', R: 'H', name: 'CH₃CHO (ইথান্যাল)' },
+    { k: 'acet', L: 'CH₃', R: 'CH₃', name: 'CH₃COCH₃ (প্রোপানোন)' },
+    { k: 'mek', L: 'CH₃', R: 'C₂H₅', name: 'CH₃COC₂H₅ (বিউটানোন)' },
+    { k: 'dek', L: 'C₂H₅', R: 'C₂H₅', name: 'C₂H₅COC₂H₅ (পেন্টান-3-ওন)' },
+  ];
+  sims.push({
+    title: 'কার্বনিল যৌগে কেন্দ্রাকর্ষী (Nₚ) সংযোজন',
+    sub: 'কার্বনিল যৌগ বেছে নাও। কার্বনিল C এর আংশিক ধনাত্মক চার্জ (δ+) যত বেশি এবং স্টেরিক বাধা যত কম, Nu⁻ তত সহজে আক্রমণ করে।',
+    groups: [['c', 'যৌগ', CO.map((c) => [c.k, c.name]), 'hcho']],
+    draw(W, H, t, p, g) {
+      const i = CO.findIndex((c) => c.k === g.c), C = CO[i];
+      const nar = W < 560, cx = nar ? W / 2 : W * 0.38, cy = nar ? H * 0.42 : H * 0.5;
+      const ph = (t % 4) / 4;
+      const dplus = 1 - i * 0.18;
+      ctx.globalAlpha = 0.18 + 0.25 * dplus; dot(cx, cy, 30 * dplus + 10, '--b'); ctx.globalAlpha = 1;
+      text(cx, cy, 'C', '--text', 18, 800); text(cx + 16, cy - 18, 'δ+', '--b', 12, 800);
+      bond(cx, cy, cx, cy - 56, 2, '--d', 12, 10); text(cx, cy - 66, 'O', '--d', 18, 800); text(cx + 16, cy - 72, 'δ−', '--d', 12, 800);
+      const bulk = (s) => (s === 'H' ? 6 : s === 'CH₃' ? 14 : 20);
+      [[C.L, -1], [C.R, 1]].forEach(([s, sd]) => {
+        const x = cx + sd * 62, y = cy + 40;
+        ctx.globalAlpha = 0.15; dot(x, y, bulk(s) + 8, '--muted'); ctx.globalAlpha = 1;
+        bond(cx, cy, x, y, 1, '--muted', 12, 14); text(x, y, s, '--text', 15, 800);
+      });
+      const reach = ease(clamp(ph / 0.6, 0, 1)) * (0.4 + 0.6 * dplus);
+      text(lerp(nar ? W - 24 : cx + 200, cx + 30, reach), lerp(cy + 10, cy + 2, reach), 'Nu⁻', '--c', 16, 800);
+      // ranking
+      const bx = W * 0.68, bw = W * 0.26;
+      text(nar ? W / 2 : bx + bw / 2, nar ? H - 50 : 22, 'Nₚ সংযোজনে সক্রিয়তার ক্রম', '--muted', 12, 700);
+      if (nar) {
+        const cw = (W - 16) / CO.length;
+        CO.forEach((c, j) => { roundRect(8 + j * cw + 2, H - 36, cw - 4, 26, 6, css(j === i ? '--a' : '--line')); text(8 + j * cw + cw / 2, H - 23, c.name.split(' ')[0], j === i ? '#fff' : '--muted', 9, 700); });
+      } else CO.forEach((c, j) => {
+        const y = 44 + j * ((H - 70) / CO.length);
+        hbar(bx, y + 12, bw, 10, 1 - j * 0.18, j === i ? '--a' : '--line');
+        text(bx, y, `${bn(j + 1)}. ${c.name.split(' ')[0]}`, j === i ? '--text' : '--muted', 12, j === i ? 800 : 500, 'left');
+      });
+      this.info = `<span class="big">${C.name} — ক্রমে ${bn(i + 1)} নম্বর</span><br>
+        ক্রম: <code>HCHO > CH₃CHO > CH₃COCH₃ > CH₃COC₂H₅ > C₂H₅COC₂H₅</code><br>
+        কারণ: HCHO তে কোনো e⁻ দাতা অ্যালকাইল গ্রুপ নেই, তাই কার্বনিল C এ (+) চার্জ বেশি ও স্টেরিক বাধা কম; অ্যালকাইল গ্রুপ বাড়লে (+) চার্জ কমে ও স্টেরিক বাধা বাড়ে। (বার = গুণগত ক্রম)`;
+    },
+  });
+
+  // ---------- framework ----------
+  let cur = null, params = {}, grp = {}, paused = false;
+  $('tabs').innerHTML = sims.map((s, i) => `<button data-i="${i}">${bn(i + 1)}. ${s.title.split(/[:—(]/)[0].trim()}</button>`).join('');
+  $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) select(Number(b.dataset.i)); });
+
+  function select(i) {
+    cur = sims[i];
+    document.querySelectorAll('#tabs button').forEach((b, j) => b.classList.toggle('on', j === i));
+    $('title').textContent = cur.title;
+    $('sub').textContent = cur.sub;
+    params = {}; grp = {};
+    $('ctl').innerHTML = (cur.controls ?? []).map(([k, label, min, max, step, val, unit]) => {
+      params[k] = val;
+      return `<label>${label}<b id="v_${k}">${bn(val)} ${unit}</b><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-k="${k}" data-u="${unit}"></label>`;
+    }).join('');
+    $('buttons').innerHTML = `<button data-b="pause">${paused ? '▶ চালাও' : '⏸ থামাও'}</button>` + (cur.groups ?? []).map(([gk, glabel, opts, def]) => {
+      grp[gk] = def;
+      return `<span class="gl">${glabel}</span>` + opts.map(([k, l]) => `<button data-g="${gk}" data-b="${k}" class="${k === def ? 'on' : ''}">${l}</button>`).join('');
+    }).join('');
+    $('note').textContent = 'নোট: অ্যানিমেশন ও বারগুলো ধারণা বোঝানোর জন্য (গুণগত); সংকেত, ক্রম ও পরীক্ষার ফল অধ্যায়ের নোট থেকে নেওয়া।';
+    resize();
+  }
+
+  $('ctl').addEventListener('input', (e) => {
+    const r = e.target; if (!r.dataset.k) return;
+    params[r.dataset.k] = Number(r.value);
+    $(`v_${r.dataset.k}`).textContent = `${bn(r.value)} ${r.dataset.u}`;
+  });
+  $('buttons').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.b === 'pause') { paused = !paused; b.textContent = paused ? '▶ চালাও' : '⏸ থামাও'; return; }
+    const gk = b.dataset.g; if (!gk) return;
+    grp[gk] = b.dataset.b; simT = 0;
+    document.querySelectorAll(`[data-g="${gk}"]`).forEach((x) => x.classList.toggle('on', x === b));
+  });
+
+  let W = 0, H = 0, simT = 0, last = performance.now();
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  let lastInfo = '';
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (!paused) simT += dt;
+    if (cur && W > 0) {
+      ctx.clearRect(0, 0, W, H);
+      cur.draw(W, H, simT, params, grp);
+      if (cur.info !== lastInfo) { $('info').innerHTML = cur.info ?? ''; lastInfo = cur.info; }
+    }
+    requestAnimationFrame(frame);
+  }
+  select(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
