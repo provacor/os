@@ -19,7 +19,6 @@ export function moreView(model) {
         <td>${unverified ? `<span class="flag">${unverified} to verify</span>` : '<span class="ok-tag">Verified</span>'}</td></tr>`;
     })
     .join('');
-  const content = model.sections.reduce((n, s) => n + s.items.length, 0);
 
   const me = getProfile();
   const a11yRow = `<a class="card pf-link rise" href="#/a11y" style="--i:0">
@@ -55,6 +54,6 @@ export function moreView(model) {
         <p class="muted small">Progress, study history and recent searches are stored only in this browser.</p>
         <button class="btn btn-danger tap" data-action="reset">Reset progress & history</button></section>
       <section class="card about rise" style="--i:4"><img class="avatar lg" src="assets/img/avatar.jpg" alt="" width="56" height="56">
-        <div><h2>Provacor</h2><p class="muted small">HSC Science study OS · ${model.subjects.length} subjects · ${model.chapters.length} chapters & topics · ${content} content items</p></div></section>`,
+        <div><h2>Provacor</h2><p class="muted small">Website, UI &amp; design by Provacor</p><p class="muted small">© ${new Date().getFullYear()} Provacor · All rights reserved</p></div></section>`,
   };
 }
