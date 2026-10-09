@@ -43,6 +43,8 @@ Never mix the subject-specific contents:
 - Never invent formulas, reactions, board questions, board names or years, question numbers,
   numerical data, book facts, or teacher quotes that are not in the source.
 - Final rule: as much source as there is, that much work; as much as is unlocked, that much content.
+- Never show the name of a book, guide, digest, lecture series or PDF that the notes/PDFs were made
+  from, anywhere in the app (no `source` field on items, no book names in titles or text).
 
 ### Notes workflow (Notes given)
 

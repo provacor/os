@@ -450,7 +450,6 @@ code { font-size: .85em; background: var(--surface-3); padding: 1px 6px; border-
 .item-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .item-meta span { font-size: .7rem; padding: 2px 8px; border-radius: 99px; background: var(--surface-3); color: var(--text-2); }
 .item-body { margin-top: 12px; white-space: pre-wrap; color: var(--text-2); }
-.item-source { font-size: .76rem; color: var(--muted); margin-top: 10px; }
 .item-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
 .item-foot .btn { flex: 1 1 140px; }
 .embed-wrap { margin-top: 14px; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); background: #0f2236; }

@@ -30,10 +30,9 @@ function mcqCard(it, n) {
 const txt = (s) => `<div class="pre">${esc(s)}</div>`;
 const chips = (...xs) => xs.filter(Boolean).map((x) => `<span class="chip">${esc(x)}</span>`).join('');
 const answerBox = (a, label = 'উত্তর দেখো') => `<details class="ans"><summary>${label}</summary>${txt(a)}</details>`;
-const sourceLine = (it) => (it.source ? `<p class="item-source">${esc(it.source)}</p>` : '');
 const noteBox = (it) => (it.note ? `<div class="item-note pre">${esc(it.note)}</div>` : '');
 const doneFoot = (it) => `<div class="item-foot">${doneButton(it)}</div>`;
-const shell = (it, n, inner, cls = '') => `<article class="item-card rise ${cls} ${isItemDone(it.id) ? 'is-done' : ''}" style="--i:${Math.min(n, 12)}">${inner}${sourceLine(it)}${doneFoot(it)}</article>`;
+const shell = (it, n, inner, cls = '') => `<article class="item-card rise ${cls} ${isItemDone(it.id) ? 'is-done' : ''}" style="--i:${Math.min(n, 12)}">${inner}${doneFoot(it)}</article>`;
 
 // Creative question (or a numerical practice set): a stem and lettered parts, each answer folded away.
 function cqCard(it, n) {
@@ -86,7 +85,6 @@ function itemCard(it, sec, n) {
       </div>
       ${it.body ? `<div class="item-body">${esc(it.body)}</div>` : ''}${noteBox(it)}
       ${embed}
-      ${it.source ? `<p class="item-source">${esc(it.source)}</p>` : ''}
       <div class="item-foot">
         ${it.file ? `<a class="btn btn-primary tap" href="${src}" target="_blank" rel="noopener">${icon(it.format === 'html' ? 'expand' : 'file')}<span>${f.open}</span></a>` : ''}
         ${doneButton(it)}
