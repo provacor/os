@@ -8,12 +8,15 @@
 // Questions and answers are read aloud with the phone's text-to-speech; MCQs can be
 // answered by saying "ক/খ/গ/ঘ" into the earbud microphone.
 
-import { speak, stopSpeaking } from './a11y.js?v=202610100150';
-import { isItemDone, toggleItemDone } from './progress.js?v=202610100150';
-import { recordDone } from './activity.js?v=202610100150';
+import { speak, stopSpeaking } from './a11y.js?v=202610100204';
+import { isItemDone, toggleItemDone } from './progress.js?v=202610100204';
+import { recordDone } from './activity.js?v=202610100204';
+import { everWrong, isBookmarked, recordAttempt, itemRef } from './learn.js?v=202610100204';
+import { openMistakes, recordMcqMistake } from './mistakes.js?v=202610100204';
+import { tocOf } from './views/topic.js?v=202610100204';
 
 const KEY = 'hscos:handsfree:v1';
-const DEFAULTS = { autoAnswer: false, autoNext: false, voiceAnswer: true, markDone: false, readOptions: true, gap: 4 };
+const DEFAULTS = { autoAnswer: false, autoNext: false, voiceAnswer: true, markDone: false, readOptions: true, gap: 4, filter: 'all' };
 const LETTERS = 'কখগঘ';
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -169,15 +172,27 @@ const hasAnswer = (it) => kindOf(it) !== 'file' && answerText(it).trim().length 
 
 // ---------- screen ----------
 
-const cards = () => [...document.querySelectorAll('#view .items > .item-card')];
-function highlight(scroll = true) {
-  const list = cards();
-  list.forEach((c, k) => c.classList.toggle('hf-current', st.on && k === st.i));
-  const c = list[st.i];
-  if (c && scroll) c.scrollIntoView({ block: 'center', behavior: 'smooth' });
+// Cards are found by item id (every card carries its "Mark as done" button), so this works on
+// section pages, filtered lists and topic pages alike.
+const cardFor = (id) => (id ? document.querySelector(`#view .btn-done[data-item="${CSS.escape(id)}"]`)?.closest('.item-card') : null);
+function highlight(scroll = true, retry = true) {
+  document.querySelectorAll('#view .item-card.hf-current').forEach((c) => c.classList.remove('hf-current'));
+  if (!st.on) return;
+  const id = st.sec?.items[st.i]?.id;
+  const c = cardFor(id);
+  if (!c && retry && id) {
+    // topic page: open the block holding this item, then try again once it has drawn its cards
+    const type = id.match(/_([a-z_]+?)_\d{4}$/)?.[1];
+    const block = type && document.querySelector(`#view details.tp-block[data-tp-key$="/${type}"]`);
+    if (block && !block.open) { block.open = true; setTimeout(() => highlight(scroll, false), 80); }
+    return;
+  }
+  if (!c) return;
+  c.classList.add('hf-current');
+  if (scroll) c.scrollIntoView({ block: 'center', behavior: 'smooth' });
 }
 function showAnswerOnScreen(it) {
-  const c = cards()[st.i];
+  const c = cardFor(it.id);
   if (!c) return;
   if (kindOf(it) === 'mcq' && !c.classList.contains('answered')) {
     const r = rightIndex(it);
@@ -384,10 +399,15 @@ function listenAnswer(manual = false) {
 
 function judge(it, k) {
   const r = rightIndex(it);
-  const c = cards()[st.i];
+  const c = cardFor(it.id);
   const btn = c?.querySelectorAll('.opt')[k];
   // Reuse the screen's own MCQ handling, so a wrong answer lands in the mistake book.
   if (btn && !c.classList.contains('answered')) btn.click();
+  else if (!btn) {
+    recordAttempt(it.id, k === r);
+    const sec = itemRef(it.id)?.sec;
+    if (k !== r && sec) recordMcqMistake({ itemId: it.id, sectionId: sec.id, chapterId: sec.chapter.id, question: it.question, options: it.options, chosen: k, correct: it.options[r] ?? it.correctAnswer, explanation: it.explanation ?? '' });
+  }
   st.phase = 'a';
   const verdict = k === r ? `সঠিক! ${LETTERS[k]}: ${it.options[k]}।` : `ভুল হয়েছে। তুমি বলেছ ${LETTERS[k]}। ${answerText(it)}`;
   say(k === r ? `${verdict} ${it.explanation ?? ''}` : verdict, afterAnswer);
@@ -416,9 +436,26 @@ function onMedia(action) {
   if (hasMediaSession) navigator.mediaSession.playbackState = 'playing';
 }
 
-export function startHandsfree(sec, from = null) {
-  if (!sec?.items?.length) return toast('এই সেকশনে এখনো কিছু নেই');
+const FILTERS = { all: 'সব', notdone: 'Done না করা', wrong: 'ভুল হওয়াগুলো', bookmarked: '⭐ বুকমার্ক' };
+export const HF_FILTERS = FILTERS;
+function applyFilter(items) {
+  const f = prefs.filter;
+  if (f === 'notdone') return items.filter((it) => !isItemDone(it.id));
+  if (f === 'wrong') {
+    const mk = new Set(openMistakes().map((m) => m.itemId));
+    return items.filter((it) => everWrong(it.id) || mk.has(it.id));
+  }
+  if (f === 'bookmarked') return items.filter((it) => isBookmarked(it.id));
+  return items;
+}
+
+// list = a section, or a topic: { id, label, chapter, items, route }
+export function startHandsfree(src, from = null) {
+  if (!src?.items?.length) return toast('এখানে এখনো কিছু নেই');
+  const items = applyFilter(src.items.filter((it) => kindOf(it) !== 'file' || src.items.length === 1));
+  if (!items.length) return toast(`"${FILTERS[prefs.filter]}" বাছাইয়ে কিছু নেই — Accessibility পেজে বাছাই বদলাও`);
   if (st.test) stopTest();
+  const sec = { id: src.id, label: src.label, chapter: src.chapter, items, route: src.route ?? `#/x/${src.id}` };
   st.on = true;
   st.sec = sec;
   ensureBar();
@@ -469,7 +506,7 @@ function stopTest() {
 // and keep the highlight when the same section is redrawn.
 export function hfAfterRender() {
   if (!st.on) return;
-  if (location.hash !== `#/x/${st.sec.id}`) return stopHandsfree();
+  if (location.hash !== st.sec.route) return stopHandsfree();
   highlight(false);
 }
 
@@ -495,8 +532,20 @@ function onClick(e) {
   const startBtn = t.closest('[data-hf-start]');
   if (startBtn) {
     const sec = model?.byId.get(startBtn.dataset.hfStart);
-    if (st.on && st.sec === sec) stopHandsfree(true);
+    if (st.on && st.sec?.id === sec?.id) stopHandsfree(true);
     else startHandsfree(sec);
+    return;
+  }
+  const topicBtn = t.closest('[data-hf-topic]');
+  if (topicBtn) {
+    const [cid, tid] = topicBtn.dataset.hfTopic.split('/');
+    if (st.on && st.sec?.id === `${cid}/${tid}`) return stopHandsfree(true);
+    return startHandsfree(topicList(cid, tid));
+  }
+  const flt = t.closest('[data-hf-filter]');
+  if (flt) {
+    setPrefs({ filter: flt.dataset.hfFilter });
+    document.querySelectorAll('[data-hf-filter]').forEach((x) => x.classList.toggle('on', x === flt));
     return;
   }
   if (t.closest('[data-hf-test]')) return st.test ? stopTest() : startTest();
@@ -518,8 +567,8 @@ function onClick(e) {
   }
   // Tap a card while hands-free is on: continue from that card.
   if (st.on && !t.closest('button, a, details, summary, input, label')) {
-    const c = t.closest('#view .items > .item-card');
-    const k = c ? cards().indexOf(c) : -1;
+    const id = t.closest('#view .item-card')?.querySelector('.btn-done')?.dataset.item;
+    const k = id ? st.sec.items.findIndex((it) => it.id === id) : -1;
     if (k >= 0 && k !== st.i) go(k);
   }
 }
@@ -576,7 +625,18 @@ export function initHandsfree(m) {
 }
 
 // Voice command entry ("শোনাও", "হ্যান্ডস ফ্রি") from the top-bar microphone.
+function topicList(chapterId, topicId) {
+  const ch = model?.byId.get(chapterId);
+  const tp = tocOf(chapterId)?.topics.find((x) => x.id === topicId);
+  if (!ch || !tp) return null;
+  const set = new Set(tp.items);
+  const items = ch.sections.filter((s) => !s.computed).flatMap((s) => s.items.filter((it) => set.has(it.id)));
+  return { id: `${chapterId}/${topicId}`, label: tp.name, chapter: ch, items, route: `#/t/${chapterId}/${topicId}` };
+}
+
 export function startFromRoute() {
+  const tm = location.hash.match(/^#\/t\/([^/]+)\/([^/]+)$/);
+  if (tm) { const l = topicList(decodeURIComponent(tm[1]), decodeURIComponent(tm[2])); if (l) { startHandsfree(l); return true; } }
   const m = location.hash.match(/^#\/x\/(.+)$/);
   const sec = m && model?.byId.get(decodeURIComponent(m[1]));
   if (sec?.level === 'section' && sec.items.length) return startHandsfree(sec), true;

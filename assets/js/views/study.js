@@ -1,15 +1,16 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610100150';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100150';
-import { progressOf } from '../progress.js?v=202610100150';
-import { contentCount, chapterCount } from '../model.js?v=202610100150';
-import { lastVisit } from './shared.js?v=202610100150';
-import { videosBlock } from './videos.js?v=202610100150';
-import { alarmsBlock } from './alarms.js?v=202610100150';
-import { hasFullMapSync } from './mindmap.js?v=202610100150';
-import { conceptsOfChapter } from '../concepts.js?v=202610100150';
-import { tocCard } from './topic.js?v=202610100150';
+import { icon } from '../icons.js?v=202610100204';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100204';
+import { progressOf } from '../progress.js?v=202610100204';
+import { contentCount, chapterCount } from '../model.js?v=202610100204';
+import { lastVisit } from './shared.js?v=202610100204';
+import { videosBlock } from './videos.js?v=202610100204';
+import { alarmsBlock } from './alarms.js?v=202610100204';
+import { hasFullMapSync } from './mindmap.js?v=202610100204';
+import { conceptsOfChapter } from '../concepts.js?v=202610100204';
+import { tocCard } from './topic.js?v=202610100204';
+import { offlineOf } from '../learn.js?v=202610100204';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -129,8 +130,23 @@ export function chapterView(model, ch) {
     crumbs: [subjectCrumb(ch.subject), [ch.paper.name, `#/p/${ch.paper.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`]],
     accent: ch.subject.accent,
     visit: { chapterId: ch.id },
-    html: hero + tocCard(ch) + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
+    html: hero + chapterActions(ch, ready) + tocCard(ch) + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
   };
+}
+
+// Practice shortcuts for a chapter: exam, flashcards, offline copy.
+function chapterActions(ch, ready) {
+  if (!ready.length) return '';
+  const hasMcq = ch.sections.some((s) => s.type === 'mcq' && s.items.length);
+  const off = offlineOf(ch.id);
+  const mb = (b) => String((b / 1048576).toFixed(1)).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
+  return `<section class="block"><div class="row-btns ch-actions">
+      ${hasMcq ? `<button class="btn tap" data-ex-quick="${esc(ch.id)}">${icon('mcq')}<span>অধ্যায়ের পরীক্ষা</span></button>` : ''}
+      <a class="btn tap" href="#/cards/${esc(ch.id)}">${icon('concept')}<span>ফ্ল্যাশকার্ড</span></a>
+      ${off
+        ? `<button class="btn tap on" data-offline-save="${esc(ch.id)}">${icon('check')}<span>অফলাইনে আছে · ${mb(off.bytes)} MB · আপডেট</span></button><button class="btn tap" data-offline-del="${esc(ch.id)}">${icon('trash')}<span>অফলাইন কপি মোছো</span></button>`
+        : `<button class="btn tap" data-offline-save="${esc(ch.id)}">${icon('file')}<span>অফলাইনে রাখো</span></button>`}
+    </div></section>`;
 }
 
 // Mind map entry, placed right after the chapter's notes.
