@@ -90,7 +90,7 @@ def load_key(password):
             .not_valid_after(datetime.datetime.fromtimestamp(now + 86400 * 365 * 40, datetime.timezone.utc))
             .sign(key, hashes.SHA256()))
     KEY.write_bytes(pkcs12.serialize_key_and_certificates(b'provacor', key, cert, None, serialization.BestAvailableEncryption(password.encode())))
-    print(f'created a new signing key: {KEY.relative_to(ROOT)}')
+    print(f'created a new signing key: {KEY.name}')
     return key, cert
 
 
