@@ -1282,3 +1282,26 @@ body.focus-on { padding-bottom: 0; }
 .fig-wrap + .pre { margin-top: 10px; color: var(--text-2); line-height: 1.6; }
 .qa-title .chip, .cq-q .chip, .qa-chips .chip, .item-foot span.chip { white-space: normal; overflow-wrap: anywhere; text-align: left; height: auto; line-height: 1.4; }
 .item-card { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------- hands-free (earbuds / headset buttons) ---------- */
+.hf-start { width: 100%; margin: 4px 0 10px; justify-content: center; }
+.hf-start.on { border-color: var(--brand); color: var(--brand); }
+.hf-bar {
+  position: fixed; z-index: 35; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--nav-h) + 22px + env(safe-area-inset-bottom)); width: min(calc(100% - 20px), 480px);
+  display: flex; align-items: center; gap: 6px; padding: 8px 8px 8px 12px; border-radius: 18px;
+  background: var(--surface); border: 1px solid var(--brand); box-shadow: var(--shadow-2);
+}
+.hf-bar[hidden] { display: none; }
+.hf-bar .hf-dot { font-size: 1.05rem; }
+.hf-bar .hf-label { flex: 1; min-width: 0; font-size: .8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hf-bar button { flex: none; width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-size: 1rem; cursor: pointer; }
+.hf-bar button[hidden] { display: none; }
+.hf-bar .hf-main { background: var(--brand); color: #fff; border-color: transparent; }
+body.hf-on .ai-fab { display: none; }
+body.hf-on .toast { bottom: calc(var(--nav-h) + 86px + env(safe-area-inset-bottom)); }
+.item-card.hf-current { outline: 2px solid var(--brand); outline-offset: 2px; }
+.hf-map { display: grid; gap: 6px; margin: 10px 0; }
+.hf-map div { display: grid; gap: 1px; padding: 8px 10px; border-radius: 12px; background: color-mix(in srgb, var(--brand) 8%, transparent); font-size: .84rem; }
+.hf-map span { color: var(--muted); font-size: .8rem; }
+.hf-gap-title { margin: 12px 0 6px; font-weight: 600; }

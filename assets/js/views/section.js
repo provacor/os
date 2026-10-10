@@ -1,8 +1,9 @@
 // Section screen: the content of one chapter section (Notes, MCQ, Simulation, …).
 
-import { icon } from '../icons.js?v=202610071239';
-import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610071239';
-import { progressOf, isItemDone } from '../progress.js?v=202610071239';
+import { icon } from '../icons.js?v=202610100121';
+import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100121';
+import { progressOf, isItemDone } from '../progress.js?v=202610100121';
+import { hfActive } from '../handsfree.js?v=202610100121';
 
 const FORMAT = {
   pdf: { icon: 'file', open: 'Open PDF', label: 'PDF' },
@@ -123,6 +124,7 @@ export function sectionView(model, sec) {
   } else if (sec.items.length) {
     const kinds = sec.contentKinds.filter((k) => sec.items.some((it) => it.kind === k.id));
     body = `<div class="sec-progress rise"><div><span class="eyebrow">Section progress</span><b>${pct}%</b></div>${bar(pct, 'bar-hue')}<span class="muted small">${sec.items.filter((it) => isItemDone(it.id)).length}/${plural(sec.items.length, 'item')} done</span></div>
+      <button class="btn tap hf-start ${hfActive() ? 'on' : ''}" data-hf-start="${esc(sec.id)}">${icon('speaker')}<span>${hfActive() ? 'হ্যান্ডস-ফ্রি বন্ধ করো' : 'ইয়ারবাডে শুনে শুনে পড়ো (হ্যান্ডস-ফ্রি)'}</span></button>
       ${kinds.length ? `<div class="chip-row">${kinds.map((k) => `<span class="chip on">${esc(k.label)} · ${sec.items.filter((it) => it.kind === k.id).length}</span>`).join('')}</div>` : ''}
       <div class="items">${withTopics(sec.items, (it, n) => itemCard(it, sec, n))}</div>`;
   } else {
