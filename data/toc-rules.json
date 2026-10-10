@@ -1,0 +1,19 @@
+{
+  "$comment": "Topic-wise table of contents (সূচিপত্র) per chapter, built by tools/build-toc.mjs into content/toc.json. By default a chapter's topics are its MCQ topics in book order; 'topics' overrides that list, 'exclude' drops mixed sets (e.g. self-tests). Every other item is placed under the topic whose MCQs it reads most like; notes PDFs and simulations stay chapter-wide.",
+  "chapterWide": ["notes", "simulation"],
+  "exclude": ["নিজেকে যাচাই করো"],
+  "chapters": {
+    "chemistry_2nd_ch02": {
+      "topics": [
+        "জৈব যৌগের শ্রেণিবিভাগ, কার্যকরী মূলক, নামকরণ ও সমাণুতা",
+        "অ্যারোমেটিক যৌগ",
+        "জৈব বিক্রিয়ার ক্রিয়াকৌশল",
+        "অ্যালকেন, অ্যালকিন ও অ্যালকাইন",
+        "অ্যালকোহল ও ইথার",
+        "অ্যালডিহাইড ও কিটোন",
+        "জৈব এসিড, এস্টার ও অ্যামিন",
+        "অ্যামাইড, ফেনল, প্যারাসিটামল, গ্লিসারিন, TNT, ডেটল ও পলিমারকরণ"
+      ]
+    }
+  }
+}

@@ -1,9 +1,9 @@
 // Section screen: the content of one chapter section (Notes, MCQ, Simulation, …).
 
-import { icon } from '../icons.js?v=202610100121';
-import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100121';
-import { progressOf, isItemDone } from '../progress.js?v=202610100121';
-import { hfActive } from '../handsfree.js?v=202610100121';
+import { icon } from '../icons.js?v=202610100130';
+import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100130';
+import { progressOf, isItemDone } from '../progress.js?v=202610100130';
+import { hfActive } from '../handsfree.js?v=202610100130';
 
 const FORMAT = {
   pdf: { icon: 'file', open: 'Open PDF', label: 'PDF' },
@@ -62,7 +62,7 @@ function figureCard(it, n) {
   return shell(it, n, `<h3 class="qa-title">${esc(it.title)}</h3><figure class="fig-wrap">${it.figure}</figure>${it.body ? txt(it.body) : ''}`);
 }
 
-function itemCard(it, sec, n) {
+export function itemCard(it, sec, n) {
   if (it.question && it.options) return mcqCard(it, n);
   if (it.parts) return cqCard(it, n);
   if (it.question && it.answer) return qaCard(it, n);
