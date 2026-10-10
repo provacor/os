@@ -67,8 +67,11 @@ function pickVoice(lang) {
 }
 
 let speakingEl = null;
-export function speak(text, el = null) {
+let speakToken = 0;
+// onEnd runs once the whole text has been spoken, never when it was cut off by another speak()/stopSpeaking().
+export function speak(text, el = null, onEnd = null) {
   if (!canSpeak()) return false;
+  const token = ++speakToken;
   speechSynthesis.cancel();
   speakingEl?.classList.remove('speaking');
   const clean = String(text).replace(/\$+([^$]+)\$+/g, '$1').replace(/[#*_`>|]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -84,12 +87,19 @@ export function speak(text, el = null) {
     const v = pickVoice(lang);
     if (v) u.voice = v;
     u.rate = prefs.rate;
-    if (i === parts.length - 1) u.onend = u.onerror = () => { el?.classList.remove('speaking'); if (speakingEl === el) speakingEl = null; };
+    if (i === parts.length - 1) {
+      u.onend = u.onerror = () => {
+        el?.classList.remove('speaking');
+        if (speakingEl === el) speakingEl = null;
+        if (token === speakToken) onEnd?.();
+      };
+    }
     speechSynthesis.speak(u);
   });
   return true;
 }
 export function stopSpeaking() {
+  speakToken++;
   if (canSpeak()) speechSynthesis.cancel();
   speakingEl?.classList.remove('speaking');
   speakingEl = null;
@@ -144,6 +154,7 @@ export function voiceCommand(heard) {
     const t = raw.toLowerCase();
     const q = t.match(/^(?:খোঁজো|খুঁজো|খোঁজ|সার্চ করো|সার্চ|search(?: for)?|find)\s+(.+)$/i) || t.match(/^(.+?)\s+(?:খোঁজো|খুঁজো|সার্চ করো)$/);
     if (q) return { search: q[1].trim() };
+    if (/হ্যান্ডস|হ্যান্ড ফ্রি|শোনাও|শুনাও|পড়ে শোনাও|ইয়ারবাড|হেডফোন|hands ?free/i.test(t)) return { handsfree: true };
     if (/পিছনে|পেছনে|ফিরে|back/.test(t)) return { back: true };
     if (/ডার্ক|অন্ধকার|dark/.test(t)) return { theme: 'dark' };
     if (/লাইট|আলো|light/.test(t)) return { theme: 'light' };
