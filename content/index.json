@@ -341,6 +341,14 @@
     "biology_1st_ch09_mcq": {
       "file": "content/biology/biology_1st_ch09_mcq.json",
       "count": 213
+    },
+    "physics_2nd_ch08_notes": {
+      "file": "content/physics/physics_2nd_ch08_notes.json",
+      "count": 1
+    },
+    "physics_2nd_ch08_simulation": {
+      "file": "content/physics/physics_2nd_ch08_simulation.json",
+      "count": 1
     }
   }
 }

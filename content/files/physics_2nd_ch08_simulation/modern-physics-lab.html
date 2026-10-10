@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>আধুনিক পদার্থবিজ্ঞান ল্যাব — ৮ম অধ্যায়ের ৯টি সিমুলেশন</title>
+<style>
+  :root {
+    --bg: #0d1017; --panel: #151a24; --panel2: #1c2230; --line: #2a3242; --text: #e9edf4; --muted: #8e98ab;
+    --a: #7ea6ff; --b: #f7c35c; --c: #4fd8c4; --d: #fb8fb0; --e: #6ee7a0; --grid: rgba(255,255,255,.06);
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f4f6fa; --panel: #fff; --panel2: #f1f4f9; --line: #dde3ec; --text: #0f172a; --muted: #5b6577;
+      --a: #3b6cf6; --b: #c58a06; --c: #0f9f8e; --d: #e2457a; --e: #16a34a; --grid: rgba(15,23,42,.07); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 "Noto Sans Bengali", "Inter", system-ui, sans-serif; }
+  header { padding: 14px 14px 6px; }
+  h1 { margin: 0; font-size: 1.15rem; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .82rem; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 8px 14px; scrollbar-width: none; position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: none; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 99px; padding: 7px 12px; font: inherit; font-size: .82rem; cursor: pointer; white-space: nowrap; }
+  .tabs button.on { background: var(--a); border-color: transparent; color: #fff; }
+  main { padding: 6px 14px 24px; max-width: 900px; margin: 0 auto; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+  h2 { margin: 2px 0 2px; font-size: 1.05rem; }
+  .sub { color: var(--muted); font-size: .82rem; margin: 0 0 10px; }
+  canvas { width: 100%; height: 260px; display: block; background: var(--panel2); border-radius: 12px; touch-action: none; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .row button { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 10px; padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+  .row button.on { border-color: var(--a); color: var(--a); }
+  .ctl { display: grid; gap: 8px; margin-top: 10px; }
+  .ctl label { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: .84rem; }
+  .ctl label b { color: var(--a); font-variant-numeric: tabular-nums; }
+  .ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--a); }
+  .info { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: var(--panel2); font-size: .86rem; }
+  .info code { font-family: ui-monospace, monospace; color: var(--c); }
+  .info .big { font-size: 1.05rem; font-weight: 700; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: .78rem; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 4px; }
+  .note { font-size: .78rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>আধুনিক পদার্থবিজ্ঞান ল্যাব</h1>
+  <p>পদার্থবিজ্ঞান ২য় পত্র · ৮ম অধ্যায় — নোটের প্রতিটি টপিকের হাতে-কলমে সিমুলেশন। স্লাইডার বদলে দেখো কী হয়।</p>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<main><section class="card">
+  <h2 id="title"></h2>
+  <p class="sub" id="sub"></p>
+  <canvas id="cv"></canvas>
+  <div class="legend" id="legend"></div>
+  <div class="row" id="buttons"></div>
+  <div class="ctl" id="ctl"></div>
+  <div class="info" id="info"></div>
+  <p class="note" id="note"></p>
+</section></main>
+
+<script>
+(() => {
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const bn = (x, d = 2) => {
+    const s = typeof x === 'number' ? (Number.isInteger(x) ? String(x) : x.toFixed(d)) : String(x);
+    return s.replace(/\d/g, (c) => '০১২৩৪৫৬৭৮৯'[c]);
+  };
+  const TAU = Math.PI * 2;
+
+  // ---------- drawing helpers ----------
+  function grid(w, h, midY = h / 2) {
+    ctx.strokeStyle = css('--grid'); ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = midY % 40; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.strokeStyle = css('--line'); ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke();
+  }
+  function curve(fn, x0, x1, color, width = 2.4, step = 2) {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath();
+    for (let x = x0; x <= x1; x += step) { const y = fn(x); x === x0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  function dot(x, y, r, color) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); }
+  function text(s, x, y, color = css('--muted'), size = 12, align = 'left') {
+    ctx.fillStyle = color; ctx.font = `${size}px "Noto Sans Bengali", system-ui, sans-serif`; ctx.textAlign = align; ctx.fillText(s, x, y);
+  }
+  function arrowLine(x1, y1, x2, y2, color, label) {
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    for (const [ax, ay, bx] of [[x1, y1, x2], [x2, y2, x1]]) {
+      const d = Math.sign(bx - ax) || 1;
+      ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + 7 * d, ay - 4); ctx.lineTo(ax + 7 * d, ay + 4); ctx.fill();
+    }
+    if (label) text(label, (x1 + x2) / 2, y1 - 6, color, 12, 'center');
+  }
+
+  const sup = (n) => String(n).replace(/[-0-9]/g, (c) => '⁻⁰¹²³⁴⁵⁶⁷⁸⁹'['-0123456789'.indexOf(c)]);
+  function sci(x, d = 2) {
+    if (!isFinite(x)) return '—';
+    if (x === 0) return '০';
+    const e = Math.floor(Math.log10(Math.abs(x)));
+    if (e >= -2 && e < 4) return bn(Number(x.toFixed(d)), d);
+    let m = x / 10 ** e;
+    if (Math.abs(Number(m.toFixed(d))) >= 10) return `${bn(m / 10, d)} × 10${sup(e + 1)}`;
+    return `${bn(m, d)} × 10${sup(e)}`;
+  }
+  const deg = (r) => (r * 180) / Math.PI, rad = (d) => (d * Math.PI) / 180;
+  // wavelength (nm) -> [r,g,b] 0..1
+  function wl(nm) {
+    let r = 0, g = 0, b = 0;
+    if (nm < 440) { r = -(nm - 440) / 60; b = 1; } else if (nm < 490) { g = (nm - 440) / 50; b = 1; }
+    else if (nm < 510) { g = 1; b = -(nm - 510) / 20; } else if (nm < 580) { r = (nm - 510) / 70; g = 1; }
+    else if (nm < 645) { r = 1; g = -(nm - 645) / 65; } else { r = 1; }
+    const f = nm < 420 ? 0.3 + 0.7 * (nm - 380) / 40 : nm > 700 ? 0.3 + 0.7 * (780 - nm) / 80 : 1;
+    return [r * f, g * f, b * f];
+  }
+  const rgb = (c, k = 1) => `rgb(${c.map((v) => Math.round(255 * Math.max(0, Math.min(1, v * k)))).join(',')})`;
+  function colourName(nm) {
+    return nm < 425 ? 'বেগুনি' : nm < 445 ? 'নীল' : nm < 500 ? 'আসমানি' : nm < 575 ? 'সবুজ' : nm < 585 ? 'হলুদ' : nm < 620 ? 'কমলা' : 'লাল';
+  }
+  function setParam(k, v) {
+    const r = document.querySelector(`#ctl input[data-k="${k}"]`);
+    if (!r) return;
+    r.value = v; r.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  function line(x1, y1, x2, y2, color, wdt = 1.5, dash) {
+    ctx.strokeStyle = color; ctx.lineWidth = wdt; if (dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function arrow(x1, y1, x2, y2, color, wdt = 1.6) {
+    line(x1, y1, x2, y2, color, wdt);
+    const a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 8 * Math.cos(a - 0.4), y2 - 8 * Math.sin(a - 0.4));
+    ctx.lineTo(x2 - 8 * Math.cos(a + 0.4), y2 - 8 * Math.sin(a + 0.4)); ctx.fill();
+  }
+  // small axes box for a graph; returns mapper
+  function graphBox(x0, y0, x1, y1, xmax, ymax, xl, yl) {
+    line(x0, y1, x1, y1, css('--line'), 1); line(x0, y0, x0, y1, css('--line'), 1);
+    if (xl) text(xl, x1, y1 + 13, css('--muted'), 10, 'right');
+    if (yl) text(yl, x0 + 3, y0 + 9, css('--muted'), 10);
+    return { X: (v) => x0 + (v / xmax) * (x1 - x0), Y: (v) => y1 - (v / ymax) * (y1 - y0) };
+  }
+
+  function stopTones() {}
+  // ---------- simulations ----------
+  const S = [];
+
+  // ---------- modern-physics constants (values used in the notes) ----------
+  const C = 3e8, HP = 6.63e-34, Q = 1.6e-19, ME = 9.1e-31, MP = 1.67e-27, B_WIEN = 2.898e-3, SIGMA = 5.67e-8, KB = 1.38e-23;
+  const gam = (b) => 1 / Math.sqrt(1 - b * b);
+  const logFmt = (unit) => (v) => `${sci(10 ** v, 2)} ${unit}`;
+  function hline(y, x0, x1, ticks, label) {
+    line(x0, y, x1, y, css('--line'), 1.5);
+    if (ticks) for (const [v, s] of ticks) { line(v, y - 4, v, y + 4, css('--line'), 1); text(s, v, y + 16, css('--muted'), 9, 'center'); }
+    if (label) text(label, x0, y - 8, css('--muted'), 10);
+  }
+
+  // ---------- 1. Galilean vs Lorentz ----------
+  S.push({
+    id: 'lorentz', tab: '১. গ্যালিলিও বনাম লরেঞ্জ',
+    title: 'গ্যালিলিও রূপান্তর বনাম লরেঞ্জ রূপান্তর',
+    sub: 'S′ কাঠামো S-এর সাপেক্ষে x-অক্ষ বরাবর v বেগে চলছে। একটা ঘটনা S-এ (x, t)-তে ঘটল। গ্যালিলিও: x′ = x − vt, t′ = t। লরেঞ্জ: x′ = γ(x − vt), t′ = γ(t − vx/c²), γ = 1/√(1 − v²/c²)।',
+    controls: [['b', 'S′-এর বেগ v', 0, 0.99, 0.01, 0.6, 'c'], ['x', 'ঘটনার অবস্থান x (S-এ)', 0, 1500, 10, 900, 'km'], ['t', 'ঘটনার সময় t (S-এ)', 0, 5, 0.05, 2, 'ms']],
+    legend: [['--a', 'S কাঠামো'], ['--b', 'গ্যালিলিও x′'], ['--d', 'লরেঞ্জ x′'], ['--c', 'γ বনাম v/c']],
+    height: 330,
+    draw(w, h, t, p) {
+      const v = p.b * C, x = p.x * 1e3, tt = p.t * 1e-3, g = gam(p.b);
+      const xg = x - v * tt, xl = g * (x - v * tt), tl = g * (tt - (v * x) / (C * C));
+      // number lines
+      const x0 = 20, x1 = w - 20, km = (k) => x0 + ((k + 500) / 2000) * (x1 - x0);
+      const yS = 38, yG = 92, yL = 146;
+      const ticks = [-500, 0, 500, 1000, 1500].map((k) => [km(k), bn(k)]);
+      hline(yS, x0, x1, ticks, 'S কাঠামো (km)');
+      const o = km((v * tt) / 1e3);
+      dot(km(p.x), yS, 6, css('--a')); text('ঘটনা', km(p.x), yS - 10, css('--a'), 10, 'center');
+      // moving S′ origin animates toward its position at time t
+      line(km(0), yS, km(0), yS + 120, css('--line'), 1, [2, 3]);
+      hline(yG, x0, x1, null, 'গ্যালিলিও: S′-এ অবস্থান');
+      hline(yL, x0, x1, null, 'লরেঞ্জ: S′-এ অবস্থান');
+      for (const y of [yG, yL]) { dot(o, y, 4, css('--muted')); text('O′', o, y + 15, css('--muted'), 9, 'center'); }
+      const sc = (x1 - x0) / 2000;
+      const gx = Math.max(x0, Math.min(x1, o + (xg / 1e3) * sc)), lx = Math.max(x0, Math.min(x1, o + (xl / 1e3) * sc));
+      arrow(o, yG - 10, gx, yG - 10, css('--b')); dot(gx, yG, 5, css('--b'));
+      arrow(o, yL - 10, lx, yL - 10, css('--d')); dot(lx, yL, 5, css('--d'));
+      // γ graph
+      const gy0 = 180, gy1 = h - 22, G = graphBox(x0 + 10, gy0, x1, gy1, 1, 8, 'v/c', 'γ');
+      for (const k of [0.2, 0.4, 0.6, 0.8]) text(bn(k, 1), G.X(k), gy1 + 12, css('--muted'), 9, 'center');
+      curve((px) => G.Y(Math.min(8, gam(Math.min(0.9999, (px - x0 - 10) / (x1 - x0 - 10))))), x0 + 10, x1 - 2, css('--c'), 2);
+      dot(G.X(p.b), G.Y(Math.min(8, g)), 5, css('--d'));
+      text(`γ = ${bn(g, 3)}`, G.X(p.b) - 8, G.Y(Math.min(8, g)) - 8, css('--d'), 11, 'right');
+      const close = Math.abs(xl - xg) / Math.max(1, Math.abs(xg)) < 0.01;
+      this.info = `<span class="big">γ = 1/√(1 − ${bn(p.b, 2)}²) = ${bn(g, 3)}</span><br>` +
+        `গ্যালিলিও: x′ = x − vt = <b>${sci(xg, 3)} m</b>, t′ = t = <b>${sci(tt, 3)} s</b><br>` +
+        `লরেঞ্জ: x′ = γ(x − vt) = <b>${sci(xl, 3)} m</b>, t′ = γ(t − vx/c²) = <b>${sci(tl, 3)} s</b><br>` +
+        (close ? 'v ≪ c — তাই লরেঞ্জ রূপান্তর প্রায় গ্যালিলিও রূপান্তরের সমান হয়ে গেছে।' : 'v আলোর বেগের কাছাকাছি — গ্যালিলিও রূপান্তর আর সঠিক ফল দেয় না।') +
+        `<br><small>বিপরীত রূপান্তর: ড্যাশ অদলবদল করে v-এর চিহ্ন উল্টাও — x = γ(x′ + vt′), t = γ(t′ + vx′/c²)।</small>`;
+    },
+  });
+
+  // ---------- 2. length, time, mass ----------
+  S.push({
+    id: 'ltm', tab: '২. দৈর্ঘ্য-সময়-ভর',
+    title: 'দৈর্ঘ্য সংকোচন, কাল দীর্ঘায়ন ও ভর বৃদ্ধি',
+    sub: 'স্থির পর্যবেক্ষকের সাপেক্ষে v বেগে চলা মহাকাশযান। L = L₀√(1 − v²/c²) (শুধু গতির দিকে), t = t₀/√(1 − v²/c²), m = m₀/√(1 − v²/c²), ρ = ρ₀/(1 − v²/c²)। শর্টকাট বোতামে চাপ দিয়ে টেবিলের মানগুলো দেখো।',
+    controls: [['b', 'বেগ v', 0, 0.999, 0.001, 0.6, 'c'], ['L0', 'প্রকৃত দৈর্ঘ্য L₀', 10, 100, 1, 100, 'm'], ['t0', 'যানের ভিতরে প্রকৃত সময় t₀', 1, 50, 1, 10, 'বছর'], ['m0', 'নিশ্চল ভর m₀', 1, 200, 1, 100, 'kg']],
+    buttons: [['0.6', '0.6c', false, true], ['0.8', '0.8c', false, true], ['0.866', '0.866c', false, true], ['0.943', '0.943c', false, true], ['0.98', '0.98c', false, true]],
+    legend: [['--muted', 'স্থির অবস্থায়'], ['--a', 'গতিশীল অবস্থায়']],
+    height: 320,
+    action(k) { setParam('b', Number(k)); },
+    draw(w, h, t, p) {
+      const k = Math.sqrt(1 - p.b * p.b), g = 1 / k;
+      const x0 = 24, full = Math.min(w - 130, 340), sc = full / 100;
+      const ship = (y, len, col, dash) => {
+        ctx.strokeStyle = col; ctx.lineWidth = 2; if (dash) ctx.setLineDash(dash);
+        ctx.beginPath(); ctx.moveTo(x0, y - 14); ctx.lineTo(x0 + len - 16, y - 14); ctx.lineTo(x0 + len, y); ctx.lineTo(x0 + len - 16, y + 14); ctx.lineTo(x0, y + 14); ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+      };
+      ship(40, p.L0 * sc, css('--muted'), [4, 3]); text(`L₀ = ${bn(p.L0, 0)} m`, x0 + p.L0 * sc + 8, 44, css('--muted'), 11);
+      ship(90, p.L0 * k * sc, css('--a')); text(`L = ${bn(p.L0 * k, 2)} m`, x0 + p.L0 * k * sc + 8, 94, css('--a'), 11);
+      // moving streaks
+      for (let i = 0; i < 4; i++) { const sx = x0 - 6 - ((t * 60 * p.b + i * 12) % 40); line(sx, 82 + i * 5, sx - 10 * p.b, 82 + i * 5, css('--a'), 1); }
+      text('উচ্চতা (গতির লম্ব দিকে) বদলায় না', x0, 122, css('--muted'), 10);
+      // clocks: proper clock runs at rate 1, the other shows the stationary observer's dilated time
+      const clock = (cx, cy, r, ang, col, label) => {
+        ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.stroke();
+        line(cx, cy, cx + r * 0.8 * Math.sin(ang), cy - r * 0.8 * Math.cos(ang), col, 2.4);
+        text(label, cx, cy + r + 14, col, 10, 'center');
+      };
+      const cy = 180, r = 26;
+      clock(x0 + 30, cy, r, t * 1.2, css('--muted'), 'পৃথিবীর ঘড়ি');
+      clock(x0 + 110, cy, r, t * 1.2 * k, css('--a'), 'যানের ঘড়ি (ধীর)');
+      // mass bars
+      const mx = Math.min(w - 120, x0 + 190), by = h - 30;
+      const bh = (m) => Math.min(110, (m / Math.max(p.m0 * g, p.m0 * 1.2)) * 110);
+      ctx.fillStyle = css('--muted'); ctx.fillRect(mx, by - bh(p.m0), 30, bh(p.m0));
+      ctx.fillStyle = css('--a'); ctx.fillRect(mx + 46, by - bh(p.m0 * g), 30, bh(p.m0 * g));
+      text('m₀', mx + 15, by + 14, css('--muted'), 10, 'center'); text('m', mx + 61, by + 14, css('--a'), 10, 'center');
+      this.info = `<span class="big">√(1 − v²/c²) = ${bn(k, 3)} · γ = ${bn(g, 3)}</span><br>` +
+        `দৈর্ঘ্য: L = ${bn(p.L0, 0)} × ${bn(k, 3)} = <b>${bn(p.L0 * k, 2)} m</b><br>` +
+        `সময়: যানে ${bn(p.t0, 0)} বছর কাটলে পৃথিবীতে কাটে t = t₀ × γ = <b>${bn(p.t0 * g, 2)} বছর</b><br>` +
+        `ভর: m = ${bn(p.m0, 0)} × ${bn(g, 3)} = <b>${bn(p.m0 * g, 2)} kg</b> · ঘনত্ব ρ = ρ₀ × <b>${bn(g * g, 3)}</b><br>` +
+        `<small>উল্টো প্রশ্ন: v = c√(1 − (ছোট/বড়)²)। ঘটনা যার সাপেক্ষে স্থির, তার মাপই m₀, L₀, t₀।</small>`;
+    },
+  });
+
+  // ---------- 3. mass–energy ----------
+  S.push({
+    id: 'emc2', tab: '৩. ভর-শক্তি',
+    title: 'ভর-শক্তি সম্পর্ক: E = mc²',
+    sub: 'মোট শক্তি E = mc², স্থির শক্তি E₀ = m₀c², আপেক্ষিক গতিশক্তি Eₖ = mc² − m₀c² = m₀c²(γ − 1)। কম বেগে এটা প্রায় ½m₀v²-এর সমান, কিন্তু v → c হলে অসীমের দিকে যায়।',
+    controls: [['b', 'বস্তুর বেগ v', 0, 0.99, 0.01, 0.8, 'c'], ['m', 'রূপান্তরিত ভর', 0.001, 10, 0.001, 1, 'kg']],
+    legend: [['--d', 'আপেক্ষিক Eₖ = m₀c²(γ − 1)'], ['--b', 'নিউটনীয় ½m₀v²']],
+    height: 280,
+    draw(w, h, t, p) {
+      const g = gam(p.b);
+      const G = graphBox(40, 14, w - 16, h - 24, 1, 4, 'v/c', 'Eₖ / m₀c²');
+      for (const k of [0.2, 0.4, 0.6, 0.8]) text(bn(k, 1), G.X(k), h - 12, css('--muted'), 9, 'center');
+      for (const k of [1, 2, 3, 4]) text(bn(k), 34, G.Y(k) + 3, css('--muted'), 9, 'right');
+      const bOf = (px) => (px - 40) / (w - 56);
+      curve((px) => G.Y(Math.min(4.2, gam(Math.min(0.999, bOf(px))) - 1)), 40, w - 17, css('--d'), 2.4);
+      curve((px) => G.Y(0.5 * bOf(px) ** 2), 40, w - 17, css('--b'), 2);
+      dot(G.X(p.b), G.Y(Math.min(4.2, g - 1)), 5, css('--d')); dot(G.X(p.b), G.Y(0.5 * p.b * p.b), 4, css('--b'));
+      line(G.X(1), 14, G.X(1), h - 24, css('--muted'), 1, [3, 3]); text('v = c', G.X(1) - 4, 26, css('--muted'), 10, 'right');
+      const E = p.m * C * C;
+      this.info = `<span class="big">E = mc² = ${bn(p.m, 3)} × (3×10⁸)² = ${sci(E, 2)} J</span> = ${sci(E / 3.6e6, 2)} kWh (1 kWh = 3.6×10⁶ J)<br>` +
+        `v = ${bn(p.b, 2)}c হলে γ = ${bn(g, 3)} → Eₖ = <b>${bn(g - 1, 3)} m₀c²</b>, যেখানে নিউটনীয় ½m₀v² = ${bn(0.5 * p.b * p.b, 3)} m₀c²<br>` +
+        `মোট শক্তি E = ${bn(g, 3)}E₀ — অর্থাৎ E = nE₀ হলে v = c√(1 − 1/n²); আর Eₖ = nE₀ হলে γ = n + 1।<br>` +
+        `<small>1 amu = 1.66057×10⁻²⁷ kg ≡ 931 MeV।</small>`;
+    },
+  });
+
+  // ---------- 4. blackbody ----------
+  S.push({
+    id: 'bb', tab: '৪. কৃষ্ণবস্তুর বিকিরণ',
+    title: 'কৃষ্ণবস্তুর বিকিরণ: ভীনের সরণ সূত্র ও স্টেফান-বোল্টজম্যান সূত্র',
+    sub: 'তাপমাত্রা বাড়লে বিকিরণ বক্ররেখার শিখর ছোট তরঙ্গদৈর্ঘ্যের দিকে সরে: λₘT = b = 2.898×10⁻³ mK। মোট বিকিরিত শক্তি E = σT⁴ (σ = 5.67×10⁻⁸ Wm⁻²K⁻⁴)। প্লাঙ্কের তত্ত্ব সব λ-তে মেলে; র‍্যালে-জিন্স দীর্ঘ λ-তে, ভীন ক্ষুদ্র λ-তে।',
+    controls: [['T', 'তাপমাত্রা T', 2000, 10000, 100, 5000, 'K']],
+    buttons: [['rj', 'র‍্যালে-জিন্স (অতিবেগুনি বিপর্যয়)', false], ['wn', 'ভীনের বক্ররেখা', false], ['ref', '৩০০০ K-এর বক্ররেখা', true]],
+    legend: [['--a', 'প্লাঙ্ক (বর্তমান T)'], ['--b', 'র‍্যালে-জিন্স'], ['--c', 'ভীন'], ['--muted', '৩০০০ K']],
+    height: 290,
+    draw(w, h, t, p, b) {
+      const planck = (lm, T) => (2 * HP * C * C) / lm ** 5 / Math.expm1((HP * C) / (lm * KB * T));
+      const lmax = B_WIEN / p.T, peak = planck(lmax, p.T);
+      const x0 = 40, x1 = w - 14, y0 = 14, y1 = h - 26, Lmax = 3000e-9;
+      const X = (lm) => x0 + (lm / Lmax) * (x1 - x0), Y = (v) => y1 - (v / (peak * 1.15)) * (y1 - y0);
+      for (let nm = 380; nm < 780; nm += 4) { const c = wl(nm); ctx.fillStyle = rgb(c, 0.35); ctx.fillRect(X(nm * 1e-9), y0, X(4e-9) - X(0), y1 - y0); }
+      graphBox(x0, y0, x1, y1, 1, 1, 'λ (nm)');
+      text('বিকিরণ তীব্রতা ↑', x1, y0 + 10, css('--muted'), 10, 'right');
+      for (const nm of [500, 1000, 1500, 2000, 2500]) text(bn(nm), X(nm * 1e-9), y1 + 12, css('--muted'), 9, 'center');
+      const lOf = (px) => ((px - x0) / (x1 - x0)) * Lmax;
+      const clip = (v) => Math.max(y0, Y(v));
+      if (b.ref) curve((px) => clip(planck(Math.max(1e-9, lOf(px)), 3000)), x0 + 2, x1, css('--muted'), 1.6);
+      if (b.rj) curve((px) => clip((2 * C * KB * p.T) / Math.max(1e-9, lOf(px)) ** 4), x0 + 2, x1, css('--b'), 2);
+      if (b.wn) curve((px) => clip(((2 * HP * C * C) / Math.max(1e-9, lOf(px)) ** 5) * Math.exp((-HP * C) / (Math.max(1e-9, lOf(px)) * KB * p.T))), x0 + 2, x1, css('--c'), 2);
+      curve((px) => clip(planck(Math.max(1e-9, lOf(px)), p.T)), x0 + 2, x1, css('--a'), 2.6);
+      line(X(lmax), Y(peak), X(lmax), y1, css('--d'), 1.4, [3, 3]);
+      text(`λₘ = ${bn(lmax * 1e9, 0)} nm`, X(lmax) + 4, Y(peak) - 4, css('--d'), 11);
+      text('দৃশ্যমান', X(580e-9), y0 + 12, css('--muted'), 9, 'center');
+      const nm = lmax * 1e9, zone = nm < 380 ? 'অতিবেগুনি অঞ্চলে' : nm <= 780 ? `দৃশ্যমান অঞ্চলে (${colourName(nm)})` : 'অবলোহিত অঞ্চলে';
+      const E = SIGMA * p.T ** 4;
+      this.info = `<span class="big">λₘ = b/T = 2.898×10⁻³ / ${bn(p.T, 0)} = ${bn(nm, 0)} nm</span> — শিখর ${zone}<br>` +
+        `E = σT⁴ = <b>${sci(E, 2)} W m⁻²</b> · ৩০০০ K-এর ${bn(E / (SIGMA * 3000 ** 4), 2)} গুণ (T⁴-এর অনুপাতে)<br>` +
+        `<small>সংশোধন মনে রাখো: E ∝ T⁴ হলো স্টেফান-বোল্টজম্যান সূত্র, ভীনের নয়। বক্ররেখার আকার দেখানোর জন্য প্লাঙ্কের সূত্র দিয়ে আঁকা।</small>`;
+    },
+  });
+
+  // ---------- 5. photoelectric ----------
+  const METALS = [['Cs', 2.14], ['K', 2.30], ['Na', 2.75], ['Ag', 4.74], ['Cu', 4.94], ['Au', 5.31], ['Pt', 5.65]];
+  S.push({
+    id: 'pe', tab: '৫. আলোক তড়িৎ ক্রিয়া',
+    title: 'আলোক তড়িৎ ক্রিয়া: hf = W₀ + ½mv²max',
+    sub: 'ধাতুর উপর আলো পড়লে ফোটনের শক্তি hf কার্য অপেক্ষক W₀-এর বেশি হলেই ইলেকট্রন বের হয়। নিবৃত্তি বিভব eVₛ = ½mv²max = hf − W₀। তীব্রতা বাড়ালে শুধু ইলেকট্রনের সংখ্যা (প্রবাহ) বাড়ে, গতিশক্তি নয়।',
+    controls: [['lam', 'আলোর তরঙ্গদৈর্ঘ্য λ', 150, 800, 5, 400, 'nm'], ['I', 'আলোর তীব্রতা', 0, 100, 5, 60, '%']],
+    buttons: METALS.map(([m], i) => [m, m, i === 0, false, 'metal']),
+    legend: [['--d', 'নিঃসৃত ইলেকট্রন'], ['--a', 'Vₛ বনাম f']],
+    height: 340,
+    draw(w, h, t, p, b) {
+      const W0 = METALS.find(([m]) => m === b.metal)[1];
+      const E = 12400 / (p.lam * 10), Ek = E - W0, f = C / (p.lam * 1e-9), f0 = (W0 * Q) / HP;
+      const top = 150, px = Math.min(w * 0.42, 170);
+      // lamp + rays
+      const col = p.lam >= 380 ? rgb(wl(p.lam)) : '#b9a6ff';
+      dot(30, 30, 12, col); text(p.lam < 380 ? 'অতিবেগুনি' : colourName(p.lam), 30, 56, css('--muted'), 9, 'center');
+      const rays = Math.round(p.I / 20);
+      for (let i = 0; i < rays; i++) arrow(42, 34 + i * 4, px - 6, 40 + i * 14, col, 1.4);
+      ctx.fillStyle = '#9aa4b5'; ctx.fillRect(px, 30, 12, top - 50); text(b.metal, px + 6, top - 6, css('--text'), 11, 'center');
+      // electrons
+      const n = Ek > 0 ? Math.round(p.I / 8) : 0, sp = Ek > 0 ? 40 + 60 * Math.sqrt(Ek) : 0, L = w - px - 30;
+      for (let i = 0; i < n; i++) {
+        const s = (t * sp + i * (L / Math.max(1, n)) * 1.7) % L;
+        dot(px + 16 + s, 40 + ((i * 37) % (top - 70)), 3.5, css('--d'));
+      }
+      if (Ek <= 0) text('কোনো ইলেকট্রন বের হচ্ছে না (f < f₀)', px + 22, 80, css('--d'), 12);
+      // Vs–f graph
+      const fmax = 2e15, vmax = 6;
+      const G = graphBox(40, top + 12, w - 14, h - 24, fmax, vmax, 'f (Hz)', 'Vₛ (V)');
+      for (const k of [0.5, 1, 1.5]) text(`${bn(k, 1)}×10¹⁵`, G.X(k * 1e15), h - 12, css('--muted'), 9, 'center');
+      for (const [m, w0] of METALS) {
+        const ff0 = (w0 * Q) / HP, on = m === b.metal;
+        curve((x) => { const ff = ((x - 40) / (w - 54)) * fmax; return G.Y(Math.max(0, Math.min(vmax, (HP / Q) * (ff - ff0)))); }, 40, w - 14, on ? css('--a') : css('--grid'), on ? 2.4 : 1);
+      }
+      dot(G.X(Math.min(f, fmax)), G.Y(Math.max(0, Math.min(vmax, Ek))), 5, css('--d'));
+      text(`f₀ = ${sci(f0, 2)} Hz`, G.X(f0) + 4, h - 30, css('--a'), 10);
+      this.info = `<span class="big">ফোটনের শক্তি E = 12400/λ(Å) = ${bn(E, 2)} eV</span> · ${b.metal}-এর W₀ = ${bn(W0, 2)} eV<br>` +
+        (Ek > 0
+          ? `½mv²max = E − W₀ = <b>${bn(Ek, 2)} eV</b> = ${sci(Ek * Q, 2)} J · নিবৃত্তি বিভব Vₛ = <b>${bn(Ek, 2)} V</b><br>সর্বোচ্চ বেগ v ≈ 5.93×10⁵√Eₖ = <b>${sci(5.93e5 * Math.sqrt(Ek), 2)} m s⁻¹</b>`
+          : `<b>E < W₀ — তীব্রতা যত বাড়াও, ইলেকট্রন বের হবে না।</b>`) +
+        `<br>f = ${sci(f, 2)} Hz · সূচন কম্পাঙ্ক f₀ = W₀/h = ${sci(f0, 2)} Hz · সূচন তরঙ্গদৈর্ঘ্য λ₀ = 12400/W₀ = ${bn(12400 / W0, 0)} Å<br>` +
+        `<small>Vₛ–f লেখচিত্রের ঢাল h/e — সব ধাতুর জন্য সমান (রেখাগুলো সমান্তরাল), শুধু f₀ আলাদা।</small>`;
+    },
+  });
+
+  // ---------- 6. X-ray ----------
+  S.push({
+    id: 'xray', tab: '৬. এক্স-রে',
+    title: 'এক্স-রে: ন্যূনতম তরঙ্গদৈর্ঘ্য λmin = hc/eV',
+    sub: 'কুলীজ নলে V বিভবে ত্বরিত ইলেকট্রন প্রতিপ্রভ (টার্গেট)-এ আঘাত করে এক্স-রে তৈরি করে। একটা ইলেকট্রনের পুরো শক্তি eV একটা ফোটনে গেলে সর্বোচ্চ কম্পাঙ্ক fmax = eV/h, তাই λmin = hc/eV = 12400/V Å। শক্তির মাত্র ~১% এক্স-রে হয়, বাকিটা তাপ।',
+    controls: [['V', 'নলের বিভব পার্থক্য V', 5, 100, 0.5, 30, 'kV']],
+    legend: [['--d', 'ইলেকট্রন'], ['--a', 'এক্স-রে বর্ণালী (প্রতীকী)']],
+    height: 320,
+    draw(w, h, t, p) {
+      const lmin = 12.4 / p.V, fmax = (Q * p.V * 1e3) / HP, v = Math.sqrt((2 * Q * p.V * 1e3) / ME);
+      // tube
+      const ty = 60, tx0 = 30, tx1 = Math.min(w - 40, 330);
+      ctx.strokeStyle = css('--line'); ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse((tx0 + tx1) / 2, ty, (tx1 - tx0) / 2 + 10, 34, 0, 0, TAU); ctx.stroke();
+      line(tx0 + 4, ty - 12, tx0 + 4, ty + 12, css('--b'), 4); text('ক্যাথোড', tx0 + 4, ty + 48, css('--muted'), 9, 'center');
+      line(tx1 - 20, ty + 16, tx1, ty - 16, '#9aa4b5', 6); text('টার্গেট (45°)', tx1 - 10, ty + 48, css('--muted'), 9, 'center');
+      const sp = 0.3 + p.V / 60;
+      for (let i = 0; i < 6; i++) { const s = ((t * sp + i / 6) % 1); dot(tx0 + 10 + s * (tx1 - tx0 - 30), ty + (i % 3 - 1) * 5, 2.6, css('--d')); }
+      for (let i = 0; i < 3; i++) arrow(tx1 - 10, ty + 4, tx1 - 10 - 20 + i * 20, ty + 46, css('--a'), 1.4);
+      // spectrum
+      const lmaxA = 2.5, top = 130;
+      const G = graphBox(40, top, w - 14, h - 24, lmaxA, 1, 'λ (Å)', 'তীব্রতা');
+      for (const k of [0.5, 1, 1.5, 2]) text(bn(k, 1), G.X(k), h - 12, css('--muted'), 9, 'center');
+      const shape = (l) => (l <= lmin ? 0 : (l / lmin - 1) / (l * l));
+      let mx = 0; for (let l = lmin; l < lmaxA; l += 0.005) mx = Math.max(mx, shape(l));
+      curve((px) => G.Y(Math.min(1, (0.9 * shape(((px - 40) / (w - 54)) * lmaxA)) / mx)), 41, w - 14, css('--a'), 2.4);
+      line(G.X(lmin), top, G.X(lmin), h - 24, css('--d'), 1.4, [3, 3]);
+      text(`λmin = ${bn(lmin, 3)} Å`, G.X(lmin) + 4, top + 12, css('--d'), 11);
+      this.info = `<span class="big">λmin = 12400/V = 12400/${bn(p.V * 1000, 0)} = ${bn(lmin, 3)} Å</span> = ${sci(lmin * 1e-10, 2)} m<br>` +
+        `fmax = eV/h = <b>${sci(fmax, 2)} Hz</b> · সর্বোচ্চ ফোটন শক্তি = ${bn(p.V, 1)} keV<br>` +
+        `টার্গেটে আঘাতের মুহূর্তে ইলেকট্রনের বেগ (eV = ½mv² ধরে) ≈ <b>${sci(v, 2)} m s⁻¹</b><br>` +
+        `<small>V বাড়ালে λmin কমে — রশ্মি কঠিনতর (ভেদন ক্ষমতা বেশি, গবেষণায়); কম V-তে কোমল রশ্মি (চিকিৎসায়)। বর্ণালীর আকার প্রতীকী।</small>`;
+    },
+  });
+
+  // ---------- 7. Compton ----------
+  S.push({
+    id: 'compton', tab: '৭. কম্পটন ক্রিয়া',
+    title: 'কম্পটন ক্রিয়া: Δλ = (h/m₀c)(1 − cosφ)',
+    sub: 'এক্স-রে ফোটন মুক্ত ইলেকট্রনে ধাক্কা খেয়ে φ কোণে বিক্ষিপ্ত হয়; কিছু শক্তি ইলেকট্রনকে দেয় বলে তরঙ্গদৈর্ঘ্য বাড়ে। h/m₀c = 0.0243 Å। φ = 0°-এ Δλ = 0 (সর্বনিম্ন), φ = 180°-এ Δλ = 0.0485 Å (সর্বোচ্চ)।',
+    controls: [['phi', 'বিক্ষেপণ কোণ φ', 0, 180, 1, 90, '°'], ['lam', 'আপতিত তরঙ্গদৈর্ঘ্য λ', 0.02, 1, 0.01, 0.4, 'Å']],
+    legend: [['--a', 'আপতিত ফোটন'], ['--b', 'বিক্ষিপ্ত ফোটন'], ['--d', 'ছিটকে যাওয়া ইলেকট্রন']],
+    height: 320,
+    draw(w, h, t, p) {
+      const dl = 0.0243 * (1 - Math.cos(rad(p.phi))), l2 = p.lam + dl;
+      const ex = Math.min(w * 0.45, 200), ey = 110;
+      const wave = (x0, y0, ang, len, lamPx, col) => {
+        ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
+        for (let s = 0; s <= len; s += 2) {
+          const yy = 8 * Math.sin((TAU * s) / lamPx - TAU * t);
+          const X = x0 + s * Math.cos(ang) - yy * Math.sin(ang), Y = y0 - s * Math.sin(ang) - yy * Math.cos(ang);
+          s ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
+        }
+        ctx.stroke();
+      };
+      const base = 14, lp1 = base, lp2 = base * (1 + (dl / p.lam) * 3); // exaggerated ×3 so the change is visible
+      wave(10, ey, 0, ex - 18, lp1, css('--a'));
+      wave(ex + 8 * Math.cos(rad(p.phi)), ey - 8 * Math.sin(rad(p.phi)), rad(p.phi), Math.min(150, w - ex - 20), lp2, css('--b'));
+      dot(ex, ey, 7, css('--d'));
+      // recoil direction from momentum conservation
+      const p1 = 1 / p.lam, p2 = 1 / l2, px = p1 - p2 * Math.cos(rad(p.phi)), py = -p2 * Math.sin(rad(p.phi));
+      const th = Math.atan2(py, px);
+      if (p.phi > 0) arrow(ex, ey, ex + 60 * Math.cos(th), ey - 60 * Math.sin(th), css('--d'), 2);
+      line(ex, ey, w - 10, ey, css('--line'), 1, [3, 3]);
+      text(`φ = ${bn(p.phi, 0)}°`, ex + 18, ey - 14, css('--muted'), 11);
+      // Δλ vs φ graph
+      const G = graphBox(40, 200, w - 14, h - 24, 180, 0.05, 'φ (°)', 'Δλ (Å)');
+      for (const k of [0, 45, 90, 135]) text(bn(k), G.X(k), h - 12, css('--muted'), 9, 'center');
+      curve((x) => G.Y(0.0243 * (1 - Math.cos(rad(((x - 40) / (w - 54)) * 180)))), 40, w - 14, css('--b'), 2);
+      dot(G.X(p.phi), G.Y(dl), 5, css('--d'));
+      const E1 = 12400 / p.lam, E2 = 12400 / l2;
+      this.info = `<span class="big">Δλ = 0.0243 × (1 − cos${bn(p.phi, 0)}°) = ${bn(dl, 4)} Å</span><br>` +
+        `বিক্ষিপ্ত তরঙ্গদৈর্ঘ্য λ′ = ${bn(p.lam, 2)} + ${bn(dl, 4)} = <b>${bn(l2, 4)} Å</b><br>` +
+        `ফোটনের শক্তি ${bn(E1 / 1000, 2)} keV → ${bn(E2 / 1000, 2)} keV; পার্থক্য <b>${bn(E1 - E2, 1)} eV</b> ইলেকট্রনের গতিশক্তি হলো<br>` +
+        `<small>Δλ আপতিত λ-এর উপর নির্ভর করে না — শুধু φ-এর উপর। (তরঙ্গের ছবিতে পরিবর্তন ৩ গুণ বড় করে দেখানো।)</small>`;
+    },
+  });
+
+  // ---------- 8. de Broglie ----------
+  S.push({
+    id: 'debroglie', tab: '৮. ডি-ব্রগলী তরঙ্গ',
+    title: 'ডি-ব্রগলী তরঙ্গদৈর্ঘ্য: λ = h/p = h/√(2mEₖ)',
+    sub: 'প্রতিটি চলমান কণার সাথে একটা তরঙ্গ যুক্ত। V বিভবে ত্বরিত কণার Eₖ = qV, তাই λ = h/√(2mqV)। ইলেকট্রনের জন্য শর্টকাট λ = 12.27/√V Å। ইলেকট্রনের λ এক্স-রের মতো কয়েক Å — তাই কেলাসে অপবর্তন হয় (ডেভিসন-জার্মার ও থমসন, ১৯২৭)।',
+    controls: [['lv', 'ত্বরণ বিভব V', 0, 4, 0.01, 2, 'V', logFmt('V')]],
+    buttons: [['e', 'ইলেকট্রন', true, false, 'part'], ['p', 'প্রোটন', false, false, 'part']],
+    legend: [['--a', 'কণার তরঙ্গ'], ['--b', 'এক্স-রের পাল্লা (0.01–10 Å)']],
+    height: 260,
+    draw(w, h, t, p, b) {
+      const V = 10 ** p.lv, m = b.part === 'e' ? ME : MP;
+      const mom = Math.sqrt(2 * m * Q * V), lam = HP / mom, v = mom / m;
+      const lamA = lam * 1e10;
+      // wave packet; on-screen wavelength follows log λ
+      const lpx = 8 + ((Math.log10(lamA) + 3) / 4) * 90;
+      const mid = 70, cx = ((t * 80) % (w + 200)) - 100;
+      curve((x) => mid - 34 * Math.exp(-(((x - cx) / 90) ** 2)) * Math.sin((TAU * (x - cx)) / Math.max(4, lpx)), 0, w, css('--a'), 2.2, 1);
+      dot(cx, mid, 5, css('--d'));
+      // log scale bar 10^-3 … 10^2 Å
+      const x0 = 20, x1 = w - 20, y = 170, L = (a) => x0 + ((Math.log10(a) + 3) / 5) * (x1 - x0);
+      ctx.fillStyle = css('--b'); ctx.globalAlpha = 0.3; ctx.fillRect(L(0.01), y - 8, L(10) - L(0.01), 16); ctx.globalAlpha = 1;
+      hline(y, x0, x1, [-3, -2, -1, 0, 1, 2].map((e) => [L(10 ** e), `10${sup(e)} Å`]), 'λ (লগ স্কেল)');
+      const mk = L(Math.min(100, Math.max(1e-3, lamA)));
+      ctx.fillStyle = css('--d'); ctx.beginPath(); ctx.moveTo(mk, y - 10); ctx.lineTo(mk - 6, y - 20); ctx.lineTo(mk + 6, y - 20); ctx.fill();
+      text('এক্স-রের পাল্লা', L(0.3), y + 32, css('--b'), 10, 'center');
+      this.info = `<span class="big">λ = h/√(2mqV) = ${sci(lam, 3)} m = ${bn(lamA, lamA < 0.1 ? 4 : 3)} Å</span><br>` +
+        (b.part === 'e' ? `শর্টকাট: 12.27/√${bn(V, V < 10 ? 2 : 0)} = <b>${bn(12.27 / Math.sqrt(V), 3)} Å</b> (একই উত্তর)<br>` : 'প্রোটনের ভর ইলেকট্রনের ≈ ১৮৩৫ গুণ, তাই একই V-তে λ অনেক ছোট।<br>') +
+        `ভরবেগ p = ${sci(mom, 3)} kg m s⁻¹ · বেগ v = ${sci(v, 3)} m s⁻¹ · Eₖ = ${sci(Q * V, 3)} J<br>` +
+        `<small>ভর বা বেগ যত বেশি, λ তত ছোট — তাই বড় বস্তুর তরঙ্গধর্ম চোখে পড়ে না।</small>`;
+    },
+  });
+
+  // ---------- 9. uncertainty ----------
+  S.push({
+    id: 'heis', tab: '৯. অনিশ্চয়তা নীতি',
+    title: 'হাইজেনবার্গের অনিশ্চয়তা নীতি: Δx·Δp ≥ h/4π',
+    sub: 'কোনো কণার অবস্থান ও ভরবেগ একই সাথে নিখুঁতভাবে জানা যায় না। অবস্থান যত নিখুঁত (Δx ছোট), ভরবেগ তত অনিশ্চিত (Δp বড়) — এটা যন্ত্রের দোষ নয়, প্রকৃতির নিয়ম। শক্তি-সময়ের জন্য ΔE·Δt ≥ h/4π।',
+    controls: [['lx', 'অবস্থানের অনিশ্চয়তা Δx', -15, -8, 0.1, -10, 'm', logFmt('m')], ['lt', 'সময়ের অনিশ্চয়তা Δt', -22, -12, 0.1, -16, 's', logFmt('s')]],
+    buttons: [['e', 'ইলেকট্রন', true, false, 'part'], ['p', 'প্রোটন', false, false, 'part']],
+    legend: [['--a', 'অবস্থানের বিস্তার'], ['--d', 'ভরবেগের বিস্তার']],
+    height: 280,
+    draw(w, h, t, p, b) {
+      const m = b.part === 'e' ? ME : MP, dx = 10 ** p.lx, dp = HP / (4 * Math.PI * dx), dv = dp / m;
+      const dt = 10 ** p.lt, dE = HP / (4 * Math.PI * dt);
+      const s = 0.03 + ((p.lx + 15) / 7) * 0.32; // fraction of width
+      const gauss = (y0, sig, col, lab) => {
+        line(14, y0, w - 14, y0, css('--line'), 1);
+        curve((x) => y0 - 70 * Math.exp(-(((x - w / 2) / (sig * w)) ** 2) / 2), 14, w - 14, col, 2.4, 1);
+        text(lab, 16, y0 - 60, col, 11);
+      };
+      gauss(110, s, css('--a'), 'অবস্থান x');
+      gauss(h - 30, Math.min(0.5, 0.0035 / s), css('--d'), 'ভরবেগ p');
+      const fast = dv > C;
+      this.info = `<span class="big">Δp ≥ h/(4πΔx) = ${sci(dp, 2)} kg m s⁻¹</span><br>` +
+        `Δv = Δp/m = <b>${sci(dv, 2)} m s⁻¹</b>${fast ? ' — আলোর বেগের চেয়েও বেশি! এত ছোট জায়গায় এই কণাকে আটকে রাখা যায় না।' : ''}<br>` +
+        `ΔE ≥ h/(4πΔt) = <b>${sci(dE, 2)} J</b> = ${sci(dE / Q, 2)} eV<br>` +
+        `<small>এ কারণেই নিউক্লিয়াসে ইলেকট্রন থাকতে পারে না: সেখানে থাকতে 23.93 MeV লাগত, কিন্তু ইলেকট্রনের শক্তি 4 MeV-এর বেশি হয় না। ħ = h/2π = 1.055×10⁻³⁴ Js।</small>`;
+    },
+  });
+
+  // ---------- runner ----------
+  let cur = null, params = {}, btn = {}, t0 = performance.now(), paused = false;
+  const $ = (id) => document.getElementById(id);
+  $('tabs').innerHTML = S.map((s, i) => `<button data-i="${i}">${s.tab}</button>`).join('');
+  $('tabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) select(Number(b.dataset.i)); });
+
+  function select(i) {
+    stopTones();
+    cur = S[i];
+    document.querySelectorAll('#tabs button').forEach((b, j) => b.classList.toggle('on', j === i));
+    $('title').textContent = cur.title;
+    $('sub').textContent = cur.sub;
+    params = {}; btn = {};
+    $('ctl').innerHTML = cur.controls.map(([k, label, min, max, step, val, unit, fmt]) => {
+      params[k] = val;
+      return `<label>${label}<b id="v_${k}">${fmt ? fmt(val) : `${bn(val, step < 0.01 ? 3 : step < 1 ? 2 : 0)} ${unit}`}</b><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-k="${k}" data-u="${unit}" data-s="${step}"></label>`;
+    }).join('');
+    $('buttons').innerHTML = `<button data-b="pause">${paused ? '▶ চালাও' : '⏸ থামাও'}</button>` + (cur.buttons ?? []).map(([k, label, on, isAction, group]) => {
+      if (group) { if (on) btn[group] = k; } else if (!isAction) btn[k] = on;
+      return `<button data-b="${k}" ${group ? `data-g="${group}"` : ''} ${isAction ? 'data-a="1"' : ''} class="${on ? 'on' : ''}">${label}</button>`;
+    }).join('');
+    $('legend').innerHTML = (cur.legend ?? []).map(([c, l]) => `<span><i style="background:var(${c})"></i>${l}</span>`).join('');
+    $('note').textContent = 'নোট: ছবিগুলো বোঝানোর জন্য মাপমতো আঁকা নয় এবং গতি ধীর করা হয়েছে; হিসাবগুলো সূত্র অনুযায়ী আসল মানে।';
+    cv.style.height = `${cur.height ?? 260}px`;
+    resize();
+  }
+
+  $('ctl').addEventListener('input', (e) => {
+    const r = e.target; if (!r.dataset.k) return;
+    params[r.dataset.k] = Number(r.value);
+    const s = Number(r.dataset.s);
+    const fmt = cur.controls.find((c) => c[0] === r.dataset.k)?.[7];
+    $(`v_${r.dataset.k}`).textContent = fmt ? fmt(Number(r.value)) : `${bn(Number(r.value), s < 0.01 ? 3 : s < 1 ? 2 : 0)} ${r.dataset.u}`;
+  });
+  $('buttons').addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    const k = b.dataset.b;
+    if (k === 'pause') { paused = !paused; b.textContent = paused ? '▶ চালাও' : '⏸ থামাও'; return; }
+    if (b.dataset.a) { cur.action?.call(cur, k, params); return; }
+    if (b.dataset.g) { btn[b.dataset.g] = k; document.querySelectorAll(`[data-g="${b.dataset.g}"]`).forEach((x) => x.classList.toggle('on', x === b)); return; }
+    btn[k] = !btn[k]; b.classList.toggle('on', btn[k]);
+  });
+
+  let W = 0, H = 0, simT = 0, last = performance.now();
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    if (!paused) simT += dt;
+    if (cur) {
+      ctx.clearRect(0, 0, W, H);
+      cur.draw(W, H, simT, params, btn);
+      $('info').innerHTML = cur.info ?? '';
+    }
+    requestAnimationFrame(frame);
+  }
+  select(0);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
