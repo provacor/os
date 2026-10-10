@@ -68,5 +68,5 @@ Never mix the subject-specific contents:
 
 ### Shipping
 
-Run `node tools/validate.mjs`. Open any new lab in headless Chromium and click every tab
+After adding or changing chapter content, run `node tools/build-toc.mjs` to rebuild the topic-wise contents (`content/toc.json`, the সূচিপত্র on each chapter page: every item placed under its topic). Then run `node tools/validate.mjs` (it fails if an item sits under no topic). Open any new lab in headless Chromium and click every tab
 (there must be no JS errors). Then ship through the usual flow: branch → PR → squash-merge.

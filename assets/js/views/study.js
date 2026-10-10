@@ -1,14 +1,15 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610100121';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100121';
-import { progressOf } from '../progress.js?v=202610100121';
-import { contentCount, chapterCount } from '../model.js?v=202610100121';
-import { lastVisit } from './shared.js?v=202610100121';
-import { videosBlock } from './videos.js?v=202610100121';
-import { alarmsBlock } from './alarms.js?v=202610100121';
-import { hasFullMapSync } from './mindmap.js?v=202610100121';
-import { conceptsOfChapter } from '../concepts.js?v=202610100121';
+import { icon } from '../icons.js?v=202610100130';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610100130';
+import { progressOf } from '../progress.js?v=202610100130';
+import { contentCount, chapterCount } from '../model.js?v=202610100130';
+import { lastVisit } from './shared.js?v=202610100130';
+import { videosBlock } from './videos.js?v=202610100130';
+import { alarmsBlock } from './alarms.js?v=202610100130';
+import { hasFullMapSync } from './mindmap.js?v=202610100130';
+import { conceptsOfChapter } from '../concepts.js?v=202610100130';
+import { tocCard } from './topic.js?v=202610100130';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -128,7 +129,7 @@ export function chapterView(model, ch) {
     crumbs: [subjectCrumb(ch.subject), [ch.paper.name, `#/p/${ch.paper.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`]],
     accent: ch.subject.accent,
     visit: { chapterId: ch.id },
-    html: hero + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
+    html: hero + tocCard(ch) + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
   };
 }
 

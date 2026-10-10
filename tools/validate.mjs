@@ -130,6 +130,22 @@ if (existsSync(conceptsPath)) {
   };
   cs.forEach((c) => visit(c.id, []));
 }
+// Topic-wise contents: every item of a chapter sits under a topic (or chapter-wide), and every id is real.
+const tocPath = join(root, 'content/toc.json');
+if (existsSync(tocPath)) {
+  const toc = JSON.parse(readFileSync(tocPath, 'utf8')).chapters ?? {};
+  for (const [cid, t] of Object.entries(toc)) {
+    const ch = model.byId.get(cid);
+    if (ch?.level !== 'chapter') { err(`toc: unknown chapter ${cid}`); continue; }
+    const ids = new Set(Object.entries(raw.content.sections ?? {})
+      .filter(([sid]) => sid.startsWith(`${cid}_`) && model.byId.get(sid)?.chapter === ch)
+      .flatMap(([, reg]) => JSON.parse(readFileSync(join(root, reg.file), 'utf8')).items.map((it) => it.id)));
+    const placed = new Set([...t.general, ...t.topics.flatMap((tp) => tp.items)]);
+    for (const id of placed) if (!ids.has(id)) err(`toc: ${cid} lists unknown item ${id}`);
+    const missing = [...ids].filter((id) => !placed.has(id));
+    if (missing.length) err(`toc: ${cid} has ${missing.length} item(s) under no topic (run node tools/build-toc.mjs), e.g. ${missing[0]}`);
+  }
+}
 model.papers.filter((p) => !p.chapters.length).forEach((p) => warnings.push(`${p.id} has no chapters yet (awaiting syllabus source)`));
 
 console.log(`subjects ${model.subjects.length} · papers ${model.papers.length} · chapters ${model.chapters.length} · sections ${model.sections.length}`);

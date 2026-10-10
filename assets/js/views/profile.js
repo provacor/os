@@ -1,9 +1,9 @@
 // Profile: your name, photo and leaderboard privacy, plus your real app-usage time.
 
-import { icon } from '../icons.js?v=202610100121';
-import { esc } from '../components.js?v=202610100121';
-import { getProfile, usageStats, durationBn, weekSeconds } from '../profile.js?v=202610100121';
-import { leaderboardReady, topUsers, syncLeaderboard } from '../leaderboard.js?v=202610100121';
+import { icon } from '../icons.js?v=202610100130';
+import { esc } from '../components.js?v=202610100130';
+import { getProfile, usageStats, durationBn, weekSeconds } from '../profile.js?v=202610100130';
+import { leaderboardReady, topUsers, syncLeaderboard } from '../leaderboard.js?v=202610100130';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 
