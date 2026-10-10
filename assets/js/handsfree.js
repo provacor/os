@@ -8,9 +8,9 @@
 // Questions and answers are read aloud with the phone's text-to-speech; MCQs can be
 // answered by saying "ক/খ/গ/ঘ" into the earbud microphone.
 
-import { speak, stopSpeaking } from './a11y.js?v=202610100130';
-import { isItemDone, toggleItemDone } from './progress.js?v=202610100130';
-import { recordDone } from './activity.js?v=202610100130';
+import { speak, stopSpeaking } from './a11y.js?v=202610100150';
+import { isItemDone, toggleItemDone } from './progress.js?v=202610100150';
+import { recordDone } from './activity.js?v=202610100150';
 
 const KEY = 'hscos:handsfree:v1';
 const DEFAULTS = { autoAnswer: false, autoNext: false, voiceAnswer: true, markDone: false, readOptions: true, gap: 4 };
@@ -92,7 +92,7 @@ function startAudio() {
     st.audio.loop = true;
     // The OS may pause us when speech or a call takes audio focus; take the buttons back.
     st.audio.addEventListener('pause', () => {
-      if (st.on || st.test) setTimeout(() => { if ((st.on || st.test) && st.audio.paused) st.audio.play().catch(() => {}); }, 700);
+      if (st.on || st.test) setTimeout(() => { if ((st.on || st.test) && !bgPaused && !document.hidden && st.audio.paused) st.audio.play().catch(() => {}); }, 700);
     });
   }
   return st.audio.play().catch(() => {});
@@ -234,7 +234,7 @@ function syncBar() {
   bar.querySelector('[data-hf="toggle"]').hidden = !st.on;
   if (st.test) { lab.textContent = 'বোতাম পরীক্ষা: ইয়ারবাডে ট্যাপ করো'; return; }
   const n = st.sec?.items.length ?? 0;
-  const state = st.rec ? 'শুনছি… বলো' : st.paused ? 'থামানো' : st.speaking ? (st.phase === 'q' ? 'প্রশ্ন পড়ছি' : 'উত্তর পড়ছি') : st.phase === 'q' ? 'ট্যাপ = উত্তর' : 'ট্যাপ = পরেরটা';
+  const state = st.rec ? 'শুনছি… বলো' : bgPaused ? 'ব্যাকগ্রাউন্ডে থেমে আছে' : st.paused ? 'থামানো' : st.speaking ? (st.phase === 'q' ? 'প্রশ্ন পড়ছি' : 'উত্তর পড়ছি') : st.phase === 'q' ? 'ট্যাপ = উত্তর' : 'ট্যাপ = পরেরটা';
   lab.textContent = `${bn(st.i + 1)}/${bn(n)} · ${state}`;
   bar.querySelector('.hf-main').textContent = st.speaking ? '⏸' : '▶';
 }
@@ -396,6 +396,12 @@ function judge(it, k) {
 // ---------- start / stop ----------
 
 function onMedia(action) {
+  // Phones stop text-to-speech while the app is in the background, so nothing can be read
+  // there; keep the buttons quiet instead of pretending to play.
+  if (document.hidden || bgPaused) {
+    if (hasMediaSession) navigator.mediaSession.playbackState = 'paused';
+    return;
+  }
   if (st.test) {
     const names = { play: 'প্লে (এক ট্যাপ)', pause: 'পজ (এক ট্যাপ)', nexttrack: 'পরের ট্র্যাক', previoustrack: 'আগের ট্র্যাক', seekforward: 'সামনে টানো', seekbackward: 'পিছনে টানো', stop: 'স্টপ' };
     toast(`পেয়েছি: ${names[action] ?? action}`);
@@ -525,6 +531,37 @@ function onChange(e) {
   toast('সেভ হয়েছে');
 }
 
+// ---------- background ----------
+// Text-to-speech stops on most phones once the app leaves the screen. Pause cleanly (no silent
+// "playing" track, media notification shows paused) and carry on from the same item on return.
+let bgPaused = false;
+function goBackground() {
+  if (st.test) stopTest();
+  if (!st.on || bgPaused) return;
+  bgPaused = true;
+  clearPending();
+  stopSpeaking();
+  st.speaking = false;
+  st.paused = true;
+  stopAudio();
+  if (hasMediaSession) navigator.mediaSession.playbackState = 'paused';
+  setMeta('থেমে আছে — Provacor খুললে আবার চলবে', `${st.sec.label} · ${bn(st.i + 1)}/${bn(st.sec.items.length)}`);
+  syncBar();
+}
+function comeBack() {
+  if (!bgPaused) return;
+  bgPaused = false;
+  if (!st.on) return;
+  startAudio();
+  if (hasMediaSession) navigator.mediaSession.playbackState = 'playing';
+  toast('আবার চালু হলো');
+  st.paused = false;
+  if (st.phase === 'q') return go(st.i);
+  const it = current();
+  setMeta(clip(it.question ?? it.title ?? it.stem ?? `আইটেম ${bn(st.i + 1)}`), `${st.sec.label} · ${st.sec.chapter.name} · ${bn(st.i + 1)}/${bn(st.sec.items.length)}`);
+  reveal();
+}
+
 export function initHandsfree(m) {
   model = m;
   document.addEventListener('keydown', onKey);
@@ -532,8 +569,10 @@ export function initHandsfree(m) {
   document.addEventListener('change', onChange);
   // Speech in the background stops on many phones; pause cleanly and resume on return.
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && st.on && st.audio?.paused) st.audio.play().catch(() => {});
+    if (document.hidden) goBackground();
+    else comeBack();
   });
+  window.addEventListener('pagehide', goBackground);
 }
 
 // Voice command entry ("শোনাও", "হ্যান্ডস ফ্রি") from the top-bar microphone.
