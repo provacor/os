@@ -2,13 +2,13 @@
 // to the last cached copy when the phone is offline. Every network request
 // revalidates with the server (cache: 'no-cache'), so the browser's HTTP cache
 // can never serve a stale page, stylesheet or script after an update.
-const CACHE = 'hscos-202610100150';
+const CACHE = 'hscos-202610100204';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) =>
   e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE && !k.startsWith('hscos-offline')).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   ),
 );

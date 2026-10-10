@@ -241,6 +241,83 @@ export async function classifyMistake(m, chapterName = '') {
   }
 }
 
+// Mark a student's creative-question answer the way a board examiner would (structured JSON).
+// parts: [{label, q, a?}] with the book answer when known; answers: {label: text}; images: data URLs.
+export async function gradeCq({ chapterName = '', stem = '', parts, answers, images = [] }) {
+  if (!hasKey()) throw new AiError('no-key');
+  sdk ??= import('../vendor/anthropic-sdk.js').catch((e) => { sdk = null; throw e; });
+  let Anthropic;
+  try {
+    Anthropic = (await sdk).default;
+  } catch {
+    throw new AiError('network');
+  }
+  const client = new Anthropic({ apiKey: settings.claudeKey, dangerouslyAllowBrowser: true, maxRetries: 1 });
+  const MAX = { ক: 1, খ: 2, গ: 3, ঘ: 4 };
+  const lines = [
+    chapterName && `অধ্যায়: ${chapterName}`,
+    stem && `উদ্দীপক: ${stem}`,
+    ...parts.map((p) => [
+      `\n${p.label}) প্রশ্ন (${MAX[p.label] ?? 0} নম্বর): ${p.q}`,
+      p.a && `বইয়ের উত্তর: ${p.a}`,
+      `শিক্ষার্থীর উত্তর: ${answers[p.label]?.trim() || (images.length ? '(ছবিতে দেখো)' : '(উত্তর দেয়নি)')}`,
+    ].filter(Boolean).join('\n')),
+  ].filter(Boolean).join('\n');
+  const content = [
+    ...images.map((d) => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: d.split(',')[1] } })),
+    { type: 'text', text: lines },
+  ];
+  const params = {
+    model: settings.claudeModel,
+    max_tokens: 8000,
+    system: 'তুমি HSC বোর্ড পরীক্ষার সৃজনশীল প্রশ্নের পরীক্ষক। বোর্ডের নিয়মে নম্বর দাও: ক = জ্ঞান (১), খ = অনুধাবন (২), গ = প্রয়োগ (৩), ঘ = উচ্চতর দক্ষতা (৪)। আংশিক সঠিক হলে আংশিক নম্বর (০.৫ ধাপে) দাও। বইয়ের উত্তর থাকলে সেটাকে মানদণ্ড ধরো, না থাকলে নিজের বিষয়জ্ঞান দিয়ে বিচার করো। ছবি দেওয়া থাকলে হাতের লেখা পড়ে সেটাই শিক্ষার্থীর উত্তর ধরো। feedback-এ বাংলায় ১-৩ বাক্যে কী ঠিক হয়েছে, কোথায় নম্বর কাটল আর কী লিখলে পুরো নম্বর পেত তা লেখো। উত্তর না দিলে ০।',
+    messages: [{ role: 'user', content }],
+    output_config: {
+      format: {
+        type: 'json_schema',
+        schema: {
+          type: 'object',
+          properties: {
+            parts: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: { label: { type: 'string' }, marks: { type: 'number' }, feedback: { type: 'string' } },
+                required: ['label', 'marks', 'feedback'],
+                additionalProperties: false,
+              },
+            },
+            tips: { type: 'string' },
+          },
+          required: ['parts', 'tips'],
+          additionalProperties: false,
+        },
+      },
+    },
+  };
+  if (settings.claudeModel !== 'claude-haiku-4-5') params.output_config.effort = 'medium';
+  try {
+    const msg = await client.messages.create(params);
+    if (msg.stop_reason === 'refusal') throw new AiError('safety');
+    const text = msg.content.filter((b) => b.type === 'text').map((b) => b.text).join('');
+    const out = JSON.parse(text);
+    const marked = parts.map((p) => {
+      const r = out.parts.find((x) => x.label.trim() === p.label) ?? { marks: 0, feedback: '' };
+      return { label: p.label, max: MAX[p.label] ?? 0, marks: Math.max(0, Math.min(MAX[p.label] ?? 0, Number(r.marks) || 0)), feedback: r.feedback };
+    });
+    return { parts: marked, total: marked.reduce((n, p) => n + p.marks, 0), tips: out.tips };
+  } catch (e) {
+    if (e instanceof AiError) throw e;
+    if (e instanceof SyntaxError) throw new AiError('empty-answer');
+    if (e instanceof Anthropic.AuthenticationError || e instanceof Anthropic.PermissionDeniedError) throw new AiError('bad-key', e.message);
+    if (e instanceof Anthropic.NotFoundError) throw new AiError('bad-model', e.message);
+    if (e instanceof Anthropic.RateLimitError) throw new AiError('quota', e.message);
+    if (e instanceof Anthropic.BadRequestError && /credit balance/i.test(e.message)) throw new AiError('credit', e.message);
+    if (e instanceof Anthropic.APIConnectionError) throw new AiError('network');
+    throw new AiError('api', e?.message);
+  }
+}
+
 export const ERRORS = {
   'no-key': 'আগে উপরের AI সেটিংসে তোমার API key বসাও।',
   'bad-key': 'API key ঠিক নেই। নতুন key কপি করে আবার বসাও।',

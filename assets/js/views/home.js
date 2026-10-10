@@ -1,10 +1,12 @@
 // Home: personal dashboard + subject cards. Every number shown is real.
 
-import { icon } from '../icons.js?v=202610100150';
-import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610100150';
-import { todayStats, streak, recentVisits } from '../activity.js?v=202610100150';
-import { progressOf } from '../progress.js?v=202610100150';
-import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610100150';
+import { icon } from '../icons.js?v=202610100204';
+import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610100204';
+import { todayStats, streak, recentVisits } from '../activity.js?v=202610100204';
+import { progressOf } from '../progress.js?v=202610100204';
+import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610100204';
+import { srsDue } from '../learn.js?v=202610100204';
+import { goalCard, weakTopics } from './practice.js?v=202610100204';
 
 export function homeView(model) {
   const t = totals(model);
@@ -68,7 +70,14 @@ export function homeView(model) {
           .join('')}</div></section>`
     : '';
 
+  const due = srsDue().length;
+  const weak = weakTopics(model)[0];
+  const today2 = `<section class="block home-practice">${goalCard()}
+      ${due ? `<a class="card px-goal rise tap" href="#/review"><span class="tool-ic hue-teal">${icon('revision')}</span><span><b>আজকের রিভিশন: ${String(due).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}টি</b><small class="muted">ভুলে যাওয়ার আগে একবার দেখে নাও</small></span>${icon('chevron', 'cc-chev')}</a>` : ''}
+      ${weak ? `<a class="card px-goal rise tap" href="#/insights"><span class="tool-ic hue-rose">${icon('warn')}</span><span><b>দুর্বল টপিক: ${esc(weak.tp.name)}</b><small class="muted">${esc(weak.ch.name)} · মাত্র ${String(weak.acc).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d])}% সঠিক</small></span>${icon('chevron', 'cc-chev')}</a>` : ''}
+    </section>`;
   const tools = [
+    ['#/practice', 'mcq', 'অনুশীলন', 'পরীক্ষা · রিভিশন · কার্ড', 'violet'],
     ['#/focus', 'play', 'Focus mode', 'মনোযোগ দিয়ে পড়া', 'teal'],
     ['#/planner', 'target', 'পরীক্ষার প্ল্যান', 'দিন ধরে পড়া সাজাও', 'violet'],
     ['#/mistakes', 'warn', 'ভুলের খাতা', 'Mistake Book', 'rose'],
@@ -78,5 +87,5 @@ export function homeView(model) {
   ];
   const toolsHtml = `<section class="block"><div class="block-head"><h2>Tools</h2></div>
       <div class="tools">${tools.map(([href, ic, t, d, hue], i) => `<a class="tool hue-${hue} rise" style="--i:${i}" href="${href}"><span class="tool-ic">${icon(ic)}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div></section>`;
-  return { nav: 'home', title: 'Provacor', html: hero + toolsHtml + recentHtml + subjects + libHtml };
+  return { nav: 'home', title: 'Provacor', html: hero + today2 + toolsHtml + recentHtml + subjects + libHtml };
 }

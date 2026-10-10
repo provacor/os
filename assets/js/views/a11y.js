@@ -1,8 +1,8 @@
 // Accessibility settings page.
 
-import { icon } from '../icons.js?v=202610100150';
-import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610100150';
-import { hfPrefs, hfSupport } from '../handsfree.js?v=202610100150';
+import { icon } from '../icons.js?v=202610100204';
+import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610100204';
+import { hfPrefs, hfSupport, HF_FILTERS } from '../handsfree.js?v=202610100204';
 
 const hfToggle = (key, on, title, text) => `<label class="a11y-row">
     <span><b>${title}</b><small class="muted">${text}</small></span>
@@ -28,6 +28,8 @@ function handsfreeCard(i) {
       ${hfToggle('autoAnswer', p.autoAnswer, 'নিজে থেকে উত্তর শোনাও', 'প্রশ্নের পর একটু থেমে উত্তর বলবে, ট্যাপ লাগবে না')}
       ${hfToggle('autoNext', p.autoNext, 'নিজে থেকে পরের প্রশ্নে যাও', 'দুটো একসাথে চালু করলে পুরো সেকশন পডকাস্টের মতো শুনে যেতে পারবে')}
       ${hfToggle('markDone', p.markDone, 'উত্তর শোনার পর "Done" করে দাও', 'প্রগ্রেস নিজে থেকে বাড়বে')}
+      <p class="small hf-gap-title">কোনগুলো শোনাবে</p>
+      <div class="seg seg-4" role="group" aria-label="কোনগুলো শোনাবে">${Object.entries(HF_FILTERS).map(([v, l]) => `<button class="seg-btn ${p.filter === v ? 'on' : ''}" data-hf-filter="${v}">${l}</button>`).join('')}</div>
       <p class="small hf-gap-title">প্রশ্ন আর উত্তরের মাঝে বিরতি</p>
       <div class="seg seg-4" role="group" aria-label="বিরতি">${gapSeg}</div>
       <button class="btn tap a11y-test" data-hf-test>${icon('play')}<span>ইয়ারবাডের বোতাম পরীক্ষা করো</span></button>
