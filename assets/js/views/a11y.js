@@ -1,8 +1,8 @@
 // Accessibility settings page.
 
-import { icon } from '../icons.js?v=202610100130';
-import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610100130';
-import { hfPrefs, hfSupport } from '../handsfree.js?v=202610100130';
+import { icon } from '../icons.js?v=202610100150';
+import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610100150';
+import { hfPrefs, hfSupport } from '../handsfree.js?v=202610100150';
 
 const hfToggle = (key, on, title, text) => `<label class="a11y-row">
     <span><b>${title}</b><small class="muted">${text}</small></span>
@@ -32,7 +32,7 @@ function handsfreeCard(i) {
       <div class="seg seg-4" role="group" aria-label="বিরতি">${gapSeg}</div>
       <button class="btn tap a11y-test" data-hf-test>${icon('play')}<span>ইয়ারবাডের বোতাম পরীক্ষা করো</span></button>
       <p class="muted small a11y-note">পরীক্ষা চালু করে ইয়ারবাডে এক/দুই/তিন ট্যাপ বা লম্বা চাপ দাও — কোন চাপে কী পৌঁছায় অ্যাপ বলে দেবে। কোন ট্যাপে কী হবে তা ইয়ারবাড ঠিক করে; দরকার হলে QCY অ্যাপে গিয়ে ট্যাপগুলো "Play/Pause", "Next", "Previous" এ সেট করো। ইয়ারবাডের লম্বা চাপে সাধারণত ফোনের Google Assistant খোলে, অ্যাপ নয়।</p>
-      <p class="muted small a11y-note">${sup.media ? '' : '⚠️ এই ব্রাউজার ইয়ারবাডের বোতাম পাঠায় না; স্ক্রিনের নিচের বারের বোতাম ব্যবহার করো। '}অ্যাপটা খোলা রাখো — স্ক্রিন বন্ধ বা অন্য অ্যাপে গেলে অনেক ফোনে পড়ে শোনানো থেমে যায়। কিবোর্ড/রিমোট: Space = চালাও/উত্তর, → = পরের, ← = আগের, M = মুখে বলো, Esc = বন্ধ।</p>
+      <p class="muted small a11y-note">${sup.media ? '' : '⚠️ এই ব্রাউজার ইয়ারবাডের বোতাম পাঠায় না; স্ক্রিনের নিচের বারের বোতাম ব্যবহার করো। '}অ্যাপটা খোলা রাখো — ফোন অ্যাপের বাইরে পড়ে শোনাতে দেয় না, তাই স্ক্রিন বন্ধ বা অন্য অ্যাপে গেলে পড়া থেমে যাবে। অ্যাপে ফিরলে যে প্রশ্নে ছিলে সেখান থেকে নিজে আবার চলবে। কিবোর্ড/রিমোট: Space = চালাও/উত্তর, → = পরের, ← = আগের, M = মুখে বলো, Esc = বন্ধ।</p>
     </section>`;
 }
 
