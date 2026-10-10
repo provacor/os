@@ -1,6 +1,6 @@
 // Structure integrity check. Run: node tools/validate.mjs
 // Uses the same buildModel() as the app, so what passes here is what the UI shows.
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { DATA_FILES, buildModel } from '../assets/js/model.js';
@@ -145,6 +145,14 @@ if (existsSync(tocPath)) {
     const missing = [...ids].filter((id) => !placed.has(id));
     if (missing.length) err(`toc: ${cid} has ${missing.length} item(s) under no topic (run node tools/build-toc.mjs), e.g. ${missing[0]}`);
   }
+}
+// Offline: the service worker's install list must name every script the app loads.
+{
+  const sw = readFileSync(join(root, 'sw.js'), 'utf8');
+  const ver = readFileSync(join(root, 'index.html'), 'utf8').match(/app\.js\?v=([\w-]+)/)?.[1];
+  const walkJs = (d) => readdirSync(join(root, d), { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walkJs(`${d}/${e.name}`) : e.name.endsWith('.js') ? [`${d}/${e.name}`] : []));
+  const stale = walkJs('assets/js').filter((f) => !sw.includes(`'${f}?v=${ver}'`));
+  if (stale.length) err(`sw.js SHELL is out of date (run node tools/bump-version.mjs), e.g. ${stale[0]}`);
 }
 model.papers.filter((p) => !p.chapters.length).forEach((p) => warnings.push(`${p.id} has no chapters yet (awaiting syllabus source)`));
 

@@ -2,7 +2,7 @@
 // Every query token must appear somewhere in the item's full path text,
 // so "physics 1st notes" or "chemistry reaction" both work.
 
-import { chapterTitle, pathOf } from './model.js?v=202610100204';
+import { chapterTitle, pathOf } from './model.js?v=202610101347';
 
 const norm = (s) => String(s ?? '').toLowerCase().normalize('NFC');
 const RANK = { subject: 0, paper: 1, chapter: 2, topic: 3, section: 4, content: 5 };

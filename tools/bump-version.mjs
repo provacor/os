@@ -33,9 +33,19 @@ for (const file of walk(join(root, 'assets/js'))) {
   }
 }
 
-// The service worker cache name follows the same version, so old caches are dropped.
+// The service worker cache name follows the same version, so old caches are dropped, and
+// its SHELL list (what is downloaded on install for offline use) is regenerated from assets/.
+const rel = (f) => f.slice(root.length + 1).split('\\').join('/');
+const files = (dir, ext) => readdirSync(join(root, dir)).filter((f) => ext.test(f)).map((f) => `${dir}/${f}`);
+const shell = [
+  './', 'index.html', 'manifest.webmanifest', 'icon.svg', `assets/css/app.css?v=${v}`,
+  ...walk(join(root, 'assets/js')).map((f) => `${rel(f)}?v=${v}`).sort(),
+  ...files('assets/img', /\.(jpe?g|png|webp|svg)$/),
+];
 const swPath = join(root, 'sw.js');
-const sw = readFileSync(swPath, 'utf8').replace(/const CACHE = '[^']*';/, `const CACHE = 'hscos-${v}';`);
+const sw = readFileSync(swPath, 'utf8')
+  .replace(/const CACHE = '[^']*';/, `const CACHE = 'hscos-${v}';`)
+  .replace(/const SHELL = \[[^\]]*\];/, `const SHELL = [\n${shell.map((u) => `  '${u}',`).join('\n')}\n];`);
 writeFileSync(swPath, sw);
 edits.push('sw.js');
 
