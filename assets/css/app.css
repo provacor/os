@@ -1536,3 +1536,14 @@ body.hf-on .toast { bottom: calc(var(--nav-h) + 86px + env(safe-area-inset-botto
 .gm-life .btn { margin: 0; min-height: 42px; padding: 0 8px; font-size: .82rem; }
 .gm-life .btn.on { border-color: var(--amber); color: var(--amber); }
 .gm-life .btn:disabled { opacity: .35; }
+.gm-home { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: var(--r-xl); color: var(--text); box-shadow: var(--shadow-2);
+  border: 1px solid color-mix(in srgb, var(--violet) 40%, var(--border));
+  background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--violet) 30%, transparent), transparent 60%),
+              radial-gradient(120% 140% at 100% 100%, color-mix(in srgb, var(--blue) 22%, transparent), transparent 60%), var(--surface); }
+.gm-home-emoji { flex: none; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 18px; font-size: 2rem; background: color-mix(in srgb, var(--violet) 22%, var(--surface-2)); animation: gm-bob 2.2s ease-in-out infinite; }
+.gm-home-body { flex: 1; min-width: 0; display: grid; gap: 5px; }
+.gm-home-body b { font-size: 1.02rem; line-height: 1.35; }
+.gm-home-body small { color: var(--text-2); font-size: .8rem; line-height: 1.45; }
+.gm-home-go { flex: none; display: inline-flex; align-items: center; gap: 2px; padding: 8px 12px; border-radius: 99px; font-weight: 700; font-size: .86rem; background: var(--violet); color: #fff; }
+.gm-home-go .ic { width: 16px; height: 16px; }
+@media (prefers-reduced-motion: reduce) { .gm-home-emoji { animation: none; } }

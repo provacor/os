@@ -1,9 +1,10 @@
 // Game zone screens: a chapter's hub (#/games/<ch>), one topic's games and level map
 // (#/games/<ch>/<topic>), and the play screen (#/play/<ch>/<topic>/<mode>).
 
-import { esc, ring, bar, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141426';
-import { tocOf } from './topic.js?v=202610141426';
-import { MODES, mcqsOf, levelsOf, levelKey, levelUnlocked, starsOf, bestOf, isMastered, playerLevel, xp, soundOn, startGame, bn } from '../games.js?v=202610141426';
+import { icon } from '../icons.js?v=202610141433';
+import { esc, ring, bar, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141433';
+import { tocOf } from './topic.js?v=202610141433';
+import { MODES, mcqsOf, levelsOf, levelKey, levelUnlocked, starsOf, bestOf, isMastered, playerLevel, xp, soundOn, startGame, bn } from '../games.js?v=202610141433';
 
 export const hasGames = (ch) => !!tocOf(ch?.id)?.topics?.some((tp) => mcqsOf(ch.id, tp.id).length);
 
@@ -14,8 +15,63 @@ const stat = (pool) => {
 const crumbsOf = (ch, extra = []) => [[ch.subject.name, `#/s/${ch.subject.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`], ['গেম', `#/games/${ch.id}`], ...extra];
 const soundBtn = () => `<button class="chip-btn tap" data-g-sound aria-pressed="${soundOn()}">${soundOn() ? '🔊 শব্দ চালু' : '🔇 শব্দ বন্ধ'}</button>`;
 
+const totalsOf = (chs) => chs.reduce((acc, ch) => { const s = stat(mcqsOf(ch.id, 'all')); acc.total += s.total; acc.done += s.done; return acc; }, { total: 0, done: 0 });
+const pctOf = (x) => (x.total ? Math.round((x.done / x.total) * 100) : 0);
+const bigCard = (href, title, sub, pct, cls = '') => `<a class="gm-home ${cls} rise tap" href="${href}">
+    <span class="gm-home-emoji" aria-hidden="true">🎮</span>
+    <span class="gm-home-body"><b>${title}</b><small>${sub}</small>${bar(pct, 'bar-thin')}</span>
+    <span class="gm-home-go">খেলো ${icon('chevron')}</span>
+  </a>`;
+
+// Home page: one big card into the game zone.
+export function gamesHomeCard(model) {
+  const chs = model.chapters.filter(hasGames);
+  if (!chs.length) return '';
+  const x = totalsOf(chs);
+  return `<section class="block">${bigCard('#/games', 'গেম জোন — খেলে খেলে MCQ শেখো', `${bn(chs.length)}টি অধ্যায় · ৭ রকম গেম · ${bn(x.total)}টি MCQ-এর ${bn(x.done)}টি আয়ত্তে`, pctOf(x))}</section>`;
+}
+
+// Chapter page: a banner at the top.
+export function gamesBanner(ch) {
+  if (!hasGames(ch)) return '';
+  const x = totalsOf([ch]);
+  return `<section class="block">${bigCard(`#/games/${esc(ch.id)}`, 'গেম জোন — এই অধ্যায়ের MCQ খেলে শেখো', `৭ রকম গেম · ${bn(x.total)}টি MCQ · আয়ত্তে ${bn(pctOf(x))}%`, pctOf(x), 'gm-banner')}</section>`;
+}
+
+// #/games: every chapter that has games.
+function gamesIndex(model) {
+  const chs = model.chapters.filter(hasGames);
+  const x = totalsOf(chs);
+  const groups = model.subjects.map((s) => ({ s, list: chs.filter((ch) => ch.subject === s) })).filter((g) => g.list.length);
+  let i = 0;
+  const html = groups.map(({ s, list }) => `<section class="block"><div class="block-head"><h2>${esc(s.name)}</h2></div><div class="gm-topics">${list.map((ch) => {
+    const c = totalsOf([ch]), pct = pctOf(c);
+    return `<a class="gm-topic tap rise" style="--i:${Math.min(i++, 12)}" href="#/games/${esc(ch.id)}">
+        <span class="gm-topic-no">${chapterNo(ch) != null ? bn(pad2(chapterNo(ch))) : '★'}</span>
+        <span class="gm-topic-body"><b>${esc(ch.name)}</b><small>${esc(ch.paper.name)} · ${bn(c.total)}টি MCQ · আয়ত্তে ${bn(c.done)}</small>${bar(pct, 'bar-thin')}</span>
+        <span class="gm-topic-pct">${pct === 100 ? '🏆' : `${bn(pct)}%`}</span>
+      </a>`;
+  }).join('')}</div></section>`).join('');
+  return {
+    nav: 'home',
+    title: 'গেম জোন',
+    back: '#/',
+    crumbs: [['গেম জোন', '#/games']],
+    html: `<header class="gm-hero rise">
+        <div><p class="eyebrow">সব অধ্যায়</p>
+          <h1>🎮 গেম জোন</h1>
+          <p class="muted small">${bn(chs.length)}টি অধ্যায়ের ${bn(x.total)}টি MCQ-এর ${bn(x.done)}টি আয়ত্তে</p>
+          <div class="chip-row"><span class="chip">🧑‍🚀 খেলোয়াড় লেভেল ${bn(playerLevel())}</span><span class="chip">✨ ${bn(xp())} XP</span>${soundBtn()}</div></div>
+        ${ring(pctOf(x), { size: 76, stroke: 6 })}
+      </header>
+      <p class="muted small gm-help">অধ্যায় বেছে নাও — প্রতিটা টপিকে লেভেল অভিযানসহ ৭ রকম গেম, সবই ওই টপিকের নিজের MCQ দিয়ে।</p>
+      ${html || emptyState({ iconName: 'mcq', title: 'এখনো কোনো অধ্যায়ে MCQ নেই', text: 'MCQ যোগ হলে এখানে গেম খেলা যাবে।' })}`,
+  };
+}
+
 // Chapter hub: every topic that has MCQs.
 export function gamesView(model, chId, tpId) {
+  if (!chId) return gamesIndex(model);
   const ch = model.byId.get(chId);
   if (ch?.level !== 'chapter') return null;
   if (tpId) return topicGames(ch, tpId);

@@ -1,12 +1,13 @@
 // Home: personal dashboard + subject cards. Every number shown is real.
 
-import { icon } from '../icons.js?v=202610141426';
-import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610141426';
-import { todayStats, streak, recentVisits } from '../activity.js?v=202610141426';
-import { progressOf } from '../progress.js?v=202610141426';
-import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610141426';
-import { srsDue } from '../learn.js?v=202610141426';
-import { goalCard, weakTopics } from './practice.js?v=202610141426';
+import { icon } from '../icons.js?v=202610141433';
+import { esc, ring, subjectCard, subjectGlyph, sectionHue, chapterEyebrow } from '../components.js?v=202610141433';
+import { todayStats, streak, recentVisits } from '../activity.js?v=202610141433';
+import { progressOf } from '../progress.js?v=202610141433';
+import { continueTarget, subjectContinue, totals, greeting } from './shared.js?v=202610141433';
+import { srsDue } from '../learn.js?v=202610141433';
+import { goalCard, weakTopics } from './practice.js?v=202610141433';
+import { gamesHomeCard } from './games.js?v=202610141433';
 
 export function homeView(model) {
   const t = totals(model);
@@ -87,5 +88,5 @@ export function homeView(model) {
   ];
   const toolsHtml = `<section class="block"><div class="block-head"><h2>Tools</h2></div>
       <div class="tools">${tools.map(([href, ic, t, d, hue], i) => `<a class="tool hue-${hue} rise" style="--i:${i}" href="${href}"><span class="tool-ic">${icon(ic)}</span><b>${t}</b><small>${d}</small></a>`).join('')}</div></section>`;
-  return { nav: 'home', title: 'Provacor', html: hero + today2 + toolsHtml + recentHtml + subjects + libHtml };
+  return { nav: 'home', title: 'Provacor', html: hero + gamesHomeCard(model) + today2 + toolsHtml + recentHtml + subjects + libHtml };
 }
