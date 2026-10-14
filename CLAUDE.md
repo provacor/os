@@ -94,7 +94,9 @@ chemistry, biology…) without being asked again.
   game sources.
 - The new game zone (`#/arena`, 12 games in `assets/js/arena/`) reads the same `gamedata.js`, so a new
   chapter appears there automatically, topic by topic and for every content type. Also open
-  `#/arena/kingdom/<chapterId>` to check it.
+  `#/arena/chapter/<chapterId>` (that chapter's 12-games page) to check it.
+- The owner wants the 12 games reached from inside each chapter (the chapter page card), not from the
+  home screen. Don't put a 12-games card back on home.
 - Both zones share one learning store (`assets/js/learnstore.js`): mastery is two right answers in a
   row, XP and coins are paid once per question per day, and one-time rewards are claimed by key. Keep
   it that way so replays never pay twice.

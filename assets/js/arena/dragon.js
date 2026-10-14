@@ -2,15 +2,20 @@
 // (and shows the right answer with its explanation). Topics are small enemies, the chapter is a
 // dragon. Difficulty only changes how hard enemies hit — never which answer is right.
 
-import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, chapterById, topicsOf, validSrc, srcChips, chapterList, scopeName, floatText, animOn } from './core.js?v=202610141859';
-import { gameState, claim, saveA } from '../learnstore.js?v=202610141859';
-import { avatarHtml } from './skills.js?v=202610141859';
+import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, chapterById, topicsOf, validSrc, srcChips, chapterList, scopeName, floatText, animOn } from './core.js?v=202610141910';
+import { gameState, claim, saveA } from '../learnstore.js?v=202610141910';
+import { avatarHtml } from './skills.js?v=202610141910';
 
 export const meta = { id: 'dragon', emoji: '🐉', name: 'ড্রাগন যুদ্ধ', desc: 'টার্ন-ভিত্তিক যুদ্ধ — সঠিক উত্তরে আঘাত, ভুলে দানবের পাল্টা আঘাত। প্রতিটা অধ্যায়ের শেষে ড্রাগন!', need: 20 };
 const MONSTERS = ['👺', '🦇', '🐺', '🦂', '🐍', '🕷️', '🧟', '👻', '🦖', '🐊', '🦈', '🦅'];
 const DIFF = [{ id: 0, name: 'সহজ', hit: 12 }, { id: 1, name: 'মাঝারি', hit: 20 }, { id: 2, name: 'কঠিন', hit: 28 }];
 const st = () => gameState('dragon', { defeated: {}, diff: 1 });
 const k = (ch, tp) => `${ch}/${tp}`;
+
+export function chapterInfo(ch) {
+  const tps = topicsOf(ch);
+  return `হারানো ${bn(tps.filter((t) => st().defeated[k(ch, t.id)]).length)}/${bn(tps.length)}${st().defeated[k(ch, 'boss')] ? ' · 🐉✓' : ''}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

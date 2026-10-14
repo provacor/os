@@ -2,8 +2,8 @@
 // chapter's castle is the final stage. A region is won with ≥70% right; stars as in the levels.
 // Story lines are decoration only — every question is the chapter's own.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, masteryPct, validSrc, srcChips, chapterList, scopeName } from './core.js?v=202610141859';
-import { gameState, claim, claimed } from '../learnstore.js?v=202610141859';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, masteryPct, validSrc, srcChips, chapterList, scopeName } from './core.js?v=202610141910';
+import { gameState, claim, claimed } from '../learnstore.js?v=202610141910';
 
 export const meta = { id: 'kingdom', emoji: '🏰', name: 'অধ্যায় রাজ্য', desc: 'প্রতিটা অধ্যায় একটা রাজ্য, প্রতিটা টপিক একটা অঞ্চল — জয় করে করে দুর্গে পৌঁছাও!', need: 0 };
 const st = () => gameState('kingdom', { stars: {}, tried: {} });
@@ -14,6 +14,12 @@ const stagesOf = (ch) => topicsOf(ch);
 export const castleOpen = (ch) => stagesOf(ch).every((tp) => cleared(ch, tp.id));
 export const castleWon = (ch) => cleared(ch, 'castle');
 const unlockedAt = (ch, list, i) => i === 0 || cleared(ch, list[i - 1].id);
+
+// One status line for the chapter's game hub.
+export function chapterInfo(ch) {
+  const list = stagesOf(ch);
+  return `জয় ${bn(list.filter((tp) => cleared(ch, tp.id)).length)}/${bn(list.length)}${castleWon(ch) ? ' · 👑' : ''}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

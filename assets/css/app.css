@@ -1571,7 +1571,7 @@ body.hf-on .toast { bottom: calc(var(--nav-h) + 86px + env(safe-area-inset-botto
 
 /* ---------- new game zone (#/arena) ---------- */
 .arena { position: relative; }
-.arena .chip-btn, .ar-chlinks .chip-btn { min-height: 44px; padding: 0 14px; font-size: .84rem; }
+.arena .chip-btn { min-height: 44px; padding: 0 14px; font-size: .84rem; }
 .arena .gm-src { min-height: 44px; }
 .arena .btn { min-height: 46px; }
 .arena .gm-topic { min-height: 56px; }
@@ -1627,8 +1627,8 @@ body.hf-on .toast { bottom: calc(var(--nav-h) + 86px + env(safe-area-inset-botto
 .ar-gcard.locked { opacity: .62; }
 .ar-gcard.locked .ar-gcard-foot { margin-top: auto; color: var(--muted); font-weight: 600; }
 .ar-home { margin-top: 10px; border-color: color-mix(in srgb, var(--amber) 45%, var(--border)); }
-.ar-chlinks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; }
-.ar-chlinks > span { flex-basis: 100%; }
+.ar-gcard.ch .ar-gcard-foot { margin-top: auto; }
+.ar-gcard-info { min-width: 0; color: var(--text-2); font-size: .74rem; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; }
 .ar-locked { text-align: center; padding: 20px 6px; }
 .ar-locked .ar-hero-emoji { margin: 0 auto 8px; }
 .ar-locked h1 { font-size: 1.3rem; }

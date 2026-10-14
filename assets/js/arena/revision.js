@@ -3,13 +3,19 @@
 // answer and resets after a wrong one), then never-tried ones, then a few mastered ones. Every
 // answer shows its explanation. Also shows the queue, the last 14 days and the weakest topics.
 
-import { esc, bn, poolOf, mixedPool, smartPick, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, topicName } from './core.js?v=202610141859';
-import { gameState, saveA, S, today, addDays, todayCounters, statOf } from '../learnstore.js?v=202610141859';
+import { esc, bn, poolOf, mixedPool, smartPick, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, topicName } from './core.js?v=202610141910';
+import { gameState, saveA, S, today, addDays, todayCounters, statOf } from '../learnstore.js?v=202610141910';
 
 export const meta = { id: 'revision', emoji: '🤖', name: 'স্মার্ট রিভিশন বট', desc: 'আগে ভুল, তারপর আজকের পালা, তারপর নতুন — প্রতিটা উত্তরের সাথে ব্যাখ্যা। বিরতি বাড়ে ১ → ৩ → ৭ → ১৬ → ৩৫ দিন।', need: 0 };
 const SIZES = [5, 10, 20];
 const RANKS = [['⚠️', 'ভুল হয়েছিল, এখনো আয়ত্তে নয়', 'bad'], ['⏰', 'আজ রিভিশনের পালা', 'due'], ['🆕', 'এখনো চেষ্টা হয়নি', 'new'], ['✅', 'আয়ত্তে / পরে আসবে', 'ok']];
 const st = () => gameState('revision', { size: 10 });
+
+export function chapterInfo(ch) {
+  const d = today();
+  const n = poolOf(ch, 'all', validSrc(ch, 'all', 'mcq')).filter((s) => rank(s, d) <= 1).length;
+  return n ? `রিভিশনের অপেক্ষায় ${bn(n)}টি` : 'অপেক্ষায় কিছু নেই';
+}
 
 export function progress() {
   // of everything tried so far, how much is mastered
