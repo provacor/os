@@ -1,17 +1,17 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610141426';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141426';
-import { progressOf } from '../progress.js?v=202610141426';
-import { contentCount, chapterCount } from '../model.js?v=202610141426';
-import { lastVisit } from './shared.js?v=202610141426';
-import { videosBlock } from './videos.js?v=202610141426';
-import { alarmsBlock } from './alarms.js?v=202610141426';
-import { hasFullMapSync } from './mindmap.js?v=202610141426';
-import { conceptsOfChapter } from '../concepts.js?v=202610141426';
-import { tocCard } from './topic.js?v=202610141426';
-import { hasGames } from './games.js?v=202610141426';
-import { offlineOf } from '../learn.js?v=202610141426';
+import { icon } from '../icons.js?v=202610141433';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141433';
+import { progressOf } from '../progress.js?v=202610141433';
+import { contentCount, chapterCount } from '../model.js?v=202610141433';
+import { lastVisit } from './shared.js?v=202610141433';
+import { videosBlock } from './videos.js?v=202610141433';
+import { alarmsBlock } from './alarms.js?v=202610141433';
+import { hasFullMapSync } from './mindmap.js?v=202610141433';
+import { conceptsOfChapter } from '../concepts.js?v=202610141433';
+import { tocCard } from './topic.js?v=202610141433';
+import { gamesBanner } from './games.js?v=202610141433';
+import { offlineOf } from '../learn.js?v=202610141433';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -131,7 +131,7 @@ export function chapterView(model, ch) {
     crumbs: [subjectCrumb(ch.subject), [ch.paper.name, `#/p/${ch.paper.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${ch.id}`]],
     accent: ch.subject.accent,
     visit: { chapterId: ch.id },
-    html: hero + chapterActions(ch, ready) + tocCard(ch) + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
+    html: hero + gamesBanner(ch) + chapterActions(ch, ready) + tocCard(ch) + readyHtml + mindmapCard(ch) + videosBlock(ch) + restHtml + progressHtml + pager,
   };
 }
 
@@ -142,7 +142,6 @@ function chapterActions(ch, ready) {
   const off = offlineOf(ch.id);
   const mb = (b) => String((b / 1048576).toFixed(1)).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
   return `<section class="block"><div class="row-btns ch-actions">
-      ${hasGames(ch) ? `<a class="btn tap gm-entry" href="#/games/${esc(ch.id)}">🎮<span>গেম জোন</span></a>` : ''}
       ${hasMcq ? `<button class="btn tap" data-ex-quick="${esc(ch.id)}">${icon('mcq')}<span>অধ্যায়ের পরীক্ষা</span></button>` : ''}
       <a class="btn tap" href="#/cards/${esc(ch.id)}">${icon('concept')}<span>ফ্ল্যাশকার্ড</span></a>
       ${off

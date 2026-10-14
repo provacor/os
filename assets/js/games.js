@@ -3,10 +3,10 @@
 // A question counts as "mastered" after two right answers in a row; wrong ones come back sooner
 // and also go to the spaced-review list (learn.js).
 
-import { esc } from './components.js?v=202610141426';
-import { itemRef, isMcq, rightIndex, recordAttempt, everWrong } from './learn.js?v=202610141426';
-import { tocOf } from './views/topic.js?v=202610141426';
-import { motionReduced } from './a11y.js?v=202610141426';
+import { esc } from './components.js?v=202610141433';
+import { itemRef, isMcq, rightIndex, recordAttempt, everWrong } from './learn.js?v=202610141433';
+import { tocOf } from './views/topic.js?v=202610141433';
+import { motionReduced } from './a11y.js?v=202610141433';
 
 export const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const shuffle = (a) => {

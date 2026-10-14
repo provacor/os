@@ -1,10 +1,10 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610141426';
-import { esc } from '../components.js?v=202610141426';
-import { themePref } from '../theme.js?v=202610141426';
-import { a11y } from '../a11y.js?v=202610141426';
-import { getProfile } from '../profile.js?v=202610141426';
+import { icon } from '../icons.js?v=202610141433';
+import { esc } from '../components.js?v=202610141433';
+import { themePref } from '../theme.js?v=202610141433';
+import { a11y } from '../a11y.js?v=202610141433';
+import { getProfile } from '../profile.js?v=202610141433';
 
 export function moreView(model) {
   const pref = themePref();
@@ -37,6 +37,7 @@ export function moreView(model) {
     title: 'More',
     html: `<header class="page-title rise"><h1>More</h1></header>
       ${profileRow}
+      <a class="card pf-link rise" href="#/games" style="--i:0"><span class="pf-mini pf-blank a11y-ico" aria-hidden="true">🎮</span><span class="pf-link-text"><b>গেম জোন</b><small class="muted">খেলে খেলে প্রতিটা টপিকের MCQ শেখো · ৭ রকম গেম</small></span>${icon('chevron')}</a>
       ${a11yRow}
       <a class="card pf-link rise" href="#/backup" style="--i:0"><span class="pf-mini pf-blank a11y-ico">${icon('key')}</span><span class="pf-link-text"><b>Backup · ব্যাকআপ ও রিস্টোর</b><small class="muted">পাসওয়ার্ড দিয়ে এনক্রিপ্ট করা ফাইল, ফোন হারালেও তথ্য থাকবে</small></span>${icon('chevron')}</a>
       <section class="card rise" style="--i:1"><h2 class="card-title">${icon('sun')} Appearance</h2><div class="seg">${seg}</div>
