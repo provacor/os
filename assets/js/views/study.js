@@ -1,16 +1,17 @@
 // Subject overview, chapter workspace and the curriculum map (Study tab).
 
-import { icon } from '../icons.js?v=202610101347';
-import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610101347';
-import { progressOf } from '../progress.js?v=202610101347';
-import { contentCount, chapterCount } from '../model.js?v=202610101347';
-import { lastVisit } from './shared.js?v=202610101347';
-import { videosBlock } from './videos.js?v=202610101347';
-import { alarmsBlock } from './alarms.js?v=202610101347';
-import { hasFullMapSync } from './mindmap.js?v=202610101347';
-import { conceptsOfChapter } from '../concepts.js?v=202610101347';
-import { tocCard } from './topic.js?v=202610101347';
-import { offlineOf } from '../learn.js?v=202610101347';
+import { icon } from '../icons.js?v=202610141426';
+import { esc, plural, ring, bar, chapterCard, sectionCard, subjectGlyph, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141426';
+import { progressOf } from '../progress.js?v=202610141426';
+import { contentCount, chapterCount } from '../model.js?v=202610141426';
+import { lastVisit } from './shared.js?v=202610141426';
+import { videosBlock } from './videos.js?v=202610141426';
+import { alarmsBlock } from './alarms.js?v=202610141426';
+import { hasFullMapSync } from './mindmap.js?v=202610141426';
+import { conceptsOfChapter } from '../concepts.js?v=202610141426';
+import { tocCard } from './topic.js?v=202610141426';
+import { hasGames } from './games.js?v=202610141426';
+import { offlineOf } from '../learn.js?v=202610141426';
 
 const subjectCrumb = (s) => [s.name, `#/s/${s.id}`];
 
@@ -141,6 +142,7 @@ function chapterActions(ch, ready) {
   const off = offlineOf(ch.id);
   const mb = (b) => String((b / 1048576).toFixed(1)).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
   return `<section class="block"><div class="row-btns ch-actions">
+      ${hasGames(ch) ? `<a class="btn tap gm-entry" href="#/games/${esc(ch.id)}">🎮<span>গেম জোন</span></a>` : ''}
       ${hasMcq ? `<button class="btn tap" data-ex-quick="${esc(ch.id)}">${icon('mcq')}<span>অধ্যায়ের পরীক্ষা</span></button>` : ''}
       <a class="btn tap" href="#/cards/${esc(ch.id)}">${icon('concept')}<span>ফ্ল্যাশকার্ড</span></a>
       ${off
