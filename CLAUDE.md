@@ -66,6 +66,33 @@ Never mix the subject-specific contents:
      `content/files/physics_2nd_ch07_simulation/physical-optics-lab.html`.
    - If the topic has nothing that can be simulated, skip this step and say so.
 
+### Game Zone (automatic — owner's standing request)
+
+Every chapter's content is also playable in the Game Zone (`#/games`). The owner has asked once for all
+time: whatever can be turned into a game must be. That covers MCQs and also short-answer content
+(ক questions, "এক কথায় প্রকাশ" definitions), concepts, formulas, reactions, tests, mistakes,
+figures and mind maps. Do this for every new chapter and subject (English, math, physics,
+chemistry, biology…) without being asked again.
+
+- Games are generated from the content by `assets/js/gamedata.js`. Nothing is written by hand and
+  nothing is invented: questions, answers and wrong options are all text that already exists in the
+  chapter.
+- To make new content playable, keep the standard item shapes:
+  - `question`+`answer` (ক/খ)
+  - `title`+`body` (concepts)
+  - `formulas`+`symbols` (formula)
+  - `formulas` (reaction)
+  - `steps` (derivation/mechanism/conversion)
+  - `ভুল:`/`সঠিক:` lines (mistakes)
+  - `বিকারক/পরীক্ষা:`/`পর্যবেক্ষণ:`/`সিদ্ধান্ত:` lines (identification)
+  - `figure` (graph/diagram)
+  - mind map nodes with `hint`
+- A chapter that only has notes still gets games from its mind map (its branches become the topics).
+- If a new section type or item shape appears that `gamedata.js` doesn't turn into questions yet,
+  extend `gamedata.js` in the same change, rather than leaving that content out of the games.
+- After shipping content, open `#/games/<chapterId>` and check that the new content shows up as
+  game sources.
+
 ### Shipping
 
 After adding or changing chapter content, run `node tools/build-toc.mjs` to rebuild the topic-wise contents (`content/toc.json`, the সূচিপত্র on each chapter page: every item placed under its topic). Then run `node tools/validate.mjs` (it fails if an item sits under no topic). Open any new lab in headless Chromium and click every tab

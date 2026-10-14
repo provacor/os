@@ -1,12 +1,12 @@
-// Game zone: every game is built from the chapter's own MCQs, topic by topic (content/toc.json),
-// so playing clears exactly the MCQs the app has — nothing is made up.
-// A question counts as "mastered" after two right answers in a row; wrong ones come back sooner
-// and also go to the spaced-review list (learn.js).
+// Game zone engine. The questions come from gamedata.js: the chapter's own MCQs, ক/খ answers,
+// concepts, formulas, reactions, tests, mistakes, figures and mind map — nothing is made up.
+// A question counts as "mastered" after two right answers in a row; wrong ones come back sooner,
+// and wrong MCQs also go to the spaced-review list (learn.js).
 
-import { esc } from './components.js?v=202610141433';
-import { itemRef, isMcq, rightIndex, recordAttempt, everWrong } from './learn.js?v=202610141433';
-import { tocOf } from './views/topic.js?v=202610141433';
-import { motionReduced } from './a11y.js?v=202610141433';
+import { esc } from './components.js?v=202610141451';
+import { recordAttempt, everWrong } from './learn.js?v=202610141451';
+import { questionsOf, recallOf, ordersOf, answersOf, compatible, ansOf } from './gamedata.js?v=202610141451';
+import { motionReduced } from './a11y.js?v=202610141451';
 
 export const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const shuffle = (a) => {
@@ -14,7 +14,6 @@ const shuffle = (a) => {
   for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; }
   return b;
 };
-const KEYS = '১২৩৪';
 const LETTER = 'কখগঘঙ';
 
 // ---------- saved game data (localStorage, so the backup carries it) ----------
@@ -33,10 +32,10 @@ export const playerLevel = () => Math.floor(Math.sqrt(S.xp / 40)) + 1;
 export const soundOn = () => S.sound;
 export function toggleSound() { S.sound = !S.sound; save(); return S.sound; }
 
-function answered(id, ok) {
-  S.m[id] = ok ? Math.min(3, masteryOf(id) + 1) : 0;
+function answered(q, ok) {
+  S.m[q.id] = ok ? Math.min(3, masteryOf(q.id) + 1) : 0;
   save();
-  recordAttempt(id, ok);
+  if (q.src === 'mcq') recordAttempt(q.id, ok);
 }
 function finish(key, score, stars = null) {
   const prev = bestOf(key);
@@ -48,34 +47,36 @@ function finish(key, score, stars = null) {
 }
 
 // ---------- questions ----------
-export function mcqsOf(chId, tpId) {
-  const t = tocOf(chId);
-  if (!t) return [];
-  const ids = tpId === 'all' ? [...t.topics.flatMap((x) => x.items), ...t.general] : t.topics.find((x) => x.id === tpId)?.items ?? [];
-  const seen = new Set();
-  return ids
-    .filter((id) => !seen.has(id) && seen.add(id))
-    .map((id) => itemRef(id)?.it)
-    .filter((it) => isMcq(it) && it.options.length >= 2 && rightIndex(it) >= 0)
-    .sort((a, b) => (a.id < b.id ? -1 : 1));
-}
 export const LEVEL_SIZE = 8;
 export const levelsOf = (pool) => Array.from({ length: Math.ceil(pool.length / LEVEL_SIZE) }, (_, i) => pool.slice(i * LEVEL_SIZE, (i + 1) * LEVEL_SIZE));
-export const levelKey = (ch, tp, n) => `${ch}/${tp}/L${n}`;
-export const levelUnlocked = (ch, tp, n) => n === 1 || starsOf(levelKey(ch, tp, n - 1)) > 0;
+export const levelKey = (ch, tp, n, src = 'mcq') => (src === 'mcq' ? `${ch}/${tp}/L${n}` : `${ch}/${tp}/${src}/L${n}`);
+export const levelUnlocked = (ch, tp, n, src = 'mcq') => n === 1 || starsOf(levelKey(ch, tp, n - 1, src)) > 0;
 
-function makeQ(it) {
-  const r = rightIndex(it);
-  const opts = shuffle(it.options.map((t, k) => ({ t: String(t), ok: k === r })));
-  return { id: it.id, it, q: it.question, opts, right: opts.findIndex((o) => o.ok), exp: it.explanation ?? '' };
+// One playable question: the spec's own options, or its answer plus up to three other answers
+// of the same kind (same topic first, then the chapter) that can't also be right.
+function makeQ(spec, near, chId, maxLen = 0) {
+  let opts;
+  if (spec.opts) opts = spec.opts.map((t, k) => ({ t: String(t), ok: k === spec.right }));
+  else {
+    const picks = [];
+    const cands = [...shuffle(near.filter((s) => s.kind === spec.kind && s.id !== spec.id).map((s) => s.a)), ...shuffle(answersOf(chId, spec.kind))];
+    for (const raw of cands) {
+      if (picks.length >= 3) break;
+      const c = String(raw).trim();
+      if ((maxLen && c.length > maxLen) || !compatible(spec.kind, spec.a, c) || picks.some((p) => !compatible(spec.kind, p, c))) continue;
+      picks.push(c);
+    }
+    opts = [{ t: String(spec.a), ok: true }, ...picks.map((t) => ({ t, ok: false }))];
+  }
+  opts = shuffle(opts);
+  return { id: spec.id, src: spec.src, q: spec.q, figure: spec.figure ?? '', opts, right: opts.findIndex((o) => o.ok), exp: spec.exp ?? '' };
 }
 // Not-yet-mastered and once-wrong questions first, then the rest; refills itself when used up.
-function deck(pool) {
+function deck(pool, mk) {
   let list = [];
-  const refill = () => {
-    list = shuffle(pool).sort((a, b) => (masteryOf(a.id) - (everWrong(a.id) && !isMastered(a.id) ? 0.5 : 0)) - (masteryOf(b.id) - (everWrong(b.id) && !isMastered(b.id) ? 0.5 : 0)));
-  };
-  return { next() { if (!list.length) refill(); return makeQ(list.shift()); } };
+  const weight = (s) => masteryOf(s.id) - (everWrong(s.id) && !isMastered(s.id) ? 0.5 : 0);
+  const refill = () => { list = shuffle(pool).sort((a, b) => weight(a) - weight(b)); };
+  return { next() { if (!list.length) refill(); return mk(list.shift()); } };
 }
 
 // ---------- sound, buzz, confetti ----------
@@ -123,7 +124,7 @@ function floatText(host, text, cls = '') {
 
 // ---------- shared pieces ----------
 const hearts = (n, max = 3) => `<span class="gm-hearts" aria-label="${bn(n)}টি জীবন">${'❤️'.repeat(Math.max(0, n))}${'🤍'.repeat(Math.max(0, max - n))}</span>`;
-const qBox = (q, label = '') => `<div class="gm-q">${label ? `<p class="gm-qn">${label}</p>` : ''}<p class="gm-qt">${esc(q.q)}</p></div>`;
+const qBox = (q, label = '') => `<div class="gm-q">${label ? `<p class="gm-qn">${label}</p>` : ''}${q.figure ? `<div class="gm-fig">${q.figure}</div>` : ''}<p class="gm-qt">${esc(q.q)}</p></div>`;
 const optsHtml = (q, hide = []) => `<div class="gm-opts">${q.opts.map((o, k) => `<button class="opt gm-opt tap" data-g-opt="${k}" ${hide.includes(k) ? 'disabled style="visibility:hidden"' : ''}><span class="opt-key">${LETTER[k]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>`;
 const expHtml = (q, ok) => `<div class="gm-fb ${ok ? 'ok' : 'bad'}" role="status">
     <b>${ok ? '✓ সঠিক!' : `✗ সঠিক উত্তর: ${esc(q.opts[q.right].t)}`}</b>
@@ -168,7 +169,7 @@ function endScreen(el, ctx, r) {
 
 // 1. Level adventure: the topic's MCQs in fixed sets of 8 — finish every level and you've done every MCQ.
 function playLevel(el, ctx) {
-  const items = shuffle(ctx.levelItems).map(makeQ);
+  const items = shuffle(ctx.levelItems).map((s) => ctx.mk(s));
   let i = 0, right = 0, streak = 0;
   const wrong = [];
   const show = () => {
@@ -187,7 +188,7 @@ function playLevel(el, ctx) {
       title: stars ? `লেভেল ${bn(ctx.level)} পার!` : 'আরেকবার চেষ্টা করো',
       emoji: stars === 3 ? '🏆' : stars ? '🎉' : '💪', score: right * 10 + (stars === 3 ? 30 : 0), stars, won: stars > 0, wrong,
       lines: [`${bn(items.length)}টির মধ্যে ${bn(right)}টি সঠিক`, stars ? '' : 'পরের লেভেল খুলতে অন্তত ৭০% সঠিক লাগবে।'].filter(Boolean),
-      nextHref: stars && !last ? `#/play/${ctx.ch}/${ctx.tp}/level-${ctx.level + 1}` : '',
+      nextHref: stars && !last ? `#/play/${ctx.ch}/${ctx.tp}/level-${ctx.level + 1}${ctx.src === 'mcq' ? '' : `.${ctx.src}`}` : '',
     });
   };
   el.onclick = (e) => {
@@ -195,7 +196,7 @@ function playLevel(el, ctx) {
     if (b && !b.disabled) {
       const q = items[i], k = Number(b.dataset.gOpt), ok = k === q.right;
       markOpts(el, q, k);
-      answered(q.id, ok);
+      answered(q, ok);
       if (ok) { right++; streak++; sfx.ok(); floatText(el, streak >= 3 ? `🔥 ${bn(streak)}` : '+১০', 'ok'); setTimeout(next, 750); }
       else { streak = 0; wrong.push(q); sfx.bad(); el.querySelector('.gm-fbbox').innerHTML = expHtml(q, false); }
       return;
@@ -209,7 +210,7 @@ function playLevel(el, ctx) {
 
 // 2. Time race: 60 seconds, combo multiplier, a wrong answer costs 5 seconds.
 function playRush(el, ctx) {
-  const d = deck(ctx.pool);
+  const d = deck(ctx.pool, ctx.mk);
   let q = d.next(), score = 0, streak = 0, best = 0, n = 0, end = Date.now() + 60000, lock = false;
   const wrong = [];
   const mult = () => Math.min(4, 1 + Math.floor(streak / 3));
@@ -238,7 +239,7 @@ function playRush(el, ctx) {
     lock = true; n++;
     const k = Number(b.dataset.gOpt), ok = k === q.right;
     markOpts(el, q, k);
-    answered(q.id, ok);
+    answered(q, ok);
     if (ok) { streak++; best = Math.max(best, streak); score += 10 * mult(); sfx.ok(); floatText(el, `+${bn(10 * mult())}`, 'ok'); }
     else { streak = 0; end -= 5000; wrong.push(q); sfx.bad(); floatText(el, '−৫ সেকেন্ড', 'bad'); }
     setTimeout(() => { lock = false; if (!timer) return; q = d.next(); paint(); }, ok ? 380 : 1100);
@@ -249,7 +250,7 @@ function playRush(el, ctx) {
 
 // 3. True or false: one question with one answer shown — is it the right one? 45 seconds, 3 lives.
 function playTrueFalse(el, ctx) {
-  const d = deck(ctx.pool);
+  const d = deck(ctx.pool, ctx.mk);
   let score = 0, streak = 0, lives = 3, n = 0, end = Date.now() + 45000, cur = null, lock = false, touchX = null;
   const wrong = [];
   const deal = () => {
@@ -284,7 +285,7 @@ function playTrueFalse(el, ctx) {
     const { q, truth } = cur, ok = sayTrue === truth;
     const card = el.querySelector('#gmCard');
     card?.classList.add(ok ? 'ok' : 'bad', sayTrue ? 'fly-r' : 'fly-l');
-    if (truth || !ok) answered(q.id, ok);
+    if (truth || !ok) answered(q, ok);
     if (ok) { streak++; score += 10 + Math.min(20, streak * 2); sfx.ok(); }
     else {
       streak = 0; lives--; wrong.push(q); sfx.bad();
@@ -310,7 +311,7 @@ function playTrueFalse(el, ctx) {
 
 // 4. Balloon pop: the answers float up — pop the right one before it flies away. Faster every level.
 function playBalloon(el, ctx) {
-  const d = deck(ctx.pool);
+  const d = deck(ctx.pool, ctx.mk);
   let score = 0, lives = 3, popped = 0, level = 1, raf = 0, q = null, balloons = [], last = 0, busy = false;
   const wrong = [];
   const speed = () => 38 + (level - 1) * 9; // px per second
@@ -353,7 +354,7 @@ function playBalloon(el, ctx) {
     busy = true;
     cancelAnimationFrame(raf);
     lives--; wrong.push(q); sfx.bad();
-    answered(q.id, false);
+    answered(q, false);
     if (bl) bl.b.classList.add('burst-bad');
     const sky = el.querySelector('#gmSky');
     sky?.insertAdjacentHTML('beforeend', `<p class="gm-sky-msg bad">${bl ? '✗ ভুল বেলুন!' : '🎈 উড়ে গেল!'}<br>✓ ${esc(q.opts[q.right].t)}</p>`);
@@ -373,7 +374,7 @@ function playBalloon(el, ctx) {
     cancelAnimationFrame(raf);
     bl.b.classList.add('burst');
     popped++; score += 10 * level; sfx.pop(); sfx.ok();
-    answered(q.id, true);
+    answered(q, true);
     floatText(el.querySelector('#gmSky'), `+${bn(10 * level)}`, 'ok');
     if (popped % 4 === 0) { level++; setTimeout(() => { sfx.up(); floatText(el.querySelector('#gmSky'), `লেভেল ${bn(level)}! ⚡`, 'up'); }, 200); }
     setTimeout(round, 650);
@@ -385,15 +386,12 @@ function playBalloon(el, ctx) {
 // 5. Match pairs: four questions, four answers — join each question to its answer. Three rounds.
 const BAD_PAIR = /^\s*(i{1,3}v?|iv|[কখগঘ])\s*(,|ও|এবং|\s)\s*(i{1,3}v?|iv|[কখগঘ])|সবগুলো|উপরের|কোনোটিই|কোনটিই/i;
 function playMatch(el, ctx) {
-  const usable = ctx.pool.filter((it) => {
-    const a = String(it.options[rightIndex(it)]).trim();
-    return a.length <= 70 && !BAD_PAIR.test(a);
-  });
+  const usable = ctx.pool;
   if (usable.length < 4) {
     el.innerHTML = `<div class="gm-end"><div class="gm-end-emoji">🧩</div><h2>এই টপিকে জোড়া মেলানোর মতো যথেষ্ট প্রশ্ন নেই</h2><a class="btn tap" href="#/games/${esc(ctx.ch)}/${esc(ctx.tp)}">অন্য গেম খেলো</a></div>`;
     return () => {};
   }
-  const d = deck(usable);
+  const d = deck(usable, ctx.mk);
   let round = 0, score = 0, mistakes = 0, pairs = [], sel = null, t0 = Date.now();
   const missed = new Set();
   const wrong = [];
@@ -430,7 +428,7 @@ function playMatch(el, ctx) {
     if (Number(ab.dataset.gMa) === sel) {
       p.done = true;
       score += missed.has(p.q.id) ? 10 : 25;
-      answered(p.q.id, !missed.has(p.q.id));
+      answered(p.q, !missed.has(p.q.id));
       for (const x of [qbtn, ab]) { x.classList.add('matched'); x.disabled = true; }
       sfx.ok();
       sel = null;
@@ -458,7 +456,7 @@ function playMatch(el, ctx) {
 
 // 6. Boss battle: every right answer hits the topic's monster; a wrong or slow answer costs a life.
 function playBoss(el, ctx) {
-  const d = deck(ctx.pool);
+  const d = deck(ctx.pool, ctx.mk);
   const MAX = 100, PER_Q = 20000;
   let hp = MAX, lives = 3, streak = 0, n = 0, q = null, deadline = 0, timer = null, lock = false, hits = 0;
   const wrong = [];
@@ -481,7 +479,7 @@ function playBoss(el, ctx) {
   const ask = () => { q = d.next(); lock = false; deadline = Date.now() + PER_Q; paint(); };
   const hurt = (pick) => {
     lock = true; n++; streak = 0; lives--; wrong.push(q);
-    answered(q.id, false);
+    answered(q, false);
     markOpts(el, q, pick);
     sfx.bad();
     el.classList.add('gm-hit'); setTimeout(() => el.classList.remove('gm-hit'), 400);
@@ -499,7 +497,7 @@ function playBoss(el, ctx) {
     const k = Number(b.dataset.gOpt);
     if (k !== q.right) return hurt(k);
     lock = true; n++; hits++; streak++;
-    answered(q.id, true);
+    answered(q, true);
     markOpts(el, q, k);
     const dmg = Math.min(35, 15 + (streak - 1) * 5);
     hp -= dmg;
@@ -518,7 +516,7 @@ function playBoss(el, ctx) {
 const LADDER = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 100000];
 const SAFE = [3, 7];
 function playLadder(el, ctx) {
-  const d = deck(ctx.pool);
+  const d = deck(ctx.pool, ctx.mk);
   let step = 0, q = d.next(), hide = [], used = { half: false, skip: false, two: false }, twoArmed = false, lock = false;
   const wrong = [];
   const safeScore = () => { const s = SAFE.filter((i) => i < step).pop(); return s == null ? 0 : LADDER[s]; };
@@ -559,7 +557,7 @@ function playLadder(el, ctx) {
     lock = true;
     markOpts(el, q, k);
     const ok = k === q.right;
-    answered(q.id, ok);
+    answered(q, ok);
     if (!ok) {
       wrong.push(q); sfx.bad();
       el.querySelector('.gm-fbbox').innerHTML = expHtml(q, false).replace('পরের প্রশ্ন →', `ফলাফল দেখো (${bn(safeScore().toLocaleString('en-IN'))})`);
@@ -576,14 +574,117 @@ function playLadder(el, ctx) {
   return () => {};
 }
 
+// 8. Put the steps in order: derivations, mechanisms and multi-step conversions.
+function playOrder(el, ctx) {
+  const list = shuffle(ctx.orders).sort((a, b) => masteryOf(a.id) - masteryOf(b.id)).slice(0, 5);
+  let i = 0, score = 0, perfect = 0, placed = [], left = [], misses = 0, wrongRun = 0;
+  const failed = [];
+  const start = () => {
+    const p = list[i];
+    placed = []; misses = 0; wrongRun = 0;
+    left = shuffle(p.steps.map((t, k) => ({ t, k })));
+    if (left.length > 1 && left.every((x, j) => x.k === j)) left.reverse();
+    paint();
+  };
+  const isNext = (x) => x.k === placed.length || x.t === list[i].steps[placed.length];
+  const paint = (hint = false) => {
+    const p = list[i];
+    el.innerHTML = `<div class="gm-hud"><span>ধাঁধা ${bn(i + 1)}/${bn(list.length)}</span><span class="gm-prog"><i style="width:${(i / list.length) * 100}%"></i></span><span>⭐ ${bn(score)}</span></div>
+      <div class="gm-q"><p class="gm-qn">ধাপগুলো সঠিক ক্রমে একে একে চাপো</p><p class="gm-qt">${esc(p.title)}</p></div>
+      ${placed.length ? `<ol class="gm-order-done">${placed.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>` : ''}
+      <div class="gm-order-left">${left.map((x, j) => `<button class="gm-card tap ${hint && isNext(x) ? 'hint' : ''}" data-g-step="${j}">${esc(x.t)}</button>`).join('')}</div>
+      <div class="gm-fbbox"></div>`;
+  };
+  const over = () => endScreen(el, ctx, {
+    title: 'সব ধাঁধা শেষ!', emoji: '🔢', score, won: perfect >= Math.ceil(list.length / 2),
+    wrong: failed.map((p) => ({ q: p.title, opts: [{ t: p.steps.map((s, k) => `${bn(k + 1)}. ${s}`).join('\n') }], right: 0, exp: p.result })),
+    lines: [`${bn(list.length)}টির মধ্যে ${bn(perfect)}টি একবারও ভুল না করে সাজিয়েছ`],
+  });
+  el.onclick = (e) => {
+    if (e.target.closest('[data-g-again]')) return ctx.again();
+    if (e.target.closest('[data-g-next]')) { i++; return i < list.length ? start() : over(); }
+    const b = e.target.closest('[data-g-step]');
+    if (!b || !left.length) return;
+    const j = Number(b.dataset.gStep), x = left[j];
+    if (!isNext(x)) {
+      misses++; wrongRun++; sfx.bad();
+      b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 400);
+      if (wrongRun >= 2) paint(true);
+      return;
+    }
+    placed.push(list[i].steps[placed.length]);
+    left.splice(j, 1);
+    score += wrongRun ? 3 : 10; wrongRun = 0; sfx.pop();
+    if (left.length) return paint();
+    const p = list[i], ok = misses === 0;
+    answered({ id: p.id, src: 'order' }, ok);
+    if (ok) { perfect++; score += 20; sfx.ok(); } else failed.push(p);
+    paint();
+    el.querySelector('.gm-fbbox').innerHTML = `<div class="gm-fb ${ok ? 'ok' : 'bad'}"><b>${ok ? '✓ একবারেই নিখুঁত!' : `✓ সাজানো হয়েছে (${bn(misses)}টি ভুল চাপ)`}</b>${p.result ? `<p>${esc(p.result)}</p>` : ''}<button class="btn btn-primary tap" data-g-next>${i + 1 < list.length ? 'পরের ধাঁধা →' : 'ফলাফল দেখো'}</button></div>`;
+  };
+  start();
+  return () => {};
+}
+
+// 9. Recall cards: think of the answer, reveal it, and say honestly whether you knew it.
+function playRecall(el, ctx) {
+  const cards = shuffle(ctx.cards).sort((a, b) => masteryOf(a.id) - masteryOf(b.id)).slice(0, 10);
+  const queue = [...cards], again = new Set(), missed = [];
+  let known = 0, score = 0, shown = false, done = 0;
+  const paint = () => {
+    const c = queue[0];
+    el.innerHTML = `<div class="gm-hud"><span>কার্ড ${bn(done + 1)}/${bn(cards.length + again.size)}</span><span class="gm-prog"><i style="width:${(done / (cards.length + again.size)) * 100}%"></i></span><span>✓ ${bn(known)}</span></div>
+      <div class="gm-recall ${shown ? 'open' : ''}"><p class="gm-qn">${shown ? 'মিলিয়ে দেখো — পেরেছিলে?' : 'মনে মনে উত্তরটা বলো, তারপর মিলিয়ে দেখো'}</p><p class="gm-qt">${esc(c.front)}</p>
+        ${shown ? `<div class="gm-back">${esc(c.back)}</div>` : ''}</div>
+      ${shown
+        ? '<div class="gm-tf-btns"><button class="btn tap gm-no" data-g-rc="0">✗ পারিনি</button><button class="btn tap gm-yes" data-g-rc="1">✓ পেরেছি</button></div>'
+        : '<button class="btn btn-primary tap gm-reveal" data-g-show>👀 উত্তর দেখো</button>'}`;
+  };
+  el.onclick = (e) => {
+    if (e.target.closest('[data-g-again]')) return ctx.again();
+    if (e.target.closest('[data-g-show]')) { shown = true; return paint(); }
+    const b = e.target.closest('[data-g-rc]');
+    if (!b || !queue.length) return;
+    const ok = b.dataset.gRc === '1', c = queue.shift();
+    answered({ id: c.id, src: 'recall' }, ok);
+    done++;
+    if (ok) { known++; score += again.has(c.id) ? 5 : 10; sfx.ok(); }
+    else {
+      sfx.bad();
+      if (!again.has(c.id)) { again.add(c.id); queue.push(c); }
+      if (!missed.includes(c)) missed.push(c);
+    }
+    shown = false;
+    if (queue.length) return paint();
+    endScreen(el, ctx, {
+      title: 'কার্ড শেষ!', emoji: '🧠', score, won: missed.length <= cards.length * 0.3,
+      wrong: missed.map((m) => ({ q: m.front, opts: [{ t: m.back }], right: 0, exp: '' })),
+      lines: [`${bn(cards.length)}টি কার্ডের ${bn(cards.length - missed.length)}টি প্রথমবারেই পেরেছ`],
+    });
+  };
+  paint();
+  return () => {};
+}
+
+const fitsBalloon = (s) => String(ansOf(s)).length <= 60 && (!s.opts || s.opts.every((o) => String(o).length <= 60));
+// match needs short, distinct answers and distinct questions ("কোনটি সঠিক?" items all share one question)
+const fitsMatch = (s) => !s.figure && s.src !== 'fix' && String(ansOf(s)).length <= 70 && !BAD_PAIR.test(String(ansOf(s))) && String(s.q).length <= 260;
 export const MODES = [
   { id: 'rush', emoji: '⏱️', name: 'সময়ের দৌড়', desc: '৬০ সেকেন্ডে যত বেশি পারো — পরপর সঠিক হলে কম্বো ×২, ×৩, ×৪!', play: playRush },
-  { id: 'balloon', emoji: '🎈', name: 'বেলুন ফাটাও', desc: 'উত্তরগুলো বেলুন হয়ে উড়ছে — সঠিকটা উড়ে যাওয়ার আগে ফাটাও। লেভেল বাড়লে গতি বাড়ে।', play: playBalloon },
+  { id: 'balloon', emoji: '🎈', name: 'বেলুন ফাটাও', desc: 'উত্তরগুলো বেলুন হয়ে উড়ছে — সঠিকটা উড়ে যাওয়ার আগে ফাটাও। লেভেল বাড়লে গতি বাড়ে।', play: playBalloon, fits: fitsBalloon, maxLen: 60, min: 4 },
   { id: 'boss', emoji: '👾', name: 'দানব যুদ্ধ', desc: 'প্রতিটা সঠিক উত্তরে টপিকের দানবকে আঘাত করো। ২০ সেকেন্ডে উত্তর না দিলে দানব আঘাত করবে!', play: playBoss },
   { id: 'ladder', emoji: '👑', name: 'লাখপতি সিঁড়ি', desc: '১২ ধাপে ১,০০,০০০ পয়েন্ট — ৫০:৫০, পাস আর দুই সুযোগ লাইফলাইন নিয়ে।', play: playLadder },
   { id: 'truefalse', emoji: '✅', name: 'সত্য না মিথ্যা', desc: 'দেখানো উত্তরটা ঠিক না ভুল? সোয়াইপ করে দ্রুত বলো — ৪৫ সেকেন্ড, ৩টি জীবন।', play: playTrueFalse },
-  { id: 'match', emoji: '🧩', name: 'জোড়া মেলাও', desc: 'প্রশ্নের সাথে তার সঠিক উত্তর জোড়া লাগাও — ৩ রাউন্ড, যত দ্রুত তত বোনাস।', play: playMatch },
+  { id: 'match', emoji: '🧩', name: 'জোড়া মেলাও', desc: 'প্রশ্নের সাথে তার সঠিক উত্তর জোড়া লাগাও — ৩ রাউন্ড, যত দ্রুত তত বোনাস।', play: playMatch, fits: fitsMatch, min: 4 },
 ];
+export const SPECIAL = [
+  { id: 'order', emoji: '🔢', name: 'ধাপ সাজাও', desc: 'প্রতিপাদন, মেকানিজম আর রূপান্তরের ধাপগুলো এলোমেলো — সঠিক ক্রমে সাজাও।', play: playOrder },
+  { id: 'recall', emoji: '🧠', name: 'মনে করে দেখো', desc: 'প্রশ্ন দেখে মনে মনে উত্তর দাও, তারপর মিলিয়ে নিজেই বলো পেরেছ কি না — না পারলে আবার আসবে।', play: playRecall },
+];
+// How many questions of a source a mode can use (for the topic page).
+export function modeCount(mode, pool) {
+  return mode.fits ? pool.filter(mode.fits).length : pool.length;
+}
 
 // ---------- running a game ----------
 let stopCurrent = null;
@@ -600,24 +701,41 @@ document.addEventListener('click', (e) => {
   if (on) sfx.ok();
 });
 
+// mode = "<game>" or "<game>.<source>" (no source = MCQ), e.g. "rush", "balloon.term", "level-2.formula", "order", "recall".
+export const parseMode = (mode) => {
+  const [game, src = 'mcq'] = String(mode).split('.');
+  return { game, src, level: Number(/^level-(\d+)$/.exec(game)?.[1] ?? 0) };
+};
+export const modeKey = (ch, tp, game, src) => (src === 'mcq' ? `${ch}/${tp}/${game}` : `${ch}/${tp}/${game}.${src}`);
+
 export function startGame(el, { ch, tp, mode, topicName }) {
   stopGame();
   if (!el) return;
-  const pool = mcqsOf(ch, tp);
+  const { game, src, level } = parseMode(mode);
   const run = () => {
     stopGame();
     el.onclick = el.ontouchstart = el.ontouchend = null;
-    const lv = /^level-(\d+)$/.exec(mode);
-    const base = { ch, tp, pool, topicName, again: run };
-    if (lv) {
-      const levels = levelsOf(pool);
-      const n = Number(lv[1]);
-      if (!levels[n - 1]) return;
-      stopCurrent = playLevel(el, { ...base, key: levelKey(ch, tp, n), level: n, levelCount: levels.length, levelItems: levels[n - 1] });
+    const base = { ch, tp, src, topicName, again: run };
+    const sp = SPECIAL.find((x) => x.id === game);
+    if (sp) {
+      const ctx = { ...base, key: `${ch}/${tp}/${game}`, orders: ordersOf(ch, tp), cards: recallOf(ch, tp) };
+      if ((game === 'order' ? ctx.orders : ctx.cards).length) stopCurrent = sp.play(el, ctx);
+      return;
+    }
+    const m = MODES.find((x) => x.id === game);
+    if (!level && !m) return;
+    let pool = questionsOf(ch, tp, src);
+    if (m?.fits) pool = pool.filter(m.fits);
+    const maxLen = m?.maxLen ?? 0;
+    const mk = (s) => makeQ(s, pool, ch, maxLen);
+    pool = pool.filter((s) => mk(s).opts.length >= 2);
+    if (!pool.length) return;
+    if (level) {
+      const levels = levelsOf(questionsOf(ch, tp, src).filter((s) => pool.includes(s)));
+      if (!levels[level - 1]) return;
+      stopCurrent = playLevel(el, { ...base, pool, mk, key: levelKey(ch, tp, level, src), level, levelCount: levels.length, levelItems: levels[level - 1] });
     } else {
-      const m = MODES.find((x) => x.id === mode);
-      if (!m) return;
-      stopCurrent = m.play(el, { ...base, key: `${ch}/${tp}/${mode}` });
+      stopCurrent = m.play(el, { ...base, pool, mk, key: modeKey(ch, tp, game, src) });
     }
     el.scrollIntoView?.({ block: 'start' });
   };

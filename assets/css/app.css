@@ -1547,3 +1547,24 @@ body.hf-on .toast { bottom: calc(var(--nav-h) + 86px + env(safe-area-inset-botto
 .gm-home-go { flex: none; display: inline-flex; align-items: center; gap: 2px; padding: 8px 12px; border-radius: 99px; font-weight: 700; font-size: .86rem; background: var(--violet); color: #fff; }
 .gm-home-go .ic { width: 16px; height: 16px; }
 @media (prefers-reduced-motion: reduce) { .gm-home-emoji { animation: none; } }
+/* game zone: content types, figures, ordering, recall */
+.gm-srcs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+.gm-src { display: inline-flex; align-items: center; gap: 4px; padding: 7px 11px; border-radius: 99px; border: 1px solid var(--border-2); background: var(--surface); color: var(--text); font-size: .82rem; font-weight: 600; }
+.gm-src small { color: var(--muted); font-weight: 600; }
+.gm-src.on { background: var(--violet); border-color: transparent; color: #fff; }
+.gm-src.on small { color: rgba(255, 255, 255, .8); }
+.gm-src-now { margin: 4px 0 0; }
+.gm-src-line { letter-spacing: 1px; }
+.gm-fig { margin: 0 0 10px; padding: 8px; border-radius: 12px; background: var(--surface-2); color: var(--text); }
+.gm-fig svg { display: block; width: 100%; height: auto; max-height: 260px; }
+.gm-order-done { margin: 0 0 10px; padding: 10px 12px 10px 34px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--green) 40%, var(--border)); background: color-mix(in srgb, var(--green) 8%, var(--surface)); }
+.gm-order-done li { padding: 4px 0; font-size: .86rem; line-height: 1.5; white-space: pre-line; color: var(--text); }
+.gm-order-left { display: grid; gap: 8px; }
+.gm-order-left .gm-card { min-height: 52px; }
+.gm-card.hint { border-color: var(--amber); box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 25%, transparent); animation: pop 1.2s var(--ease) infinite; }
+.gm-recall { padding: 18px 16px; border-radius: 18px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 12px; min-height: 160px; }
+.gm-recall .gm-qt { font-size: 1.08rem; }
+.gm-recall.open { border-color: color-mix(in srgb, var(--violet) 40%, var(--border)); }
+.gm-back { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-2); white-space: pre-line; line-height: 1.65; color: var(--text-2); font-size: .92rem; animation: rise .3s var(--ease-out); }
+.gm-reveal { width: 100%; min-height: 54px; margin: 0; }
+.gm-rv-a { white-space: pre-line; }
