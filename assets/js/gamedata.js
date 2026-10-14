@@ -15,8 +15,8 @@
 //   anything with ≥2 steps      → put the steps in order
 //   mind map                    → hint → topic, node → branch, recall
 
-import { isMcq, rightIndex } from './learn.js?v=202610141451';
-import { tocOf } from './views/topic.js?v=202610141451';
+import { isMcq, rightIndex } from './learn.js?v=202610141859';
+import { tocOf } from './views/topic.js?v=202610141859';
 
 export const SOURCES = [
   { id: 'mcq', emoji: '📝', name: 'MCQ' },
@@ -103,12 +103,12 @@ function build(chId) {
   const topicOf = new Map();
   for (const tp of toc?.topics ?? []) for (const id of tp.items) topicOf.set(id, tp.id);
   const seenQ = new Set(), seenRecall = new Set();
-  const add = (spec, item) => out.specs.push({ ...spec, topic: topicOf.get(item) });
+  const add = (spec, item) => out.specs.push({ ...spec, ch: chId, topic: topicOf.get(item) });
   const addRecall = (id, item, front, back) => {
     const k = norm(front);
     if (!front || !back || seenRecall.has(k)) return;
     seenRecall.add(k);
-    out.recall.push({ id: `${id}~rc`, front, back: String(back), topic: topicOf.get(item) });
+    out.recall.push({ id: `${id}~rc`, ch: chId, front, back: String(back), topic: topicOf.get(item) });
   };
   const addQA = (id, item, q, a) => {
     const k = norm(q);
@@ -125,7 +125,7 @@ function build(chId) {
   };
   const addOrder = (it) => {
     const steps = (it.steps ?? []).map((s) => String(s).trim()).filter(Boolean);
-    if (steps.length >= 2 && steps.length <= 9) out.orders.push({ id: `${it.id}~or`, title: it.title ?? '', steps, result: it.result ?? '', topic: topicOf.get(it.id) });
+    if (steps.length >= 2 && steps.length <= 9) out.orders.push({ id: `${it.id}~or`, ch: chId, title: it.title ?? '', steps, result: it.result ?? '', topic: topicOf.get(it.id) });
   };
 
   const secs = [...ch.sections].sort((x, y) => (ORDER.indexOf(x.type) + 1 || 99) - (ORDER.indexOf(y.type) + 1 || 99));
@@ -226,11 +226,11 @@ function build(chId) {
       const id = `map:${chId}:${path}`;
       if (n.hint && text.length <= 70 && String(n.hint).length <= 320) {
         const where = depth > 1 ? `“${parent.text}” অংশে — ` : '';
-        out.specs.push({ id: `${id}~h`, src: 'map', q: `${where}নিচের কথাটি কোন বিষয়ের?\n${mask(n.hint, text)}`, a: text, kind: depth > 1 ? `map${branch}` : 'mapb', exp: `${text}: ${n.hint}`, topic });
-        out.recall.push({ id: `${id}~rc`, front: depth > 1 ? `${parent.text} › ${text}` : text, back: String(n.hint), topic });
+        out.specs.push({ id: `${id}~h`, ch: chId, src: 'map', q: `${where}নিচের কথাটি কোন বিষয়ের?\n${mask(n.hint, text)}`, a: text, kind: depth > 1 ? `map${branch}` : 'mapb', exp: `${text}: ${n.hint}`, topic });
+        out.recall.push({ id: `${id}~rc`, ch: chId, front: depth > 1 ? `${parent.text} › ${text}` : text, back: String(n.hint), topic });
       }
       if (depth >= 2 && text.length <= 70 && count.get(norm(text)) === 1 && !SUMMARY.test(root.children[branch].text) && !mentionsOther(text, branch)) {
-        out.specs.push({ id: `${id}~b`, src: 'map', q: `“${text}” — এটি কোন অংশের?`, a: String(root.children[branch].text), kind: 'mapbranch', topic });
+        out.specs.push({ id: `${id}~b`, ch: chId, src: 'map', q: `“${text}” — এটি কোন অংশের?`, a: String(root.children[branch].text), kind: 'mapbranch', topic });
       }
     }
   }
@@ -264,4 +264,6 @@ export function hasTopicGames(chId, tpId) {
   return questionsOf(chId, tpId).length + recallOf(chId, tpId).length + ordersOf(chId, tpId).length > 0;
 }
 export const hasGameData = (chId) => hasTopicGames(chId, 'all');
+export const gameChapters = () => (model?.chapters ?? []).filter((ch) => hasGameData(ch.id));
+export const chapterById = (id) => model?.byId.get(id) ?? null;
 export const ansOf = (spec) => (spec.opts ? spec.opts[spec.right] : spec.a);
