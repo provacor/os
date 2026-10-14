@@ -1,0 +1,121 @@
+{
+ "chapterId": "english_2nd_preposition",
+ "source": "english_2nd_preposition_notes_0001",
+ "updated": "2026-10-14",
+ "note": "Built from the chapter's notes PDF.",
+ "root": {
+  "text": "Preposition",
+  "children": [
+   {
+    "text": "সময়, স্থান ও অবস্থান (Time • Place • Position)",
+    "children": [
+     {
+      "text": "at / in / on — সময় (Time)",
+      "hint": "ফাঁকার পরের শব্দটি কী দেখো: সাল/মাস/ঋতু (1971, May, winter) → in; বার/তারিখ (Friday, 21 February) → on; ঘড়ি/মুহূর্ত (5 a.m., noon, night, that moment) → at। 'In time / On time / At times' একেবারে আলাদা অর্থ — মুখস্থ রাখো।",
+      "id": "n.1.1"
+     },
+     {
+      "text": "at / in / on — স্থান (Place)",
+      "hint": "ফাঁকার পরে দেশ/শহর/ঘর/সমুদ্র থাকলে → in; পৃষ্ঠতল (floor, balcony, road, shore, wall) → on; ছোট স্থান/প্রতিষ্ঠান/ ঠিকানা (cafe, college, gate, station) → at।",
+      "id": "n.1.2"
+     },
+     {
+      "text": "since / for / by / till — সময়ের ব্যাপ্তি ও সীমা",
+      "hint": "ফাঁকার পরে নির্দিষ্ট তারিখ/বার → since; কত সময়ের মাপ (3 days, several months, two millennia) → for; 'by the time' বা deadline → by; 'starting from' অর্থে → from/since।",
+      "id": "n.1.3"
+     },
+     {
+      "text": "to / into / through / out of — গতি ও দিক (Motion)",
+      "hint": "ফাঁকার আগে go, come, sail, fly, fall, flow, return জাতীয় গতির verb থাকলে → to / into / through / across। গন্তব্য (school, bed, the south) → to; ভেতরে ঢোকা/রূপান্তর → into।",
+      "id": "n.1.4"
+     },
+     {
+      "text": "অবস্থান ও দিকের Preposition (under, over, around, behind, beyond…)",
+      "hint": "চিত্র-সূত্র: ঘরের ছবিতে — ছাদের ওপর up/over, ঘরের ভেতর in/inside, নিচে below/under/beneath, ফাঁক দিয়ে through, বাইরে outside। ফাঁকার আগে-পরে অবস্থান বা অতিক্রম বোঝালে এই দলে দেখো।",
+      "id": "n.1.5"
+     }
+    ],
+    "id": "n.1"
+   },
+   {
+    "text": "সম্পর্ক ও অর্থ-ভিত্তিক Preposition (by, with, of, from, for, about…)",
+    "children": [
+     {
+      "text": "by / with — কর্তা ও যন্ত্র (Agent • Instrument • Means)",
+      "hint": "ফাঁকার পরের Noun: ব্যক্তি-কর্তা বা মাধ্যম/পথ/V-ing → by; হাতিয়ার/সঙ্গী/ভাব (stick, pen, rope, a smile, us) → with।",
+      "id": "n.2.1"
+     },
+     {
+      "text": "between / among",
+      "hint": "ফাঁকার পরে X and Y (দুটি নাম) থাকলে → between; বহুবচন/দল (young people, internet users, the people of our country) → among। 'relationship/similarity/connection between' সবসময় between।",
+      "id": "n.2.2"
+     },
+     {
+      "text": "of — উপকরণ, মালিকানা, উৎস, অংশ",
+      "hint": "ফাঁকার আগের শব্দ Verb/Adjective না হয়ে সাধারণ Noun হলে (surface, sails, hands, youths) এবং পরের অংশ 'কিসের/কার' উত্তর দিলে → of।",
+      "id": "n.2.3"
+     },
+     {
+      "text": "from — উৎস, শুরু ও পৃথকীকরণ",
+      "hint": "ফাঁকার আগে get, borrow, come, take, receive, protect, suffer বা 'কোথা থেকে' প্রশ্নের উত্তর থাকলে → from।",
+      "id": "n.2.4"
+     },
+     {
+      "text": "for — জন্য, উদ্দেশ্য ও কারণ",
+      "hint": "ফাঁকার পরে purpose (decoration, expressing love, quick profit) বা -ing রূপ 'উদ্দেশ্যে' অর্থে থাকলে → for। 'কত সময়ের জন্য' → for (সময়ের পর্বেও আছে)।",
+      "id": "n.2.5"
+     },
+     {
+      "text": "about / on — বিষয় (Topic)",
+      "hint": "ফাঁকার আগে idea, speech, book, discussion, comments, learn, know, write থাকলে 'কী বিষয়ে' → about / on।",
+      "id": "n.2.6"
+     }
+    ],
+    "id": "n.2"
+   },
+   {
+    "text": "Appropriate Prepositions (Verb • Adjective • Noun-এর পরে)",
+    "children": [
+     {
+      "text": "Verb + Preposition (বিশেষ Verb-এর পরের Preposition)",
+      "hint": "ফাঁকার ঠিক আগে একটি Verb আছে? তাহলে Verb-টিকে তালিকার সঙ্গে মেলাও। না মনে পড়লে অর্থ ভাবো: দূরে সরা/বিরত → from; আকাঙ্ক্ষা → for/after; নির্ভরতা → on; সংযুক্তি/সম্মতি → with / to; শুরুর অর্থহীন কণা (up/down/out/off/away) → phrasal verb।",
+      "id": "n.3.1"
+     },
+     {
+      "text": "Adjective / Participle + Preposition",
+      "hint": "ফাঁকার ঠিক আগে Adjective/Participle (V3) থাকলে তালিকা দেখো। ইংরেজিতে ‘-এ’/‘কে’ অর্থে → to; ‘-কে নিয়ে/…এর’ অর্থে → of; পৃথক/মুক্ত/ভিন্ন → from; দক্ষতা → at; আগ্রহ → in।",
+      "id": "n.3.2"
+     },
+     {
+      "text": "Noun + Preposition",
+      "hint": "ফাঁকার ঠিক আগে Noun থাকলে প্রথমে of ভাবো (আধিক্য/ধরন/অংশ), তারপর অর্থ ধরে: আকাঙ্ক্ষা/ক্ষুধা → for; প্রভাব/জোর → on; সম্পর্ক/ যোগাযোগ → with; প্রবেশ/প্রতিক্রিয়া/সমাধান → to।",
+      "id": "n.3.3"
+     }
+    ],
+    "id": "n.3"
+   },
+   {
+    "text": "Phrasal, Special ও Fixed Expression",
+    "children": [
+     {
+      "text": "Phrasal / Compound Preposition",
+      "hint": "ফাঁকার পরে ইংরেজি সম্পূর্ণ phrase 'a + কারণ/উদ্দেশ্য/বিপরীত' অর্থ দিলে এবং একাধিক শব্দ উত্তর হলে (due to, because of, in order to, out of) → Phrasal।",
+      "id": "n.4.1"
+     },
+     {
+      "text": "অন্য Part of Speech Preposition-এর মতো (without, like, besides, until…",
+      "hint": "ফাঁকার পরে Noun/Pronoun আছে, কিন্তু বাক্যের ভেতরে 'ছাড়া / মতো / ছাড়াও / পর্যন্ত' অর্থ → without / like / besides / until / except।",
+      "id": "n.4.2"
+     },
+     {
+      "text": "Fixed Expression (Idiom) ও to-Infinitive",
+      "hint": "ফাঁকার আগে-পরে এমন কিছু যা Verb/Adjective/Noun-এর appropriate Preposition নয়, কিন্তু একটি জমাট বাক্যাংশ (in vain, at times, such as) গঠন করে → Fixed। 'ফাঁকার পরে সরাসরি V1 আসে' → infinitive 'to'।",
+      "id": "n.4.3"
+     }
+    ],
+    "id": "n.4"
+   }
+  ],
+  "id": "n"
+ }
+}

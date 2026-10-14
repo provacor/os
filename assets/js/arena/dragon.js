@@ -2,9 +2,9 @@
 // (and shows the right answer with its explanation). Topics are small enemies, the chapter is a
 // dragon. Difficulty only changes how hard enemies hit — never which answer is right.
 
-import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, chapterById, topicsOf, validSrc, srcChips, chapterList, scopeName, floatText, animOn } from './core.js?v=202610141910';
-import { gameState, claim, saveA } from '../learnstore.js?v=202610141910';
-import { avatarHtml } from './skills.js?v=202610141910';
+import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, chapterById, topicsOf, validSrc, srcChips, chapterList, scopeName, floatText, animOn } from './core.js?v=202610141937';
+import { gameState, claim, saveA } from '../learnstore.js?v=202610141937';
+import { avatarHtml } from './skills.js?v=202610141937';
 
 export const meta = { id: 'dragon', emoji: '🐉', name: 'ড্রাগন যুদ্ধ', desc: 'টার্ন-ভিত্তিক যুদ্ধ — সঠিক উত্তরে আঘাত, ভুলে দানবের পাল্টা আঘাত। প্রতিটা অধ্যায়ের শেষে ড্রাগন!', need: 20 };
 const MONSTERS = ['👺', '🦇', '🐺', '🦂', '🐍', '🕷️', '🧟', '👻', '🦖', '🐊', '🦈', '🦅'];

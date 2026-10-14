@@ -14,6 +14,34 @@
         "জৈব এসিড, এস্টার ও অ্যামিন",
         "অ্যামাইড, ফেনল, প্যারাসিটামল, গ্লিসারিন, TNT, ডেটল ও পলিমারকরণ"
       ]
+    },
+    "english_2nd_changing_sentences": {
+      "topics": [
+        "পর্ব ১ — Affirmative ↔ Negative",
+        "পর্ব ২ — Assertive → Interrogative",
+        "পর্ব ৩ — Assertive ↔ Imperative",
+        "পর্ব ৪ — Assertive ↔ Exclamatory",
+        "পর্ব ৫ — Degree — Positive · Comparative · Superlative",
+        "পর্ব ৬ — Voice — Active ↔ Passive",
+        "পর্ব ৭ — Simple · Complex · Compound"
+      ]
+    },
+    "english_2nd_preposition": {
+      "topics": [
+        "পর্ব ১ — সময়, স্থান ও অবস্থান (Time • Place • Position)",
+        "পর্ব ২ — সম্পর্ক ও অর্থ-ভিত্তিক Preposition (by, with, of, from, for, about…)",
+        "পর্ব ৩ — Appropriate Prepositions (Verb • Adjective • Noun-এর পরে)",
+        "পর্ব ৪ — Phrasal, Special ও Fixed Expression"
+      ]
+    },
+    "english_2nd_right_form_of_verbs": {
+      "topics": [
+        "পর্ব ক — V-ing, to + V1 ও V1 — Non-finite রূপ",
+        "পর্ব খ — Tense ও Subject-Verb Agreement",
+        "পর্ব গ — Modal, Passive ও Negative",
+        "পর্ব ঘ — Conditional ও Special Structure",
+        "পর্ব ঙ — অতিরিক্ত নিয়ম (উদাহরণসহ)"
+      ]
     }
   }
 }

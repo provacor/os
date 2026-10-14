@@ -1,0 +1,230 @@
+{
+ "chapterId": "english_2nd_right_form_of_verbs",
+ "source": "english_2nd_right_form_of_verbs_notes_0001",
+ "updated": "2026-10-14",
+ "note": "Built from the chapter's notes PDF.",
+ "root": {
+  "text": "Right Form of Verbs",
+  "children": [
+   {
+    "text": "V-ing, to + V1 ও V1 — Non-finite রূপ",
+    "children": [
+     {
+      "text": "Preposition + V-ing (Gerund)",
+      "hint": "Gap-এর ঠিক আগে in, of, for, by, without, about, after, before, besides, instead of, in spite of। এছাড়া adjective + preposition: fond of, capable of, interested in, busy in, proud of, sorry for, keen on, in the habit of।",
+      "id": "n.1.1"
+     },
+     {
+      "text": "to-preposition + V-ing (বিশেষ 'to')",
+      "hint": "Gap-এর আগে to আছে, কিন্তু phrase-টা উপরের তালিকার। পরীক্ষা: to-এর পরে একটা noun বসিয়ে দেখো — বসলে সেটা preposition (look forward to the party) → তাই V-ing।",
+      "id": "n.1.2"
+     },
+     {
+      "text": "কিছু Verb-এর পরে V-ing (Gerund Object)",
+      "hint": "Gap-এর আগে এই verb-গুলোর কোনোটি। বিশেষ করে Would you mind …? এবং cannot help … বোর্ডে বারবার আসে।",
+      "id": "n.1.3"
+     },
+     {
+      "text": "বাক্যের শুরুতে V-ing (Gerund as Subject)",
+      "hint": "Gap বাক্যের প্রথমে, এবং পরে comma নেই — সরাসরি is/means/makes ইত্যাদি main verb আসে।",
+      "id": "n.1.4"
+     },
+     {
+      "text": "Present Participle (V-ing) — একসাথে ঘটা কাজ / বিশেষণ",
+      "hint": "Gap-এর পরে comma ও নতুন subject, অথবা clause-এ আগেই main verb আছে; অর্থ ‘করতে করতে / করে / যা … করছে’।",
+      "id": "n.1.5"
+     },
+     {
+      "text": "to + V1 (Infinitive)",
+      "hint": "‘করার জন্য / করতে’ অর্থ; gap-এর আগে to আছে বা উদ্দেশ্য বোঝায় (They cut trees to make profit)।",
+      "id": "n.1.6"
+     },
+     {
+      "text": "Bare Infinitive (to ছাড়া V1)",
+      "hint": "Gap-এর আগে makes us, made people, helps us, let him ইত্যাদি।",
+      "id": "n.1.7"
+     }
+    ],
+    "id": "n.1"
+   },
+   {
+    "text": "Tense ও Subject-Verb Agreement",
+    "children": [
+     {
+      "text": "Singular Subject → V + s/es (Present Simple)",
+      "hint": "Subject একবচন (Education, It, The poem, Many a student, Life, Research) এবং time clue: always, every day, generally বা সাধারণ সত্য।",
+      "id": "n.2.1"
+     },
+     {
+      "text": "Plural Subject / I / You / We / They → V1 (Present Simple)",
+      "hint": "Subject plural; ‘who/that/which’-এর আগের noun plural কি না দেখো।",
+      "id": "n.2.2"
+     },
+     {
+      "text": "be verb: am / is / are / was / were",
+      "hint": "(be) বন্ধনীতে; subject-এর বচন ও সময় (now/today → present, when I was a child/once upon a time → past)।",
+      "id": "n.2.3"
+     },
+     {
+      "text": "Past Simple (V2) ও used to + V1",
+      "hint": "ago, yesterday, last…, in 1971, once upon a time, one day, then, when I was a child; গল্পের বাকি verb-গুলো past।",
+      "id": "n.2.4"
+     },
+     {
+      "text": "Present Perfect (has/have + V3)",
+      "hint": "already, just, yet, ever, never, recently, lately, since, for (time), so far, till now, this year/century।",
+      "id": "n.2.5"
+     },
+     {
+      "text": "Past Perfect (had + V3) ও Perfect Continuous",
+      "hint": "before, after, already (অতীতে), by the time; ‘for last few days’, ‘till her old age’।",
+      "id": "n.2.6"
+     },
+     {
+      "text": "Continuous Tense (be + V-ing)",
+      "hint": "now, at present, currently, nowadays, day by day, these days, at that time, while।",
+      "id": "n.2.7"
+     },
+     {
+      "text": "Future (will/shall + V1)",
+      "hint": "tomorrow, next, soon, in future, by the end of this decade, Otherwise, we believe…।",
+      "id": "n.2.8"
+     }
+    ],
+    "id": "n.2"
+   },
+   {
+    "text": "Modal, Passive ও Negative",
+    "children": [
+     {
+      "text": "Modal + V1 (can, should, must, may, would…)",
+      "hint": "উপদেশ/দায়িত্ব (we ___ take care) → should/must; ক্ষমতা (nobody ___ maintain) → can; বাক্যে আগে থেকেই can/should/must থাকলে শুধু V1।",
+      "id": "n.3.1"
+     },
+     {
+      "text": "Passive Voice (be + V3)",
+      "hint": "অর্থ ‘করা হয় / হয়েছিল’; gap-এর পরে by, as (regarded as, known as, called) বা object নেই।",
+      "id": "n.3.2"
+     },
+     {
+      "text": "Modal Passive (Modal + be + V3)",
+      "hint": "Subsidies must ___ (give) → কেউ subsidies দেবে, subsidies নিজে দেয় না → must be given।",
+      "id": "n.3.3"
+     },
+     {
+      "text": "Perfect ও Continuous Passive",
+      "hint": "Perfect-এর clue (since, already, for years) + কর্মবাচ্য; বা চলমান + কর্মবাচ্য (are being built)।",
+      "id": "n.3.4"
+     },
+     {
+      "text": "Past Participle (V3) — বিশেষণ / সংক্ষিপ্ত Passive",
+      "hint": "Clause-এ আগেই main verb আছে, gap-এর পরে by/as/in/upon; অর্থ passive।",
+      "id": "n.3.5"
+     },
+     {
+      "text": "Negative: do / does / did + not + V1",
+      "hint": "বন্ধনীতে (not …) থাকলে বা বাক্যে আগে থেকেই do/does/did not আছে।",
+      "id": "n.3.6"
+     }
+    ],
+    "id": "n.3"
+   },
+   {
+    "text": "Conditional ও Special Structure",
+    "children": [
+     {
+      "text": "Conditional Sentence (If / Unless / Had …)",
+      "hint": "বাক্যে if / unless / even if / বাক্যের শুরুতে Had ...।",
+      "id": "n.4.1"
+     },
+     {
+      "text": "Special Structures: It is (high) time • as if • lest • suggest/recomme",
+      "hint": "বাক্যে high time / It is time / as if / as though / lest / recommended that।",
+      "id": "n.4.2"
+     }
+    ],
+    "id": "n.4"
+   },
+   {
+    "text": "অতিরিক্ত নিয়ম (উদাহরণসহ)",
+    "children": [
+     {
+      "text": "প্রশ্নবোধক বাক্য: Do / Does / Wh + Auxiliary",
+      "hint": "Present Simple-এর প্রশ্নে Do/Does + Subject + V1; Wh-প্রশ্নে Wh + Aux (tense অনুযায়ী) + Subject + Verb।",
+      "id": "n.5.1"
+     },
+     {
+      "text": "যেসব Verb Continuous হয় না (Stative verbs)",
+      "hint": "appear, hate, like, feel, see, smell, notice, desire, wish, look, recognize, dislike, hope, remember, consist, belong, know, behave, suppose, agree, consider, trust, forget, imagine, mean, mind, contain, refuse, prefer, seem, taste, remain, sound।",
+      "id": "n.5.2"
+     },
+     {
+      "text": "অতীত অভ্যাসে always / often / regularly",
+      "hint": "অতীতের অভ্যাস বোঝালে এসব শব্দ থাকলেও Past Simple।",
+      "id": "n.5.3"
+     },
+     {
+      "text": "Future Perfect (shall/will have + V3)",
+      "hint": "ভবিষ্যতের নির্দিষ্ট সময়ের মধ্যে কাজ শেষ হয়ে যাবে — by 4 p.m., by the morning, by next year।",
+      "id": "n.5.4"
+     },
+     {
+      "text": "Since-যুক্ত Complex Sentence",
+      "hint": "প্রথম অংশ Present / Present Perfect → since-এর পরের অংশ Past Simple। প্রথম অংশ Past → পরের অংশ Past Perfect।",
+      "id": "n.5.5"
+     },
+     {
+      "text": "No sooner had … than / Scarcely / Hardly had … when",
+      "hint": "প্রথম verb V3 (had-এর পরে), দ্বিতীয় verb V2। No sooner-এর সাথে than, Scarcely/Hardly-এর সাথে when/before।",
+      "id": "n.5.6"
+     },
+     {
+      "text": "Would that / wish / fancy",
+      "hint": "wish/fancy + Subject + V2 • Would that + Subject + could + V1।",
+      "id": "n.5.7"
+     },
+     {
+      "text": "Had better / Had rather / Would rather + V1",
+      "id": "n.5.8"
+     },
+     {
+      "text": "Let / Need / Dare + V1",
+      "hint": "need ও dare negative/প্রশ্নে modal হিসেবে বসলে পরে to ছাড়া V1।",
+      "id": "n.5.9"
+     },
+     {
+      "text": "to be / having + V3",
+      "id": "n.5.10"
+     },
+     {
+      "text": "Causative Verb: have / get / make / help",
+      "hint": "have + বস্তু + V3 • have + ব্যক্তি + V1 • get + বস্তু + V3 • get + ব্যক্তি + to V1 • make + obj + V1 • help + obj + V1 / to V1",
+      "id": "n.5.11"
+     },
+     {
+      "text": "as if / as though — Tense মিল",
+      "hint": "প্রথম অংশ Present → পরের অংশ Past Simple (be → were) • প্রথম অংশ Past → পরের অংশ Past Perfect।",
+      "id": "n.5.12"
+     },
+     {
+      "text": "Indirect Speech: Past reporting verb + next day/week",
+      "hint": "Reporting verb Past হলে এবং next day/week/year থাকলে → would/should + V1।",
+      "id": "n.5.13"
+     },
+     {
+      "text": "than / as well as / more than দিয়ে যুক্ত দুই Clause",
+      "hint": "প্রথম clause Past হলেও দ্বিতীয় clause অর্থ অনুযায়ী যেকোনো tense হতে পারে।",
+      "id": "n.5.14"
+     },
+     {
+      "text": "be + to V1 এবং Wh-word + to V1",
+      "hint": "be verb-এর পরে কর্তব্য/পরিকল্পনা বোঝাতে to V1; know, learn, decide, ask, explain ইত্যাদির পরে wh-word + to V1।",
+      "id": "n.5.15"
+     }
+    ],
+    "id": "n.5"
+   }
+  ],
+  "id": "n"
+ }
+}

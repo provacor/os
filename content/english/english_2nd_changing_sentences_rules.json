@@ -1,0 +1,307 @@
+{
+ "sectionId": "english_2nd_changing_sentences_rules",
+ "updated": "2026-10-14",
+ "items": [
+  {
+   "id": "english_2nd_changing_sentences_rules_0001",
+   "kind": null,
+   "title": "Only / alone → None but · Nothing but · Nowhere but · not more than",
+   "body": "only / alone-এর মানে “শুধু এই-ই, আর কেউ নয়”। Negative-এ একই অর্থ রেখে বলতে হয় “এ ছাড়া কেউ নয়” (None but)। তাই only/alone বাদ যায়, বাক্যের শুরুতে বসে None but / Nothing but / Nowhere but — কী নিয়ে কথা হচ্ছে (ব্যক্তি/বস্তু/স্থান) তার ওপর নির্ভর করে। সংখ্যা বা বয়সে only হলে not more than বসে।\n\nকাঠামো / ফর্মুলা:\nOnly/alone + ব্যক্তি → None but + বাকি অংশ\nOnly + বস্তু → Nothing but • Only + স্থান → Nowhere but\nOnly + সংখ্যা → not more than\n\nধরনগুলো:\n• Only/alone + ব্যক্তি → None but\n• Only + বস্তু → Nothing but\n• Only + স্থান → Nowhere but\n• Only + সংখ্যা/বয়স → not more than",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0002",
+   "kind": null,
+   "title": "must / can / have to → cannot but · cannot help + V- ing",
+   "body": "must মানে “না করে উপায় নেই”। Negative-এ এই ‘উপায় নেই’ ভাবটিকেই বলা হয়: cannot but + V1 (না করে পারি না) বা cannot help + V-ing। মূল verb একই থাকে, শুধু must বদলে যায়। উল্টোদিকে Negative (cannot but) থেকে Affirmative করতে must বসে।\n\nকাঠামো / ফর্মুলা:\nmust/can/have to/has to → cannot but + Vbase বা cannot help + Ving\ncould/had to → could not but + Vbase\n\nধরনগুলো:\n• must → cannot but / cannot help + V-ing\n• cannot but → must (উল্টো — Negative → Affirmative)",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0003",
+   "kind": null,
+   "title": "Every / Everybody / All → There is no … but",
+   "body": "Every / Everybody / Everyone / All বলতে “প্রত্যেকে” বোঝায়। Negative-এ বলতে হয়: “এমন কেউ নেই যে করে না”। তাই There is no বসে, এরপর every/everybody-এর noun/pronoun (one / body / man), তারপর but এবং বাকি অংশ। (Almost everyone থাকলে hardly বসাতে পারো।)\n\nকাঠামো / ফর্মুলা:\nEverybody / Every + noun + verb … → There is no + one/body/noun + but + verb …\n\nধরনগুলো:\n• Every/Everybody/All + noun → There is no + noun + but",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0004",
+   "kind": null,
+   "title": "As soon as → No sooner had … than",
+   "body": "As soon as বলে “যেই … অমনি”। Negative-এ একই অর্থ No sooner had … than … দিয়ে বলা হয় — “… করতে না করতেই …”। প্রথম clause-এর Subject had-এর পরে বসে, verb হয় past participle (V3), তারপর বাকি অংশ, এরপর than এবং দ্বিতীয় clause।\n\nকাঠামো / ফর্মুলা:\nAs soon as + S + V2 + …, S + V2 …\n→ No sooner had + S + V3 + … than + S + V2 …\n\nধরনগুলো:\n• As soon as … → No sooner had + S + V3 … than …",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0005",
+   "kind": null,
+   "title": "Always ↔ Never",
+   "body": "Always মানে “সবসময়”। Negative-এ এর বদলে never (কখনোই না) বসে, আর বাক্যের মূল verb/adjective-টির বিপরীত অর্থের শব্দ বসাতে হয় যাতে অর্থ একই থাকে। উল্টোটা: Negative never থাকলে Affirmative-এ always বসে এবং শব্দটির বিপরীত রূপ আসে।\n\nকাঠামো / ফর্মুলা:\nAlways + verb/adj → Never + বিপরীত শব্দ\n\nধরনগুলো:\n• Always → Never + বিপরীত শব্দ\n• Never → Always (উল্টো)",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0006",
+   "kind": null,
+   "title": "as … as · less … than · more ↔ less",
+   "body": "as … as মানে “সমান”। Negative-এ বলতে হয় “এর চেয়ে কম নয়” — তাই প্রথম as বদলে not less এবং শেষের as বদলে than। আবার more than থাকলে Negative-এ not less than, আর less … than থাকলে not as … as বসে।\n\nকাঠামো / ফর্মুলা:\nS + be + as + adj + as + O → S + be + not less + adj + than + O\nmore than → not less than • Less…than → not as … as\n\nধরনগুলো:\n• as … as → not less … than\n• more / less / not less → বিপরীত তুলনা-শব্দ",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0007",
+   "kind": null,
+   "title": "Very / very much → not + বিপরীত শব্দ + at all",
+   "body": "very মানে “খুব”। Negative-এ বলতে হয় “মোটেই তার উল্টো নয়”। তাই adjective-টির বিপরীত শব্দ বসে, আগে not এবং শেষে at all। অর্থাৎ very difficult → not easy at all; very angry → not at all pleased।\n\nকাঠামো / ফর্মুলা:\nSubject + be/verb + not + antonym … + at all\n\nধরনগুলো:\n• Very + adj → not + antonym + at all",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0008",
+   "kind": null,
+   "title": "Superlative → No other … as … as",
+   "body": "Superlative (সবার সেরা) বাক্য Negative করলে হয় “আর কেউ এর সমান নয়”। তাই No other + (superlative-এর পরের অংশ) + verb + as + Positive adjective + as + আগের Subject।\n\nকাঠামো / ফর্মুলা:\nS + be + the + Superlative + noun → No other + noun + be + as + Positive + as + S\n\nধরনগুলো:\n• the + Superlative → No other + noun + be + as + Positive + as",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0009",
+   "kind": null,
+   "title": "সাধারণ নিয়ম — বিপরীত শব্দ বসিয়ে Negative করা",
+   "body": "বইয়ের সাধারণ নিয়ম: Affirmative বাক্যের মূল শব্দটির বিপরীত শব্দ বসাতে হয় এবং তার আগে not বসাতে হয়; বাকি সব যেমন থাকে। যেমন good → not bad, honest → not dishonest। বিপরীত শব্দ না পেলে Negative Interrogative করা যায় (Universal truth-এর ক্ষেত্রে)।\n\nকাঠামো / ফর্মুলা:\nSubject + be + not + antonym …\nVerb হলে: do/does/did + not + বিপরীত-অর্থের verb\n\nধরনগুলো:\n• Affirmative শব্দের বিপরীত রূপ + not",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0010",
+   "kind": null,
+   "title": "Negative → Affirmative (উল্টো Rule)",
+   "body": "প্রশ্নে যখন Negative বাক্য দিয়ে Affirmative করতে বলা হয়, তখন উপরের Rule গুলো উল্টো করে ভাবো: not + antonym → মূল শব্দ, cannot but → must, never forgotten → always remembered, should not remain untested → should be tested। অর্থ ঠিক রেখে ‘not’ বাদ দিয়ে বিপরীত শব্দটি লিখতে হয়।\n\nকাঠামো / ফর্মুলা:\nnot + বিশেষণ/ক্রিয়ার বিপরীত → মূল শব্দ\nnot … without → only by / only if • should not → should (বিপরীত verb) • never → always\n\nধরনগুলো:\n• not + adj/verb → বিপরীত Affirmative শব্দ\n• not … without / should not / never → Affirmative রূপ",
+   "topic": "পর্ব ১ — Affirmative ↔ Negative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0011",
+   "kind": null,
+   "title": "Affirmative → Negative Interrogative",
+   "body": "বইয়ের নিয়ম: Affirmative বাক্যকে Interrogative করলে তা হয় Negative Interrogative (Isn't …? / Doesn't …?)। প্রথমে Auxiliary verb, তার সঙ্গে n't, তারপর Subject, তারপর বাকি অংশ। Auxiliary না থাকলে tense অনুযায়ী do/does/did বসে এবং মূল verb V1 হয়। শেষে ‘?’ বসে।\n\nকাঠামো / ফর্মুলা:\nAux + n't + Subject + Verb + বাকি অংশ + ? Present → Don't/Doesn't + V1 • Past → Didn't + V1 • be → Isn't/Aren't/Wasn't\n\nধরনগুলো:\n• Be verb (is/am/are/was/were) দিয়ে শুরু\n• do/does/did দিয়ে শুরু (Simple tense)\n• Modal (will/can/shall …) দিয়ে শুরু\n• have/has/had দিয়ে শুরু (Perfect)",
+   "topic": "পর্ব ২ — Assertive → Interrogative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0012",
+   "kind": null,
+   "title": "Negative → Affirmative Interrogative",
+   "body": "Negative বাক্যকে Interrogative করলে হয় Affirmative Interrogative — অর্থাৎ not বাদ যায়। শুধু Auxiliary আগে আনো, Subject বসাও, বাকি অংশ লেখো। (any, ever থাকলে সেগুলোও থাকে।)\n\nকাঠামো / ফর্মুলা:\nAux + Subject + Verb + বাকি অংশ + ? (not বাদ)\n\nধরনগুলো:\n• not বাদ দিয়ে Affirmative প্রশ্ন",
+   "topic": "পর্ব ২ — Assertive → Interrogative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0013",
+   "kind": null,
+   "title": "Nothing / Never → Anything / Ever",
+   "body": "Nothing থাকলে Interrogative-এ anything হয়; Never থাকলে ever হয়। তখন প্রশ্নটি Affirmative আকারে হয় (কারণ nothing/never নিজেই Negative)।\n\nকাঠামো / ফর্মুলা:\nNever → Ever • Nothing → Anything\n\nধরনগুলো:\n• Nothing → Anything (Never → Ever)",
+   "topic": "পর্ব ২ — Assertive → Interrogative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0014",
+   "kind": null,
+   "title": "Everybody / Everyone / All → Who + Negative",
+   "body": "Everybody / everyone / all মানে “সবাই”। Interrogative-এ প্রশ্ন হয় “কে না করে?” — তাই Who + Negative verb। Subject (everybody) বাদ যায়।\n\nকাঠামো / ফর্মুলা:\nEverybody + verb … → Who + do/does not + V1 … ?\n\nধরনগুলো:\n• Everybody → Who + না-বাচক বাক্য",
+   "topic": "পর্ব ২ — Assertive → Interrogative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0015",
+   "kind": null,
+   "title": "Nobody / No one / None → Who + Affirmative",
+   "body": "Nobody / no one / none মানে “কেউ না”। Interrogative-এ প্রশ্ন হয় “কে করে?” — অর্থাৎ Who + Affirmative। Negative চিহ্ন (no) বাদ যায়।\n\nকাঠামো / ফর্মুলা:\nNobody + verb … → Who + verb(s) … ?\n\nধরনগুলো:\n• Nobody → Who + হ্যাঁ-বাচক বাক্য",
+   "topic": "পর্ব ২ — Assertive → Interrogative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0016",
+   "kind": null,
+   "title": "Assertive → Imperative (Let-গঠন)",
+   "body": "বইয়ের নিয়ম: Subject যদি 2nd person না হয় (১ম বা ৩য় person), তাহলে Imperative-এ Let + Subject-এর object form + Vbase বসে। should / must / may বাদ যায়। 1st person বহুবচন হলে Let us।\n\nকাঠামো / ফর্মুলা:\nSubject (1st/3rd person) + should/must + V1 + ext → Let + Subject-এর objective + V1 + ext\n(Negative হলে: Let + object + not + V1)\n\nধরনগুলো:\n• Subject 1st person → Let us / Let me\n• Subject 3rd person → Let + Subject-এর object",
+   "topic": "পর্ব ৩ — Assertive ↔ Imperative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0017",
+   "kind": null,
+   "title": "Imperative → Assertive (উল্টো)",
+   "body": "প্রশ্নে Imperative দিয়ে Assertive করতে বললে Rule উল্টো করো: Let’s / Let us + V1 → We should + V1। Let him + V1 → He should + V1।\n\nকাঠামো / ফর্মুলা:\nLet’s + V1 → We should + V1\nLet him/her + V1 → He/She should + V1\n\nধরনগুলো:\n• Let’s / Let + object → We should / S + should",
+   "topic": "পর্ব ৩ — Assertive ↔ Imperative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0018",
+   "kind": null,
+   "title": "Assertive → Exclamatory (What / How)",
+   "body": "Exclamatory-তে বিস্ময়-আবেগ প্রকাশ পায়। very / great থাকলে: বাক্যে a/an + noun থাকলে What a/an + (adj) + noun + Subject + verb!; a/an না থাকলে (adjective/adverb) How + adj/adv + Subject + verb!। শেষে ‘!’ বসে।\n\nকাঠামো / ফর্মুলা:\nvery/great + a/an + noun → What a/an + adj + noun + S + V !\na/an নেই (adj/adv) → How + adj/adv + S + V !\n\nধরনগুলো:\n• very/great + a/an + noun → What a/an + noun + S + V!\n• very + adj/adv (a/an ছাড়া) → How + adj/adv + S + V!",
+   "topic": "পর্ব ৪ — Assertive ↔ Exclamatory"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0019",
+   "kind": null,
+   "title": "It is a matter of joy/sorrow/shame that … → Hurrah! / Alas! / Fie! / Wow!",
+   "body": "It is a matter of joy / sorrow / shameful / wonder that … থাকলে Exclamatory-তে interjection বসে: joy → Hurrah!, sorrow → Alas!, shame → Fie!, wonder → Wow!; তারপর that-এর পরের অংশ Assertive আকারে লেখো।\n\nকাঠামো / ফর্মুলা:\njoy → Hurrah! • sorrow → Alas! • shame → Fie! • wonder → Wow!\n\nধরনগুলো:\n• It is a matter of sorrow that … → Alas! + বাক্য",
+   "topic": "পর্ব ৪ — Assertive ↔ Exclamatory"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0020",
+   "kind": null,
+   "title": "Exclamatory → Assertive (উল্টো)",
+   "body": "Exclamatory দিয়ে Assertive করতে Rule উল্টো করো: How + adj + S + V! → S + V + very + adj; What a + adj + noun + S + V! → S + V + a very + adj + noun। আবেগ বোঝাতে very / great বসে।\n\nকাঠামো / ফর্মুলা:\nHow + adj/adv + S + V ! → S + V + very + adj/adv What a + (adj) + noun + S + V ! → S + V + a very/great + (adj) + noun\n\nধরনগুলো:\n• What a / How … ! → very + adj সহ Assertive",
+   "topic": "পর্ব ৪ — Assertive ↔ Exclamatory"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0021",
+   "kind": null,
+   "title": "Interrogative (Rhetorical) → Assertive",
+   "body": "Who does not … ?, Isn’t she …?, What though …? — এসব rhetorical প্রশ্নকে Assertive করতে উল্টো Rule: Who does not like peace? → Everybody likes peace.; Isn’t she beautiful? → She is very beautiful.; What though the field be lost? → It does not matter though the field is lost.\n\nকাঠামো / ফর্মুলা:\nWho + not + V → Everybody + V • Who + V → Nobody + not V\nIsn’t + S + adj? → S + be + very + adj\n\nধরনগুলো:\n• প্রশ্নবোধক ভঙ্গি → সরাসরি বক্তব্য",
+   "topic": "পর্ব ৪ — Assertive ↔ Exclamatory"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0022",
+   "kind": null,
+   "title": "Superlative → Positive",
+   "body": "Superlative বাক্যে একজন/একটি জিনিসকে সবার সেরা বলা হয় (the + -est/most বা one of the + -est/most)। Positive করতে একই অর্থ রেখে উল্টো দিক থেকে বলতে হয় — “অন্য কেউই তার মতো নয়” (No other) অথবা “খুব কম কেউ তার মতো” (Very few)। এজন্য বাক্যের অংশ ভেঙে নতুন করে সাজাতে হয়: আগের Subject শেষে চলে যায় এবং as + Positive adjective + as বসে।\n\nকাঠামো / ফর্মুলা:\nthe + Sup → No other + noun + be + as + Positive + as + Subject\none of the + Sup + plural → Very few + plural noun + are/were + as + Positive + as + Subject\n\nধরনগুলো:\n• asone of the + Superlative + plural noun → Very few … as …\n• …theas + Superlative + singular noun → No other … as",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0023",
+   "kind": null,
+   "title": "Superlative → Comparative",
+   "body": "Superlative-এ বলা হয় “সবার চেয়ে সেরা”। Comparative-এ একই কথা তুলনা দিয়ে বলতে হয়: “অন্য যেকোনোটির চেয়ে বেশি”। the থাকলে “যেকোনো একটির চেয়ে” (than any other); one of the থাকলে “অধিকাংশ অন্যদের চেয়ে” (than most other)। Subject ঠিক থাকে, শুধু adjective-টি Comparative (-er / more) হয়।\n\nকাঠামো / ফর্মুলা:\nSubject + verb + Comparative + than any other + singular noun + বাকি অংশ\nSubject + verb + Comparative + than most other + plural noun + বাকি অংশ\n\nধরনগুলো:\n• the + Superlative → Comparative + than any other + singular noun\n• pluralone ofnounthe + Superlative + plural → Comparative + than most other +",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0024",
+   "kind": null,
+   "title": "Comparative → Positive",
+   "body": "Comparative-এর than থাকলে Positive-এ as … as হয়, আর বাক্যের হ্যাঁ/না উল্টে যায়। কারণ “A, B-র চেয়ে বেশি” মানে “B, A-র সমান নয়”। তাই Subject-দুটি জায়গা বদলায়, Comparative adjective-টি Positive হয় এবং not বসে। than any other থাকলে বাক্যটি আসলে Superlative-এর মতো — তখন No other গঠন হয়।\n\nকাঠামো / ফর্মুলা:\nA + be + Comp + than + B → B + be + not as/so + Positive + as + A\n… Comp + than any other + noun → No other + noun + be + as + Positive + as + Subject\n\nধরনগুলো:\n• Comparative + than any/all other → No other … as … as\n• A … than B → B … not as/so … as A",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0025",
+   "kind": null,
+   "title": "Comparative → Superlative",
+   "body": "“অন্য সবার চেয়ে” (than all other) মানেই সবার সেরা। Superlative-এ তাই the + -est/most বসে এবং than all other বদলে of all হয়। বই-এর বিশেষ নিয়ম: Comparative-এ all other থাকলে Superlative-এ of all বসে। যদি any other থাকত তবে the …est + বাকি অংশ হতো; most other থাকলে one of the।\n\nকাঠামো / ফর্মুলা:\nSubject + verb + the + Superlative + of all + plural noun\n(than any other → the + Sup; than most other → one of the + Sup + plural)\n\nধরনগুলো:\n• pluralComparative + than all other + plural → the + Superlative + of all +",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0026",
+   "kind": null,
+   "title": "Positive → Comparative",
+   "body": "Very few … as … as-এর মানে “প্রায় কেউই এর মতো নয়” — অর্থাৎ এটি অধিকাংশের চেয়ে বেশি। তাই Comparative-এ than most other বসে। আর সাধারণ as … as বাক্যকে Comparative করতে হলে not … than (বা negative হলে affirmative) গঠন লাগে এবং দুই Subject জায়গা বদলায়: “Rahim is as good as Karim” → “Karim is not better than Rahim”।\n\nকাঠামো / ফর্মুলা:\nVery few + plural noun + are + as + Pos + as + S → S + be + Comp + than most other + plural noun\nS1 + be + as + Pos + as + S2 → S2 + be + not + Comp + than + S1\nS1 + be + not as + Pos + as + S2 → S2 + be + Comp + than + S1\n\nধরনগুলো:\n• pluralVery few … as … as → Comparative + than most other +\n• as … as / not as … as → Comparative (হ্যাঁ-না উল্টে)",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0027",
+   "kind": null,
+   "title": "Positive → Superlative",
+   "body": "Very few … as … as মানে “প্রায় কেউই সমান নয়” — অর্থাৎ সে সেরাদের একজন। Superlative-এ তাই one of the + - est/most + plural noun হয়। Subject প্রথমে চলে আসে এবং Very few + as…as পুরো বাদ যায়। No other … as … as থাকলে বদলে the + Superlative হতো।\n\nকাঠামো / ফর্মুলা:\nSubject + verb + one of the + Superlative + plural noun + বাকি অংশ\n(No other … as … as → Subject + verb + the + Superlative + singular noun)\n\nধরনগুলো:\n• SuperlativeVery few ++pluralplural… as … as → Subject + one of the +",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0028",
+   "kind": null,
+   "title": "বিশেষ ও ব্যতিক্রমী প্রশ্ন (সোর্সে degree-চিহ্ন স্পষ্ট নয়)",
+   "body": "এই চারটি প্রশ্নে বাক্যে স্পষ্ট degree-চিহ্ন (than / as…as / the …est) নেই অথবা নির্দেশনার সঙ্গে বাক্য মেলে না। যেমন Q১২(c)-তে ‘a revolutionary step’ (Positive চাওয়া হয়েছে), Q২৩(b)-তে ‘at least as great as’, Q৩৭(c)-তে ‘more … and …’ (than নেই), Q৯২(e)-তে ‘at least 80 francs’ (Comparative)। তাই এখানে নিজে উত্তর বানানো হয়নি।\n\nকাঠামো / ফর্মুলা:\nসোর্স-বইয়ে এই বাক্যগুলোর উত্তর/Rule আলাদা করে দেওয়া নেই। প্রশ্নের\nধরনের কাছাকাছি Rule: Rule ১ (Superlative → Positive) ও Rule ৩ (Comparative → Positive)।\n\nধরনগুলো:\n• বইয়ের Rule-এর সঙ্গে সরাসরি মেলে না — শিক্ষকের সঙ্গে মিলিয়ে নাও\n• বইয়ের Rule-এর সঙ্গে সরাসরি মেলে না — শিক্ষকের সঙ্গে মিলিয়ে নাও (বাক্যটি আগে থেকেই Positive degree-তে আছে — বই-এর প্রশ্নে অসঙ্গতি; কোনো পরিবর্তন লাগে না।)",
+   "topic": "পর্ব ৫ — Degree — Positive · Comparative · Superlative"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0029",
+   "kind": null,
+   "title": "Assertive: Active → Passive",
+   "body": "বইয়ের নিয়ম: ১) Active-এর Object → Passive-এর Subject; ২) Auxiliary (AV) বদলে যায়; ৩) Principal verb (PV) → V3; ৪) Active-এর Subject → Passive-এর by + Object। Auxiliary-র ধরন: Be verb / Be + being / Have + been / Modal + be।\n\nকাঠামো / ফর্মুলা:\nActive: Subject + AV + PV + Object\nPassive: Object-এর Subject + AV + V3 + by + Subject-এর Object\n\nধরনগুলো:\n• Simple tense (V1 / V2) → be + V3\n• Continuous (be + V-ing) → be + being + V3\n• Perfect (have + V3) → have + been + V3\n• Modal (can/may/must/should) → Modal + be + V3",
+   "topic": "পর্ব ৬ — Voice — Active ↔ Passive"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0030",
+   "kind": null,
+   "title": "Interrogative: Active → Passive",
+   "body": "Interrogative বাক্যে প্রথমে Auxiliary বসে। Passive-এ Active-এর Object হয় Subject; Auxiliary বদলে be-form আসে; verb হয় V3। Who দিয়ে শুরু হলে Passive-এ By whom; Whom দিয়ে শুরু হলে Passive-এ Who।\n\nকাঠামো / ফর্মুলা:\nActive: Av + S + Pv + O ? → Passive: Av + O + V3 + by + S ?\nWho + V + O → By whom + Av + O + V3 ? • Whom + Av + S + V → Who + Av + V3 + by S ?\n\nধরনগুলো:\n• Aux + S + V + O ? → Aux + O + V3 + by S ?\n• Who / Whom দিয়ে শুরু → By whom / Who",
+   "topic": "পর্ব ৬ — Voice — Active ↔ Passive"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0031",
+   "kind": null,
+   "title": "Special Rules (বিশেষ নিয়ম)",
+   "body": "বইয়ের বিশেষ নিয়ম: ০১ দুটি Object থাকলে যেকোনো একটি Subject; Object + Complement থাকলে ব্যক্তিবাচক Object Subject। ০৩ Present participle Main verb-এর পরে বসে। ০৪ Quasi-passive: Subject + be + V3 + adjective। ০৫ help/make/let/see/hear-এর পর Active-এ to নেই, Passive-এ to বসে। ০৬ কিছু verb-এর পর by নয়, অন্য preposition (known to, surprised at, filled with, seized with)। ০৭ Complex/Compound-এ উভয় clause-এর voice বদলাতে হয়; “সাধারণ উক্তি”-তে It is known that…।\n\nকাঠামো / ফর্মুলা:\n০১: I gave him a book. → He was given a book by me.\n০৩: I saw him reading a book. → He was seen reading a book by me.\n০৪: Honey tastes sweet. → Honey is tasted sweet.\n০৫: I made him weep. → He was made to weep by me.\n০৬: I know the boy. → The boy is known to me. • Panic seized the writer. → The writer was seized with panic.\n\nধরনগুলো:\n• দুটি Object / Object + Complement\n• Present participle থাকলে\n• Quasi-passive (half-passive) verb\n• help, make, let, see, hear … + to\n• by ছাড়া অন্য preposition (known to, seized with …)\n• Complex / Compound বাক্য (that-clause)",
+   "topic": "পর্ব ৬ — Voice — Active ↔ Passive"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0032",
+   "kind": null,
+   "title": "Passive → Active",
+   "body": "বইয়ের নিয়ম: ১) by-এর পরের Object → Active-এর Subject; ২) মূল verb-এর ঠিক আগের be verb বাদ; ৩) মূল verb tense অনুযায়ী (V1/V2/V3/Ving); ৪) Passive-এর Subject → Active-এর Object; ৫) বাকি অংশ। by-যোগে object না থাকলে sense বুঝে Subject আনো (Someone / People / They / We)।\n\nকাঠামো / ফর্মুলা:\nPassive Subject + be + V3 + by O → O + V(tense অনুযায়ী) + Subject\nBe + V3 → V1/V2 • Have been + V3 →\nhave/has/had + V3 • Modal + be + V3 → Modal + V1\n\nধরনগুলো:\n• Simple (is/am/are/was/were + V3)\n• Perfect (have/has/had been + V3)\n• Modal + be + V3",
+   "topic": "পর্ব ৬ — Voice — Active ↔ Passive"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0033",
+   "kind": null,
+   "title": "Though / Although ↔ In spite of ↔ but",
+   "body": "বৈপরীত্য (যদিও … তবুও) বোঝালে তিন রূপ: Simple-এ In spite of / Despite + (noun / V-ing); Complex-এ Though / Although + clause; Compound-এ but দিয়ে দুটি স্বাধীন বাক্য। Complex ↔ Compound-এ Though বাদ দিয়ে but বসাও (এবং উল্টো)।\n\nকাঠামো / ফর্মুলা:\nS: In spite of his being rich, he is unhappy.\nCx: Though he is rich, he is unhappy.\nCd: He is rich but he is unhappy.\n\nধরনগুলো:\n• Simple — In spite of / Despite + noun/V-ing\n• Complex — Though / Although + S + V …, S + V …\n• Compound — …, but …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0034",
+   "kind": null,
+   "title": "As / Since / Because ↔ Because of ↔ and so",
+   "body": "কারণ বোঝালে: Simple-এ Because of / On account of / Owing to / V-ing / Being; Complex-এ As / Since / Because + clause; Compound-এ … and so …। Compound-এ কারণের বাক্য আগে, ফলের বাক্য পরে।\n\nকাঠামো / ফর্মুলা:\nS: He could not go to school because of his illness.\nCx: He could not go to school because he was ill.\nCd: He was ill and so he could not go to school.\n\nধরনগুলো:\n• Simple — Because of / On account of / Owing to / Due to / V-ing / Being\n• Complex — As / Since / Because + S + V …, S + V …\n• Compound — …, and so …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0035",
+   "kind": null,
+   "title": "If (affirmative) ↔ By + V-ing ↔ and",
+   "body": "শর্ত (ইতিবাচক) বোঝালে: Simple-এ By + V-ing বা In case of; Complex-এ If + S + V; Compound-এ PC and PC (প্রথম বাক্য Imperative আকারে)।\n\nকাঠামো / ফর্মুলা:\nS: By working hard, you can shine in life.\nCx: If you work hard, you can shine in life.\nCd: Work hard and you can shine in life.\n\nধরনগুলো:\n• Simple — By + V-ing, S + V …\n• Complex — If + S + V (aff), S + V …\n• Compound — PC and PC",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0036",
+   "kind": null,
+   "title": "If … not / Unless ↔ Without + V-ing ↔ or",
+   "body": "নেতিবাচক শর্ত বোঝালে: Simple-এ Without + V-ing; Complex-এ If … not / Unless; Compound-এ … or … (প্রথম বাক্য Imperative)।\n\nকাঠামো / ফর্মুলা:\nS: Without reading book attentively, you will not pass.\nCx: If you do not read book attentively, you will not pass.\nCd: Read book attentively or you will not pass.\n\nধরনগুলো:\n• Simple — Without + V-ing / In case of (negative)\n• Complex — If + S + not … / Unless …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0037",
+   "kind": null,
+   "title": "Too … to ↔ So … that … not ↔ Very … and so",
+   "body": "পরিণতি বোঝালে: Too … to (নেতিবাচক অর্থ) = So … that … cannot = Very … and so … cannot। Enough … to (ইতিবাচক) = So … that … can = Very … and so … can।\n\nকাঠামো / ফর্মুলা:\nS: The load is too heavy for him to carry.\nCx: The load is so heavy that he cannot carry it.\nCd: The load is very heavy and so he cannot carry it.\n\nধরনগুলো:\n• Simple — Too + adj + to / Enough … to\n• Complex — So + adj + that (aff/neg)\n• Compound — Very … and so …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0038",
+   "kind": null,
+   "title": "To / In order to ↔ So that ↔ and so",
+   "body": "উদ্দেশ্য বোঝালে: Simple-এ To / In order to / With a view to; Complex-এ So that / In order that + clause (can/could/may); Compound-এ … and so …।\n\nকাঠামো / ফর্মুলা:\nS: Della sold her hair to buy a gift for Jim.\nCx: Della sold her hair so that she could buy a gift for Jim.\nCd: Della sold her hair and so she could buy a gift for Jim.\n\nধরনগুলো:\n• Simple — To + V1 / In order to + V1 / With a view to + V-ing\n• Complex — So that / In order that + S + can/could …\n• Compound — …, and so …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0039",
+   "kind": null,
+   "title": "Besides · While · Not only … but also",
+   "body": "অতিরিক্ত/বৈপরীত্য: Simple-এ Besides + V-ing; Complex-এ While + S + V; Compound-এ not only … but also …। While কখনো ‘যেখানে/অথচ’ অর্থে but বসে।\n\nকাঠামো / ফর্মুলা:\nS: Besides being a good student, he is a good player.\nCx: While he is a good student, he is a good player.\nCd: He is not only a good student but also a good player.\n\nধরনগুলো:\n• Simple — Besides + V-ing / noun\n• Complex — While + S + V …, S + V …\n• Compound — not only … but also …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0040",
+   "kind": null,
+   "title": "Immediately after · On + V-ing ↔ As soon as ↔ and at once",
+   "body": "যেই … অমনি বোঝালে: Simple-এ Immediately after / On + V-ing; Complex-এ As soon as / Whenever / No sooner had … than; Compound-এ … and at once …।\n\nকাঠামো / ফর্মুলা:\nS: Immediately after seeing the police, the thief ran away.\nCx: As soon as the thief saw the police, he ran away.\nCd: The thief saw the police and at once he ran away.\n\nধরনগুলো:\n• Simple — Immediately after / Just after / On + V-ing\n• Complex — As soon as / No sooner had … than\n• Compound — …, and at once …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0041",
+   "kind": null,
+   "title": "When · At the time of · Preposition + noun (সময়)",
+   "body": "সময় বোঝালে: Simple-এ At the time of / At the age of / Preposition + noun; Complex-এ When + clause; Compound-এ … and … (দুটি স্বাধীন বাক্য)। বই-এর শর্টকাট চার্ট : Preposition + Noun → When → and।\n\nকাঠামো / ফর্মুলা:\nS: At the age of 17, he was sent for studies.\nCx: When he was 17 years old, he was sent for studies.\nCd: He was 17 years old and he was sent for studies.\n\nধরনগুলো:\n• V-ingSimple+ noun— At the time of / At the age of / On / In / After +\n• Complex — When / After / While + S + V …\n• Compound — …, and …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0042",
+   "kind": null,
+   "title": "Relative Pronoun · Adjective · Participle · and",
+   "body": "বইয়ের নিয়ম ১০–১৫: Simple: determiner + adjective + noun (বা participle); Complex: noun + who/which/that + be verb + adj; Compound: noun + and + Sub + be verb + adj। নিয়ম ১৪: The + adjective ↔ Those who + be + adj ↔ They are … and …। নিয়ম ১৫: Health is wealth ↔ It is health which is wealth ↔ It is health and wealth।\n\nকাঠামো / ফর্মুলা:\nS: Rahim saw a colorful picture.\nCx: Rahim saw a picture which was colorful.\nCd: Rahim saw a picture and it was colorful.\n\nধরনগুলো:\n• (সংক্ষিপ্তSimpleরূপ)— Adjective / Participle / V-ing\n• adj/verbComplex…— who / which / that + be +\n• Compound — …, and + S + be + adj …",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  },
+  {
+   "id": "english_2nd_changing_sentences_rules_0043",
+   "kind": null,
+   "title": "Noun clause · Noun phrase · বিবিধ (that-clause, What, It is…that, the reason why)",
+   "body": "Noun clause ↔ Noun phrase: He confessed that he was guilty ↔ He confessed his guilt। নিয়ম ১৬: Our freedom fighters showed dedication… ↔ What our freedom fighters showed was dedication… ↔ …showed something … and it was dedication। অন্যান্য: It is unfortunate that … ↔ Unfortunately …; The reason of … ↔ … why …।\n\nকাঠামো / ফর্মুলা:\nS: He confessed his guilt.\nCx: He confessed that he was guilty.\nCd: He was guilty and he confessed it.\n\nধরনগুলো:\n• Simple — noun/phrase/infinitive-এ সংক্ষিপ্ত রূপ\n• …Complexclause — that / what / how / where / why\n• Compound — …, and + (পৃথক বাক্য)",
+   "topic": "পর্ব ৭ — Simple · Complex · Compound"
+  }
+ ]
+}
