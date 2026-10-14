@@ -1,8 +1,8 @@
 // Study alarms block, shown at the bottom of the Study tab.
 
-import { icon } from '../icons.js?v=202610141910';
-import { esc } from '../components.js?v=202610141910';
-import { listAlarms, keepAwake, leftText, leftPct, clockText, durationText, MAX_ALARMS } from '../alarms.js?v=202610141910';
+import { icon } from '../icons.js?v=202610141937';
+import { esc } from '../components.js?v=202610141937';
+import { listAlarms, keepAwake, leftText, leftPct, clockText, durationText, MAX_ALARMS } from '../alarms.js?v=202610141937';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const QUICK = [[30, '৩০ মিনিট'], [60, '১ ঘণ্টা'], [90, '১.৫ ঘণ্টা'], [120, '২ ঘণ্টা'], [180, '৩ ঘণ্টা']];

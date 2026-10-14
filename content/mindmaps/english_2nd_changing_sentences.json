@@ -1,0 +1,269 @@
+{
+ "chapterId": "english_2nd_changing_sentences",
+ "source": "english_2nd_changing_sentences_notes_0001",
+ "updated": "2026-10-14",
+ "note": "Built from the chapter's notes PDF.",
+ "root": {
+  "text": "Changing Sentences",
+  "children": [
+   {
+    "text": "Affirmative ↔ Negative",
+    "children": [
+     {
+      "text": "Only / alone → None but · Nothing but · Nowhere but · not more than",
+      "hint": "বাক্যে only / alone দেখলেই এই Rule। শব্দটি কার/কীসের আগে তা দেখো: ব্যক্তি → None but, বস্তু → Nothing but, স্থান → Nowhere but, সংখ্যা → not more than।",
+      "id": "n.1.1"
+     },
+     {
+      "text": "must / can / have to → cannot but · cannot help + V- ing",
+      "hint": "বাক্যে must আছে? → cannot but (verb ঠিক থাকে) অথবা cannot help + ing (verb-এ ing)। Negative-এ cannot but থাকলে Affirmative-এ must।",
+      "id": "n.1.2"
+     },
+     {
+      "text": "Every / Everybody / All → There is no … but",
+      "hint": "বাক্যের Subject Every… / Everybody / Everyone / All হলে এই Rule। There is no দিয়ে শুরু, মাঝে but।",
+      "id": "n.1.3"
+     },
+     {
+      "text": "As soon as → No sooner had … than",
+      "hint": "As soon as দেখলেই → No sooner had। প্রথম অংশে V3, দ্বিতীয় অংশে V2 (যেমন ছিল)। মাঝখানে than (then নয়)।",
+      "id": "n.1.4"
+     },
+     {
+      "text": "Always ↔ Never",
+      "hint": "always আছে? → never + antonym। never … forgotten থাকলে → always + remembered।",
+      "id": "n.1.5"
+     },
+     {
+      "text": "as … as · less … than · more ↔ less",
+      "hint": "as … as দেখলে → not less … than; more than → not less than; less … than → not as … as।",
+      "id": "n.1.6"
+     },
+     {
+      "text": "Very / very much → not + বিপরীত শব্দ + at all",
+      "hint": "very / very much দেখলে → not + antonym + at all। adjective-টির উল্টো শব্দ মনে রাখো: difficult↔easy, angry↔pleased, rich↔poor।",
+      "id": "n.1.7"
+     },
+     {
+      "text": "Superlative → No other … as … as",
+      "hint": "(Negative) নির্দেশ + the …est / the best → No other + as…as।",
+      "id": "n.1.8"
+     },
+     {
+      "text": "সাধারণ নিয়ম — বিপরীত শব্দ বসিয়ে Negative করা",
+      "hint": "কোনো বিশেষ চিহ্ন (only/must/every/always/very …) নেই? → বিপরীত শব্দ + not। শব্দের বিপরীত না পেলে verb-এর Negative করো (do not + opposite verb)।",
+      "id": "n.1.9"
+     },
+     {
+      "text": "Negative → Affirmative (উল্টো Rule)",
+      "hint": "(Affirmative) নির্দেশ + বাক্যে not / never / without → বিপরীত শব্দ বসিয়ে not বাদ দাও।",
+      "id": "n.1.10"
+     }
+    ],
+    "id": "n.1"
+   },
+   {
+    "text": "Assertive → Interrogative",
+    "children": [
+     {
+      "text": "Affirmative → Negative Interrogative",
+      "hint": "(Interrogative) নির্দেশ + বাক্য Affirmative → Negative question। প্রথম শব্দ সবসময় Aux + n't।",
+      "id": "n.2.1"
+     },
+     {
+      "text": "Negative → Affirmative Interrogative",
+      "hint": "বাক্যে not / n't / cannot থাকলে প্রশ্নে not থাকবে না।",
+      "id": "n.2.2"
+     },
+     {
+      "text": "Nothing / Never → Anything / Ever",
+      "hint": "nothing / never / nothing but দেখলে → anything / ever + Affirmative প্রশ্ন।",
+      "id": "n.2.3"
+     },
+     {
+      "text": "Everybody / Everyone / All → Who + Negative",
+      "hint": "Everybody/everyone → Who + not।",
+      "id": "n.2.4"
+     },
+     {
+      "text": "Nobody / No one / None → Who + Affirmative",
+      "hint": "Nobody / No one / None → Who + (না ছাড়া) verb।",
+      "id": "n.2.5"
+     }
+    ],
+    "id": "n.2"
+   },
+   {
+    "text": "Assertive ↔ Imperative",
+    "children": [
+     {
+      "text": "Assertive → Imperative (Let-গঠন)",
+      "hint": "(Imperative) নির্দেশ + বাক্যে should / must → Let। 2nd person (You) হলে শুধু V1 দিয়ে শুরু।",
+      "id": "n.3.1"
+     },
+     {
+      "text": "Imperative → Assertive (উল্টো)",
+      "hint": "Let / Let’s দিয়ে শুরু → should দিয়ে Assertive।",
+      "id": "n.3.2"
+     }
+    ],
+    "id": "n.3"
+   },
+   {
+    "text": "Assertive ↔ Exclamatory",
+    "children": [
+     {
+      "text": "Assertive → Exclamatory (What / How)",
+      "hint": "(Exclamatory) নির্দেশ + very / great। দেখো a/an + noun আছে কিনা → থাকলে What, না থাকলে How।",
+      "id": "n.4.1"
+     },
+     {
+      "text": "It is a matter of joy/sorrow/shame that … → Hurrah! / Alas! / Fie! / W",
+      "hint": "It is a matter of … দেখলে → আবেগ অনুযায়ী interjection + !।",
+      "id": "n.4.2"
+     },
+     {
+      "text": "Exclamatory → Assertive (উল্টো)",
+      "hint": "(Assertive) নির্দেশ + How / What দিয়ে শুরু বাক্য → very / great বসাও।",
+      "id": "n.4.3"
+     },
+     {
+      "text": "Interrogative (Rhetorical) → Assertive",
+      "hint": "প্রশ্ন-চিহ্ন (?) আছে কিন্তু নির্দেশ Assertive → উল্টো Rule।",
+      "id": "n.4.4"
+     }
+    ],
+    "id": "n.4"
+   },
+   {
+    "text": "Degree — Positive · Comparative · Superlative",
+    "children": [
+     {
+      "text": "Superlative → Positive",
+      "hint": "বাক্যে (Positive) লেখা + the …est / the most বা one of the দেখলেই এই Rule। the একা থাকলে → No other; one of the থাকলে → Very few। শেষে অবশ্যই as … as।",
+      "id": "n.5.1"
+     },
+     {
+      "text": "Superlative → Comparative",
+      "hint": "the + Superlative → any other + একবচন। one of the → most other + বহুবচন। of all থাকলে → all other (বই: নিয়ম ৫)। of any থাকলে → any other।",
+      "id": "n.5.2"
+     },
+     {
+      "text": "Comparative → Positive",
+      "hint": "(Positive) নির্দেশ + বাক্যে than → ১) দুই Subject অদলবদল ২) not as … as ৩) adjective-কে Positive করো। যেখানে any other আছে সেখানে No other।",
+      "id": "n.5.3"
+     },
+     {
+      "text": "Comparative → Superlative",
+      "hint": "Comparative-এ all other → Superlative-এ of all। any other → the …est। most other → one of the।",
+      "id": "n.5.4"
+     },
+     {
+      "text": "Positive → Comparative",
+      "hint": "(Comparative) নির্দেশ + Very few → than most other। শুধু as…as → not … than আর Subject অদলবদল। not as…as থাকলে not বাদ, than বসে (বই: Positive negative হলে Comparative affirmative)।",
+      "id": "n.5.5"
+     },
+     {
+      "text": "Positive → Superlative",
+      "hint": "(Superlative) নির্দেশ + Very few → one of the + বহুবচন। No other → the + একবচন। শেষে as…as থাকবে না — adjective-এ -est / most।",
+      "id": "n.5.6"
+     },
+     {
+      "text": "বিশেষ ও ব্যতিক্রমী প্রশ্ন (সোর্সে degree-চিহ্ন স্পষ্ট নয়)",
+      "hint": "এই ধরনের প্রশ্নে আগে বাক্যে than / as…as / the …est / one of the খোঁজো। না পেলে শিক্ষকের সাহায্য নাও।",
+      "id": "n.5.7"
+     }
+    ],
+    "id": "n.5"
+   },
+   {
+    "text": "Voice — Active ↔ Passive",
+    "children": [
+     {
+      "text": "Assertive: Active → Passive",
+      "hint": "(Passive) নির্দেশ + Active বাক্য। প্রথমে tense চেনো (simple/continuous/perfect/modal) → ছকে মিলিয়ে be-form বসাও।",
+      "id": "n.6.1"
+     },
+     {
+      "text": "Interrogative: Active → Passive",
+      "hint": "প্রশ্নচিহ্ন (?)সহ Active বাক্য। Who → By whom; Whom → Who।",
+      "id": "n.6.2"
+     },
+     {
+      "text": "Special Rules (বিশেষ নিয়ম)",
+      "hint": "(Passive) নির্দেশ + বাক্যে two objects / ing-participle / made, helped, let / known, seized, surprised / that-clause থাকলে বিশেষ নিয়ম।",
+      "id": "n.6.3"
+     },
+     {
+      "text": "Passive → Active",
+      "hint": "(Active) নির্দেশ + Passive বাক্য। by থাকলে তার Object-কেই Subject করো; by নেই হলে Someone / People / We / They বসাও।",
+      "id": "n.6.4"
+     }
+    ],
+    "id": "n.6"
+   },
+   {
+    "text": "Simple · Complex · Compound",
+    "children": [
+     {
+      "text": "Though / Although ↔ In spite of ↔ but",
+      "hint": "বাক্যে Though / Although / In spite of / Despite / Notwithstanding / but / yet দেখলেই এই Rule।",
+      "id": "n.7.1"
+     },
+     {
+      "text": "As / Since / Because ↔ Because of ↔ and so",
+      "hint": "Because of / due to / owing to / as / since / because / therefore / and so → কারণ-ফল Rule।",
+      "id": "n.7.2"
+     },
+     {
+      "text": "If (affirmative) ↔ By + V-ing ↔ and",
+      "hint": "By + V-ing / If (not-ছাড়া) / Imperative + and থাকলে।",
+      "id": "n.7.3"
+     },
+     {
+      "text": "If … not / Unless ↔ Without + V-ing ↔ or",
+      "hint": "Without / Unless / If … not / or → এই Rule।",
+      "id": "n.7.4"
+     },
+     {
+      "text": "Too … to ↔ So … that … not ↔ Very … and so",
+      "hint": "too…to / so…that / enough…to / very…and so থাকলে।",
+      "id": "n.7.5"
+     },
+     {
+      "text": "To / In order to ↔ So that ↔ and so",
+      "hint": "to + V1 (উদ্দেশ্য) / in order to / so that / and so।",
+      "id": "n.7.6"
+     },
+     {
+      "text": "Besides · While · Not only … but also",
+      "hint": "Besides / While / not only … but also / both … and দেখলে।",
+      "id": "n.7.7"
+     },
+     {
+      "text": "Immediately after · On + V-ing ↔ As soon as ↔ and at once",
+      "hint": "As soon as / on + V-ing / immediately after / at once।",
+      "id": "n.7.8"
+     },
+     {
+      "text": "When · At the time of · Preposition + noun (সময়)",
+      "hint": "when / at the age of / at the time of / in + (year, season) থাকলে এই Rule।",
+      "id": "n.7.9"
+     },
+     {
+      "text": "Relative Pronoun · Adjective · Participle · and",
+      "hint": "বাক্যে who/which/that, adjective + noun, participle (V-ing / V3) বা and + আরেকটি বাক্য থাকলে এই Rule।",
+      "id": "n.7.10"
+     },
+     {
+      "text": "Noun clause · Noun phrase · বিবিধ (that-clause, What, It is…that, the ",
+      "hint": "that-clause / what / how / why / where / unfortunately / reason থাকলে — বাক্যটি কোন অংশকে noun clause বানানো যায় তা ভাবো।",
+      "id": "n.7.11"
+     }
+    ],
+    "id": "n.7"
+   }
+  ],
+  "id": "n"
+ }
+}

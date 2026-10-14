@@ -2,8 +2,8 @@
 // a 7-second clock, moving targets, a sudden-death combo, an accuracy grade, a sprint against the
 // stopwatch, a round of only the questions once answered wrong, and a mixed-chapter round.
 
-import { esc, bn, poolOf, mixedPool, smartPick, deck, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText, animOn } from './core.js?v=202610141910';
-import { gameState, bestOf, saveA, S } from '../learnstore.js?v=202610141910';
+import { esc, bn, poolOf, mixedPool, smartPick, deck, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText, animOn } from './core.js?v=202610141937';
+import { gameState, bestOf, saveA, S } from '../learnstore.js?v=202610141937';
 
 export const meta = { id: 'arcade', emoji: '🕹️', name: 'আর্কেড চ্যালেঞ্জ', desc: '৭ সেকেন্ডের দ্রুত উত্তর, নড়তে থাকা নিশানা, কম্বো চেইন, নির্ভুলতা, স্প্রিন্ট, ভুল শোধরানো আর মিশ্র অধ্যায় — ৭টি চ্যালেঞ্জ।', need: 0 };
 const CHALLENGES = [

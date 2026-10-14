@@ -10,13 +10,15 @@
 //   formula (formulas+symbols)  → symbol → meaning, quantity → unit, formula → topic
 //   reaction / conversion       → reactants → product, equation → name, conversion → steps
 //   identification             → test → what it identifies, and the reverse
+//   grammar rules / examples    → "which rule is this?" + recall
+//   grammar practice / board    → question → answer (the gap's word, the changed sentence…)
 //   mistakes ("ভুল:/সঠিক:")     → which statement is right
 //   graph / diagram (figure)    → which figure is this?
 //   anything with ≥2 steps      → put the steps in order
 //   mind map                    → hint → topic, node → branch, recall
 
-import { isMcq, rightIndex } from './learn.js?v=202610141910';
-import { tocOf } from './views/topic.js?v=202610141910';
+import { isMcq, rightIndex } from './learn.js?v=202610141937';
+import { tocOf } from './views/topic.js?v=202610141937';
 
 export const SOURCES = [
   { id: 'mcq', emoji: '📝', name: 'MCQ' },
@@ -26,6 +28,8 @@ export const SOURCES = [
   { id: 'reaction', emoji: '⚗️', name: 'বিক্রিয়া ও রূপান্তর' },
   { id: 'ident', emoji: '🔬', name: 'শনাক্তকরণ' },
   { id: 'concept', emoji: '💡', name: 'ধারণা চেনো' },
+  { id: 'drill', emoji: '✍️', name: 'অনুশীলন ও বোর্ড প্রশ্ন' },
+  { id: 'rule', emoji: '📏', name: 'Rule চেনো' },
   { id: 'fix', emoji: '✔️', name: 'ভুল না শুদ্ধ' },
   { id: 'figure', emoji: '🖼️', name: 'চিত্র চেনো' },
   { id: 'map', emoji: '🗺️', name: 'মাইন্ড ম্যাপ' },
@@ -110,13 +114,16 @@ function build(chId) {
     seenRecall.add(k);
     out.recall.push({ id: `${id}~rc`, ch: chId, front, back: String(back), topic: topicOf.get(item) });
   };
-  const addQA = (id, item, q, a) => {
+  // src 'qa' = ক/খ-type questions; 'drill' = grammar practice and board questions (gap-filling,
+  // changing sentences…), whose wrong options are other answers of the same section kind
+  const addQA = (id, item, q, a, src = 'qa') => {
     const k = norm(q);
     if (!q || !a || seenQ.has(k)) return;
     seenQ.add(k);
     const ans = String(a).trim();
-    if (ans.length <= 260) add({ id: `${id}~qa`, src: 'qa', q, a: ans, kind: 'qa' }, item);
+    if (ans.length <= 260) add({ id: `${id}~qa`, src, q, a: ans, kind: src }, item);
     else addRecall(id, item, q, ans);
+    if (src !== 'qa') return;
     const m = TERM_RE.exec(String(q).trim());
     const term = m?.[1]?.trim();
     if (term && term.length >= 2 && term.length <= 45 && !/[?？]|নিচের/.test(term) && ans.length <= 420) {
@@ -138,6 +145,7 @@ function build(chId) {
         continue;
       }
       if (sec.type === 'kha' && it.question && it.answer) { addRecall(it.id, it.id, it.question, it.answer); continue; }
+      if ((sec.type === 'practice' || sec.type === 'board') && it.question && it.answer) { addQA(it.id, it.id, it.question, it.answer, 'drill'); continue; }
       if (it.question && it.answer) { addQA(it.id, it.id, it.question, it.answer); continue; }
       if (Array.isArray(it.parts)) {
         it.parts.forEach((p, k) => {
@@ -193,7 +201,10 @@ function build(chId) {
         continue;
       }
       if (it.title && it.body && !['mistakes', 'identification'].includes(sec.type)) {
-        add({ id: `${it.id}~ct`, src: 'concept', q: `নিচের বর্ণনাটি কোন বিষয়ের?\n${excerpt(mask(it.body, it.title))}`, a: it.title, kind: 'ctitle', exp: excerpt(it.body, 400) }, it.id);
+        // grammar rules and their examples: "which rule is this?"
+        const rule = sec.type === 'rules' || sec.type === 'examples';
+        const ask = sec.type === 'examples' ? 'নিচের উদাহরণগুলো কোন Rule-এর?' : rule ? 'নিচের বর্ণনাটি কোন Rule-এর?' : 'নিচের বর্ণনাটি কোন বিষয়ের?';
+        add({ id: `${it.id}~ct`, src: rule ? 'rule' : 'concept', q: `${ask}\n${excerpt(mask(it.body, it.title))}`, a: it.title, kind: rule ? 'rtitle' : 'ctitle', exp: excerpt(it.body, 400) }, it.id);
         addRecall(it.id, it.id, it.title, it.body);
       }
     }

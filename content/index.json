@@ -349,6 +349,90 @@
     "physics_2nd_ch08_simulation": {
       "file": "content/physics/physics_2nd_ch08_simulation.json",
       "count": 1
+    },
+    "english_2nd_changing_sentences_notes": {
+      "file": "content/english/english_2nd_changing_sentences_notes.json",
+      "count": 1
+    },
+    "english_2nd_changing_sentences_rules": {
+      "file": "content/english/english_2nd_changing_sentences_rules.json",
+      "count": 43
+    },
+    "english_2nd_changing_sentences_examples": {
+      "file": "content/english/english_2nd_changing_sentences_examples.json",
+      "count": 41
+    },
+    "english_2nd_changing_sentences_practice": {
+      "file": "content/english/english_2nd_changing_sentences_practice.json",
+      "count": 166
+    },
+    "english_2nd_changing_sentences_board": {
+      "file": "content/english/english_2nd_changing_sentences_board.json",
+      "count": 313
+    },
+    "english_2nd_changing_sentences_mistakes": {
+      "file": "content/english/english_2nd_changing_sentences_mistakes.json",
+      "count": 111
+    },
+    "english_2nd_changing_sentences_revision": {
+      "file": "content/english/english_2nd_changing_sentences_revision.json",
+      "count": 52
+    },
+    "english_2nd_preposition_notes": {
+      "file": "content/english/english_2nd_preposition_notes.json",
+      "count": 1
+    },
+    "english_2nd_preposition_rules": {
+      "file": "content/english/english_2nd_preposition_rules.json",
+      "count": 17
+    },
+    "english_2nd_preposition_examples": {
+      "file": "content/english/english_2nd_preposition_examples.json",
+      "count": 17
+    },
+    "english_2nd_preposition_practice": {
+      "file": "content/english/english_2nd_preposition_practice.json",
+      "count": 425
+    },
+    "english_2nd_preposition_board": {
+      "file": "content/english/english_2nd_preposition_board.json",
+      "count": 566
+    },
+    "english_2nd_preposition_mistakes": {
+      "file": "content/english/english_2nd_preposition_mistakes.json",
+      "count": 51
+    },
+    "english_2nd_preposition_revision": {
+      "file": "content/english/english_2nd_preposition_revision.json",
+      "count": 20
+    },
+    "english_2nd_right_form_of_verbs_notes": {
+      "file": "content/english/english_2nd_right_form_of_verbs_notes.json",
+      "count": 1
+    },
+    "english_2nd_right_form_of_verbs_rules": {
+      "file": "content/english/english_2nd_right_form_of_verbs_rules.json",
+      "count": 38
+    },
+    "english_2nd_right_form_of_verbs_examples": {
+      "file": "content/english/english_2nd_right_form_of_verbs_examples.json",
+      "count": 14
+    },
+    "english_2nd_right_form_of_verbs_practice": {
+      "file": "content/english/english_2nd_right_form_of_verbs_practice.json",
+      "count": 482
+    },
+    "english_2nd_right_form_of_verbs_board": {
+      "file": "content/english/english_2nd_right_form_of_verbs_board.json",
+      "count": 689
+    },
+    "english_2nd_right_form_of_verbs_mistakes": {
+      "file": "content/english/english_2nd_right_form_of_verbs_mistakes.json",
+      "count": 37
+    },
+    "english_2nd_right_form_of_verbs_revision": {
+      "file": "content/english/english_2nd_right_form_of_verbs_revision.json",
+      "count": 25
     }
   }
 }

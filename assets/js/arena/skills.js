@@ -2,9 +2,9 @@
 // backgrounds, effects) and a little daily help (50:50, skip). Help never raises mastery, and each
 // node is unlocked once. XP, looks and real mastery are kept apart.
 
-import { esc, bn, bar, refresh } from './core.js?v=202610141910';
-import { gameState, playerLevel, xp, levelFloor, saveA } from '../learnstore.js?v=202610141910';
-import { achCount } from './achievements.js?v=202610141910';
+import { esc, bn, bar, refresh } from './core.js?v=202610141937';
+import { gameState, playerLevel, xp, levelFloor, saveA } from '../learnstore.js?v=202610141937';
+import { achCount } from './achievements.js?v=202610141937';
 
 export const meta = { id: 'skills', emoji: '🌳', name: 'দক্ষতা গাছ ও চরিত্র', desc: 'XP দিয়ে দক্ষতা পয়েন্ট — নতুন পোশাক, ব্যাকগ্রাউন্ড, ইফেক্ট আর ৫০:৫০ / পাস সাহায্য খোলো।', need: 0 };
 export const NODES = [
