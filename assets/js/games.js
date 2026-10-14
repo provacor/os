@@ -3,48 +3,24 @@
 // A question counts as "mastered" after two right answers in a row; wrong ones come back sooner,
 // and wrong MCQs also go to the spaced-review list (learn.js).
 
-import { esc } from './components.js?v=202610141451';
-import { recordAttempt, everWrong } from './learn.js?v=202610141451';
-import { questionsOf, recallOf, ordersOf, answersOf, compatible, ansOf } from './gamedata.js?v=202610141451';
-import { motionReduced } from './a11y.js?v=202610141451';
+import { esc } from './components.js?v=202610141859';
+import { everWrong } from './learn.js?v=202610141859';
+import { recordAnswer, finishRecord, masteryOf, isMastered, bestOf, starsOf, soundOn, toggleSound } from './learnstore.js?v=202610141859';
+import { questionsOf, recallOf, ordersOf, answersOf, compatible, ansOf } from './gamedata.js?v=202610141859';
+import { motionReduced } from './a11y.js?v=202610141859';
 
 export const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
-const shuffle = (a) => {
+export const shuffle = (a) => {
   const b = [...a];
   for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; }
   return b;
 };
 const LETTER = 'কখগঘঙ';
 
-// ---------- saved game data (localStorage, so the backup carries it) ----------
-const KEY = 'hscos:games:v1';
-let S;
-try { S = JSON.parse(localStorage.getItem(KEY)) ?? {}; } catch { S = {}; }
-S.m ??= {}; S.best ??= {}; S.stars ??= {}; S.xp ??= 0; S.sound ??= true;
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch { /* keeps for this visit */ } };
-
-export const masteryOf = (id) => S.m[id] ?? 0;
-export const isMastered = (id) => masteryOf(id) >= 2;
-export const bestOf = (k) => S.best[k] ?? 0;
-export const starsOf = (k) => S.stars[k] ?? 0;
-export const xp = () => S.xp;
-export const playerLevel = () => Math.floor(Math.sqrt(S.xp / 40)) + 1;
-export const soundOn = () => S.sound;
-export function toggleSound() { S.sound = !S.sound; save(); return S.sound; }
-
-function answered(q, ok) {
-  S.m[q.id] = ok ? Math.min(3, masteryOf(q.id) + 1) : 0;
-  save();
-  if (q.src === 'mcq') recordAttempt(q.id, ok);
-}
-function finish(key, score, stars = null) {
-  const prev = bestOf(key);
-  if (score > prev) S.best[key] = score;
-  if (stars != null && stars > starsOf(key)) S.stars[key] = stars;
-  S.xp += Math.max(0, Math.round(score / 10));
-  save();
-  return { prev, newBest: score > prev && score > 0 };
-}
+// ---------- saved progress: the shared learning store (learnstore.js) ----------
+export { masteryOf, isMastered, bestOf, starsOf, xp, playerLevel, soundOn, toggleSound } from './learnstore.js?v=202610141859';
+const answered = (q, ok, opts) => recordAnswer(q, ok, opts);
+const finish = (key, score, stars = null) => finishRecord(key, score, stars);
 
 // ---------- questions ----------
 export const LEVEL_SIZE = 8;
@@ -54,7 +30,7 @@ export const levelUnlocked = (ch, tp, n, src = 'mcq') => n === 1 || starsOf(leve
 
 // One playable question: the spec's own options, or its answer plus up to three other answers
 // of the same kind (same topic first, then the chapter) that can't also be right.
-function makeQ(spec, near, chId, maxLen = 0) {
+export function makeQ(spec, near, chId = spec.ch, maxLen = 0) {
   let opts;
   if (spec.opts) opts = spec.opts.map((t, k) => ({ t: String(t), ok: k === spec.right }));
   else {
@@ -69,7 +45,7 @@ function makeQ(spec, near, chId, maxLen = 0) {
     opts = [{ t: String(spec.a), ok: true }, ...picks.map((t) => ({ t, ok: false }))];
   }
   opts = shuffle(opts);
-  return { id: spec.id, src: spec.src, q: spec.q, figure: spec.figure ?? '', opts, right: opts.findIndex((o) => o.ok), exp: spec.exp ?? '' };
+  return { id: spec.id, src: spec.src, ch: spec.ch, tp: spec.topic, q: spec.q, figure: spec.figure ?? '', opts, right: opts.findIndex((o) => o.ok), exp: spec.exp ?? '' };
 }
 // Not-yet-mastered and once-wrong questions first, then the rest; refills itself when used up.
 function deck(pool, mk) {
@@ -82,7 +58,7 @@ function deck(pool, mk) {
 // ---------- sound, buzz, confetti ----------
 let ac = null;
 function tone(freqs, { dur = 0.11, type = 'sine', gap = 0.085, vol = 0.12 } = {}) {
-  if (!S.sound) return;
+  if (!soundOn()) return;
   try {
     ac ??= new (window.AudioContext || window.webkitAudioContext)();
     let t = ac.currentTime;
@@ -95,7 +71,7 @@ function tone(freqs, { dur = 0.11, type = 'sine', gap = 0.085, vol = 0.12 } = {}
     }
   } catch { /* no audio */ }
 }
-const sfx = {
+export const sfx = {
   ok: () => tone([660, 990]),
   bad: () => { tone([220, 160], { type: 'square', vol: 0.07, dur: 0.14 }); navigator.vibrate?.(70); },
   pop: () => tone([880], { dur: 0.06, vol: 0.09 }),
@@ -103,7 +79,7 @@ const sfx = {
   win: () => tone([523, 659, 784, 1047, 1319], { gap: 0.1, dur: 0.16 }),
   lose: () => tone([392, 330, 262], { type: 'triangle', gap: 0.14, dur: 0.2 }),
 };
-function confetti(host) {
+export function confetti(host) {
   if (motionReduced() || !host) return;
   const box = document.createElement('div');
   box.className = 'gm-confetti';
@@ -113,7 +89,7 @@ function confetti(host) {
   host.appendChild(box);
   setTimeout(() => box.remove(), 2600);
 }
-function floatText(host, text, cls = '') {
+export function floatText(host, text, cls = '') {
   if (!host) return;
   const s = document.createElement('span');
   s.className = `gm-float ${cls}`;
@@ -617,7 +593,7 @@ function playOrder(el, ctx) {
     score += wrongRun ? 3 : 10; wrongRun = 0; sfx.pop();
     if (left.length) return paint();
     const p = list[i], ok = misses === 0;
-    answered({ id: p.id, src: 'order' }, ok);
+    answered({ id: p.id, src: 'order', ch: p.ch, tp: p.topic }, ok);
     if (ok) { perfect++; score += 20; sfx.ok(); } else failed.push(p);
     paint();
     el.querySelector('.gm-fbbox').innerHTML = `<div class="gm-fb ${ok ? 'ok' : 'bad'}"><b>${ok ? '✓ একবারেই নিখুঁত!' : `✓ সাজানো হয়েছে (${bn(misses)}টি ভুল চাপ)`}</b>${p.result ? `<p>${esc(p.result)}</p>` : ''}<button class="btn btn-primary tap" data-g-next>${i + 1 < list.length ? 'পরের ধাঁধা →' : 'ফলাফল দেখো'}</button></div>`;
@@ -646,7 +622,7 @@ function playRecall(el, ctx) {
     const b = e.target.closest('[data-g-rc]');
     if (!b || !queue.length) return;
     const ok = b.dataset.gRc === '1', c = queue.shift();
-    answered({ id: c.id, src: 'recall' }, ok);
+    answered({ id: c.id, src: 'recall', ch: c.ch, tp: c.topic }, ok);
     done++;
     if (ok) { known++; score += again.has(c.id) ? 5 : 10; sfx.ok(); }
     else {
