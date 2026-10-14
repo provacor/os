@@ -2,8 +2,8 @@
 // a 7-second clock, moving targets, a sudden-death combo, an accuracy grade, a sprint against the
 // stopwatch, a round of only the questions once answered wrong, and a mixed-chapter round.
 
-import { esc, bn, poolOf, mixedPool, smartPick, deck, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText, animOn } from './core.js?v=202610141859';
-import { gameState, bestOf, saveA } from '../learnstore.js?v=202610141859';
+import { esc, bn, poolOf, mixedPool, smartPick, deck, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText, animOn } from './core.js?v=202610141910';
+import { gameState, bestOf, saveA, S } from '../learnstore.js?v=202610141910';
 
 export const meta = { id: 'arcade', emoji: '🕹️', name: 'আর্কেড চ্যালেঞ্জ', desc: '৭ সেকেন্ডের দ্রুত উত্তর, নড়তে থাকা নিশানা, কম্বো চেইন, নির্ভুলতা, স্প্রিন্ট, ভুল শোধরানো আর মিশ্র অধ্যায় — ৭টি চ্যালেঞ্জ।', need: 0 };
 const CHALLENGES = [
@@ -18,6 +18,11 @@ const CHALLENGES = [
 const QUICK_SECS = 7, PENALTY = 5;
 const st = () => gameState('arcade', { perfect: 0, played: {}, times: {} });
 const recKey = (o, id) => (id === 'mixed' ? 'arcade/mixed' : `arcade/${o.ch}/${o.tp}/${o.src}/${id}`);
+
+export function chapterInfo(ch) {
+  const played = new Set(Object.keys(S.best).filter((k) => k.startsWith(`arcade/${ch}/`)).map((k) => k.split('/').pop()));
+  return `রেকর্ড ${bn(played.size)}/৬টি চ্যালেঞ্জে`;
+}
 
 export function progress() {
   return Math.round((CHALLENGES.filter((c) => st().played[c.id]).length / CHALLENGES.length) * 100);

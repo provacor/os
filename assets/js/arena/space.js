@@ -3,9 +3,9 @@
 // this one is explored or half mastered. Right answers (the rewarded ones) fill the ship's energy,
 // which buys new ships and trails. An explored system calls out its space monster (optional).
 
-import { esc, bn, poolOf, mixedPool, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, masteryPct, refresh, sfx, floatText } from './core.js?v=202610141859';
-import { gameState, claim, claimed, spend, saveA, A, today } from '../learnstore.js?v=202610141859';
-import { battle } from './dragon.js?v=202610141859';
+import { esc, bn, poolOf, mixedPool, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, masteryPct, refresh, sfx, floatText } from './core.js?v=202610141910';
+import { gameState, claim, claimed, spend, saveA, A, today } from '../learnstore.js?v=202610141910';
+import { battle } from './dragon.js?v=202610141910';
 
 export const meta = { id: 'space', emoji: '🚀', name: 'মহাকাশ অভিযান', desc: 'বিষয় = ছায়াপথ, অধ্যায় = নক্ষত্রমণ্ডল, টপিক = গ্রহ। মিশন জিতে গ্রহ আবিষ্কার করো, শক্তি জমিয়ে মহাকাশযান সাজাও।', need: 60 };
 const PLANETS = ['🌍', '🪐', '🌕', '🔴', '🟠', '🟣', '🔵', '🟢', '🌑', '🟡', '🟤', '⚪', '🌎', '🌏'];
@@ -20,6 +20,11 @@ const sysDone = (ch) => topicsOf(ch).every((t) => explored(ch, t.id));
 const shipE = () => SHIPS.find((s) => s.id === st().ship)?.e ?? '🚀';
 const trailE = () => TRAILS.find((s) => s.id === st().trail && s.id)?.e ?? '';
 const exploredCount = () => Object.keys(st().explored).length;
+
+export function chapterInfo(ch) {
+  const tps = topicsOf(ch);
+  return `গ্রহ ${bn(tps.filter((t) => explored(ch, t.id)).length)}/${bn(tps.length)}${st().boss[ch] ? ' · 👾✓' : ''}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

@@ -3,9 +3,9 @@
 // those questions is mastered, the topic's chest opens (once). All chests of a chapter lead to the
 // chapter's great treasure. Everything found is kept in the collection.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, floatText, hashStr, refresh, shuffle, sfx, confetti } from './core.js?v=202610141859';
-import { gameState, claim, claimed, isMastered, saveA } from '../learnstore.js?v=202610141859';
-import { questionsOf } from '../gamedata.js?v=202610141859';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, floatText, hashStr, refresh, shuffle, sfx, confetti } from './core.js?v=202610141910';
+import { gameState, claim, claimed, isMastered, saveA } from '../learnstore.js?v=202610141910';
+import { questionsOf } from '../gamedata.js?v=202610141910';
 
 export const meta = { id: 'treasure', emoji: '🗺️', name: 'গুপ্তধন শিকার', desc: 'সঠিক উত্তরে মানচিত্রের টুকরো, টুকরোর প্রশ্নগুলো আয়ত্তে আনলে সিন্দুক খোলে — অধ্যায় শেষে মহাগুপ্তধন!', need: 10 };
 const PIECES = 9, SESSION = 6;
@@ -18,6 +18,11 @@ const chestOpen = (ch, tp) => claimed(`treasure:chest:${k(ch, tp)}`);
 const chestReady = (ch, tp) => { const f = fragsOf(ch, tp); return f.length >= target(ch, tp) && f.length > 0 && f.every(isMastered); };
 const itemOf = (ch, tp) => ITEMS[hashStr(k(ch, tp)) % ITEMS.length];
 const bigOpen = (ch) => claimed(`treasure:big:${ch}`);
+
+export function chapterInfo(ch) {
+  const tps = topicsOf(ch);
+  return `সিন্দুক ${bn(tps.filter((t) => chestOpen(ch, t.id)).length)}/${bn(tps.length)}${bigOpen(ch) ? ' · 🏆' : ''}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

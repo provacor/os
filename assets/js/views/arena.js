@@ -2,25 +2,25 @@
 // mastery dashboard, achievements and settings. Each game lives in ../arena/<id>.js and shares one
 // learning store with the first game zone (#/games), so mastery, XP and records are the same.
 
-import { esc, bar, ring, chapterNo, pad2 } from '../components.js?v=202610141859';
-import { bn, refresh, chapters, topicsOf, masteryPct, badgeOf, BADGE } from '../arena/core.js?v=202610141859';
-import { A, S, xp, playerLevel, levelFloor, streak, bestStreak, soundOn, toggleSound, animOn, setAnim } from '../learnstore.js?v=202610141859';
-import { ACH, achCount, achClaimed, claimAch, checkAchievements } from '../arena/achievements.js?v=202610141859';
-import { avatarHtml, pointsLeft } from '../arena/skills.js?v=202610141859';
-import { missionSummary } from '../arena/missions.js?v=202610141859';
-import { getProfile } from '../profile.js?v=202610141859';
-import * as kingdom from '../arena/kingdom.js?v=202610141859';
-import * as dragon from '../arena/dragon.js?v=202610141859';
-import * as detective from '../arena/detective.js?v=202610141859';
-import * as race from '../arena/race.js?v=202610141859';
-import * as farm from '../arena/farm.js?v=202610141859';
-import * as skills from '../arena/skills.js?v=202610141859';
-import * as treasure from '../arena/treasure.js?v=202610141859';
-import * as revision from '../arena/revision.js?v=202610141859';
-import * as tournament from '../arena/tournament.js?v=202610141859';
-import * as missions from '../arena/missions.js?v=202610141859';
-import * as space from '../arena/space.js?v=202610141859';
-import * as arcade from '../arena/arcade.js?v=202610141859';
+import { esc, bar, ring, chapterNo, pad2, chapterEyebrow } from '../components.js?v=202610141910';
+import { bn, refresh, chapters, topicsOf, masteryPct, badgeOf, BADGE } from '../arena/core.js?v=202610141910';
+import { A, S, xp, playerLevel, levelFloor, streak, bestStreak, soundOn, toggleSound, animOn, setAnim } from '../learnstore.js?v=202610141910';
+import { ACH, achCount, achClaimed, claimAch, checkAchievements } from '../arena/achievements.js?v=202610141910';
+import { avatarHtml, pointsLeft } from '../arena/skills.js?v=202610141910';
+import { missionSummary } from '../arena/missions.js?v=202610141910';
+import { getProfile } from '../profile.js?v=202610141910';
+import * as kingdom from '../arena/kingdom.js?v=202610141910';
+import * as dragon from '../arena/dragon.js?v=202610141910';
+import * as detective from '../arena/detective.js?v=202610141910';
+import * as race from '../arena/race.js?v=202610141910';
+import * as farm from '../arena/farm.js?v=202610141910';
+import * as skills from '../arena/skills.js?v=202610141910';
+import * as treasure from '../arena/treasure.js?v=202610141910';
+import * as revision from '../arena/revision.js?v=202610141910';
+import * as tournament from '../arena/tournament.js?v=202610141910';
+import * as missions from '../arena/missions.js?v=202610141910';
+import * as space from '../arena/space.js?v=202610141910';
+import * as arcade from '../arena/arcade.js?v=202610141910';
 
 export const GAMES = [kingdom, dragon, detective, race, farm, skills, treasure, revision, tournament, missions, space, arcade];
 const HOME = ['🎮 নতুন গেম জোন', '#/arena'];
@@ -32,6 +32,7 @@ export function arenaView(model, a, b, c, d, e) {
     return { nav: 'home', title: 'নতুন গেম জোন', back: '#/', html: '<p class="muted">এখনো কোনো অধ্যায়ে খেলার মতো প্রশ্ন নেই।</p>' };
   }
   if (!a) return hub();
+  if (a === 'chapter') return chapterHub(b);
   if (a === 'profile') return page('প্রোফাইল', profilePage());
   if (a === 'dashboard') return page('আয়ত্ত ড্যাশবোর্ড', dashboard());
   if (a === 'achievements') return page('অর্জন', achievements());
@@ -62,15 +63,18 @@ function playerCard() {
       <span class="ar-player-body"><b>${esc(playerName())}</b><small>লেভেল ${bn(lv)} · ${bn(xp())} XP · পরের লেভেলে ${bn(Math.max(0, next - xp()))} XP</small>${bar(pct, 'bar-thin')}
         <span class="ar-wallet"><span>🪙 ${bn(A.coins)}</span><span>💎 ${bn(A.gems)}</span><span>⚡ ${bn(A.energy)}</span><span>🔥 ${bn(streak())}</span></span></span></a>`;
 }
-function gameCard(g, i) {
+// opts.href / opts.info: the card as shown on one chapter's game page
+function gameCard(g, i, opts = {}) {
   const open = isOpen(g);
   const pct = open ? g.progress() : 0;
   const left = g.meta.need - A.stats.n;
-  return `<a class="ar-gcard tap rise ${open ? '' : 'locked'}" style="--i:${Math.min(i, 12)}" href="#/arena/${g.meta.id}">
+  const href = open && opts.href ? opts.href : `#/arena/${g.meta.id}`;
+  const foot = opts.info != null ? `<span class="ar-gcard-info">${esc(opts.info)}</span>` : `<span>${bn(pct)}%</span>`;
+  return `<a class="ar-gcard tap rise ${open ? '' : 'locked'} ${opts.info != null ? 'ch' : ''}" style="--i:${Math.min(i, 12)}" href="${href}">
       <span class="ar-gcard-top"><span class="ar-gcard-emoji" aria-hidden="true">${open ? g.meta.emoji : '🔒'}</span><span class="ar-gcard-no">${bn(i + 1)}</span></span>
       <b>${esc(g.meta.name)}</b>
       <small>${esc(g.meta.desc)}</small>
-      ${open ? `${bar(pct, 'bar-thin')}<span class="ar-gcard-foot"><span>${bn(pct)}%</span><span class="ar-play">▶ খেলো</span></span>`
+      ${open ? `${opts.info != null ? '' : bar(pct, 'bar-thin')}<span class="ar-gcard-foot">${foot}<span class="ar-play">▶ খেলো</span></span>`
         : `<span class="ar-gcard-foot"><span>🔒 আরও ${bn(left)}টি উত্তর দিলে খুলবে</span></span>`}</a>`;
 }
 function hub() {
@@ -96,7 +100,7 @@ function hub() {
       ${playerCard()}
       <a class="ar-mission-strip tap rise" href="#/arena/missions"><span>🎯</span><span><b>আজকের মিশন: ${bn(ms.done)}/${bn(ms.total)} সম্পন্ন</b><small>${ms.got < ms.done ? `${bn(ms.done - ms.got)}টি পুরস্কার নেওয়া বাকি!` : ms.done === ms.total ? 'সব শেষ — দারুণ!' : 'মিশন শেষ করে XP আর কয়েন নাও'}</small></span><span class="ar-play">▶</span></a>
       <nav class="ar-links" aria-label="নতুন গেম জোনের পাতা">${links.map(([e, t, h, x]) => `<a class="ar-link tap" href="${h}"><span>${e}</span><b>${t}</b>${x ? `<small>${x}</small>` : ''}</a>`).join('')}</nav>
-      <section class="block"><div class="block-head"><h2>১২টি গেম</h2></div><div class="ar-cards">${GAMES.map(gameCard).join('')}</div></section>
+      <section class="block"><div class="block-head"><h2>১২টি গেম</h2></div><div class="ar-cards">${GAMES.map((g, i) => gameCard(g, i)).join('')}</div></section>
       <a class="gm-home rise tap" href="#/games"><span class="gm-home-emoji" aria-hidden="true">🕹️</span><span class="gm-home-body"><b>পুরনো গেম জোন</b><small>লেভেল, সময়ের দৌড়, বেলুন, দানব যুদ্ধ, লাখপতি সিঁড়ি, সত্য-মিথ্যা, জোড়া মেলাও, ধাপ সাজাও, মনে করে দেখো</small></span><span class="gm-home-go">খেলো</span></a>
     </div>`,
   };
@@ -207,7 +211,40 @@ function settings() {
   };
 }
 
-// Home and chapter-page entry points.
+// ---------- one chapter's 12 games (#/arena/chapter/<ch>) ----------
+// Where each game opens for one chapter; the farm, skill tree and missions are the same for all chapters.
+const CH_HREF = {
+  kingdom: (c) => `#/arena/kingdom/${c}`, dragon: (c) => `#/arena/dragon/${c}`, detective: (c) => `#/arena/detective/${c}`,
+  race: (c) => `#/arena/race/${c}`, farm: (c) => `#/arena/farm/work/${c}`, skills: () => '#/arena/skills',
+  treasure: (c) => `#/arena/treasure/${c}`, revision: (c) => `#/arena/revision/${c}`, tournament: (c) => `#/arena/tournament/custom/${c}`,
+  missions: () => '#/arena/missions', space: (c) => `#/arena/space/${c}`, arcade: (c) => `#/arena/arcade/${c}`,
+};
+const SHARED_INFO = { farm: 'এই অধ্যায়ের প্রশ্নে পানি আনো', skills: 'সব অধ্যায়ের জন্য একটাই', missions: 'সব অধ্যায় মিলিয়ে রোজ ৪টি', tournament: 'এই অধ্যায়ের আজকের সেট' };
+function chapterHub(chId) {
+  const ch = chapters().find((x) => x.id === chId);
+  if (!ch) return null;
+  const m = masteryPct(ch.id);
+  const id = encodeURIComponent(ch.id);
+  const cards = GAMES.map((g, i) => gameCard(g, i, { href: CH_HREF[g.meta.id](id), info: g.chapterInfo?.(ch.id) ?? SHARED_INFO[g.meta.id] ?? '' })).join('');
+  return {
+    nav: 'study',
+    title: '১২টি গেম',
+    back: `#/c/${id}`,
+    crumbs: [[ch.subject.name, `#/s/${ch.subject.id}`], [chapterNo(ch) != null ? `Ch ${pad2(chapterNo(ch))}` : ch.name, `#/c/${id}`], ['১২টি গেম', '#']],
+    html: `<div class="arena">
+      <header class="gm-hero rise"><div><p class="eyebrow">${esc(ch.subject.name)} · ${esc(chapterEyebrow(ch))}</p>
+          <h1>🎮 ১২টি গেম</h1>
+          <p class="muted small">${esc(ch.name)} · ${bn(m.total)}টি প্রশ্নের ${bn(m.done)}টি আয়ত্তে</p></div>
+        ${ring(m.pct, { size: 76, stroke: 6 })}</header>
+      <p class="muted small">প্রতিটা গেম এই অধ্যায়ের নিজের প্রশ্ন দিয়ে — টপিক ধরে বা পুরো অধ্যায়, MCQ বা অন্য কনটেন্ট।</p>
+      ${playerCard()}
+      <div class="ar-cards">${cards}</div>
+      <a class="ar-mission-strip tap rise" href="#/arena"><span>🎮</span><span><b>সব অধ্যায়ের গেম জোন</b><small>প্রোফাইল, আয়ত্ত ড্যাশবোর্ড, অর্জন, সেটিংস</small></span><span class="ar-play">▶</span></a>
+    </div>`,
+  };
+}
+
+// The game-zone index card (#/games) and the chapter-page card.
 export function arenaHomeCard() {
   if (!chapters().length) return '';
   const open = GAMES.filter(isOpen).length;
@@ -216,12 +253,11 @@ export function arenaHomeCard() {
       <span class="gm-home-body"><b>নতুন গেম জোন — ১২টি গেম</b><small>অধ্যায় রাজ্য, ড্রাগন যুদ্ধ, রহস্য গোয়েন্দা, রেসিং, খামার, গুপ্তধন, মহাকাশ… · ${bn(open)}টি খোলা · লেভেল ${bn(playerLevel())} · 🔥 ${bn(streak())}</small></span>
       <span class="gm-home-go">খেলো</span></a></section>`;
 }
-export function arenaChapterLinks(chId) {
+export function arenaChapterCard(chId) {
   if (!chapters().some((c) => c.id === chId)) return '';
-  const id = encodeURIComponent(chId);
-  const l = [['🏰', 'রাজ্য', 'kingdom'], ['🐉', 'ড্রাগন', 'dragon'], ['🏎️', 'রেস', 'race'], ['🗺️', 'গুপ্তধন', 'treasure'], ['🚀', 'মহাকাশ', 'space'], ['🕹️', 'আর্কেড', 'arcade'], ['🤖', 'রিভিশন', 'revision']];
-  return `<div class="ar-chlinks"><span class="muted small">নতুন গেম জোনে এই অধ্যায়:</span>${l.map(([e, t, g]) => {
-    const game = GAMES.find((x) => x.meta.id === g);
-    return isOpen(game) ? `<a class="chip-btn tap" href="#/arena/${g}/${id}">${e} ${t}</a>` : '';
-  }).join('')}</div>`;
+  const open = GAMES.filter(isOpen).length;
+  return `<a class="gm-home ar-home rise tap" href="#/arena/chapter/${encodeURIComponent(chId)}">
+      <span class="gm-home-emoji" aria-hidden="true">🎮</span>
+      <span class="gm-home-body"><b>১২টি গেম — এই অধ্যায়ে</b><small>অধ্যায় রাজ্য, ড্রাগন যুদ্ধ, রহস্য গোয়েন্দা, রেসিং, গুপ্তধন, মহাকাশ, আর্কেড… · ${bn(open)}টি খোলা</small></span>
+      <span class="gm-home-go">খেলো</span></a>`;
 }

@@ -2,14 +2,19 @@
 // a wrong one slows it down (and shows the explanation, with the clock paused). A 90-second race
 // or an untimed practice run, for one topic or the whole chapter, with personal bests.
 
-import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText } from './core.js?v=202610141859';
-import { gameState, bestOf, saveA } from '../learnstore.js?v=202610141859';
+import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText } from './core.js?v=202610141910';
+import { gameState, bestOf, saveA } from '../learnstore.js?v=202610141910';
 
 export const meta = { id: 'race', emoji: '🏎️', name: 'MCQ রেসিং', desc: 'সঠিক উত্তরে গাড়ি ছোটে, পরপর ৩টায় নাইট্রো! ভুলে গতি কমে। ৯০ সেকেন্ডের রেস বা সময় ছাড়া অনুশীলন।', need: 0 };
 const TRACK = 1000, STEP = 100, NITRO_STEP = 200, SLOW = 50, TIME = 90;
 const MODES = [{ id: 'timed', name: `⏱️ ${bn(TIME)} সেকেন্ড` }, { id: 'free', name: '🧘 সময় ছাড়া' }];
 const st = () => gameState('race', { mode: 'timed', raced: {} });
 const keyOf = (ch, tp, src, mode) => `race/${ch}/${tp}/${src}/${mode}`;
+
+export function chapterInfo(ch) {
+  const tps = topicsOf(ch);
+  return `ট্র্যাক ${bn(tps.filter((t) => st().raced[`${ch}/${t.id}`]).length)}/${bn(tps.length)}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

@@ -3,8 +3,8 @@
 // questioning (the whole chapter) solves the case. The story is only a frame: every question,
 // answer and explanation is the chapter's own.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, hashStr } from './core.js?v=202610141859';
-import { gameState, claim, claimed, saveA } from '../learnstore.js?v=202610141859';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, hashStr } from './core.js?v=202610141910';
+import { gameState, claim, claimed, saveA } from '../learnstore.js?v=202610141910';
 
 export const meta = { id: 'detective', emoji: '🕵️', name: 'রহস্য গোয়েন্দা', desc: 'প্রতিটা সঠিক উত্তরে একটা সূত্র, প্রতিটা টপিকে একটা প্রমাণ — সব প্রমাণ জুড়ে রহস্যের সমাধান করো!', need: 40 };
 const CLUES = 4;      // clues that make one topic's evidence
@@ -22,6 +22,11 @@ const cluesAt = (ch, tp) => Math.min(CLUES, st().clues[k(ch, tp)] ?? 0);
 const hasEvidence = (ch, tp) => cluesAt(ch, tp) >= CLUES;
 const allEvidence = (ch) => topicsOf(ch).every((t) => hasEvidence(ch, t.id));
 const solved = (ch) => claimed(`detective:solved:${ch}`);
+
+export function chapterInfo(ch) {
+  const tps = topicsOf(ch);
+  return `প্রমাণ ${bn(tps.filter((t) => hasEvidence(ch, t.id)).length)}/${bn(tps.length)}${solved(ch) ? ' · ✅' : ''}`;
+}
 
 export function progress() {
   let done = 0, total = 0;

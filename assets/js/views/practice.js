@@ -1,15 +1,15 @@
 // Practice tools: hub, timed exam, weak topics, spaced-repetition review, flashcards,
 // saved items (bookmarks + notes) and AI marking of creative questions.
 
-import { icon } from '../icons.js?v=202610141859';
-import { esc, ring, bar, emptyState, chapterEyebrow } from '../components.js?v=202610141859';
-import { itemCard } from './section.js?v=202610141859';
-import { tocOf } from './topic.js?v=202610141859';
+import { icon } from '../icons.js?v=202610141910';
+import { esc, ring, bar, emptyState, chapterEyebrow } from '../components.js?v=202610141910';
+import { itemCard } from './section.js?v=202610141910';
+import { tocOf } from './topic.js?v=202610141910';
 import {
   itemRef, isMcq, rightIndex, attemptOf, everWrong, srsDue, srsNext, srsCount, examHistory,
   bookmarks, notedItems, noteOf, goalState, offlineAll,
-} from '../learn.js?v=202610141859';
-import { hasKey } from '../ai.js?v=202610141859';
+} from '../learn.js?v=202610141910';
+import { hasKey } from '../ai.js?v=202610141910';
 
 export const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 const LET = 'কখগঘ';

@@ -3,11 +3,11 @@
 // A question counts as "mastered" after two right answers in a row; wrong ones come back sooner,
 // and wrong MCQs also go to the spaced-review list (learn.js).
 
-import { esc } from './components.js?v=202610141859';
-import { everWrong } from './learn.js?v=202610141859';
-import { recordAnswer, finishRecord, masteryOf, isMastered, bestOf, starsOf, soundOn, toggleSound } from './learnstore.js?v=202610141859';
-import { questionsOf, recallOf, ordersOf, answersOf, compatible, ansOf } from './gamedata.js?v=202610141859';
-import { motionReduced } from './a11y.js?v=202610141859';
+import { esc } from './components.js?v=202610141910';
+import { everWrong } from './learn.js?v=202610141910';
+import { recordAnswer, finishRecord, masteryOf, isMastered, bestOf, starsOf, soundOn, toggleSound } from './learnstore.js?v=202610141910';
+import { questionsOf, recallOf, ordersOf, answersOf, compatible, ansOf } from './gamedata.js?v=202610141910';
+import { motionReduced } from './a11y.js?v=202610141910';
 
 export const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 export const shuffle = (a) => {
@@ -18,7 +18,7 @@ export const shuffle = (a) => {
 const LETTER = 'কখগঘঙ';
 
 // ---------- saved progress: the shared learning store (learnstore.js) ----------
-export { masteryOf, isMastered, bestOf, starsOf, xp, playerLevel, soundOn, toggleSound } from './learnstore.js?v=202610141859';
+export { masteryOf, isMastered, bestOf, starsOf, xp, playerLevel, soundOn, toggleSound } from './learnstore.js?v=202610141910';
 const answered = (q, ok, opts) => recordAnswer(q, ok, opts);
 const finish = (key, score, stars = null) => finishRecord(key, score, stars);
 
