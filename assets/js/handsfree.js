@@ -8,12 +8,12 @@
 // Questions and answers are read aloud with the phone's text-to-speech; MCQs can be
 // answered by saying "ক/খ/গ/ঘ" into the earbud microphone.
 
-import { speak, stopSpeaking } from './a11y.js?v=202610150241';
-import { isItemDone, toggleItemDone } from './progress.js?v=202610150241';
-import { recordDone } from './activity.js?v=202610150241';
-import { everWrong, isBookmarked, recordAttempt, itemRef } from './learn.js?v=202610150241';
-import { openMistakes, recordMcqMistake } from './mistakes.js?v=202610150241';
-import { tocOf } from './views/topic.js?v=202610150241';
+import { speak, stopSpeaking } from './a11y.js?v=202610150258';
+import { isItemDone, toggleItemDone } from './progress.js?v=202610150258';
+import { recordDone } from './activity.js?v=202610150258';
+import { everWrong, isBookmarked, recordAttempt, itemRef } from './learn.js?v=202610150258';
+import { openMistakes, recordMcqMistake } from './mistakes.js?v=202610150258';
+import { tocOf } from './views/topic.js?v=202610150258';
 
 const KEY = 'hscos:handsfree:v1';
 const DEFAULTS = { autoAnswer: false, autoNext: false, voiceAnswer: true, markDone: false, readOptions: true, gap: 4, filter: 'all' };

@@ -8,7 +8,8 @@
       "accent": "blue",
       "order": 1,
       "sectionTemplate": "english_grammar_topic",
-      "note": "Only English 2nd Paper is kept. English 1st Paper is intentionally excluded."
+      "note": "Only English 2nd Paper is kept. English 1st Paper is intentionally excluded.",
+      "image": "assets/img/subject-english.jpg"
     },
     {
       "id": "higher_math",
@@ -16,7 +17,8 @@
       "icon": "📐",
       "accent": "violet",
       "order": 2,
-      "sectionTemplate": "higher_math"
+      "sectionTemplate": "higher_math",
+      "image": "assets/img/subject-higher-math.jpg"
     },
     {
       "id": "physics",

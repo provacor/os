@@ -1,8 +1,8 @@
 // Reusable UI building blocks. Each returns an HTML string; views compose them.
 
-import { icon } from './icons.js?v=202610150241';
-import { progressOf } from './progress.js?v=202610150241';
-import { contentCount, chapterCount } from './model.js?v=202610150241';
+import { icon } from './icons.js?v=202610150258';
+import { progressOf } from './progress.js?v=202610150258';
+import { contentCount, chapterCount } from './model.js?v=202610150258';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -10,7 +10,7 @@ export const esc = (s) =>
 export const plural = (n, word) => `${n} ${word.toLowerCase()}${n === 1 ? '' : 's'}`;
 export const pad2 = (n) => String(n).padStart(2, '0');
 
-// A subject's glyph: a custom round image when the subject defines one in
+// A subject's glyph: its logo tile image when the subject defines one in
 // data/subjects.json, otherwise the line icon. Drops into any .s-icon / .r-icon box.
 export function subjectGlyph(s) {
   return s?.image
