@@ -2,25 +2,25 @@
 // mastery dashboard, achievements and settings. Each game lives in ../arena/<id>.js and shares one
 // learning store with the first game zone (#/games), so mastery, XP and records are the same.
 
-import { esc, bar, ring, chapterNo, pad2, chapterEyebrow } from '../components.js?v=202610150307';
-import { bn, refresh, chapters, topicsOf, masteryPct, badgeOf, BADGE } from '../arena/core.js?v=202610150307';
-import { A, S, xp, playerLevel, levelFloor, streak, bestStreak, soundOn, toggleSound, animOn, setAnim } from '../learnstore.js?v=202610150307';
-import { ACH, achCount, achClaimed, claimAch, checkAchievements } from '../arena/achievements.js?v=202610150307';
-import { avatarHtml, pointsLeft } from '../arena/skills.js?v=202610150307';
-import { missionSummary } from '../arena/missions.js?v=202610150307';
-import { getProfile } from '../profile.js?v=202610150307';
-import * as kingdom from '../arena/kingdom.js?v=202610150307';
-import * as dragon from '../arena/dragon.js?v=202610150307';
-import * as detective from '../arena/detective.js?v=202610150307';
-import * as race from '../arena/race.js?v=202610150307';
-import * as farm from '../arena/farm.js?v=202610150307';
-import * as skills from '../arena/skills.js?v=202610150307';
-import * as treasure from '../arena/treasure.js?v=202610150307';
-import * as revision from '../arena/revision.js?v=202610150307';
-import * as tournament from '../arena/tournament.js?v=202610150307';
-import * as missions from '../arena/missions.js?v=202610150307';
-import * as space from '../arena/space.js?v=202610150307';
-import * as arcade from '../arena/arcade.js?v=202610150307';
+import { esc, bar, ring, chapterNo, pad2, chapterEyebrow } from '../components.js?v=202610150320';
+import { bn, refresh, chapters, topicsOf, masteryPct, badgeOf, BADGE } from '../arena/core.js?v=202610150320';
+import { A, S, xp, playerLevel, levelFloor, streak, bestStreak, soundOn, toggleSound, animOn, setAnim } from '../learnstore.js?v=202610150320';
+import { ACH, achCount, achClaimed, claimAch, checkAchievements } from '../arena/achievements.js?v=202610150320';
+import { avatarHtml, pointsLeft } from '../arena/skills.js?v=202610150320';
+import { missionSummary } from '../arena/missions.js?v=202610150320';
+import { getProfile } from '../profile.js?v=202610150320';
+import * as kingdom from '../arena/kingdom.js?v=202610150320';
+import * as dragon from '../arena/dragon.js?v=202610150320';
+import * as detective from '../arena/detective.js?v=202610150320';
+import * as race from '../arena/race.js?v=202610150320';
+import * as farm from '../arena/farm.js?v=202610150320';
+import * as skills from '../arena/skills.js?v=202610150320';
+import * as treasure from '../arena/treasure.js?v=202610150320';
+import * as revision from '../arena/revision.js?v=202610150320';
+import * as tournament from '../arena/tournament.js?v=202610150320';
+import * as missions from '../arena/missions.js?v=202610150320';
+import * as space from '../arena/space.js?v=202610150320';
+import * as arcade from '../arena/arcade.js?v=202610150320';
 
 export const GAMES = [kingdom, dragon, detective, race, farm, skills, treasure, revision, tournament, missions, space, arcade];
 const HOME = ['🎮 নতুন গেম জোন', '#/arena'];

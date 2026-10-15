@@ -3,8 +3,8 @@
 // answer and resets after a wrong one), then never-tried ones, then a few mastered ones. Every
 // answer shows its explanation. Also shows the queue, the last 14 days and the weakest topics.
 
-import { esc, bn, poolOf, mixedPool, smartPick, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, topicName } from './core.js?v=202610150307';
-import { gameState, saveA, S, today, addDays, todayCounters, statOf } from '../learnstore.js?v=202610150307';
+import { esc, bn, poolOf, mixedPool, smartPick, rank, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, scopeName, topicName } from './core.js?v=202610150320';
+import { gameState, saveA, S, today, addDays, todayCounters, statOf } from '../learnstore.js?v=202610150320';
 
 export const meta = { id: 'revision', emoji: '🤖', name: 'স্মার্ট রিভিশন বট', desc: 'আগে ভুল, তারপর আজকের পালা, তারপর নতুন — প্রতিটা উত্তরের সাথে ব্যাখ্যা। বিরতি বাড়ে ১ → ৩ → ৭ → ১৬ → ৩৫ দিন।', need: 0 };
 const SIZES = [5, 10, 20];

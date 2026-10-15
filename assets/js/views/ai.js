@@ -1,10 +1,10 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610150307';
-import { esc } from '../components.js?v=202610150307';
-import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610150307';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610150307';
-import { canSpeak, canListen } from '../a11y.js?v=202610150307';
+import { icon } from '../icons.js?v=202610150320';
+import { esc } from '../components.js?v=202610150320';
+import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610150320';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610150320';
+import { canSpeak, canListen } from '../a11y.js?v=202610150320';
 
 export const speakBtn = () => (canSpeak() ? `<button class="ai-speak" data-ai-speak aria-label="উত্তর পড়ে শোনাও">${icon('speaker')}</button>` : '');
 
