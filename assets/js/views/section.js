@@ -1,10 +1,10 @@
 // Section screen: the content of one chapter section (Notes, MCQ, Simulation, …).
 
-import { icon } from '../icons.js?v=202610141937';
-import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141937';
-import { progressOf, isItemDone } from '../progress.js?v=202610141937';
-import { hfActive } from '../handsfree.js?v=202610141937';
-import { isBookmarked, noteOf } from '../learn.js?v=202610141937';
+import { icon } from '../icons.js?v=202610150224';
+import { esc, plural, bar, ring, sectionHue, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610150224';
+import { progressOf, isItemDone } from '../progress.js?v=202610150224';
+import { hfActive } from '../handsfree.js?v=202610150224';
+import { isBookmarked, noteOf } from '../learn.js?v=202610150224';
 
 const FORMAT = {
   pdf: { icon: 'file', open: 'Open PDF', label: 'PDF' },
@@ -24,7 +24,7 @@ function doneButton(it) {
 function mcqCard(it, n) {
   const opts = (it.options ?? []).map((o, k) => `<button class="opt" data-action="mcq" data-item="${esc(it.id)}" data-k="${k}">
       <span class="opt-key">${'কখগঘ'[k] ?? k + 1}</span><span>${esc(o)}</span></button>`).join('');
-  return `<article class="item-card mcq rise" style="--i:${n}" data-answer="${esc(it.correctAnswer ?? '')}">
+  return `<article class="item-card mcq rise" style="--i:${Math.min(n, 12)}" data-answer="${esc(it.correctAnswer ?? '')}">
       <p class="mcq-q"><span class="mcq-n">${n + 1}.</span> ${esc(it.question)}</p>
       <div class="opts">${opts}</div>
       ${it.explanation ? `<p class="mcq-exp" hidden>${esc(it.explanation)}</p>` : ''}
@@ -81,7 +81,7 @@ export function itemCard(it, sec, n) {
   const embed = it.format === 'html' && it.file
     ? `<div class="embed-wrap"><iframe class="item-embed" src="${src}" title="${esc(it.title ?? it.id)}" loading="lazy"></iframe></div>`
     : '';
-  return `<article class="item-card rise ${isItemDone(it.id) ? 'is-done' : ''}" style="--i:${n}">
+  return `<article class="item-card rise ${isItemDone(it.id) ? 'is-done' : ''}" style="--i:${Math.min(n, 12)}">
       <div class="item-head">
         <span class="item-icon hue-${sectionHue(sec.type)}">${icon(f.icon)}</span>
         <div class="item-text">
