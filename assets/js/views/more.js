@@ -1,10 +1,15 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610150320';
-import { esc, brandMark } from '../components.js?v=202610150320';
-import { themePref } from '../theme.js?v=202610150320';
-import { a11y } from '../a11y.js?v=202610150320';
-import { getProfile } from '../profile.js?v=202610150320';
+import { icon } from '../icons.js?v=202610150339';
+import { esc, brandMark } from '../components.js?v=202610150339';
+import { themePref } from '../theme.js?v=202610150339';
+import { a11y } from '../a11y.js?v=202610150339';
+import { getProfile } from '../profile.js?v=202610150339';
+
+// The Android app (built by .github/workflows/android.yml) is always at this address.
+const APK_URL = 'https://github.com/provacor/p-b/releases/latest/download/pb.apk';
+// Inside the installed app or the Android app there is nothing to download.
+const inApp = typeof matchMedia === 'function' && (matchMedia('(display-mode: standalone)').matches || document.referrer.startsWith('android-app://'));
 
 export function moreView(model) {
   const pref = themePref();
@@ -55,6 +60,9 @@ export function moreView(model) {
       <section class="card rise" style="--i:3"><h2 class="card-title">${icon('trash')} Data on this device</h2>
         <p class="muted small">Progress, study history and recent searches are stored only in this browser.</p>
         <button class="btn btn-danger tap" data-action="reset">Reset progress & history</button></section>
+      ${inApp ? '' : `<section class="card rise apk-card" style="--i:4"><h2 class="card-title">${icon('download')} Android অ্যাপ</h2>
+        <p class="muted small">ফোনে pb অ্যাপ হিসেবে ইনস্টল করো — হোম স্ক্রিনে আইকন, পুরো স্ক্রিনে চলে।</p>
+        <a class="btn btn-primary tap" href="${APK_URL}" rel="noopener">APK ডাউনলোড</a></section>`}
       <section class="card about rise" style="--i:4"><span class="about-mark">${brandMark()}</span>
         <div><h2>pb</h2><p class="muted small">Website, UI &amp; design by pb</p><p class="muted small">© ${new Date().getFullYear()} pb · All rights reserved</p></div></section>`,
   };

@@ -3,9 +3,9 @@
 // those questions is mastered, the topic's chest opens (once). All chests of a chapter lead to the
 // chapter's great treasure. Everything found is kept in the collection.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, floatText, hashStr, refresh, shuffle, sfx, confetti } from './core.js?v=202610150320';
-import { gameState, claim, claimed, isMastered, saveA } from '../learnstore.js?v=202610150320';
-import { questionsOf } from '../gamedata.js?v=202610150320';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, floatText, hashStr, refresh, shuffle, sfx, confetti } from './core.js?v=202610150339';
+import { gameState, claim, claimed, isMastered, saveA } from '../learnstore.js?v=202610150339';
+import { questionsOf } from '../gamedata.js?v=202610150339';
 
 export const meta = { id: 'treasure', emoji: '🗺️', name: 'গুপ্তধন শিকার', desc: 'সঠিক উত্তরে মানচিত্রের টুকরো, টুকরোর প্রশ্নগুলো আয়ত্তে আনলে সিন্দুক খোলে — অধ্যায় শেষে মহাগুপ্তধন!', need: 10 };
 const PIECES = 9, SESSION = 6;
