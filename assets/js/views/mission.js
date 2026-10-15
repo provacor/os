@@ -1,8 +1,8 @@
 // Mission tab: plan today and the next six days. Each day has its own task list and note.
 
-import { icon } from '../icons.js?v=202610150241';
-import { esc } from '../components.js?v=202610150241';
-import { week, todayKey, tasksOf, noteOf, leftovers } from '../mission.js?v=202610150241';
+import { icon } from '../icons.js?v=202610150258';
+import { esc } from '../components.js?v=202610150258';
+import { week, todayKey, tasksOf, noteOf, leftovers } from '../mission.js?v=202610150258';
 
 export const missionState = { day: null, week: 0 }; // selected day key (null = today) and week offset
 
