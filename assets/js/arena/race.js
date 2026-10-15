@@ -2,8 +2,8 @@
 // a wrong one slows it down (and shows the explanation, with the clock paused). A 90-second race
 // or an untimed practice run, for one topic or the whole chapter, with personal bests.
 
-import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText } from './core.js?v=202610150307';
-import { gameState, bestOf, saveA } from '../learnstore.js?v=202610150307';
+import { esc, bn, poolOf, deck, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, floatText } from './core.js?v=202610150320';
+import { gameState, bestOf, saveA } from '../learnstore.js?v=202610150320';
 
 export const meta = { id: 'race', emoji: '🏎️', name: 'MCQ রেসিং', desc: 'সঠিক উত্তরে গাড়ি ছোটে, পরপর ৩টায় নাইট্রো! ভুলে গতি কমে। ৯০ সেকেন্ডের রেস বা সময় ছাড়া অনুশীলন।', need: 0 };
 const TRACK = 1000, STEP = 100, NITRO_STEP = 200, SLOW = 50, TIME = 90;
