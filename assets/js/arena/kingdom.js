@@ -2,8 +2,8 @@
 // chapter's castle is the final stage. A region is won with ≥70% right; stars as in the levels.
 // Story lines are decoration only — every question is the chapter's own.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, masteryPct, validSrc, srcChips, chapterList, scopeName } from './core.js?v=202610141937';
-import { gameState, claim, claimed } from '../learnstore.js?v=202610141937';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, masteryPct, validSrc, srcChips, chapterList, scopeName } from './core.js?v=202610150224';
+import { gameState, claim, claimed } from '../learnstore.js?v=202610150224';
 
 export const meta = { id: 'kingdom', emoji: '🏰', name: 'অধ্যায় রাজ্য', desc: 'প্রতিটা অধ্যায় একটা রাজ্য, প্রতিটা টপিক একটা অঞ্চল — জয় করে করে দুর্গে পৌঁছাও!', need: 0 };
 const st = () => gameState('kingdom', { stars: {}, tried: {} });

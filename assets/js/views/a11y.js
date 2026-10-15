@@ -1,8 +1,8 @@
 // Accessibility settings page.
 
-import { icon } from '../icons.js?v=202610141937';
-import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610141937';
-import { hfPrefs, hfSupport, HF_FILTERS } from '../handsfree.js?v=202610141937';
+import { icon } from '../icons.js?v=202610150224';
+import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610150224';
+import { hfPrefs, hfSupport, HF_FILTERS } from '../handsfree.js?v=202610150224';
 
 const hfToggle = (key, on, title, text) => `<label class="a11y-row">
     <span><b>${title}</b><small class="muted">${text}</small></span>

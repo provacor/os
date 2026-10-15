@@ -2,8 +2,8 @@
 // bring seeds, and topic mastery unlocks new crops. Crops never wilt: a missed day costs nothing.
 // Finishing a chapter's topics (bronze or better) holds a harvest festival, once per chapter.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, masteryPct, badgeOf, refresh, sfx, floatText } from './core.js?v=202610141937';
-import { gameState, claim, claimed, spend, saveA, A, FARM_DEFAULTS } from '../learnstore.js?v=202610141937';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, masteryPct, badgeOf, refresh, sfx, floatText } from './core.js?v=202610150224';
+import { gameState, claim, claimed, spend, saveA, A, FARM_DEFAULTS } from '../learnstore.js?v=202610150224';
 
 export const meta = { id: 'farm', emoji: '🌾', name: 'জ্ঞানের খামার', desc: 'সঠিক উত্তরে পানি, আয়ত্তে বীজ। টপিক আয়ত্ত করে নতুন ফসল খোলো, ফসল তুলে খামার সাজাও — দিন বাদ গেলেও কিছু নষ্ট হয় না।', need: 0 };
 const CROPS = [

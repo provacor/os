@@ -1,11 +1,11 @@
 // Game zone screens: all chapters (#/games), a chapter's hub (#/games/<ch>), one topic's games
 // for a content type (#/games/<ch>/<topic>/<source>), and the play screen (#/play/<ch>/<topic>/<mode>).
 
-import { icon } from '../icons.js?v=202610141937';
-import { esc, ring, bar, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610141937';
-import { topicsOf, topicName, questionsOf, recallOf, ordersOf, factIds, sourcesOf, hasGameData, SOURCES, sourceMeta } from '../gamedata.js?v=202610141937';
-import { MODES, SPECIAL, modeCount, levelsOf, levelKey, levelUnlocked, starsOf, bestOf, isMastered, playerLevel, xp, soundOn, startGame, bn, parseMode, modeKey } from '../games.js?v=202610141937';
-import { arenaHomeCard, arenaChapterCard } from './arena.js?v=202610141937';
+import { icon } from '../icons.js?v=202610150224';
+import { esc, ring, bar, chapterEyebrow, chapterNo, pad2, emptyState } from '../components.js?v=202610150224';
+import { topicsOf, topicName, questionsOf, recallOf, ordersOf, factIds, sourcesOf, hasGameData, SOURCES, sourceMeta } from '../gamedata.js?v=202610150224';
+import { MODES, SPECIAL, modeCount, levelsOf, levelKey, levelUnlocked, starsOf, bestOf, isMastered, playerLevel, xp, soundOn, startGame, bn, parseMode, modeKey } from '../games.js?v=202610150224';
+import { arenaHomeCard, arenaChapterCard } from './arena.js?v=202610150224';
 
 export const hasGames = (ch) => ch?.level === 'chapter' && hasGameData(ch.id);
 
@@ -26,18 +26,36 @@ const bigCard = (href, title, sub, pct, cls = '') => `<a class="gm-home ${cls} r
   </a>`;
 
 // Home page: one big card into the game zone.
+const homeStat = (n, total, done) => `${n}টি অধ্যায় · ${total}টি প্রশ্নের ${done}টি আয়ত্তে`;
 export function gamesHomeCard(model) {
-  const chs = model.chapters.filter(hasGames);
-  if (!chs.length) return '';
-  const x = stat(chs.flatMap((ch) => factIds(ch.id, 'all')));
-  return `<section class="block">${bigCard('#/games', 'গেম জোন — খেলে খেলে শেখো', `${bn(chs.length)}টি অধ্যায় · MCQ, এক কথায় প্রকাশ, সূত্র, বিক্রিয়া, ধারণা… · ${bn(x.total)}টি প্রশ্নের ${bn(x.done)}টি আয়ত্তে`, x.pct)}</section>`;
+  if (!model.chapters.length) return '';
+  // Counting needs every chapter's game questions built (~100 ms), so the card is drawn at once
+  // and its numbers are filled in when the browser is idle, keeping that work out of start-up.
+  const sub = `MCQ, এক কথায় প্রকাশ, সূত্র, বিক্রিয়া, ধারণা…</small><small class="gm-home-stat">${homeStat('…', '…', '…')}`;
+  return `<section class="block" data-gm-home>${bigCard('#/games', 'গেম জোন — খেলে খেলে শেখো', sub, 0)}</section>`;
+}
+export function fillGamesHomeCard(model) {
+  const run = () => {
+    const box = document.querySelector('[data-gm-home]');
+    if (!box) return;
+    const chs = model.chapters.filter(hasGames);
+    if (!chs.length) { box.remove(); return; }
+    const x = stat(chs.flatMap((ch) => factIds(ch.id, 'all')));
+    box.querySelector('.gm-home-stat').textContent = homeStat(bn(chs.length), bn(x.total), bn(x.done));
+    const b = box.querySelector('.bar');
+    b?.setAttribute('aria-valuenow', x.pct);
+    b?.querySelector('span')?.style.setProperty('--p', `${x.pct}%`);
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1500 });
+  else setTimeout(run, 200);
 }
 
 // Chapter page: a banner at the top.
 export function gamesBanner(ch) {
   if (!hasGames(ch)) return '';
   const x = chStat(ch);
-  return `<section class="block">${bigCard(`#/games/${esc(ch.id)}`, 'গেম জোন — এই অধ্যায় খেলে শেখো', `${emojis(ch.id, 'all')} · ${bn(x.total)}টি প্রশ্ন · আয়ত্তে ${bn(x.pct)}%`, x.pct, 'gm-banner')}${arenaChapterCard(ch.id)}</section>`;
+  // both game entry points share one grouped card, so the chapter page shows a single game block
+  return `<section class="block"><div class="gm-pair">${bigCard(`#/games/${esc(ch.id)}`, 'গেম জোন — এই অধ্যায় খেলে শেখো', `${emojis(ch.id, 'all')} · ${bn(x.total)}টি প্রশ্ন · আয়ত্তে ${bn(x.pct)}%`, x.pct, 'gm-banner')}${arenaChapterCard(ch.id)}</div></section>`;
 }
 
 // #/games: every chapter that has games.
