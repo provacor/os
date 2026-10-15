@@ -1,7 +1,7 @@
 // Achievements: unlocked once by real progress (answers, mastery, streak, finished games), each
 // with a one-time coin reward the player claims. Nothing here changes mastery.
 
-import { A, S, gameState, bestStreak, claim, claimed, saveA, today, FARM_DEFAULTS } from '../learnstore.js?v=202610150224';
+import { A, S, gameState, bestStreak, claim, claimed, saveA, today, FARM_DEFAULTS } from '../learnstore.js?v=202610150241';
 
 const mastered = () => Object.values(S.m).filter((v) => v >= 2).length;
 const anyKey = (o, test) => Object.entries(o).some(([key, v]) => test(key, v));

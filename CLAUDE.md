@@ -1,4 +1,4 @@
-# Provacor — working notes for Claude
+# pb (formerly Provacor) — working notes for Claude
 
 The owner writes in Bengali; reply in Bengali.
 

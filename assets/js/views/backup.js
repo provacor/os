@@ -1,7 +1,7 @@
 // Backup & restore page.
 
-import { icon } from '../icons.js?v=202610150224';
-import { lastBackupAt, snapshot } from '../backup.js?v=202610150224';
+import { icon } from '../icons.js?v=202610150241';
+import { lastBackupAt, snapshot } from '../backup.js?v=202610150241';
 
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);
 
@@ -29,7 +29,7 @@ export function backupView() {
       <section class="card rise" style="--i:2">
         <h2 class="card-title">${icon('revision')} রিস্টোর করো</h2>
         <form class="bk-form" data-bk-restore>
-          <input name="file" type="file" accept=".provacor,application/octet-stream,application/json" required>
+          <input name="file" type="file" accept=".pb,.provacor,application/octet-stream,application/json" required>
           <input name="pw" type="password" required autocomplete="current-password" placeholder="ব্যাকআপের পাসওয়ার্ড">
           <button class="btn tap" type="submit">${icon('revision')}<span>রিস্টোর করো</span></button>
         </form>

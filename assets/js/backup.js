@@ -34,6 +34,8 @@ export function snapshot({ includeAiKey = false } = {}) {
 
 export async function makeBackup(password, opts) {
   if (!crypto?.subtle) throw new Error('nocrypto');
+  // 'provacor' / 'provacor-backup' are the file format's internal ids (the app's old name); they stay
+  // so that backups made before the rename to pb still restore.
   const plain = JSON.stringify({ app: 'provacor', v: 1, at: Date.now(), data: snapshot(opts) });
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -41,7 +43,7 @@ export async function makeBackup(password, opts) {
   const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plain));
   const file = JSON.stringify({ format: 'provacor-backup', v: 1, kdf: { name: 'PBKDF2', hash: 'SHA-256', iterations: ITER, salt: b64(salt) }, cipher: { name: 'AES-GCM', iv: b64(iv) }, data: b64(ct) });
   const d = new Date();
-  const name = `provacor-backup-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.provacor`;
+  const name = `pb-backup-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.pb`;
   localStorage.setItem(LAST, String(Date.now()));
   return { blob: new Blob([file], { type: 'application/octet-stream' }), name, keys: Object.keys(JSON.parse(plain).data).length };
 }
@@ -82,7 +84,7 @@ export async function saveOrShare({ blob, name }) {
   const file = new File([blob], name, { type: 'application/octet-stream' });
   if (navigator.canShare?.({ files: [file] })) {
     try {
-      await navigator.share({ files: [file], title: 'Provacor backup' });
+      await navigator.share({ files: [file], title: 'pb backup' });
       return 'shared';
     } catch (e) {
       if (e?.name === 'AbortError') return 'cancelled';

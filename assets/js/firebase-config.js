@@ -1,4 +1,4 @@
-// Firebase settings for the shared leaderboard (project "provacor").
+// Firebase settings for the shared leaderboard (Firebase project id "provacor", kept from the app's old name).
 // These values are not secret; the database is protected by the rules in firestore.rules.
 // Set to null to turn the leaderboard off.
 export const firebaseConfig = {

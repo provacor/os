@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Provacor weekly leaderboard.
+// pb weekly leaderboard.
 // weeks/{week}/users/{uid}: week is the Saturday date (YYYY-MM-DD) the week starts on.
 // Everyone can read the board; a device can only write its own row, only the
 // fields { name, seconds, updatedAt }, and its time can't grow faster than real time.

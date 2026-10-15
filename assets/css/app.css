@@ -1,5 +1,5 @@
 /* =========================================================
-   Provacor design system
+   pb design system
    Dark-first · subject accents · calm motion · mobile-first
    ========================================================= */
 
@@ -133,15 +133,11 @@ code { font-size: .85em; background: var(--surface-3); padding: 1px 6px; border-
   background: var(--bg); transition: opacity .38s var(--ease), visibility .38s;
 }
 #splash.out { opacity: 0; visibility: hidden; }
-.splash-mark {
-  width: 64px; height: 64px; display: grid; place-items: center; border-radius: var(--r-xl); color: #fff;
-  background: linear-gradient(140deg, var(--brand), color-mix(in srgb, var(--teal) 80%, var(--brand)));
-  box-shadow: 0 12px 40px -10px color-mix(in srgb, var(--brand) 70%, transparent);
-  animation: splash-mark .6s var(--ease-out) both;
-}
-.splash-name { font-size: var(--fs-xl); font-weight: 700; letter-spacing: -0.02em; margin-top: 10px; animation: rise .5s var(--ease-out) .12s both; }
+.splash-mark { width: 112px; height: 100px; color: var(--text); animation: splash-mark .6s var(--ease-out) both; }
+.splash-mark path { stroke-dasharray: 160; stroke-dashoffset: 160; animation: pb-draw 1s var(--ease-out) .05s forwards; } /* the mark draws itself once */
+@keyframes pb-draw { to { stroke-dashoffset: 0; } }
 .splash-sub { font-size: var(--fs-sm); color: var(--muted); letter-spacing: .04em; animation: fade .5s var(--ease) .22s both; }
-@keyframes splash-mark { from { opacity: 0; transform: scale(.7) rotate(-8deg); } }
+@keyframes splash-mark { from { opacity: 0; transform: scale(.85); } }
 
 /* ---------- top bar ---------- */
 .topbar {
@@ -154,7 +150,7 @@ code { font-size: .85em; background: var(--surface-3); padding: 1px 6px; border-
 .tb-title { font-weight: 600; font-size: var(--fs-base); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
 .tb-right { display: flex; gap: 6px; }
 @media (max-width: 360px) { .topbar { gap: 4px; padding-left: 8px; padding-right: 8px; } .tb-right { gap: 2px; } }
-.brand { display: flex; align-items: center; gap: 9px; min-height: var(--tap); font-weight: 700; letter-spacing: -0.02em; font-size: var(--fs-lg); }
+.brand { display: flex; align-items: center; min-height: var(--tap); padding: 0 4px; border-radius: var(--r-md); }
 .icon-btn {
   width: var(--tap); height: var(--tap); display: grid; place-items: center; border-radius: var(--r-md); cursor: pointer;
   background: var(--surface-2); border: 1px solid var(--border); color: var(--text-2);
@@ -721,7 +717,11 @@ th { color: var(--muted); font-weight: 600; font-size: var(--fs-xs); text-transf
 }
 .avatar.sm { width: 34px; height: 34px; }
 .avatar.lg { width: 56px; height: 56px; }
-.splash-mark.avatar { width: 72px; height: 72px; padding: 0; border-radius: 50%; }
+/* brand mark (pb) in the top bar and the About card */
+.pb-mark { display: block; flex: none; }
+.brand .pb-mark { width: 46px; height: 41px; color: var(--text); }
+.about-mark { display: grid; place-items: center; flex: none; width: 60px; height: 60px; border-radius: var(--r-lg); background: #0a0c11; color: #fff; }
+.about-mark .pb-mark { width: 42px; height: 38px; }
 
 /* custom subject image icons (round, drop into any icon box) */
 .s-icon:has(.s-img), .r-icon:has(.s-img) { background: none; border: 0; padding: 0; overflow: hidden; }

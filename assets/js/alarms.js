@@ -136,7 +136,7 @@ function notify(a) {
   try {
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
     const body = a.note || `${durationText(a.minutes)}ের অ্যালার্ম`;
-    const opts = { body, tag: `alarm-${a.id}`, renotify: true, requireInteraction: true, icon: 'assets/img/avatar.jpg' };
+    const opts = { body, tag: `alarm-${a.id}`, renotify: true, requireInteraction: true, icon: 'assets/img/icon-192.png' };
     if (navigator.serviceWorker?.controller) navigator.serviceWorker.ready.then((r) => r.showNotification('⏰ সময় শেষ!', opts));
     else new Notification('⏰ সময় শেষ!', opts);
   } catch {
