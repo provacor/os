@@ -2,10 +2,10 @@
 // player, picked by a seed), 1–4 players passing one phone. Only the phone's owner (player 1)
 // changes mastery; the ranking never does. Records stay on this phone — it is not a global board.
 
-import { esc, bn, poolOf, mixedPool, ask, askQuestion, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, hashStr, seeded, seededShuffle, sfx, confetti, animOn } from './core.js?v=202610150258';
-import { gameState, claim, saveA, today, finishRecord } from '../learnstore.js?v=202610150258';
-import { checkAchievements } from './achievements.js?v=202610150258';
-import { getProfile } from '../profile.js?v=202610150258';
+import { esc, bn, poolOf, mixedPool, ask, askQuestion, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, topicList, scopeName, hashStr, seeded, seededShuffle, sfx, confetti, animOn } from './core.js?v=202610150307';
+import { gameState, claim, saveA, today, finishRecord } from '../learnstore.js?v=202610150307';
+import { checkAchievements } from './achievements.js?v=202610150307';
+import { getProfile } from '../profile.js?v=202610150307';
 
 export const meta = { id: 'tournament', emoji: '🏆', name: 'টুর্নামেন্ট', desc: 'আজকের আর এই সপ্তাহের টুর্নামেন্ট — নিজের রেকর্ড ভাঙো, বা এক ফোনে বন্ধুদের সাথে পালা করে খেলো।', need: 80 };
 const st = () => gameState('tournament', { results: [], done: {}, players: 1, names: [] });

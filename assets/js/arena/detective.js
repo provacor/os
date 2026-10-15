@@ -3,8 +3,8 @@
 // questioning (the whole chapter) solves the case. The story is only a frame: every question,
 // answer and explanation is the chapter's own.
 
-import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, hashStr } from './core.js?v=202610150258';
-import { gameState, claim, claimed, saveA } from '../learnstore.js?v=202610150258';
+import { esc, bn, poolOf, smartPick, ask, askQuestion, resultScreen, mount, chapters, topicsOf, chapterById, validSrc, srcChips, chapterList, scopeName, hashStr } from './core.js?v=202610150307';
+import { gameState, claim, claimed, saveA } from '../learnstore.js?v=202610150307';
 
 export const meta = { id: 'detective', emoji: '🕵️', name: 'রহস্য গোয়েন্দা', desc: 'প্রতিটা সঠিক উত্তরে একটা সূত্র, প্রতিটা টপিকে একটা প্রমাণ — সব প্রমাণ জুড়ে রহস্যের সমাধান করো!', need: 40 };
 const CLUES = 4;      // clues that make one topic's evidence

@@ -41,7 +41,7 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --t-fast: 160ms; --t: 240ms; --t-slow: 420ms;
-  --nav-h: 64px;
+  --nav-h: 80px;
   --ai-grad: linear-gradient(135deg, #7c5cf0, #3b6cf6 55%, #0fb5c9); /* the AI tutor's own colour, same in both themes */
   --font: "Inter", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color-scheme: dark;
@@ -668,23 +668,67 @@ th { color: var(--muted); font-weight: 600; font-size: var(--fs-xs); text-transf
 .about { display: flex; align-items: center; gap: 14px; }
 
 /* ---------- bottom nav ---------- */
+/* Glowing glass bar: each tab is an icon in a glass bubble with a label; the active tab sits in a
+   lit rounded-square tile (the sliding .nav-ind) with a glowing underline. Colours are local
+   tokens so the light theme and high-contrast mode can restyle it in one place. */
 .bottom-nav {
+  --nv-bg: linear-gradient(180deg, rgba(16, 30, 66, .9), rgba(7, 13, 32, .94));
+  --nv-border: rgba(84, 144, 255, .55);
+  --nv-glow: 0 0 22px rgba(46, 116, 255, .32), 0 0 0 1px rgba(46, 100, 230, .12), inset 0 1px 0 rgba(150, 196, 255, .16), 0 16px 32px -14px rgba(0, 0, 0, .85);
+  --nv-div: rgba(110, 160, 255, .26);
+  --nv-bub-bg: radial-gradient(circle at 35% 25%, rgba(130, 176, 255, .2), rgba(22, 42, 96, .38) 72%);
+  --nv-bub-border: rgba(120, 168, 255, .3);
+  --nv-ic: #d3e2ff;
+  --nv-lbl: #c3d1ee;
+  --nv-act-bg: linear-gradient(170deg, rgba(64, 128, 255, .62), rgba(20, 58, 168, .6) 60%, rgba(12, 36, 110, .7));
+  --nv-act-border: rgba(132, 196, 255, .8);
+  --nv-act-glow: 0 0 18px rgba(64, 146, 255, .6), inset 0 1px 0 rgba(255, 255, 255, .28);
+  --nv-act-ic: #9fe3ff;
+  --nv-act-lbl: #a8e6ff;
   position: fixed; z-index: var(--z-nav); left: 50%; transform: translateX(-50%);
   bottom: calc(10px + env(safe-area-inset-bottom)); width: min(calc(100% - 20px), 480px); height: var(--nav-h);
   display: grid; grid-template-columns: repeat(6, 1fr); padding: 6px;
-  background: var(--glass); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid var(--border-2); border-radius: var(--r-xl); box-shadow: var(--shadow-2);
+  background: var(--nv-bg); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid var(--nv-border); border-radius: 26px; box-shadow: var(--nv-glow);
+}
+:root[data-theme="light"] .bottom-nav {
+  --nv-bg: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(234, 241, 255, .95));
+  --nv-border: rgba(47, 95, 230, .38);
+  --nv-glow: 0 0 20px rgba(47, 95, 230, .16), inset 0 1px 0 rgba(255, 255, 255, .9), 0 14px 28px -16px rgba(15, 23, 42, .35);
+  --nv-div: rgba(47, 95, 230, .18);
+  --nv-bub-bg: radial-gradient(circle at 35% 25%, #ffffff, #e3ecff 75%);
+  --nv-bub-border: rgba(47, 95, 230, .22);
+  --nv-ic: #1f3f9e;
+  --nv-lbl: #334155;
+  --nv-act-bg: linear-gradient(170deg, #4a7dff, #2f5fe6 55%, #1d3fb8);
+  --nv-act-border: rgba(120, 170, 255, .9);
+  --nv-act-glow: 0 0 16px rgba(47, 95, 230, .45), inset 0 1px 0 rgba(255, 255, 255, .35);
+  --nv-act-ic: #ffffff;
+  --nv-act-lbl: #ffffff;
 }
 .nav-ind {
-  position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 6); border-radius: var(--r-lg);
-  background: color-mix(in srgb, var(--brand) 14%, transparent); border: 1px solid color-mix(in srgb, var(--brand) 20%, transparent);
+  position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 6); border-radius: 18px;
+  background: var(--nv-act-bg); border: 1px solid var(--nv-act-border); box-shadow: var(--nv-act-glow);
   transform: translateX(calc(var(--idx, 0) * 100%)); transition: transform var(--t-slow) var(--ease-out);
 }
-.bottom-nav a { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: var(--fs-2xs); font-weight: 500; color: var(--muted); border-radius: var(--r-lg); transition: color var(--t) var(--ease); }
-.bottom-nav a .ic { width: 22px; height: 22px; transition: transform var(--t) var(--ease-out); }
-.bottom-nav a.active { color: var(--brand); }
-.bottom-nav a.active .ic { transform: translateY(-1px) scale(1.06); }
-.bottom-nav a:active .ic { transform: scale(.88); }
+.bottom-nav a { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 5px; gap: 3px; min-width: 0; font-size: var(--fs-2xs); font-weight: 500; color: var(--nv-lbl); border-radius: 18px; transition: color var(--t) var(--ease); }
+/* thin glowing dividers between tabs */
+.bottom-nav a + a::before { content: ""; position: absolute; left: 0; top: 22%; bottom: 22%; width: 1px; background: linear-gradient(transparent, var(--nv-div), transparent); }
+.nav-bub {
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: var(--nv-ic);
+  background: var(--nv-bub-bg); border: 1px solid var(--nv-bub-border); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  transition: transform var(--t) var(--ease-out), background-color var(--t) var(--ease), border-color var(--t) var(--ease);
+}
+.nav-bub .ic { width: 22px; height: 22px; }
+.nav-lbl { position: relative; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+.bottom-nav a.active { color: var(--nv-act-lbl); font-weight: 600; }
+.bottom-nav a.active .nav-bub { background: none; border-color: transparent; box-shadow: none; color: var(--nv-act-ic); transform: translateY(-1px) scale(1.08); }
+.bottom-nav a.active .nav-bub .ic { filter: drop-shadow(0 0 5px color-mix(in srgb, var(--nv-act-ic) 70%, transparent)); }
+.bottom-nav a.active::after { content: ""; position: absolute; bottom: 3px; left: 50%; width: 18px; height: 3px; margin-left: -9px; border-radius: 3px; background: var(--nv-act-ic); box-shadow: 0 0 8px var(--nv-act-ic); }
+.bottom-nav a:active .nav-bub { transform: scale(.9); }
+@media (hover: hover) { .bottom-nav a:not(.active):hover .nav-bub { border-color: var(--nv-act-border); } }
+@media (max-width: 360px) { .nav-bub { width: 34px; height: 34px; } .nav-bub .ic { width: 20px; height: 20px; } .bottom-nav a { padding-top: 7px; } .bottom-nav .nav-lbl { font-size: 10px; letter-spacing: -.01em; } }
+:root[data-contrast="high"] .bottom-nav { --nv-bg: var(--surface); --nv-border: var(--border-2); --nv-glow: none; --nv-bub-bg: none; --nv-bub-border: var(--border); --nv-ic: var(--text); --nv-lbl: var(--text); --nv-act-bg: var(--surface-3); --nv-act-border: var(--text); --nv-act-glow: none; --nv-act-ic: var(--text); --nv-act-lbl: var(--text); }
 
 /* toast */
 .toast {
@@ -726,9 +770,6 @@ th { color: var(--muted); font-weight: 600; font-size: var(--fs-xs); text-transf
 /* custom subject image icons (round, drop into any icon box) */
 .s-icon:has(.s-img), .r-icon:has(.s-img) { background: none; border: 0; padding: 0; overflow: hidden; }
 .s-img { width: 100%; height: 100%; object-fit: cover; border-radius: 22%; display: block; } /* subject logos are rounded-square tiles */
-.bottom-nav .nav-img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; display: block; transition: transform var(--t) var(--ease-out); box-shadow: 0 0 0 1.5px var(--border-2); }
-.bottom-nav a.active .nav-img { box-shadow: 0 0 0 2px var(--brand); transform: translateY(-1px) scale(1.06); }
-.bottom-nav a:active .nav-img { transform: scale(.88); }
 
 /* ---------- mission planner ---------- */
 .day-strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-bottom: 14px; }
@@ -1029,7 +1070,6 @@ body.fab-on { padding-bottom: calc(var(--nav-h) + 92px + env(safe-area-inset-bot
 :root[data-motion="full"] .rise { animation: rise .42s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 38ms); }
 /* the bottom bar has fixed room: let its labels grow only a little with large text */
 .bottom-nav a { font-size: clamp(11px, var(--fs-2xs), 12.5px); }
-.bottom-nav a span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 :root[data-contrast="high"] .seg-btn.on, :root[data-contrast="high"] .chip.on { outline: 2px solid var(--text); outline-offset: -2px; background: var(--surface-3); }
 
 /* =========================================================
@@ -1957,11 +1997,12 @@ html.ar-calm .ar-opts.targets .ar-opt { width: 100%; transform: none; }
   .topbar { margin-left: -108px; padding-left: calc(12px + 108px); }
   .bottom-nav {
     left: 16px; top: calc(var(--topbar-h) + 16px); bottom: auto; transform: none;
-    width: 76px; height: auto; grid-template-columns: 1fr; grid-auto-rows: 64px; padding: 6px;
+    width: 80px; height: auto; grid-template-columns: 1fr; grid-auto-rows: 76px; padding: 6px;
   }
-  .nav-ind { left: 6px; right: 6px; top: 6px; bottom: auto; width: auto; height: 64px; transform: translateY(calc(var(--idx, 0) * 100%)); }
+  .nav-ind { left: 6px; right: 6px; top: 6px; bottom: auto; width: auto; height: 76px; transform: translateY(calc(var(--idx, 0) * 100%)); }
+  .bottom-nav a + a::before { left: 22%; right: 22%; top: 0; bottom: auto; width: auto; height: 1px; background: linear-gradient(90deg, transparent, var(--nv-div), transparent); }
   .bottom-nav a { font-size: var(--fs-2xs); }
-  .ai-fab { left: 16px; right: auto; bottom: 16px; width: 76px; height: 56px; padding: 0; justify-content: center; border-radius: var(--r-xl); }
+  .ai-fab { left: 16px; right: auto; bottom: 16px; width: 80px; height: 56px; padding: 0; justify-content: center; border-radius: var(--r-xl); }
   .ai-fab.away { transform: none; opacity: 1; pointer-events: auto; } /* docked: no need to move away */
   .toast { bottom: 24px; }
   .ai-compose { bottom: 16px; }
@@ -1978,7 +2019,8 @@ html.ar-calm .ar-opts.targets .ar-opt { width: 100%; transform: none; }
 /* users who ask for less transparency (and old GPUs that honour it) get solid bars instead of
    live blur: the glass layers are always on screen, so this saves a blur pass on every frame */
 @media (prefers-reduced-transparency: reduce) {
-  .topbar, .bottom-nav, .seg-tabs, .ai-compose, .hf-bar { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--surface); }
+  .topbar, .seg-tabs, .ai-compose, .hf-bar { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--surface); }
+  .bottom-nav { backdrop-filter: none; -webkit-backdrop-filter: none; } /* its own background is already opaque enough */
 }
 
 /* ---------- touch targets (kept last so no later component rule shrinks them) ---------- */
