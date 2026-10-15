@@ -1,15 +1,15 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610150339';
-import { esc, brandMark } from '../components.js?v=202610150339';
-import { themePref } from '../theme.js?v=202610150339';
-import { a11y } from '../a11y.js?v=202610150339';
-import { getProfile } from '../profile.js?v=202610150339';
+import { icon } from '../icons.js?v=202610150356';
+import { esc, brandMark } from '../components.js?v=202610150356';
+import { themePref } from '../theme.js?v=202610150356';
+import { a11y } from '../a11y.js?v=202610150356';
+import { getProfile } from '../profile.js?v=202610150356';
 
 // The Android app (built by .github/workflows/android.yml) is always at this address.
 const APK_URL = 'https://github.com/provacor/p-b/releases/latest/download/pb.apk';
 // Inside the installed app or the Android app there is nothing to download.
-const inApp = typeof matchMedia === 'function' && (matchMedia('(display-mode: standalone)').matches || document.referrer.startsWith('android-app://'));
+const inApp = /pbAndroid/.test(navigator.userAgent) || (typeof matchMedia === 'function' && (matchMedia('(display-mode: standalone)').matches || document.referrer.startsWith('android-app://')));
 
 export function moreView(model) {
   const pref = themePref();

@@ -1,14 +1,17 @@
 # pb Android app
 
-A Trusted Web Activity wrapper around https://provacor.github.io/p-b/ (Chrome shows the site
-full-screen; phones without Chrome fall back to a WebView). The APK is built and published by
-`.github/workflows/android.yml` on every change under `android/`, or by running that workflow by
-hand. Latest APK: https://github.com/provacor/p-b/releases/latest/download/pb.apk
+A small native app: one full-screen WebView (`MainActivity`) that shows
+https://provacor.github.io/p-b/. It needs no Chrome and no libraries, so the APK is tiny.
 
-- Signing: the workflow reads the key from the repository secrets `PB_KEYSTORE_BASE64` (the
-  keystore file, base64) and `PB_KEYSTORE_PASSWORD` (alias `pb`). Until they are set, each build is
-  signed with a one-off key, so a newer APK only installs after uninstalling the older one. The key
-  is never committed.
-- Once a fixed key is in the secrets, the small address bar at the top can be hidden by publishing
-  a Digital Asset Links file for that key's SHA-256 fingerprint at
-  `https://provacor.github.io/.well-known/assetlinks.json` (a repository named `provacor.github.io`).
+- **Offline:** the site's service worker stores the app and the study files on the first launch
+  with internet; after that the app opens and works offline. Without that first visit it shows a
+  small "needs internet once" page (`assets/offline.html`).
+- **Bridge (`window.PbAndroid`):** read-aloud through Android text-to-speech (the WebView has no
+  speechSynthesis; `assets/js/a11y.js` maps the page's API onto it) and saving backup files
+  (`assets/js/backup.js`). Links outside the site (YouTube, GitHub…) open in their own apps.
+- **Build:** `.github/workflows/android.yml` builds the signed APK on every change under
+  `android/` (and by hand) and publishes it; latest:
+  https://github.com/provacor/p-b/releases/latest/download/pb.apk
+- **Signing:** from the repository secrets `PB_KEYSTORE_BASE64` (the keystore file, base64) and
+  `PB_KEYSTORE_PASSWORD` (alias `pb`). Until they are set, each build gets a one-off key, so a newer
+  APK installs only after uninstalling the older one. The key is never committed.
