@@ -30,6 +30,28 @@ jobs:
         with:
           gradle-version: '8.7'
 
+      # Signing key: the PB_KEYSTORE_BASE64 / PB_KEYSTORE_PASSWORD repository secrets when they are
+      # set (same key every build, so installed apps update in place). Without them a throwaway key
+      # is made for this build only; the APK still installs, but updating needs an uninstall first.
+      - name: Signing key
+        env:
+          KS_B64: ${{ secrets.PB_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.PB_KEYSTORE_PASSWORD }}
+        run: |
+          KS="$RUNNER_TEMP/pb-release.jks"
+          if [ -n "$KS_B64" ] && [ -n "$KS_PASS" ]; then
+            echo "$KS_B64" | base64 -d > "$KS"
+            echo "PB_KEYSTORE_PASSWORD=$KS_PASS" >> "$GITHUB_ENV"
+          else
+            echo "::warning::PB_KEYSTORE_BASE64 secret not set: signing with a one-off key"
+            PASS="$(openssl rand -hex 16)"
+            echo "::add-mask::$PASS"
+            keytool -genkeypair -keystore "$KS" -alias pb -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "$PASS" -keypass "$PASS" -dname "CN=pb, O=pb, C=BD"
+            echo "PB_KEYSTORE_PASSWORD=$PASS" >> "$GITHUB_ENV"
+          fi
+          echo "PB_KEYSTORE_FILE=$KS" >> "$GITHUB_ENV"
+
       - name: Build signed APK
         run: gradle -p android assembleRelease -PversionCode=${{ github.run_number }}
 

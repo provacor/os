@@ -22,12 +22,12 @@ android {
 
     signingConfigs {
         release {
-            // The key lives in the repo so every build signs the same way and phones can update
-            // in place. CI can override it with the PB_KEYSTORE_* secrets if they are ever set.
-            storeFile file(System.getenv('PB_KEYSTORE_FILE') ?: '../pb-release.jks')
-            storePassword System.getenv('PB_KEYSTORE_PASSWORD') ?: 'pbstudy-app'
+            // The key is never stored in the repo: CI writes it from the PB_KEYSTORE_BASE64 secret
+            // (or, until that secret exists, from a throwaway key made for that one build).
+            storeFile file(System.getenv('PB_KEYSTORE_FILE') ?: 'pb-release.jks')
+            storePassword System.getenv('PB_KEYSTORE_PASSWORD')
             keyAlias System.getenv('PB_KEY_ALIAS') ?: 'pb'
-            keyPassword System.getenv('PB_KEY_PASSWORD') ?: 'pbstudy-app'
+            keyPassword System.getenv('PB_KEY_PASSWORD') ?: System.getenv('PB_KEYSTORE_PASSWORD')
         }
     }
 
