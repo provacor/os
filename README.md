@@ -1,4 +1,4 @@
-# Provacor
+# pb
 
 A personal, mobile-first HSC Science study app:
 **Subject → Paper → Chapter → Section → Content**.

@@ -1,10 +1,10 @@
 // More: appearance, data, syllabus source status, about.
 
-import { icon } from '../icons.js?v=202610150224';
-import { esc } from '../components.js?v=202610150224';
-import { themePref } from '../theme.js?v=202610150224';
-import { a11y } from '../a11y.js?v=202610150224';
-import { getProfile } from '../profile.js?v=202610150224';
+import { icon } from '../icons.js?v=202610150241';
+import { esc, brandMark } from '../components.js?v=202610150241';
+import { themePref } from '../theme.js?v=202610150241';
+import { a11y } from '../a11y.js?v=202610150241';
+import { getProfile } from '../profile.js?v=202610150241';
 
 export function moreView(model) {
   const pref = themePref();
@@ -55,7 +55,7 @@ export function moreView(model) {
       <section class="card rise" style="--i:3"><h2 class="card-title">${icon('trash')} Data on this device</h2>
         <p class="muted small">Progress, study history and recent searches are stored only in this browser.</p>
         <button class="btn btn-danger tap" data-action="reset">Reset progress & history</button></section>
-      <section class="card about rise" style="--i:4"><img class="avatar lg" src="assets/img/avatar.jpg" alt="" width="56" height="56">
-        <div><h2>Provacor</h2><p class="muted small">Website, UI &amp; design by Provacor</p><p class="muted small">© ${new Date().getFullYear()} Provacor · All rights reserved</p></div></section>`,
+      <section class="card about rise" style="--i:4"><span class="about-mark">${brandMark()}</span>
+        <div><h2>pb</h2><p class="muted small">Website, UI &amp; design by pb</p><p class="muted small">© ${new Date().getFullYear()} pb · All rights reserved</p></div></section>`,
   };
 }

@@ -1,10 +1,10 @@
 // AI tutor page: ask in text or with photos (camera / gallery), answers stream in.
 
-import { icon } from '../icons.js?v=202610150224';
-import { esc } from '../components.js?v=202610150224';
-import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610150224';
-import { renderMarkdown, typesetMath } from '../markdown.js?v=202610150224';
-import { canSpeak, canListen } from '../a11y.js?v=202610150224';
+import { icon } from '../icons.js?v=202610150241';
+import { esc } from '../components.js?v=202610150241';
+import { aiSettings, hasKey, chatHistory, CLAUDE_MODELS } from '../ai.js?v=202610150241';
+import { renderMarkdown, typesetMath } from '../markdown.js?v=202610150241';
+import { canSpeak, canListen } from '../a11y.js?v=202610150241';
 
 export const speakBtn = () => (canSpeak() ? `<button class="ai-speak" data-ai-speak aria-label="উত্তর পড়ে শোনাও">${icon('speaker')}</button>` : '');
 
@@ -58,9 +58,9 @@ export function aiView(model, chapterId) {
 
   return {
     nav: 'home',
-    title: 'Provacor AI',
+    title: 'pb AI',
     back: ch ? `#/c/${ch.id}` : '#/',
-    html: `<header class="page-title rise ai-head"><p class="eyebrow">AI শিক্ষক</p><h1>Provacor AI</h1>
+    html: `<header class="page-title rise ai-head"><p class="eyebrow">AI শিক্ষক</p><h1>pb AI</h1>
         ${aiState.context ? `<p class="muted small">${icon('notes')} ${esc(aiState.context)}</p>` : ''}
         ${list.length ? '<button class="link ai-clear" data-ai-clear>নতুন চ্যাট</button>' : ''}</header>
       ${settingsCard}

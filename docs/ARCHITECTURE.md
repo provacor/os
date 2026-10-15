@@ -1,4 +1,4 @@
-# Provacor: structure and architecture
+# pb: structure and architecture
 
 This covers the seven "first deliverable" items: subjects, papers, chapters, section structure, data architecture, folder structure and UI navigation.
 

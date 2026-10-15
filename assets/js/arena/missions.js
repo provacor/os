@@ -2,9 +2,9 @@
 // questions waiting, a topic not yet mastered…), each paid once. A day with at least five answers
 // keeps the streak; a broken streak never deletes any progress. Dates are the phone's local date.
 
-import { esc, bn, bar, chapters, topicsOf, chapterById, topicName, hashStr, seeded, refresh, sfx } from './core.js?v=202610150224';
-import { S, A, saveA, todayCounters, claim, claimed, isMastered, statOf, streak, bestStreak, today, addDays, ACTIVE_MIN } from '../learnstore.js?v=202610150224';
-import { questionsOf } from '../gamedata.js?v=202610150224';
+import { esc, bn, bar, chapters, topicsOf, chapterById, topicName, hashStr, seeded, refresh, sfx } from './core.js?v=202610150241';
+import { S, A, saveA, todayCounters, claim, claimed, isMastered, statOf, streak, bestStreak, today, addDays, ACTIVE_MIN } from '../learnstore.js?v=202610150241';
+import { questionsOf } from '../gamedata.js?v=202610150241';
 
 export const meta = { id: 'missions', emoji: '🎯', name: 'দৈনিক মিশন ও ধারা', desc: 'প্রতিদিন তোমার নিজের পড়া থেকে ৪টি মিশন — শেষ করলে XP আর কয়েন। টানা পড়লে ধারা বাড়ে, ভাঙলেও কিছু হারায় না।', need: 0 };
 const REWARD = { xp: 20, coins: 15 }, BONUS = { coins: 25, gems: 1 };

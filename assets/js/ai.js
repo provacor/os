@@ -1,6 +1,6 @@
 // AI tutor on Anthropic Claude, called straight from the browser with the person's own
 // API key from the Claude Console. The key and the chat stay in this browser; nothing
-// goes through a Provacor server, so no shared key can leak from the site.
+// goes through a pb server, so no shared key can leak from the site.
 
 const SETTINGS = 'hscos:ai:v1';
 const CHAT = 'hscos:ai-chat:v1';
@@ -63,7 +63,7 @@ function remember(msg) {
   }
 }
 
-const SYSTEM = `তুমি "Provacor AI", বাংলাদেশের HSC বিজ্ঞান বিভাগের (NCTB সিলেবাস) একজন ধৈর্যশীল শিক্ষক।
+const SYSTEM = `তুমি "pb AI", বাংলাদেশের HSC বিজ্ঞান বিভাগের (NCTB সিলেবাস) একজন ধৈর্যশীল শিক্ষক।
 - উত্তর বাংলায় দাও; বৈজ্ঞানিক পরিভাষা, সূত্র ও একক ইংরেজিতে রাখা যাবে। প্রশ্ন ইংরেজিতে হলে বা ইংরেজি চাইলে ইংরেজিতে দাও।
 - অঙ্ক/গাণিতিক সমস্যা ধাপে ধাপে সমাধান করো: প্রদত্ত তথ্য → সূত্র → মান বসানো → উত্তর (একক সহ)।
 - গণিতের সব রাশি LaTeX-এ লেখো: লাইনের ভেতরে $...$, আলাদা লাইনে $$...$$।

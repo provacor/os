@@ -1,8 +1,8 @@
 {
-  "name": "provacor",
+  "name": "pb",
   "version": "0.1.0",
   "private": true,
-  "description": "Provacor: personal HSC Science study app (Subject → Paper → Chapter → Section → Content).",
+  "description": "pb: personal HSC Science study app (Subject → Paper → Chapter → Section → Content).",
   "type": "module",
   "scripts": {
     "start": "node tools/serve.mjs",

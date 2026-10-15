@@ -1,18 +1,18 @@
 // Event handling for the practice tools (exam, review, flashcards, bookmarks & notes,
 // board filter, AI marking, daily goal & reminders, offline chapters).
 
-import { icon } from './icons.js?v=202610150224';
+import { icon } from './icons.js?v=202610150241';
 import {
   indexItems, itemRef, rightIndex, recordAttempt, srsReview, srsDue, srsAdd, saveExam, toggleBookmark,
   noteOf, setNote, goalState, setGoal, todayStr, offlineOf, setOffline, isMcq,
-} from './learn.js?v=202610150224';
-import { recordMcqMistake } from './mistakes.js?v=202610150224';
-import { addTask, todayKey } from './mission.js?v=202610150224';
-import { gradeCq, shrinkImage, AiError, ERRORS } from './ai.js?v=202610150224';
-import { exam, filterPool, poolFor, deck, savedState, grading, bn } from './views/practice.js?v=202610150224';
-import { setBoardFilter } from './views/section.js?v=202610150224';
-import { DATA_FILES } from './model.js?v=202610150224';
-import { tocOf } from './views/topic.js?v=202610150224';
+} from './learn.js?v=202610150241';
+import { recordMcqMistake } from './mistakes.js?v=202610150241';
+import { addTask, todayKey } from './mission.js?v=202610150241';
+import { gradeCq, shrinkImage, AiError, ERRORS } from './ai.js?v=202610150241';
+import { exam, filterPool, poolFor, deck, savedState, grading, bn } from './views/practice.js?v=202610150241';
+import { setBoardFilter } from './views/section.js?v=202610150241';
+import { DATA_FILES } from './model.js?v=202610150241';
+import { tocOf } from './views/topic.js?v=202610150241';
 
 let model;
 let ui; // { rerender, toast }
@@ -81,7 +81,7 @@ function checkReminder() {
   setGoal({ notified: todayStr() });
   const body = `আজ এখনো ${bn(g.mcq - g.count)}টি MCQ বাকি। চলো শুরু করি!`;
   if ('Notification' in window && Notification.permission === 'granted') {
-    const opts = { body, icon: 'assets/img/avatar.jpg', tag: 'provacor-goal' };
+    const opts = { body, icon: 'assets/img/icon-192.png', tag: 'pb-goal' };
     if (navigator.serviceWorker?.controller) navigator.serviceWorker.ready.then((reg) => reg.showNotification('📚 পড়ার সময়', opts));
     else new Notification('📚 পড়ার সময়', opts);
   }
@@ -94,11 +94,11 @@ function downloadIcs() {
   const p = (n) => String(n).padStart(2, '0');
   const start = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}T${p(h)}${p(m)}00`;
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Provacor//Study reminder//BN', 'BEGIN:VEVENT', `UID:provacor-daily-${Date.now()}@provacor`, `DTSTAMP:${stamp}`, `DTSTART:${start}`, 'DURATION:PT30M', 'RRULE:FREQ=DAILY',
-    `SUMMARY:Provacor — আজকের পড়া (${g.mcq}টি MCQ)`, 'DESCRIPTION:Provacor খুলে আজকের রিভিশন আর MCQ শেষ করো।', 'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:পড়ার সময়', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pb//Study reminder//BN', 'BEGIN:VEVENT', `UID:pb-daily-${Date.now()}@pb`, `DTSTAMP:${stamp}`, `DTSTART:${start}`, 'DURATION:PT30M', 'RRULE:FREQ=DAILY',
+    `SUMMARY:pb — আজকের পড়া (${g.mcq}টি MCQ)`, 'DESCRIPTION:pb খুলে আজকের রিভিশন আর MCQ শেষ করো।', 'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:পড়ার সময়', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
-  a.download = 'provacor-reminder.ics';
+  a.download = 'pb-reminder.ics';
   document.body.appendChild(a);
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);

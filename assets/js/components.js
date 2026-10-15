@@ -1,8 +1,8 @@
 // Reusable UI building blocks. Each returns an HTML string; views compose them.
 
-import { icon } from './icons.js?v=202610150224';
-import { progressOf } from './progress.js?v=202610150224';
-import { contentCount, chapterCount } from './model.js?v=202610150224';
+import { icon } from './icons.js?v=202610150241';
+import { progressOf } from './progress.js?v=202610150241';
+import { contentCount, chapterCount } from './model.js?v=202610150241';
 
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -156,3 +156,9 @@ export function highlight(text, tokens) {
     });
   return out.replace(/\u0000/g, '<mark>').replace(/\u0001/g, '</mark>');
 }
+
+// ---------- brand ----------
+// The pb mark: a monoline "p" and "b" joined in one infinity loop. It draws in currentColor,
+// so it follows the theme (and high-contrast mode) everywhere it is used.
+export const brandMark = (cls = 'pb-mark') =>
+  `<svg class="${cls}" viewBox="0 0 56 50" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 26C7 20.5 11.5 16 17 16C22.5 16 25 21 28 26C31 31 33.5 36 39 36C44.5 36 49 31.5 49 26C49 20.5 44.5 16 39 16C33.5 16 31 21 28 26C25 31 22.5 36 17 36C11.5 36 7 31.5 7 26Z"/><path d="M7 26V46M28 26V4"/></svg>`;

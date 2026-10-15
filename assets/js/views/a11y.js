@@ -1,8 +1,8 @@
 // Accessibility settings page.
 
-import { icon } from '../icons.js?v=202610150224';
-import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610150224';
-import { hfPrefs, hfSupport, HF_FILTERS } from '../handsfree.js?v=202610150224';
+import { icon } from '../icons.js?v=202610150241';
+import { a11y, FONT_STEPS, canSpeak, canListen } from '../a11y.js?v=202610150241';
+import { hfPrefs, hfSupport, HF_FILTERS } from '../handsfree.js?v=202610150241';
 
 const hfToggle = (key, on, title, text) => `<label class="a11y-row">
     <span><b>${title}</b><small class="muted">${text}</small></span>
@@ -80,7 +80,7 @@ export function a11yView() {
       <section class="card rise" style="--i:4">
         <h2 class="card-title">${icon('speaker')} পড়ে শোনানো</h2>
         ${canSpeak() ? `<div class="seg" role="group" aria-label="কথার গতি">${rateSeg}</div>
-          <button class="btn tap a11y-test" data-a11y-speak="Provacor-এ স্বাগতম। AI-এর উত্তরের পাশে স্পিকার চিহ্ন চাপলে উত্তর পড়ে শোনাবে।">${icon('speaker')}<span>শুনে দেখো</span></button>
+          <button class="btn tap a11y-test" data-a11y-speak="pb-তে স্বাগতম। AI-এর উত্তরের পাশে স্পিকার চিহ্ন চাপলে উত্তর পড়ে শোনাবে।">${icon('speaker')}<span>শুনে দেখো</span></button>
           <p class="muted small a11y-note">AI-এর প্রতিটা উত্তরে ${icon('speaker')} চাপলে পড়ে শোনাবে। বাংলা না শোনালে ফোনের Settings → Text-to-speech-এ বাংলা ভয়েস নামাও।</p>`
           : '<p class="muted small">এই ব্রাউজারে পড়ে শোনানো সাপোর্ট করে না।</p>'}
       </section>

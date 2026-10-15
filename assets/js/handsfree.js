@@ -8,12 +8,12 @@
 // Questions and answers are read aloud with the phone's text-to-speech; MCQs can be
 // answered by saying "ক/খ/গ/ঘ" into the earbud microphone.
 
-import { speak, stopSpeaking } from './a11y.js?v=202610150224';
-import { isItemDone, toggleItemDone } from './progress.js?v=202610150224';
-import { recordDone } from './activity.js?v=202610150224';
-import { everWrong, isBookmarked, recordAttempt, itemRef } from './learn.js?v=202610150224';
-import { openMistakes, recordMcqMistake } from './mistakes.js?v=202610150224';
-import { tocOf } from './views/topic.js?v=202610150224';
+import { speak, stopSpeaking } from './a11y.js?v=202610150241';
+import { isItemDone, toggleItemDone } from './progress.js?v=202610150241';
+import { recordDone } from './activity.js?v=202610150241';
+import { everWrong, isBookmarked, recordAttempt, itemRef } from './learn.js?v=202610150241';
+import { openMistakes, recordMcqMistake } from './mistakes.js?v=202610150241';
+import { tocOf } from './views/topic.js?v=202610150241';
 
 const KEY = 'hscos:handsfree:v1';
 const DEFAULTS = { autoAnswer: false, autoNext: false, voiceAnswer: true, markDone: false, readOptions: true, gap: 4, filter: 'all' };
@@ -114,7 +114,7 @@ function bindMedia(handler) {
 }
 function setMeta(title, artist) {
   if (!hasMediaSession || !window.MediaMetadata) return;
-  navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: 'Provacor', artwork: [{ src: 'assets/img/avatar.jpg', type: 'image/jpeg' }] });
+  navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album: 'pb', artwork: [{ src: 'assets/img/icon-512.png', sizes: '512x512', type: 'image/png' }] });
 }
 
 // ---------- item → spoken text ----------
@@ -487,7 +487,7 @@ function startTest() {
   ensureBar();
   startAudio();
   bindMedia(onMedia);
-  setMeta('বোতাম পরীক্ষা', 'Provacor হ্যান্ডস-ফ্রি');
+  setMeta('বোতাম পরীক্ষা', 'pb হ্যান্ডস-ফ্রি');
   syncBar();
   speak('ইয়ারবাডে এক ট্যাপ, দুই ট্যাপ, তিন ট্যাপ বা লম্বা চাপ দিয়ে দেখো। প্রতিটা চাপ আমি নাম ধরে বলব।');
   clearTimeout(st.timer);
@@ -594,7 +594,7 @@ function goBackground() {
   st.paused = true;
   stopAudio();
   if (hasMediaSession) navigator.mediaSession.playbackState = 'paused';
-  setMeta('থেমে আছে — Provacor খুললে আবার চলবে', `${st.sec.label} · ${bn(st.i + 1)}/${bn(st.sec.items.length)}`);
+  setMeta('থেমে আছে — pb খুললে আবার চলবে', `${st.sec.label} · ${bn(st.i + 1)}/${bn(st.sec.items.length)}`);
   syncBar();
 }
 function comeBack() {
