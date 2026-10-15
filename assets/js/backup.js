@@ -81,6 +81,12 @@ export function restore(payload) {
 }
 
 export async function saveOrShare({ blob, name }) {
+  // pb Android app: a WebView cannot save blob downloads, so the app saves the file itself.
+  if (window.PbAndroid?.saveFile) {
+    const dataUrl = await new Promise((ok, fail) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = fail; r.readAsDataURL(blob); });
+    window.PbAndroid.saveFile(name, String(dataUrl).split(',')[1] ?? '');
+    return 'downloaded';
+  }
   const file = new File([blob], name, { type: 'application/octet-stream' });
   if (navigator.canShare?.({ files: [file] })) {
     try {

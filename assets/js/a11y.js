@@ -3,6 +3,27 @@
 // Settings live in this browser and are applied to <html> as data attributes;
 // index.html applies them before first paint so nothing flashes.
 
+// pb Android app: its WebView has no speechSynthesis, so read-aloud goes through the app's own
+// text-to-speech (window.PbAndroid) behind the same small API that speak() below uses.
+if (typeof window !== 'undefined' && !('speechSynthesis' in window) && window.PbAndroid?.speak) {
+  const live = new Map();
+  let next = 1;
+  window.__pbTts = (id, what) => {
+    const u = live.get(id);
+    live.delete(id);
+    (what === 'end' ? u?.onend : u?.onerror)?.({ type: what });
+  };
+  window.SpeechSynthesisUtterance = class {
+    constructor(text = '') { Object.assign(this, { text, lang: '', rate: 1, voice: null, onend: null, onerror: null }); }
+  };
+  window.speechSynthesis = {
+    getVoices: () => [],
+    speak(u) { const id = next++; live.set(id, u); window.PbAndroid.speak(id, String(u.text), u.lang || '', Number(u.rate) || 1); },
+    cancel() { live.clear(); window.PbAndroid.stopSpeaking(); },
+    get speaking() { return live.size > 0; },
+  };
+}
+
 const KEY = 'hscos:a11y:v1';
 export const FONT_STEPS = [[0.9, 'ছোট'], [1, 'সাধারণ'], [1.15, 'বড়'], [1.3, 'আরও বড়'], [1.5, 'সবচেয়ে বড়']];
 const DEFAULTS = { font: 1, dyslexia: false, contrast: false, motion: 'system', captions: true, rate: 1, bright: 100 };
