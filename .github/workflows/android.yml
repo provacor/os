@@ -6,6 +6,8 @@ on:
   push:
     branches: [main]
     paths: ['android/**', '.github/workflows/android.yml']
+  pull_request:
+    paths: ['android/**', '.github/workflows/android.yml']
   workflow_dispatch:
 
 permissions:
@@ -34,7 +36,15 @@ jobs:
       - name: Rename
         run: cp android/app/build/outputs/apk/release/app-release.apk pb.apk
 
+      - name: Keep the APK of a pull request build
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pb-apk
+          path: pb.apk
+
       - name: Publish release
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: apk-v${{ github.run_number }}
