@@ -1,10 +1,10 @@
 // Chapter mind map page (#/mm/<chapterId>): built from the chapter's notes when a map
 // exists in content/mindmaps, otherwise an outline from the concept map.
 
-import { icon } from '../icons.js?v=202610150320';
-import { esc } from '../components.js?v=202610150320';
-import { MindMap, leaves, walk } from '../mindmap.js?v=202610150320';
-import { conceptsOfChapter } from '../concepts.js?v=202610150320';
+import { icon } from '../icons.js?v=202610150339';
+import { esc } from '../components.js?v=202610150339';
+import { MindMap, leaves, walk } from '../mindmap.js?v=202610150339';
+import { conceptsOfChapter } from '../concepts.js?v=202610150339';
 
 const KEY = 'hscos:mindmap:v1';
 const bn = (s) => String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]);

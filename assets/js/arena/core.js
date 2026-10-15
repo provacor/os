@@ -2,11 +2,11 @@
 // (with explanation and 50:50 / skip help), the results screen, and chapter/topic pickers.
 // Every question is a gamedata.js spec — the chapter's own MCQ or content, never rewritten.
 
-import { esc, bar, chapterNo } from '../components.js?v=202610150320';
-import { questionsOf, sourcesOf, topicsOf as allTopicsOf, topicName, gameChapters, chapterById, sourceMeta, answersOf, compatible } from '../gamedata.js?v=202610150320';
-import { makeQ, sfx, confetti, floatText, shuffle, bn } from '../games.js?v=202610150320';
-import { recordAnswer, isMastered, masteryOf, statOf, isDue, today, gameState, finishRecord, animOn, saveAll } from '../learnstore.js?v=202610150320';
-import { checkAchievements } from './achievements.js?v=202610150320';
+import { esc, bar, chapterNo } from '../components.js?v=202610150339';
+import { questionsOf, sourcesOf, topicsOf as allTopicsOf, topicName, gameChapters, chapterById, sourceMeta, answersOf, compatible } from '../gamedata.js?v=202610150339';
+import { makeQ, sfx, confetti, floatText, shuffle, bn } from '../games.js?v=202610150339';
+import { recordAnswer, isMastered, masteryOf, statOf, isDue, today, gameState, finishRecord, animOn, saveAll } from '../learnstore.js?v=202610150339';
+import { checkAchievements } from './achievements.js?v=202610150339';
 
 export { bn, shuffle, sfx, confetti, floatText, esc, bar, animOn };
 export const pad2 = (n) => String(n).padStart(2, '0');

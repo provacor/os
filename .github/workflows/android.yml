@@ -1,0 +1,44 @@
+# Builds the pb Android app (APK) and publishes it as a GitHub release, so the latest APK is
+# always at https://github.com/provacor/p-b/releases/latest/download/pb.apk
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    paths: ['android/**', '.github/workflows/android.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: android   # the study content is large and not needed for the APK
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Build signed APK
+        run: gradle -p android assembleRelease -PversionCode=${{ github.run_number }}
+
+      - name: Rename
+        run: cp android/app/build/outputs/apk/release/app-release.apk pb.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-v${{ github.run_number }}
+          name: pb Android app v1.${{ github.run_number }}
+          body: Android অ্যাপ (APK)। ফোনে pb.apk ডাউনলোড করে খুলুন, "Install" চাপুন।
+          files: pb.apk
+          make_latest: true

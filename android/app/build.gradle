@@ -1,0 +1,49 @@
+// pb Android app: a Trusted Web Activity that opens the live site full-screen in Chrome
+// (so offline mode, read-aloud, voice and notifications all keep working), with a WebView
+// fallback on phones without Chrome. Built and published by .github/workflows/android.yml.
+plugins {
+    id 'com.android.application'
+}
+
+def siteUrl = 'https://provacor.github.io/p-b/'
+
+android {
+    namespace 'io.github.provacor.pb'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'io.github.provacor.pb'
+        minSdk 21
+        targetSdk 34
+        versionCode((project.findProperty('versionCode') ?: '1') as int)
+        versionName "1.${versionCode}"
+        manifestPlaceholders = [siteUrl: siteUrl, siteHost: 'provacor.github.io', sitePath: '/p-b']
+    }
+
+    signingConfigs {
+        release {
+            // The key lives in the repo so every build signs the same way and phones can update
+            // in place. CI can override it with the PB_KEYSTORE_* secrets if they are ever set.
+            storeFile file(System.getenv('PB_KEYSTORE_FILE') ?: '../pb-release.jks')
+            storePassword System.getenv('PB_KEYSTORE_PASSWORD') ?: 'pbstudy-app'
+            keyAlias System.getenv('PB_KEY_ALIAS') ?: 'pb'
+            keyPassword System.getenv('PB_KEY_PASSWORD') ?: 'pbstudy-app'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+}

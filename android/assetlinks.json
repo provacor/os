@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.provacor.pb",
+    "sha256_cert_fingerprints": ["D9:1A:47:64:16:24:3C:4F:63:8E:FD:56:DC:A3:BE:BD:6F:4B:B3:D5:39:25:DA:BD:05:58:86:9B:FE:BD:22:B5"]
+  }
+}]
